@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: xDecision
+Bundle-SymbolicName: com.xross.tools.xdecision
+Bundle-Version: 1.0.0.qualifier
+Export-Package: com.ebay.tools.decisiontree,
+ com.ebay.tools.decisiontree.utils
+Bundle-Vendor: he, jiehui

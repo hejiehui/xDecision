@@ -1,0 +1,26 @@
+package !PACKAGE!;
+
+import junit.framework.TestCase;
+import com.ebay.tools.decisiontree.DecisionTree;
+import com.ebay.tools.decisiontree.utils.DecisionTreeFactory;
+
+public class !TEST_CLASS! extends TestCase {
+	public void testGetDecision(){
+		DecisionTree<String> tree = new DecisionTreeFactory().createFromXML("!MODEL_PATH!");
+		
+		//Verify tree
+		Object[] test;
+		!TREE_VERIFY!
+	}
+	
+	private void assertEquals(Object[] test, String expected, String actual){
+		StringBuffer valueBuf = new StringBuffer();
+		for(int i = 0; i < test.length; i++)
+			if(test[i] == null)
+				valueBuf.append("[]");
+			else
+				valueBuf.append("[" + test[i] + "]");
+		
+		assertEquals(expected, actual);
+	}
+}

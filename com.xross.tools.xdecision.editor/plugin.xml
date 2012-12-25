@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.ebay.tools.decisiontree.editor.DecisionTreeDiagramEditor"
+            default="true"
+            extensions="decisiontree"
+            icon="icons/tree.ico"
+            id="com.ebay.tools.decisiontree.editor.DecisionTreeDiagramEditor"
+            contributorClass="com.ebay.tools.decisiontree.editor.DecisionTreeActionBarContributor"
+            name="Decision Tree Editor">
+         <contentTypeBinding
+               contentTypeId="com.ebay.tools.xross.decisiontree">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            alias-for="dt"
+            base-type="org.eclipse.core.runtime.xml"
+            file-extensions="decisiontree"
+            id="com.ebay.tools.xross.decisiontree"
+            name="Decision Tree"
+            priority="high">
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="com.ebay.tools.xross"
+            class="com.ebay.tools.decisiontree.editor.NewDecisionTreeWizard"
+            icon="icons/tree.ico"
+            id="com.ebay.tools.decisiontree.editor.NewDecisionTreeWizard"
+            name="New Decision Tree Wizard">
+      </wizard>
+   </extension>
+</plugin>
