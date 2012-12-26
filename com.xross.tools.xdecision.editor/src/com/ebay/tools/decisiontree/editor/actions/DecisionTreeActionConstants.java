@@ -1,7 +1,7 @@
 package com.ebay.tools.decisiontree.editor.actions;
 
 public interface DecisionTreeActionConstants {
-	String ID_PREFIX = "com.ebay.tools.decisiontree.editor.";
+	String ID_PREFIX = "com.xross.tools.xdecision.editor.";
 
 	String ALIGN_LEFT = "alignment_left";
 	String ALIGN_CENTER = "alignment_center";
