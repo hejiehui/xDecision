@@ -3,6 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: xDecision
 Bundle-SymbolicName: com.xross.tools.xdecision
 Bundle-Version: 1.0.0.qualifier
-Export-Package: com.ebay.tools.decisiontree,
- com.ebay.tools.decisiontree.utils
+Export-Package: com.xross.tools.xdecision,
+ com.xross.tools.xdecision.utils
 Bundle-Vendor: he, jiehui
