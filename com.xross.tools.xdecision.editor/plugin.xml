@@ -5,12 +5,12 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.ebay.tools.decisiontree.editor.DecisionTreeDiagramEditor"
+            class="com.xross.tools.xdecision.editor.DecisionTreeDiagramEditor"
             default="true"
             extensions="decisiontree"
             icon="icons/tree.ico"
             id="com.ebay.tools.decisiontree.editor.DecisionTreeDiagramEditor"
-            contributorClass="com.ebay.tools.decisiontree.editor.DecisionTreeActionBarContributor"
+            contributorClass="com.xross.tools.xdecision.editor.DecisionTreeActionBarContributor"
             name="Decision Tree Editor">
          <contentTypeBinding
                contentTypeId="com.ebay.tools.xross.decisiontree">
@@ -23,7 +23,7 @@
             alias-for="dt"
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="decisiontree"
-            id="com.ebay.tools.xross.decisiontree"
+            id="com.xross.tools.xdecisiontree"
             name="Decision Tree"
             priority="high">
       </content-type>
@@ -31,10 +31,10 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            category="com.ebay.tools.xross"
-            class="com.ebay.tools.decisiontree.editor.NewDecisionTreeWizard"
+            category="com.xross.tools"
+            class="com.xross.tools.xdecision.editor.NewDecisionTreeWizard"
             icon="icons/tree.ico"
-            id="com.ebay.tools.decisiontree.editor.NewDecisionTreeWizard"
+            id="com.xross.tools.xdecision.editor.NewDecisionTreeWizard"
             name="New Decision Tree Wizard">
       </wizard>
    </extension>
