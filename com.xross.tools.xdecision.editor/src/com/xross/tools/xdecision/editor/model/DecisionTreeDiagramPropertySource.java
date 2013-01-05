@@ -8,7 +8,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
-import com.ebay.tools.decisiontree.utils.DecisionTreeFactor;
+import com.xross.tools.xdecision.utils.DecisionTreeFactor;
 
 public class DecisionTreeDiagramPropertySource implements IPropertySource {
 	public static final String NAME = "Name";

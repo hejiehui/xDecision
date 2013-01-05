@@ -4,9 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.ebay.tools.decisiontree.utils.DecisionTreeModel;
-import com.ebay.tools.decisiontree.utils.DecisionTreePath;
-import com.ebay.tools.decisiontree.utils.DecisionTreePathEntry;
+import com.xross.tools.xdecision.utils.DecisionTreeModel;
+import com.xross.tools.xdecision.utils.DecisionTreePath;
+import com.xross.tools.xdecision.utils.DecisionTreePathEntry;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagramFactory;
 

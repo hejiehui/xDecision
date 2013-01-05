@@ -6,7 +6,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.ebay.tools.decisiontree.utils.DecisionTreeFactor;
+import com.xross.tools.xdecision.utils.DecisionTreeFactor;
 import com.xross.tools.xdecision.editor.DecisionTreeDiagramEditor;
 import com.xross.tools.xdecision.editor.commands.AddFactorCommand2;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagram;

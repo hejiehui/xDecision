@@ -8,12 +8,12 @@ import java.util.Properties;
 
 import org.w3c.dom.Document;
 
-import com.ebay.tools.decisiontree.utils.DecisionTreeFactor;
-import com.ebay.tools.decisiontree.utils.DecisionTreeModel;
-import com.ebay.tools.decisiontree.utils.DecisionTreePath;
-import com.ebay.tools.decisiontree.utils.DecisionTreePathEntry;
-import com.ebay.tools.decisiontree.utils.DecisionTreePropertySerializer;
-import com.ebay.tools.decisiontree.utils.DecisionTreeXMLSerializer;
+import com.xross.tools.xdecision.utils.DecisionTreeFactor;
+import com.xross.tools.xdecision.utils.DecisionTreeModel;
+import com.xross.tools.xdecision.utils.DecisionTreePath;
+import com.xross.tools.xdecision.utils.DecisionTreePathEntry;
+import com.xross.tools.xdecision.utils.DecisionTreePropertySerializer;
+import com.xross.tools.xdecision.utils.DecisionTreeXMLSerializer;
 
 public class DecisionTreeDiagramFactory {
 	public DecisionTreeDiagram getFromXML(Document doc){

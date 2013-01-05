@@ -6,7 +6,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 
-import com.ebay.tools.decisiontree.utils.DecisionTreeFactor;
+import com.xross.tools.xdecision.utils.DecisionTreeFactor;
 import com.xross.tools.xdecision.editor.commands.AddFactorCommand;
 import com.xross.tools.xdecision.editor.commands.ChangeFactorCommand;
 import com.xross.tools.xdecision.editor.figures.DecisionTreeNodeFigure;

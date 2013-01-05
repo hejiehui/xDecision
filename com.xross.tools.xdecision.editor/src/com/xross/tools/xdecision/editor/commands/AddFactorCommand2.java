@@ -2,7 +2,7 @@ package com.xross.tools.xdecision.editor.commands;
 
 import org.eclipse.gef.commands.Command;
 
-import com.ebay.tools.decisiontree.utils.DecisionTreeFactor;
+import com.xross.tools.xdecision.utils.DecisionTreeFactor;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagram;
 
 public class AddFactorCommand2 extends Command{

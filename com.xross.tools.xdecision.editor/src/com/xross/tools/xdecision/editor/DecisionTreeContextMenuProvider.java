@@ -8,10 +8,10 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 
-import com.ebay.tools.decisiontree.utils.DecisionTreeFactor;
 import com.xross.tools.xdecision.editor.actions.DecisionTreeActionConstants;
 import com.xross.tools.xdecision.editor.actions.DecisionTreeCreateValueAction;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagram;
+import com.xross.tools.xdecision.utils.DecisionTreeFactor;
 
 public class DecisionTreeContextMenuProvider extends ContextMenuProvider {
 	private ActionRegistry actionRegistry;
