@@ -13,7 +13,7 @@
             contributorClass="com.xross.tools.xdecision.editor.DecisionTreeActionBarContributor"
             name="Decision Tree Editor">
          <contentTypeBinding
-               contentTypeId="com.ebay.tools.xross.decisiontree">
+               contentTypeId="com.xross.tools.xdecisiontree">
          </contentTypeBinding>
       </editor>
    </extension>
