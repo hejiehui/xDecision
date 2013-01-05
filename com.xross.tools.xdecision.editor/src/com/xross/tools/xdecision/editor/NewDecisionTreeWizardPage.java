@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 public class NewDecisionTreeWizardPage extends WizardPage {
-	private static final String DECISION_TREE_EXT = "decisiontree";
+	private static final String DECISION_TREE_EXT = "xdecision";
 	
 	private Text containerText;
 
@@ -106,7 +106,7 @@ public class NewDecisionTreeWizardPage extends WizardPage {
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
-		fileText.setText("new_file.decisiontree");
+		fileText.setText("new_file.xdecision");
 	}
 
 	/**

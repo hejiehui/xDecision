@@ -22,7 +22,7 @@
       <content-type
             alias-for="dt"
             base-type="org.eclipse.core.runtime.xml"
-            file-extensions="decisiontree"
+            file-extensions="xdecision"
             id="com.xross.tools.xdecisiontree"
             name="Decision Tree"
             priority="high">

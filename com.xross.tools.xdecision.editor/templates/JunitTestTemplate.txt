@@ -1,8 +1,8 @@
 package !PACKAGE!;
 
 import junit.framework.TestCase;
-import com.ebay.tools.decisiontree.DecisionTree;
-import com.ebay.tools.decisiontree.utils.DecisionTreeFactory;
+import com.xross.tools.xdecision.DecisionTree;
+import com.xross.tools.xdecision.utils.DecisionTreeFactory;
 
 public class !TEST_CLASS! extends TestCase {
 	public void testGetDecision(){

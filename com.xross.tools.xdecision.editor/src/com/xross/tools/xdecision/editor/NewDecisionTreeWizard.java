@@ -28,6 +28,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 public class NewDecisionTreeWizard extends Wizard implements INewWizard {
+	private static final String TEMPLATE = "/templates/template.xdecision";
 	private NewDecisionTreeWizardPage page;
 	private ISelection selection;
 
@@ -101,7 +102,7 @@ public class NewDecisionTreeWizard extends Wizard implements INewWizard {
 		final IFile file = container.getFile(new Path(fileName));
 		try {
 			
-			InputStream stream = NewDecisionTreeWizard.class.getResourceAsStream("/templates/template.decisiontree");
+			InputStream stream = NewDecisionTreeWizard.class.getResourceAsStream(TEMPLATE);
 			if (file.exists()) {
 				file.setContents(stream, true, true, monitor);
 			} else {
