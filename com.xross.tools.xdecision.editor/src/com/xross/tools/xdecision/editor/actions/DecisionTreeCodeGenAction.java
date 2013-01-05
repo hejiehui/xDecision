@@ -43,7 +43,7 @@ public class DecisionTreeCodeGenAction extends WorkbenchPartAction implements De
 
 		String packageName, testName, path;
 		packageName = "com.ebay.xdomain.xcomponent";
-		testName = file.getName().substring(0, file.getName().indexOf(".decisiontree")) + "Test";
+		testName = file.getName().substring(0, file.getName().indexOf(".xdecision")) + "Test";
 		
 		path = file.getName();
 //		file.getProjectRelativePath()
