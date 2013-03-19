@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.EventObject;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -19,6 +20,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.RootEditPart;
+import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.palette.PaletteRoot;
@@ -54,7 +56,12 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
     private PaletteRoot paletteRoot;
     
     private DecisionTreeDiagramFactory diagramFactory = new DecisionTreeDiagramFactory();
-    
+    private CommandStackListener commandStackListener = new CommandStackListener() {
+        public void commandStackChanged(EventObject event) {
+                firePropertyChange(PROP_DIRTY);
+        }
+    };
+
     public DecisionTreeDiagramEditor() {
         setEditDomain(new DefaultEditDomain(this));
     }
@@ -64,6 +71,7 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
         getGraphicalViewer().setRootEditPart(new ScalableFreeformRootEditPart());
         getGraphicalViewer().setEditPartFactory(new DecisionTreePartFactory());
         getGraphicalViewer().setContextMenu(new DecisionTreeContextMenuProvider(getGraphicalViewer(), getActionRegistry(), this));
+        getCommandStack().addCommandStackListener(commandStackListener);
     }
     
     public RootEditPart getRootEditPart(){
