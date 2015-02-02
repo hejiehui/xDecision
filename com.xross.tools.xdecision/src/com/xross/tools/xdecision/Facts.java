@@ -3,14 +3,14 @@ package com.xross.tools.xdecision;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface FactorValues {
+public interface Facts {
 	Object get(String name);
 	
 	/**
 	 * Default implementation, which use a map internally to hold the factory values
 	 * @author jhhe
 	 */
-	public class DefaultFactorValues implements FactorValues {
+	public class DefaultFacts implements Facts {
 		private Map<String, Object> values = new HashMap<String, Object>();
 
 		@Override
