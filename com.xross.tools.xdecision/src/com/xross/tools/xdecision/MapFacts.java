@@ -8,7 +8,7 @@ import java.util.Map;
  * This is useful for cases that the calculation of facts is cheap. 
  * @author Jerry He
  */
-public class DefaultFacts implements Facts {
+public class MapFacts implements Facts {
 	private Map<String, Object> values = new HashMap<String, Object>();
 
 	@Override
