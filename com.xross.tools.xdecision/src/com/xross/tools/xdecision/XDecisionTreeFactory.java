@@ -1,5 +1,9 @@
 package com.xross.tools.xdecision;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,27 +45,107 @@ public class XDecisionTreeFactory {
 	public static final String _DECISION = "_decision";
 	public static final String DELIMITER = "|";
 	public static final char FACTOR_VALUE_DELIMITER = ':';
-
 	
-	public DecisionTreeModel readMode(Document doc) {
-		DecisionTreeModel model = new DecisionTreeModel();
-		model.setComments(getComments(doc));
-		model.setFactors(createFactors(doc));
-		model.setPathes(createPaths(doc));
-		model.setDecisions(createDecisions(doc));
-		return model;
+	private static final XDecisionTreeFactory factory = new XDecisionTreeFactory();
+
+	/**
+	 * Default implementation which just use the string as value
+	 * @author Jerry He
+	 */
+	private static class StringParser implements XDecisionTreeParser {
+		@Override
+		public Object parseFact(String name, String value) {
+			return value;
+		}
+
+		@Override
+		public Object parseDecision(String name, String value) {
+			return value;
+		}
 	}
 	
-	private String getComments(Document doc){
-		if(doc.getElementsByTagName(COMMENTS).getLength() == 0)
-			return "";
-		return doc.getElementsByTagName(COMMENTS).item(0).getNodeValue();
+	private static final XDecisionTreeParser defaultParser = new StringParser();
+
+	public static <T> XDecisionTree<T> create(URL url) throws Exception {
+        return create(url, defaultParser);
+	}
+	
+	public static <T> XDecisionTree<T> create(URL url, XDecisionTreeParser parser) throws Exception {
+        return create(url.openStream(), parser);
+	}
+	
+	/**
+	 * It will first check model file from file path, if it does not exist, it will try classpath then. 
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
+	public static <T> XDecisionTree<T> create(String path) throws Exception {
+		return create(path, defaultParser);
+	}
+	
+	public static <T> XDecisionTree<T> create(String path, XDecisionTreeParser parser) throws Exception {
+		InputStream in;
+		File f = new File(path);
+		if(f.exists())
+			in = new FileInputStream(f);
+		else {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			if (classLoader == null) {
+				classLoader = XDecisionTreeFactory.class.getClassLoader();
+			}
+			in = classLoader.getResource(path).openStream();
+		}
+		
+		return create(in);
+	}
+	
+	public static <T> XDecisionTree<T> create(InputStream in) throws Exception {
+		return create(in, defaultParser);
+	}
+	
+	public static <T> XDecisionTree<T> create(InputStream in, XDecisionTreeParser parser) throws Exception {
+		try{
+			Document doc= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+			return factory.create(doc);
+		} finally {
+			try{
+				if(in != null)
+					in.close();
+			}catch(Throwable e1){
+			}
+		}
+	}
+	
+	private class FactorDefinition {
+		String factorName;
+		Object[] values;
 	}
 
-	private DecisionTreeFactor[] createFactors(Document doc) {
+	public <T> XDecisionTree<T> create(Document doc) {
+		XDecisionTree<T> tree = new XDecisionTree<T>();
+		
+		XDecisionPath<T>[] paths = createPaths(doc);
+		FactorDefinition[] factors = createFactors(doc);
+		String[] decisions = createDecisions(doc);
+		
+		for(int i = 0; i < paths.length; i++){
+			TreePath[] entries = paths[i].getPathEntries();
+			Object[][] newPath = new Object[entries.length][2];
+			for(int j = 0; j < entries.length; j++){
+				newPath[j][0] = entries[j].getFactorIndex();
+				newPath[j][1] = factors[entries[j].getFactorIndex()].getFactorValues()[entries[j].getValueIndex()];
+			}
+			tree.add(newPath, decisions[paths[i].getDecisionIndex()]);
+		}
+		
+		return tree;
+	}
+	
+	private FactorDefinition[] createFactors(Document doc) {
 		NodeList factorNodes = doc.getElementsByTagName(FACTORS).item(0).getChildNodes();
 		
-		DecisionTreeFactor[] factors = new DecisionTreeFactor[factorNodes.getLength()];
+		FactorDefinition[] factors = new FactorDefinition[factorNodes.getLength()];
 		for(int i = 0; i < factors.length; i++){
 			Node factorNode = factorNodes.item(i);
 			DecisionTreeFactor factor = new DecisionTreeFactor();
@@ -94,9 +178,9 @@ public class XDecisionTreeFactory {
 		return null;
 	}
 	
-	private DecisionTreePath[] createPaths(Document doc) {
+	private  <T> XDecisionPath<T>[] createPaths(Document doc) {
 		NodeList pathNodes = doc.getElementsByTagName(PATHS).item(0).getChildNodes();
-		DecisionTreePath[] paths = new DecisionTreePath[pathNodes.getLength()];
+		XDecisionPath<T>[] paths = new XDecisionPath<T>[pathNodes.getLength()];
 		for(int i = 0; i < paths.length; i++){
 			paths[i] = getDecisionTreePath(pathNodes.item(i).getTextContent(), getIntAttribute(pathNodes.item(i), INDEX));
 		}
@@ -107,7 +191,7 @@ public class XDecisionTreeFactory {
 	 * @param value looks like 1:2|2:1|..., which means factor 1, value 2
 	 * @return
 	 */
-	private DecisionTreePath getDecisionTreePath(String value, int decisionId){
+	private  <T> XDecisionPath<T> getDecisionTreePath(String value, int decisionId){
 		StringTokenizer t = new StringTokenizer(value, DELIMITER);
 		DecisionTreePathEntry[] entries = new DecisionTreePathEntry[t.countTokens()];
 		
@@ -120,7 +204,7 @@ public class XDecisionTreeFactory {
 			entries[i] = entry;
 		}
 
-		return new DecisionTreePath(entries, decisionId);
+		return new XDecisionPath(entries, decisionId);
 	}
 	
 	private String[] createDecisions(Document doc) {

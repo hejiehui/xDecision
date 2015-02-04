@@ -27,20 +27,20 @@ public class XDecisionTree<T> {
      * @param path
      * @param decision
      */
-    public void add(Object[][] path, T decision) {
-        add(0, path, decision);
+    public void add(XDecisionPath<T> path) {
+        add(0, path);
     }
     
-    private void add(int depth, Object[][] path, T aDecision) {
-        setKeyIndex((String)path[depth][0]);
-        Object key = path[depth][1];
+    private void add(int depth, XDecisionPath<T> path) {
+        setKeyIndex(path.getPathEntry(depth).getFactorName());
+        Object key = path.getPathEntry(depth).getValue();
         XDecisionTree<T> node = getNode(key);
         
-        if ((depth + 1) == path.length) {
-            node.decision = aDecision;
+        if ((depth + 1) == path.length()) {
+            node.decision = path.getDecision();
         }
         else {
-            node.add(depth + 1, path, aDecision);
+            node.add(depth + 1, path);
         }
     }
     
