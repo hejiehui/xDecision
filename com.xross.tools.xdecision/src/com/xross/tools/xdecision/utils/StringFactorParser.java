@@ -1,4 +1,4 @@
-package com.xross.tools.xdecision;
+package com.xross.tools.xdecision.utils;
 
 /**
  * Default implementation which just use the string as value
