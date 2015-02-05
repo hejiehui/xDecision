@@ -10,10 +10,10 @@ import com.xross.tools.xdecision.utils.DecisionTreePathEntry;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagramFactory;
 
-public class DecisionTreeJunitTestCodeGen {
-	private static final String TEST_ASSIGN = 		"		test[?] = \"?\";\n";
-	private static final String ASSERT_DISPLAY = 	"		assertEquals(test, \"?\", tree.get(test));\n\n";
-	private static final String TEST_RESET = 		"		test = new Object[!FACTOR_COUNT!];\n";
+public class DecisionTreeJunit4TestCodeGen {
+	private static final String TEST_ASSIGN = 		"		test.set(\"?\", \"?\");\n";
+	private static final String ASSERT_DISPLAY = 	"		assertEquals(\"?\", tree.get(test));\n";
+	private static final String TEST_RESET = 		"		test = new MapFacts();\n";
 	public String generate(DecisionTreeDiagram diagram, String packageName, String testName, String path){
 		DecisionTreeModel model = new DecisionTreeDiagramFactory().convert(diagram);
 		
@@ -36,11 +36,10 @@ public class DecisionTreeJunitTestCodeGen {
 		
 		for(DecisionTreePath path: model.getPathes()){
 			StringBuffer testReset = new StringBuffer(TEST_RESET);
-			replace(testReset, "!FACTOR_COUNT!", String.valueOf(model.getFactors().length));
 			codeBuf.append(testReset);
 			for(DecisionTreePathEntry entry: path.getPathEntries()){
 				StringBuffer testAssign = new StringBuffer(TEST_ASSIGN);
-				replace(testAssign, "?", String.valueOf(entry.getFactorIndex()));
+				replace(testAssign, "?", String.valueOf(model.getFactors()[entry.getFactorIndex()].getFactorName()));
 				replace(testAssign, "?", String.valueOf(model.getFactors()[entry.getFactorIndex()].getFactorValues()[entry.getValueIndex()]));
 				codeBuf.append(testAssign);
 			}
@@ -55,7 +54,7 @@ public class DecisionTreeJunitTestCodeGen {
 	private StringBuffer getTemplate(){
 		StringBuffer codeBuf = new StringBuffer();
 		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(DecisionTreeJunitTestCodeGen.class.getResourceAsStream("/templates/JunitTestTemplate.txt")));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(DecisionTreeJunit4TestCodeGen.class.getResourceAsStream("/templates/Junit4TestTemplate.txt")));
 		String line;
 		try {
 			while((line = reader.readLine()) != null)

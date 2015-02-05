@@ -13,6 +13,7 @@ import org.eclipse.ui.console.MessageConsoleStream;
 
 import com.xross.tools.xdecision.editor.DecisionTreeDiagramEditor;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagram;
+import com.xross.tools.xdecision.editor.util.DecisionTreeJunit4TestCodeGen;
 import com.xross.tools.xdecision.editor.util.DecisionTreeJunitTestCodeGen;
 import com.xross.tools.xdecision.editor.util.DecisionTreeTestCodeGen;
 
@@ -20,6 +21,7 @@ public class DecisionTreeCodeGenAction extends WorkbenchPartAction implements De
 	private boolean useJunitTest;
 	private DecisionTreeTestCodeGen codeGen = new DecisionTreeTestCodeGen();
 	private DecisionTreeJunitTestCodeGen junitCodeGen = new DecisionTreeJunitTestCodeGen();
+	private DecisionTreeJunit4TestCodeGen junit4CodeGen = new DecisionTreeJunit4TestCodeGen();
 	public DecisionTreeCodeGenAction(IWorkbenchPart part, boolean useJunitTest){
 		super(part);
 		if(useJunitTest){
@@ -48,7 +50,7 @@ public class DecisionTreeCodeGenAction extends WorkbenchPartAction implements De
 		path = file.getName();
 //		file.getProjectRelativePath()
 		DecisionTreeDiagram diagram = (DecisionTreeDiagram)editor.getRootEditPart().getContents().getModel();
-		String out = useJunitTest?junitCodeGen.generate(diagram, packageName, testName, path):codeGen.generate(diagram, packageName, testName, path);
+		String out = useJunitTest?junit4CodeGen.generate(diagram, packageName, testName, path):codeGen.generate(diagram, packageName, testName, path);
 		print(out);
 	}
 	

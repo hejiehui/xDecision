@@ -1,0 +1,27 @@
+package !PACKAGE!;
+
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+import com.xross.tools.xdecision.MapFacts;
+import com.xross.tools.xdecision.XDecisionTree;
+import com.xross.tools.xdecision.XDecisionTreeFactory;
+
+public class !TEST_CLASS! extends TestCase {
+	@Test
+	public void testGetDecision(){
+		XDecisionTree<String> tree;
+		try {
+			tree = XDecisionTreeFactory.create("!MODEL_PATH!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail();
+			return;
+		}
+
+		//Verify tree
+		Object[] test;
+		!TREE_VERIFY!
+	}
+}
