@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,7 +25,8 @@ public class XDecisionTreeFactory {
 	public static final String DECISION_TREE = "decision_tree";
 	
 	public static final String COMMENTS = "comments";
-
+	public static final String PARSER = "parser";
+	
 	public static final String FACTORS = "factors";
 	public static final String FACTOR = "factor";
 	public static final String VALUE = "value";
@@ -59,19 +62,15 @@ public class XDecisionTreeFactory {
 		}
 
 		@Override
-		public Object parseDecision(String name, String value) {
-			return value;
+		public Object parseDecision(String name) {
+			return name;
 		}
 	}
 	
 	private static final XDecisionTreeParser defaultParser = new StringParser();
 
 	public static <T> XDecisionTree<T> create(URL url) throws Exception {
-        return create(url, defaultParser);
-	}
-	
-	public static <T> XDecisionTree<T> create(URL url, XDecisionTreeParser parser) throws Exception {
-        return create(url.openStream(), parser);
+        return create(url.openStream());
 	}
 	
 	/**
@@ -81,10 +80,6 @@ public class XDecisionTreeFactory {
 	 * @throws Exception
 	 */
 	public static <T> XDecisionTree<T> create(String path) throws Exception {
-		return create(path, defaultParser);
-	}
-	
-	public static <T> XDecisionTree<T> create(String path, XDecisionTreeParser parser) throws Exception {
 		InputStream in;
 		File f = new File(path);
 		if(f.exists())
@@ -101,10 +96,6 @@ public class XDecisionTreeFactory {
 	}
 	
 	public static <T> XDecisionTree<T> create(InputStream in) throws Exception {
-		return create(in, defaultParser);
-	}
-	
-	public static <T> XDecisionTree<T> create(InputStream in, XDecisionTreeParser parser) throws Exception {
 		try{
 			Document doc= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
 			return factory.create(doc);
@@ -122,42 +113,67 @@ public class XDecisionTreeFactory {
 		Object[] values;
 	}
 
-	public <T> XDecisionTree<T> create(Document doc) {
+	public <T> XDecisionTree<T> create(Document doc) throws Exception {
 		XDecisionTree<T> tree = new XDecisionTree<T>();
 		
-		XDecisionPath<T>[] paths = createPaths(doc);
-		FactorDefinition[] factors = createFactors(doc);
-		String[] decisions = createDecisions(doc);
+		XDecisionTreeParser parser = createParser(doc);
+		Object[] decisions = createDecisions(doc, parser);
+		FactorDefinition[] factors = createFactors(doc, parser);
+
+		NodeList pathNodes = doc.getElementsByTagName(PATHS).item(0).getChildNodes();
+		int pathLength = pathNodes.getLength();
 		
-		for(int i = 0; i < paths.length; i++){
-			TreePath[] entries = paths[i].getPathEntries();
-			Object[][] newPath = new Object[entries.length][2];
-			for(int j = 0; j < entries.length; j++){
-				newPath[j][0] = entries[j].getFactorIndex();
-				newPath[j][1] = factors[entries[j].getFactorIndex()].getFactorValues()[entries[j].getValueIndex()];
+		for(int i = 0; i < pathLength; i++){
+			StringTokenizer t = new StringTokenizer(pathNodes.item(i).getTextContent(), DELIMITER);
+			int entryLength = t.countTokens();
+			List<XDecisionPathEntry> entries = new ArrayList<XDecisionPathEntry>(entryLength);
+			
+			for(int j = 0; j < entryLength; j++){
+				String pair = t.nextToken();
+				int index = pair.indexOf(FACTOR_VALUE_DELIMITER);
+				int factorIndex = Integer.parseInt(pair.substring(0, index));
+				int valueIndex = Integer.parseInt(pair.substring(index+1, pair.length()));
+				FactorDefinition factor = factors[factorIndex];
+				XDecisionPathEntry entry = new XDecisionPathEntry(factor.factorName, factor.values[valueIndex]);
+				entries.add(entry);
 			}
-			tree.add(newPath, decisions[paths[i].getDecisionIndex()]);
+
+
+			XDecisionPath<T> path = new XDecisionPath<T>(entries, (T)decisions[getIntAttribute(pathNodes.item(i), INDEX)]);
+			tree.add(path);
 		}
 		
 		return tree;
 	}
 	
-	private FactorDefinition[] createFactors(Document doc) {
+	private XDecisionTreeParser createParser(Document doc) throws Exception {
+		Node parserNode = doc.getElementsByTagName(PARSER).item(0);
+		if(parserNode == null)
+			return defaultParser;
+
+		String parserClassName = parserNode.getTextContent();
+		if(parserClassName == null || parserClassName.trim().equals(""))
+			return defaultParser;
+		
+		return (XDecisionTreeParser)Class.forName(parserClassName).newInstance();
+	}
+	
+	private FactorDefinition[] createFactors(Document doc, XDecisionTreeParser parser) {
 		NodeList factorNodes = doc.getElementsByTagName(FACTORS).item(0).getChildNodes();
 		
 		FactorDefinition[] factors = new FactorDefinition[factorNodes.getLength()];
 		for(int i = 0; i < factors.length; i++){
 			Node factorNode = factorNodes.item(i);
-			DecisionTreeFactor factor = new DecisionTreeFactor();
+			FactorDefinition factor = new FactorDefinition();
 			
-			factor.setFactorName(getAttribute(factorNode, ID));
+			factor.factorName = getAttribute(factorNode, ID);
 			factors[getIntAttribute(factorNode, INDEX)] = factor;
 			
 			NodeList valueNodes = factorNode.getChildNodes();
-			String[] values = new String[valueNodes.getLength()];
-			factor.setFactorValues(values);
+			Object[] values = new Object[valueNodes.getLength()];
+			factor.values = values;
 			for(int j = 0; j < values.length; j++){
-				values[j] = valueNodes.item(j).getTextContent();
+				values[j] = parser.parseFact(factor.factorName, valueNodes.item(j).getTextContent());
 			}
 		}
 		
@@ -178,11 +194,15 @@ public class XDecisionTreeFactory {
 		return null;
 	}
 	
-	private  <T> XDecisionPath<T>[] createPaths(Document doc) {
+	private  List<XDecisionPath<?>> createPaths(Document doc, Object[] decisions, FactorDefinition[] factors) {
 		NodeList pathNodes = doc.getElementsByTagName(PATHS).item(0).getChildNodes();
-		XDecisionPath<T>[] paths = new XDecisionPath<T>[pathNodes.getLength()];
-		for(int i = 0; i < paths.length; i++){
-			paths[i] = getDecisionTreePath(pathNodes.item(i).getTextContent(), getIntAttribute(pathNodes.item(i), INDEX));
+		int size = pathNodes.getLength();
+		List<XDecisionPath<?>> paths = new ArrayList<XDecisionPath<?>>(size);
+		for(int i = 0; i < size; i++){
+			XDecisionPath<?> path = getDecisionTreePath(
+					pathNodes.item(i).getTextContent(), 
+					decisions[getIntAttribute(pathNodes.item(i), INDEX)], factors);
+			paths.add(path);
 		}
 		return paths;
 	}
@@ -191,28 +211,30 @@ public class XDecisionTreeFactory {
 	 * @param value looks like 1:2|2:1|..., which means factor 1, value 2
 	 * @return
 	 */
-	private  <T> XDecisionPath<T> getDecisionTreePath(String value, int decisionId){
+	private  <T> XDecisionPath<T> getDecisionTreePath(String value, T decision, FactorDefinition[] factors){
 		StringTokenizer t = new StringTokenizer(value, DELIMITER);
-		DecisionTreePathEntry[] entries = new DecisionTreePathEntry[t.countTokens()];
+		int size = t.countTokens();
+		List<XDecisionPathEntry> entries = new ArrayList<XDecisionPathEntry>(size);
 		
-		for(int i = 0; i < entries.length; i++){
+		for(int i = 0; i < size; i++){
 			String pair = t.nextToken();
 			int index = pair.indexOf(FACTOR_VALUE_DELIMITER);
-			String factorIndexStr = pair.substring(0, index);
-			String valueIndexStr = pair.substring(index+1, pair.length());
-			DecisionTreePathEntry entry = new DecisionTreePathEntry(new Integer(factorIndexStr), Integer.parseInt(valueIndexStr));
-			entries[i] = entry;
+			int factorIndex = Integer.parseInt(pair.substring(0, index));
+			int valueIndex = Integer.parseInt(pair.substring(index+1, pair.length()));
+			FactorDefinition factor = factors[factorIndex];
+			XDecisionPathEntry entry = new XDecisionPathEntry(factor.factorName, factor.values[valueIndex]);
+			entries.add(entry);
 		}
 
-		return new XDecisionPath(entries, decisionId);
+		return new XDecisionPath<T>(entries, decision);
 	}
 	
-	private String[] createDecisions(Document doc) {
+	private Object[] createDecisions(Document doc, XDecisionTreeParser parser) {
 		NodeList decisionNodes = doc.getElementsByTagName(DECISIONS).item(0).getChildNodes();
-		String[] decisions = new String[decisionNodes.getLength()];
+		Object[] decisions = new String[decisionNodes.getLength()];
 		
 		for(int i = 0; i < decisions.length; i++){
-			decisions[getIntAttribute(decisionNodes.item(i), INDEX)] = getAttribute(decisionNodes.item(i), ID);
+			decisions[getIntAttribute(decisionNodes.item(i), INDEX)] = parser.parseDecision(getAttribute(decisionNodes.item(i), ID));
 		}
 
 		return decisions;
