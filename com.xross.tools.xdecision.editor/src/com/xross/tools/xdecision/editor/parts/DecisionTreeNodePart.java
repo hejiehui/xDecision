@@ -110,14 +110,14 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     	
         String factor;
     	if(node.getFactorId() == -1)
-    		factor = "Not specified";
+    		factor = "";
     	else
     		factor = ((DecisionTreeDiagram)getParent().getModel()).getFactors().get(node.getFactorId()).getFactorName();
     	figure.setFactor(factor);
     	
         String decision;
     	if(node.getDecisionId() == -1)
-    		decision = "No decision";
+    		decision = "";
     	else
     		decision = ((DecisionTreeDiagram)getParent().getModel()).getDecisions().get(node.getDecisionId());
 

@@ -8,7 +8,7 @@ import com.xross.tools.xdecision.MapFacts;
 import com.xross.tools.xdecision.XDecisionTree;
 import com.xross.tools.xdecision.XDecisionTreeFactory;
 
-public class !TEST_CLASS! extends TestCase {
+public class !TEST_CLASS! {
 	@Test
 	public void testGetDecision(){
 		XDecisionTree<String> tree;
@@ -21,7 +21,8 @@ public class !TEST_CLASS! extends TestCase {
 		}
 
 		//Verify tree
-		Object[] test;
+		MapFacts test;
+		
 		!TREE_VERIFY!
 	}
 }

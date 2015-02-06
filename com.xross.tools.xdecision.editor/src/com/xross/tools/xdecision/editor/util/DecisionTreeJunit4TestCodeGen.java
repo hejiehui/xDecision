@@ -12,7 +12,7 @@ import com.xross.tools.xdecision.editor.model.DecisionTreeDiagramFactory;
 
 public class DecisionTreeJunit4TestCodeGen {
 	private static final String TEST_ASSIGN = 		"		test.set(\"?\", \"?\");\n";
-	private static final String ASSERT_DISPLAY = 	"		assertEquals(\"?\", tree.get(test));\n";
+	private static final String ASSERT_DISPLAY = 	"		assertEquals(\"?\", tree.get(test));\n\n";
 	private static final String TEST_RESET = 		"		test = new MapFacts();\n";
 	public String generate(DecisionTreeDiagram diagram, String packageName, String testName, String path){
 		DecisionTreeModel model = new DecisionTreeDiagramFactory().convert(diagram);
