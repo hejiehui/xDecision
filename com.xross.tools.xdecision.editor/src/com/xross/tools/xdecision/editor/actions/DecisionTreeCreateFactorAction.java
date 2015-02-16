@@ -6,10 +6,10 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.xross.tools.xdecision.utils.DecisionTreeFactor;
 import com.xross.tools.xdecision.editor.DecisionTreeDiagramEditor;
 import com.xross.tools.xdecision.editor.commands.AddFactorCommand2;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagram;
+import com.xross.tools.xdecision.editor.model.DecisionTreeFactor;
 
 public class DecisionTreeCreateFactorAction extends WorkbenchPartAction implements DecisionTreeActionConstants, DecisionTreeMessages{
 	public DecisionTreeCreateFactorAction(IWorkbenchPart part){

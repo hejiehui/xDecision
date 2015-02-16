@@ -2,8 +2,6 @@ package com.xross.tools.xdecision.editor.model;
 
 import java.util.List;
 
-import com.xross.tools.xdecision.utils.DecisionTreeFactor;
-
 public class DecisionTreeManager {
 	private DecisionTreeDiagram diagram;
 	public DecisionTreeManager(DecisionTreeDiagram diagram){

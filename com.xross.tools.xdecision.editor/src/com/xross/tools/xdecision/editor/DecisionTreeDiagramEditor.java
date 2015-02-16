@@ -127,7 +127,7 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
     		public void execute(final IProgressMonitor monitor) throws CoreException {
     			try {
     				ByteArrayOutputStream out = new ByteArrayOutputStream();
-    				diagramFactory.convertToProp(diagram).store(out, COMMENTS);
+    				writeAsXML(out);
     				file.create(new ByteArrayInputStream(out.toByteArray()), true, monitor);
     				out.close();
     			} 

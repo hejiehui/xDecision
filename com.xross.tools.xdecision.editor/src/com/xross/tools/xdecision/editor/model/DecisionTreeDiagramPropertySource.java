@@ -8,8 +8,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
-import com.xross.tools.xdecision.utils.DecisionTreeFactor;
-
 public class DecisionTreeDiagramPropertySource implements IPropertySource {
 	public static final String NAME = "Name";
 	public static final String VALUE_ = "Value ";

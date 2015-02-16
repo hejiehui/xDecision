@@ -11,7 +11,7 @@ import org.eclipse.jface.action.Separator;
 import com.xross.tools.xdecision.editor.actions.DecisionTreeActionConstants;
 import com.xross.tools.xdecision.editor.actions.DecisionTreeCreateValueAction;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagram;
-import com.xross.tools.xdecision.utils.DecisionTreeFactor;
+import com.xross.tools.xdecision.editor.model.DecisionTreeFactor;
 
 public class DecisionTreeContextMenuProvider extends ContextMenuProvider {
 	private ActionRegistry actionRegistry;
@@ -24,7 +24,6 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider {
     public void buildContextMenu(IMenuManager menu) {
         // Add standard action groups to the menu
     	 GEFActionConstants.addStandardActionGroups(menu);
-     	menu.add(actionRegistry.getAction(DecisionTreeActionConstants.ID_PREFIX + DecisionTreeActionConstants.GEN_TEST_CODE));
     	menu.add(actionRegistry.getAction(DecisionTreeActionConstants.ID_PREFIX + DecisionTreeActionConstants.GEN_JUNIT_TEST_CODE));
     	menu.add(new Separator());
     	menu.add(actionRegistry.getAction(DecisionTreeActionConstants.ID_PREFIX + DecisionTreeActionConstants.CREATE_NEW_DECISION));

@@ -2,8 +2,8 @@ package com.xross.tools.xdecision.editor.commands;
 
 import org.eclipse.gef.commands.Command;
 
-import com.xross.tools.xdecision.utils.DecisionTreeFactor;
 import com.xross.tools.xdecision.editor.model.DecisionTreeDiagram;
+import com.xross.tools.xdecision.editor.model.DecisionTreeFactor;
 
 public class AddFactorCommand2 extends Command{
 	private DecisionTreeDiagram diagram;

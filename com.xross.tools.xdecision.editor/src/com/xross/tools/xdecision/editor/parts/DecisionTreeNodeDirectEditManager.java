@@ -13,8 +13,8 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Text;
 
-import com.xross.tools.xdecision.utils.DecisionTreeFactor;
 import com.xross.tools.xdecision.editor.figures.DecisionTreeNodeFigure;
+import com.xross.tools.xdecision.editor.model.DecisionTreeFactor;
 import com.xross.tools.xdecision.editor.model.DecisionTreeNode;
 
 public class DecisionTreeNodeDirectEditManager extends DirectEditManager {

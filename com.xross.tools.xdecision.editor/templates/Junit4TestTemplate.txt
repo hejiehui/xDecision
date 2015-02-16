@@ -13,6 +13,7 @@ public class !TEST_CLASS! {
 	public void testGetDecision(){
 		XDecisionTree<String> tree;
 		try {
+			// Please revise the path to correct value 
 			tree = XDecisionTreeFactory.create("!MODEL_PATH!");
 		} catch (Exception e) {
 			e.printStackTrace();

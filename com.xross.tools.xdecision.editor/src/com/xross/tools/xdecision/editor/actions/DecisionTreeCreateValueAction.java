@@ -6,8 +6,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.xross.tools.xdecision.utils.DecisionTreeFactor;
 import com.xross.tools.xdecision.editor.commands.AddFactorValueCommand;
+import com.xross.tools.xdecision.editor.model.DecisionTreeFactor;
 
 public class DecisionTreeCreateValueAction extends WorkbenchPartAction implements DecisionTreeActionConstants, DecisionTreeMessages{
 	private DecisionTreeFactor factor;

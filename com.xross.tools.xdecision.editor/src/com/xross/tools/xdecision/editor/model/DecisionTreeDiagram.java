@@ -7,8 +7,6 @@ import java.util.List;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.xross.tools.xdecision.utils.DecisionTreeFactor;
-
 public class DecisionTreeDiagram implements IPropertySource {
 	private String description;
 	private String factorDescription;

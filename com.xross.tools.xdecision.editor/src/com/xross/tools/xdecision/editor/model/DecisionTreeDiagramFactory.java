@@ -8,13 +8,6 @@ import java.util.Properties;
 
 import org.w3c.dom.Document;
 
-import com.xross.tools.xdecision.utils.DecisionTreeFactor;
-import com.xross.tools.xdecision.utils.DecisionTreeModel;
-import com.xross.tools.xdecision.utils.DecisionTreePath;
-import com.xross.tools.xdecision.utils.DecisionTreePathEntry;
-import com.xross.tools.xdecision.utils.DecisionTreePropertySerializer;
-import com.xross.tools.xdecision.utils.DecisionTreeXMLSerializer;
-
 public class DecisionTreeDiagramFactory {
 	public DecisionTreeDiagram getFromXML(Document doc){
 		DecisionTreeXMLSerializer saver = new DecisionTreeXMLSerializer();
@@ -22,12 +15,6 @@ public class DecisionTreeDiagramFactory {
 		
 	}
 
-	public DecisionTreeDiagram getFromProp(Properties prop){
-		DecisionTreePropertySerializer saver = new DecisionTreePropertySerializer();
-		return convert(saver.readMode(prop));
-		
-	}
-	
 	private DecisionTreeDiagram convert(DecisionTreeModel model){
 		DecisionTreeDiagram diagram = new DecisionTreeDiagram();
 		diagram.setDescription(model.getComments());
@@ -115,10 +102,6 @@ public class DecisionTreeDiagramFactory {
 	
 	public Document convertToXML(DecisionTreeDiagram diagram) {
 		return new DecisionTreeXMLSerializer().writeModel(convert(diagram));
-	}
-	
-	public Properties convertToProp(DecisionTreeDiagram diagram) {
-		return new DecisionTreePropertySerializer().writeModel(convert(diagram));
 	}
 	
 	public DecisionTreeModel convert(DecisionTreeDiagram diagram) {
