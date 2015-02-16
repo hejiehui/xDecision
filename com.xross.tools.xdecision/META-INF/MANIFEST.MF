@@ -3,6 +3,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: xDecision
 Bundle-SymbolicName: com.xross.tools.xdecision
 Bundle-Version: 1.0.0.qualifier
-Export-Package: com.xross.tools.xdecision,
- com.xross.tools.xdecision.utils
+Export-Package: com.xross.tools.xdecision
 Bundle-Vendor: he, jiehui

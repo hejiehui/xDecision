@@ -3,6 +3,24 @@ package com.xross.tools.xdecision;
 import java.util.List;
 
 public class XDecisionPath<T> {
+	public static class XDecisionPathEntry {
+		private String factorName;
+		private Object value;
+
+		public XDecisionPathEntry(String factorName, Object value) {
+			this.factorName = factorName;
+			this.value = value;
+		}
+		
+		public String getFactorName() {
+			return factorName;
+		}
+		
+		public Object getValue() {
+			return value;
+		}
+	}
+	
 	private List<XDecisionPathEntry> path;
 	private T decision;
 	

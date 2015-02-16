@@ -14,6 +14,10 @@ import java.util.Map;
  * is the nearest one.
  * 
  * @author jiehe
+ * 
+ * Note: This class is the early version of decision tree. The problem is it is not so easy to 
+ * explain and understand. So begin from 2015, you can use XDecisionTree, which is more user friendly and 
+ * easy to understand.
  */
 
 public class DecisionTree<T> {
