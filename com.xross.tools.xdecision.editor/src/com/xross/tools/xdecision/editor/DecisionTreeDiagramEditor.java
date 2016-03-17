@@ -1,16 +1,10 @@
 package com.xross.tools.xdecision.editor;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.EventObject;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
@@ -36,8 +30,8 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-import org.w3c.dom.Document;
 
+import com.xross.tools.common.XmlHelper;
 import com.xross.tools.xdecision.editor.actions.DecisionTreeActionConstants;
 import com.xross.tools.xdecision.editor.actions.DecisionTreeCodeGenAction;
 import com.xross.tools.xdecision.editor.actions.DecisionTreeCreateDecisionAction;
@@ -86,16 +80,11 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
         getGraphicalViewer().setContents(diagram);
     }
 
-    private static final String COMMENTS = "Please use Decision Tree editor to edit this file. Any problem, contact jiehe@ebay.com";
     public void doSave(IProgressMonitor monitor) {
 		try {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-//			diagramFactory.convertToProp(diagram).store(out, COMMENTS);
-			writeAsXML(out);
 			IFile file = ((IFileEditorInput)getEditorInput()).getFile();
-			file.setContents(new ByteArrayInputStream(out.toByteArray()), 
-							true, false, monitor);
-			out.close();
+			file.setContents(new ByteArrayInputStream(writeAsXML().getBytes()), 
+					true, false, monitor);
 			getCommandStack().markSaveLocation();
 		}
 		catch (Exception e) {
@@ -103,12 +92,8 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
 		}
     }
     
-    private void writeAsXML(OutputStream out) throws Exception{
-    	TransformerFactory tFactory =TransformerFactory.newInstance();
-    	Transformer transformer = tFactory.newTransformer();
-    	DOMSource source = new DOMSource(diagramFactory.convertToXML(diagram));
-    	StreamResult result = new StreamResult(out);
-    	transformer.transform(source, result);
+    private String writeAsXML() throws Exception{
+    	return XmlHelper.format(diagramFactory.convertToXML(diagram));
     }
 
     public void doSaveAs() {
@@ -126,10 +111,7 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
     	WorkspaceModifyOperation op= new WorkspaceModifyOperation() {
     		public void execute(final IProgressMonitor monitor) throws CoreException {
     			try {
-    				ByteArrayOutputStream out = new ByteArrayOutputStream();
-    				writeAsXML(out);
-    				file.create(new ByteArrayInputStream(out.toByteArray()), true, monitor);
-    				out.close();
+    				file.create(new ByteArrayInputStream(writeAsXML().getBytes("utf-8")), true, monitor);
     			} 
     			catch (Exception e) {
     				e.printStackTrace();
@@ -174,8 +156,7 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
     }
     
     private DecisionTreeDiagram getFromXML(InputStream is) throws Exception {
-    	Document doc= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is); 
-    	return diagramFactory.getFromXML(doc);
+    	return diagramFactory.getFromXML(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is));
     }
 
     public Object getAdapter(Class type) {
