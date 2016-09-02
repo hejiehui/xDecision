@@ -5,12 +5,12 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.xross.tools.xdecision.editor.DecisionTreeDiagramEditor"
+            class="com.xrosstools.xdecision.editor.DecisionTreeDiagramEditor"
             default="true"
             extensions="xdecision"
             icon="icons/tree.ico"
             id="com.xross.tools.xdecision.editor.DecisionTreeDiagramEditor"
-            contributorClass="com.xross.tools.xdecision.editor.DecisionTreeActionBarContributor"
+            contributorClass="com.xrosstools.xdecision.editor.DecisionTreeActionBarContributor"
             name="Decision Tree Editor">
          <contentTypeBinding
                contentTypeId="com.xross.tools.xdecisiontree">
@@ -32,7 +32,7 @@
          point="org.eclipse.ui.newWizards">
       <wizard
             category="com.xross.tools"
-            class="com.xross.tools.xdecision.editor.NewDecisionTreeWizard"
+            class="com.xrosstools.xdecision.editor.NewDecisionTreeWizard"
             icon="icons/tree.ico"
             id="com.xross.tools.xdecision.editor.NewDecisionTreeWizard"
             name="New Decision Tree Wizard">
