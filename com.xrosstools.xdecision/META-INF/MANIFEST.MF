@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: xDecision
+Bundle-SymbolicName: com.xrosstools.xdecision
+Bundle-Version: 1.0.0.qualifier
+Export-Package: com.xrosstools.xdecision
+Bundle-Vendor: he, jiehui
