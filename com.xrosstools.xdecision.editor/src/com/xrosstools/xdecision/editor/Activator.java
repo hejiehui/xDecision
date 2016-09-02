@@ -8,7 +8,7 @@ import org.osgi.framework.BundleContext;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeActionConstants;
 
 public class Activator extends AbstractUIPlugin implements DecisionTreeActionConstants {
-	public static final String PLUGIN_ID	= "com.xross.tools.xdecision.editor";	//$NON-NLS-1$
+	public static final String PLUGIN_ID	= "com.xrosstools.xdecision.editor";	//$NON-NLS-1$
 	private static BundleContext s_context;
 	private static Activator plugin;
 	public static final String HOME = "icons/";
