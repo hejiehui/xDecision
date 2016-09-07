@@ -43,7 +43,7 @@ public class DecisionTreePaletteFactory {
     	tool = new MarqueeToolEntry();
     	entries.add(tool);
 
-    	PaletteSeparator sep = new PaletteSeparator("com.ebay.tools.decisiontree.editor.sep1");
+    	PaletteSeparator sep = new PaletteSeparator("com.xrosstools.xdecision.editor.sep1");
     	sep.setUserModificationPermission(PaletteEntry.PERMISSION_NO_MODIFICATION);
     	entries.add(sep);
 

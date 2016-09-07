@@ -9,11 +9,11 @@
             default="true"
             extensions="xdecision"
             icon="icons/tree.ico"
-            id="com.xross.tools.xdecision.editor.DecisionTreeDiagramEditor"
+            id="com.xrosstools.xdecision.editor.DecisionTreeDiagramEditor"
             contributorClass="com.xrosstools.xdecision.editor.DecisionTreeActionBarContributor"
             name="Decision Tree Editor">
          <contentTypeBinding
-               contentTypeId="com.xross.tools.xdecisiontree">
+               contentTypeId="com.xrosstools.xdecisiontree">
          </contentTypeBinding>
       </editor>
    </extension>
@@ -23,7 +23,7 @@
             alias-for="dt"
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="xdecision"
-            id="com.xross.tools.xdecisiontree"
+            id="com.xrosstools.xdecisiontree"
             name="Decision Tree"
             priority="high">
       </content-type>
@@ -31,10 +31,10 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            category="com.xross.tools"
+            category="com.xrosstools"
             class="com.xrosstools.xdecision.editor.NewDecisionTreeWizard"
             icon="icons/tree.ico"
-            id="com.xross.tools.xdecision.editor.NewDecisionTreeWizard"
+            id="com.xrosstools.xdecision.editor.NewDecisionTreeWizard"
             name="New Decision Tree Wizard">
       </wizard>
    </extension>

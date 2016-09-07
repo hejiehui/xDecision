@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.editor.actions;
 
 public interface DecisionTreeActionConstants {
-	String ID_PREFIX = "com.xross.tools.xdecision.editor.";
+	String ID_PREFIX = "com.xrosstools.xdecision.editor.";
 
 	String ALIGN_LEFT = "alignment_left";
 	String ALIGN_CENTER = "alignment_center";
