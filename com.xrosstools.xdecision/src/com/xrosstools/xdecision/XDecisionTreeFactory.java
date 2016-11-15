@@ -116,11 +116,12 @@ public class XDecisionTreeFactory {
 		Object[] decisions = createDecisions(doc, parser);
 		FactorDefinition[] factors = createFactors(doc, parser);
 
-		NodeList pathNodes = doc.getElementsByTagName(PATHS).item(0).getChildNodes();
-		int pathLength = pathNodes.getLength();
+		List<Node> pathNodes = getValidChildNodes(doc.getElementsByTagName(PATHS).item(0));
 		
-		for(int i = 0; i < pathLength; i++){
-			StringTokenizer t = new StringTokenizer(pathNodes.item(i).getTextContent(), DELIMITER);
+		for(int i = 0; i < pathNodes.size(); i++){
+			Node pathNode = pathNodes.get(i);
+			
+			StringTokenizer t = new StringTokenizer(pathNode.getTextContent(), DELIMITER);
 			int entryLength = t.countTokens();
 			List<XDecisionPathEntry> entries = new ArrayList<XDecisionPathEntry>(entryLength);
 			
@@ -134,8 +135,7 @@ public class XDecisionTreeFactory {
 				entries.add(entry);
 			}
 
-
-			XDecisionPath<T> path = new XDecisionPath<T>(entries, (T)decisions[getIntAttribute(pathNodes.item(i), INDEX)]);
+			XDecisionPath<T> path = new XDecisionPath<T>(entries, (T)decisions[getIntAttribute(pathNode, INDEX)]);
 			tree.add(path);
 		}
 		
@@ -155,21 +155,23 @@ public class XDecisionTreeFactory {
 	}
 	
 	private FactorDefinition[] createFactors(Document doc, XDecisionTreeParser parser) {
-		NodeList factorNodes = doc.getElementsByTagName(FACTORS).item(0).getChildNodes();
+		List<Node> factorNodes = getValidChildNodes(doc.getElementsByTagName(FACTORS).item(0));
 		
-		FactorDefinition[] factors = new FactorDefinition[factorNodes.getLength()];
+		FactorDefinition[] factors = new FactorDefinition[factorNodes.size()];
+		
 		for(int i = 0; i < factors.length; i++){
-			Node factorNode = factorNodes.item(i);
+			Node factorNode = factorNodes.get(i);
+			
 			FactorDefinition factor = new FactorDefinition();
 			
 			factor.factorName = getAttribute(factorNode, ID);
 			factors[getIntAttribute(factorNode, INDEX)] = factor;
 			
-			NodeList valueNodes = factorNode.getChildNodes();
-			Object[] values = new Object[valueNodes.getLength()];
+			List<Node> valueNodes = getValidChildNodes(factorNode);
+			Object[] values = new Object[valueNodes.size()];
 			factor.values = values;
 			for(int j = 0; j < values.length; j++){
-				values[j] = parser.parseFact(factor.factorName, valueNodes.item(j).getTextContent());
+				values[j] = parser.parseFact(factor.factorName, valueNodes.get(j).getTextContent());
 			}
 		}
 		
@@ -177,11 +179,13 @@ public class XDecisionTreeFactory {
 	}
 	
 	private Object[] createDecisions(Document doc, XDecisionTreeParser parser) {
-		NodeList decisionNodes = doc.getElementsByTagName(DECISIONS).item(0).getChildNodes();
-		Object[] decisions = new String[decisionNodes.getLength()];
+		List<Node> decisionNodes = getValidChildNodes(doc.getElementsByTagName(DECISIONS).item(0));
+		
+		Object[] decisions = new String[decisionNodes.size()];
 		
 		for(int i = 0; i < decisions.length; i++){
-			decisions[getIntAttribute(decisionNodes.item(i), INDEX)] = parser.parseDecision(getAttribute(decisionNodes.item(i), ID));
+			Node decisionNode = decisionNodes.get(i);
+			decisions[getIntAttribute(decisionNode, INDEX)] = parser.parseDecision(getAttribute(decisionNode, ID));
 		}
 
 		return decisions;
@@ -199,5 +203,19 @@ public class XDecisionTreeFactory {
 		}
 		
 		return null;
+	}
+	
+	private boolean isValidNode(Node node) {
+		return !node.getNodeName().equals("#text");
+	}
+	
+	private List<Node> getValidChildNodes(Node node) {
+		List<Node> nl = new ArrayList<>();
+		NodeList nodeList = node.getChildNodes();
+		for(int i = 0; i < nodeList.getLength(); i++){
+			if(isValidNode(nodeList.item(i)))
+				nl.add(nodeList.item(i));
+		}
+		return nl;
 	}
 }
