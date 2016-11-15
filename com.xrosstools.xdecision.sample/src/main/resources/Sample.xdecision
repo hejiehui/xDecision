@@ -1,1 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><decision_tree><factors><factor id="Age" index="0"><value>below 20</value><value>above 20</value></factor><factor id="Rank" index="1"><value>Level 1</value><value>Level 2</value><value>Level 3</value></factor><factor id="Insurance Participation" index="2"><value>Yes</value><value>No</value></factor></factors><paths><path index="1">0:0</path><path index="2">0:1</path><path index="0">0:0|1:0</path><path index="4">0:0|1:1</path><path index="5">0:1|2:0</path><path index="6">0:1|2:1</path><path index="5">0:0|1:2</path></paths><decisions><decision id="decision0" index="0"/><decision id="decision1" index="1"/><decision id="decision2" index="2"/><decision id="decision3" index="3"/><decision id="decision4" index="4"/><decision id="decision5" index="5"/><decision id="decision6" index="6"/></decisions></decision_tree>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decision_tree>
+ <factors>
+  <factor id="Age" index="0">
+   <value>below 20</value>
+   <value>above 20</value>
+  </factor>
+  <factor id="Rank" index="1">
+   <value>Level 1</value>
+   <value>Level 2</value>
+   <value>Level 3</value>
+  </factor>
+  <factor id="Insurance Participation" index="2">
+   <value>Yes</value>
+   <value>No</value>
+  </factor>
+ </factors>
+ <paths>
+  <path index="1">0:0</path>
+  <path index="2">0:1</path>
+  <path index="0">0:0|1:0</path>
+  <path index="4">0:0|1:1</path>
+  <path index="5">0:1|2:0</path>
+  <path index="6">0:1|2:1</path>
+  <path index="5">0:0|1:2</path>
+ </paths>
+ <decisions>
+  <decision id="decision0" index="0"/>
+  <decision id="decision1" index="1"/>
+  <decision id="decision2" index="2"/>
+  <decision id="decision3" index="3"/>
+  <decision id="decision4" index="4"/>
+  <decision id="decision5" index="5"/>
+  <decision id="decision6" index="6"/>
+ </decisions>
+</decision_tree>
