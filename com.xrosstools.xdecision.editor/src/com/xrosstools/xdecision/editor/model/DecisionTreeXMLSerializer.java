@@ -1,5 +1,8 @@
 package com.xrosstools.xdecision.editor.model;
 
+import static com.xrosstools.common.XmlHelper.getValidChildNodes;
+
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -54,21 +57,21 @@ public class DecisionTreeXMLSerializer {
 	}
 
 	private DecisionTreeFactor[] createFactors(Document doc) {
-		NodeList factorNodes = doc.getElementsByTagName(FACTORS).item(0).getChildNodes();
+		List<Node> factorNodes = getValidChildNodes(doc.getElementsByTagName(FACTORS).item(0));
 		
-		DecisionTreeFactor[] factors = new DecisionTreeFactor[factorNodes.getLength()];
+		DecisionTreeFactor[] factors = new DecisionTreeFactor[factorNodes.size()];
 		for(int i = 0; i < factors.length; i++){
-			Node factorNode = factorNodes.item(i);
+			Node factorNode = factorNodes.get(i);
 			DecisionTreeFactor factor = new DecisionTreeFactor();
 			
 			factor.setFactorName(getAttribute(factorNode, ID));
 			factors[getIntAttribute(factorNode, INDEX)] = factor;
 			
-			NodeList valueNodes = factorNode.getChildNodes();
-			String[] values = new String[valueNodes.getLength()];
+			List<Node> valueNodes = getValidChildNodes(factorNode);
+			String[] values = new String[valueNodes.size()];
 			factor.setFactorValues(values);
 			for(int j = 0; j < values.length; j++){
-				values[j] = valueNodes.item(j).getTextContent();
+				values[j] = valueNodes.get(j).getTextContent();
 			}
 		}
 		
@@ -90,10 +93,10 @@ public class DecisionTreeXMLSerializer {
 	}
 	
 	private DecisionTreePath[] createPaths(Document doc) {
-		NodeList pathNodes = doc.getElementsByTagName(PATHS).item(0).getChildNodes();
-		DecisionTreePath[] paths = new DecisionTreePath[pathNodes.getLength()];
+		List<Node> pathNodes = getValidChildNodes(doc.getElementsByTagName(PATHS).item(0));
+		DecisionTreePath[] paths = new DecisionTreePath[pathNodes.size()];
 		for(int i = 0; i < paths.length; i++){
-			paths[i] = getDecisionTreePath(pathNodes.item(i).getTextContent(), getIntAttribute(pathNodes.item(i), INDEX));
+			paths[i] = getDecisionTreePath(pathNodes.get(i).getTextContent(), getIntAttribute(pathNodes.get(i), INDEX));
 		}
 		return paths;
 	}
@@ -119,11 +122,11 @@ public class DecisionTreeXMLSerializer {
 	}
 	
 	private String[] createDecisions(Document doc) {
-		NodeList decisionNodes = doc.getElementsByTagName(DECISIONS).item(0).getChildNodes();
-		String[] decisions = new String[decisionNodes.getLength()];
+		List<Node> decisionNodes = getValidChildNodes(doc.getElementsByTagName(DECISIONS).item(0));
+		String[] decisions = new String[decisionNodes.size()];
 		
 		for(int i = 0; i < decisions.length; i++){
-			decisions[getIntAttribute(decisionNodes.item(i), INDEX)] = getAttribute(decisionNodes.item(i), ID);
+			decisions[getIntAttribute(decisionNodes.get(i), INDEX)] = getAttribute(decisionNodes.get(i), ID);
 		}
 
 		return decisions;
