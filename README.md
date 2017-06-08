@@ -25,3 +25,30 @@ A decision tree editor and runtime engine
 方便重用
 
 替代if/else，极大的简化代码
+
+# 集成说明
+[参考样例POM](https://github.com/hejiehui/xDecision/blob/master/com.xrosstools.xdecision.sample/pom.xml)
+
+Depenency
+
+	<dependency>
+		<groupId>com.xrosstools</groupId>
+		<artifactId>xdecision</artifactId>
+		<version>0.9.0</version>
+	</dependency>
+
+repository
+
+	<repositories>
+		<repository>
+			<id>xtools-repo</id>
+			<url>https://raw.github.com/hejiehui/xtools-repo/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+
+# Demo project
+[Demo](https://github.com/hejiehui/xDecision/tree/master/com.xrosstools.xdecision.sample)
