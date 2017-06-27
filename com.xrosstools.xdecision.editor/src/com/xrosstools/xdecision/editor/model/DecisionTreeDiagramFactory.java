@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.w3c.dom.Document;
 
@@ -64,39 +63,6 @@ public class DecisionTreeDiagramFactory {
 	
 	public DecisionTreeDiagram getEmptyDiagram(){
 		DecisionTreeDiagram diagram = new DecisionTreeDiagram();
-		
-		int depth = 2;
-		int width = 2;
-		diagram.setAlignment(0.5f);
-		for(int i = 0; i < depth + 1; i++){
-			DecisionTreeFactor factor = new DecisionTreeFactor();
-			factor.setFactorName("factor" + i);
-			factor.setFactorValues(new String[]{"value1", "value2"});
-			diagram.getFactors().add(factor);
-			diagram.getDecisions().add("decision" + i);
-		}
-		
-		DecisionTreeNode rootNode = new DecisionTreeNode();
-		rootNode.setFactorId(0);
-		List<DecisionTreeNode> last = new ArrayList<DecisionTreeNode>();
-		last.add(rootNode);
-		diagram.addNode(rootNode);
-		for(int i = 0; i< depth; i++){
-			List<DecisionTreeNode> newLast = new ArrayList<DecisionTreeNode>();
-			for(DecisionTreeNode node : last){
-				for(int j = 0; j< width; j++){
-					DecisionTreeNode newNode = new DecisionTreeNode();
-					newNode.setFactorId(i+1);
-					newNode.setDecisionId(i+1);
-					diagram.addNode(newNode);
-					DecisionTreeNodeConnection path = new DecisionTreeNodeConnection(node, newNode);
-					path.setValueId(1);
-					newLast.add(newNode);
-				}
-			}
-			last = newLast;
-		}
-		
 		return diagram;
 	}
 	
