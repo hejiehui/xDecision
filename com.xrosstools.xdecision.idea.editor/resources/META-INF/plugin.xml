@@ -1,0 +1,39 @@
+<idea-plugin>
+  <id>com.xrosstools.xdecision.editor</id>
+  <name>Decision Tree Edtitor</name>
+  <version>0.1.0</version>
+  <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
+
+  <description><![CDATA[
+      Xross Tools.<br>
+      <em>Xross Decision Tree Edtitor</em>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Initial IDEA version.<br>
+      <em>Getting started</em>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="173.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <fileEditorProvider implementation="com.xrosstools.xdecision.idea.editor.XrossDecisionEditorProvider"/>
+    <fileTypeFactory implementation="com.xrosstools.xdecision.idea.editor.XdecisionFileTypeFactory"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+    <action id="XrossTools.NewDecisionTreeAction" class="com.xrosstools.xdecision.idea.editor.NewDecisionTreeAction" text="Xross Decision Model" description="Create new Xross Decision Model file" icon="/icons/tree.png">
+      <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
+    </action>
+  </actions>
+
+</idea-plugin>
