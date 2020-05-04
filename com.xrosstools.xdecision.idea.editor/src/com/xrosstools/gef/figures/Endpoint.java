@@ -3,7 +3,12 @@ package com.xrosstools.gef.figures;
 import java.awt.*;
 
 public class Endpoint extends Figure {
-    private final int SIZE = 5;
+    public static final int SIZE = 5;
+
+    public Endpoint() {
+        setWidth(SIZE);
+        setHeight(SIZE);
+    }
 
     public Connection getParentConnection() {
         return (Connection)getParent();
@@ -26,15 +31,5 @@ public class Endpoint extends Figure {
     public void paint(Graphics graphics) {
         if(getParentConnection().isSelected())
             graphics.fill3DRect(getX(), getY(), SIZE, SIZE, true);
-    }
-
-    @Override
-    public final int getWidth() {
-        return SIZE;
-    }
-
-    @Override
-    public final int getHeight() {
-        return SIZE;
     }
 }

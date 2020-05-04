@@ -25,7 +25,6 @@ public abstract class EditPart implements PropertyChangeListener {
     private int flags;
     private EditPart parent;
     private List<EditPart> childEditParts = new ArrayList<>();
-    private List<ConnectionEditPart> connectionEditParts = new ArrayList<>();
     private int selected;
 
     private EditPartFactory factory;
@@ -44,16 +43,17 @@ public abstract class EditPart implements PropertyChangeListener {
     protected List getModelChildren() {
         return Collections.EMPTY_LIST;
     }
+
+    public List getModelSourceConnections() {
+        return Collections.EMPTY_LIST;
+    }
+
+    public List getModelTargetConnections() {
+        return Collections.EMPTY_LIST;
+    }
+
     public void addChildVisual(EditPart childEditPart, int index) {
         getFigure().add(childEditPart.getFigure(), index);
-    }
-
-    public void removeChildVisual(EditPart childEditPart) {
-        getFigure().remove(childEditPart.getFigure());
-    }
-
-    public final void setEditPartFactory(DecisionTreePartFactory factory) {
-        this.factory = factory;
     }
 
     public final void addChildModel(Object child, int index) {
@@ -65,10 +65,35 @@ public abstract class EditPart implements PropertyChangeListener {
 
     public final void addConnection(Object conn) {
         ConnectionEditPart connPart = (ConnectionEditPart)factory.createEditPart(this, conn);
-        connectionEditParts.add(connPart);
         Connection connFigure = (Connection)connPart.getFigure();
         connFigure.setParent(getFigure());
-        getFigure().getConnections().add(connFigure);
+        getFigure().getConnection().add(connFigure);
+    }
+
+    public void remove() {
+        for(Object conn : getModelSourceConnections())
+            findEditPart(conn).remove();
+
+        for(Object conn : getModelTargetConnections())
+            findEditPart(conn).remove();
+
+        parent.removeChild(this);
+    }
+
+    public void removeChild(EditPart childEditPart) {
+        getFigure().remove(childEditPart.getFigure());
+    }
+
+    public void removeSourceConnection(ConnectionEditPart connectionEditPart) {
+        getFigure().getConnection().remove(connectionEditPart.getFigure());
+    }
+
+    public void removeTargetConnection(ConnectionEditPart connectionEditPart) {
+        getFigure().getConnection().remove(connectionEditPart.getFigure());
+    }
+
+    public final void setEditPartFactory(DecisionTreePartFactory factory) {
+        this.factory = factory;
     }
 
     public final void build() {
@@ -163,13 +188,13 @@ public abstract class EditPart implements PropertyChangeListener {
         refresh();
     }
 
-    public List getModelSourceConnections() {
-        return new ArrayList<>();
-    }
+    public void showSourceFeedback() {}
 
-    public List getModelTargetConnections() {
-        return new ArrayList<>();
-    }
+    public void eraseSourceFeedback() {}
+
+    public void showTargetFeedback() {}
+
+    public void eraseTargetFeedback() {}
 
     public AbstractAnchor getSourceConnectionAnchor(ConnectionEditPart connectionEditPart) {
         return new ChopboxAnchor(getFigure());

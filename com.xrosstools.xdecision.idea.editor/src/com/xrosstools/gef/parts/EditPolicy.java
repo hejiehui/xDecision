@@ -41,14 +41,6 @@ public class EditPolicy {
 
     public boolean isSelectableSource(Object connectionModel) {return false;}
 
-    public void showSourceFeedback() {}
-
-    public void eraseSourceFeedback() {}
-
-    public void showTargetFeedback() {}
-
-    public void eraseTargetFeedback() {}
-
     public Command getCreateConnectionCommand(Object newConnectionModel, EditPart sourcePart) {return null;}
 
     /**

@@ -563,8 +563,14 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
             }
         }
         public void keyPressed(KeyEvent e) {
-            if(e.getKeyCode() == KeyEvent.VK_DELETE)
-                update(lastSelected.getPart().getEditPolicy().getDeleteCommand());
+            if(e.getKeyCode() == KeyEvent.VK_DELETE) {
+                Command deleteCmd = lastSelected.getPart().getEditPolicy().getDeleteCommand();
+                if(deleteCmd == null)
+                    return;
+
+                lastSelected.getPart().remove();
+                update(deleteCmd);
+            }
         }
     };
 
@@ -572,7 +578,6 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         private Command getCreateCommand(Figure underPoint, Point p) {
             return underPoint.getPart().getEditPolicy().getCreateCommand(newModel, p);
         }
-
         public void mouseMoved(MouseEvent e) {
             Point p = e.getPoint();
             Figure underPoint = findFigureAt(p);
@@ -600,7 +605,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         public void mouseMoved(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
             if(f.getPart().getEditPolicy().isSelectableSource(newModel))
-                f.getPart().getEditPolicy().showSourceFeedback();
+                f.getPart().showSourceFeedback();
         }
         public void mousePressed(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
@@ -618,15 +623,23 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
     };
 
     private InteractionHandle sourceSelected = new InteractionHandle("sourceSelected") {
+        private Command getCreateConnectionCommand(Figure f) {
+            return f.getPart().getEditPolicy().getCreateConnectionCommand(newModel, sourcePart);
+        }
         public void mouseMoved(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
-            if(f.getPart().getEditPolicy().getCreateConnectionCommand(newModel, sourcePart) != null)
-                f.getPart().getEditPolicy().showTargetFeedback();
+            if(getCreateConnectionCommand(f) != null)
+                f.getPart().showTargetFeedback();
         }
         public void mousePressed(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
-            update(f.getPart().getEditPolicy().getCreateConnectionCommand(newModel, sourcePart));
-            f.getPart().addConnection(newModel);
+            Command createConnectionCmd = getCreateConnectionCommand(f);
+
+            if(createConnectionCmd != null) {
+                update(createConnectionCmd);
+                f.getPart().addConnection(newModel);
+            }
+
             gotoNext(ready);
         }
         public void keyPressed(KeyEvent e) {
@@ -639,7 +652,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         public void mouseDragged(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
             if(getCommand(f) != null)
-                f.getPart().getEditPolicy().showSourceFeedback();
+                f.getPart().showSourceFeedback();
         }
         public void mouseReleased(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
@@ -659,7 +672,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         public void mouseDragged(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
             if(getCommand(f) != null)
-                f.getPart().getEditPolicy().showTargetFeedback();
+                f.getPart().showTargetFeedback();
         }
         public void mouseReleased(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());

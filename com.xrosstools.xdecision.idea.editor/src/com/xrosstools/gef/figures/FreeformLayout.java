@@ -10,6 +10,9 @@ public class FreeformLayout implements LayoutManager {
         int height=0;
 
         for (Figure c: parent.getComponents()) {
+            Dimension size = c.getPreferredSize();
+            c.setSize(size);
+
             int cWidth = c.getX() + c.getWidth();
             if(cWidth > width)
                 width = cWidth;

@@ -1,5 +1,6 @@
 package com.xrosstools.gef.figures;
 
+import com.sun.jna.platform.win32.WinUser;
 import com.xrosstools.gef.parts.ConnectionEditPart;
 import com.xrosstools.gef.routers.*;
 
@@ -59,6 +60,17 @@ public class Connection extends Figure {
         points.addPoint(getConnectionPart().getTargetAnchor().getLocation(start));
     }
 
+    public Figure findFigureAt(int x, int y) {
+        for(Figure child: children.keySet()) {
+            if(child.containsPoint(x, y))
+                return child;
+        }
+
+        if(points.containsPoint(x, y))
+            return this;
+
+        return null;
+    }
     @Override
     public boolean containsPoint(int x, int y) {
         if(points.containsPoint(x, y))
@@ -119,7 +131,10 @@ public class Connection extends Figure {
 
         @Override
         public Point getLocation(PointList points) {
-            return source ? points.getStartPoint() : points.getLast();
+            Point p = source ? points.getStartPoint() : points.getLast();
+            p = new Point(p);
+            p.translate(-Endpoint.SIZE/2, -Endpoint.SIZE/2);
+            return p;
         }
     }
 }

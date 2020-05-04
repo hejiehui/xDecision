@@ -206,7 +206,7 @@ public class Figure implements ImageObserver {
         return components;
     }
 
-    public List<Connection> getConnections() {
+    public List<Connection> getConnection() {
         return connections;
     }
 
@@ -237,8 +237,11 @@ public class Figure implements ImageObserver {
         }
 
         for (Connection conn: connections) {
-            if(conn.containsPoint(x, y))
-                return conn;
+            found = conn.findFigureAt(x, y);
+            if(found == null)
+                continue;
+
+            return found;
         }
 
         if(!containsPoint(x, y))

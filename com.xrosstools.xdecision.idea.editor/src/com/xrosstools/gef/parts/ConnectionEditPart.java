@@ -7,6 +7,12 @@ public abstract class ConnectionEditPart extends EditPart {
     public abstract Object getSourceModel();
     public abstract Object getTargetModel();
 
+    @Override
+    public void remove() {
+        getSource().removeSourceConnection(this);
+        getTarget().removeTargetConnection(this);
+    }
+
     public EditPart getSource() {
         return findEditPart(getSourceModel());
     }
