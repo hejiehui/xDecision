@@ -15,8 +15,21 @@
    <value>Yes</value>
    <value>No</value>
   </factor>
+  <factor id="title" index="3">
+   <value>worker</value>
+   <value>teacher</value>
+   <value>student</value>
+  </factor>
  </factors>
- <paths/>
+ <paths>
+  <path index="1">0:0</path>
+  <path index="2">0:1</path>
+  <path index="5">0:1|2:0</path>
+  <path index="6">0:1|2:1</path>
+  <path index="5">0:0|1:2</path>
+  <path index="0">0:0|1:0</path>
+  <path index="4">0:0|1:1</path>
+ </paths>
  <decisions>
   <decision id="decision0" index="0"/>
   <decision id="decision1" index="1"/>
