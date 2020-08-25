@@ -11,36 +11,48 @@ public class XDecisionTree<T> {
     private String factorName;
     private T decision;
     private Map<Object, XDecisionTree<T>> nodes;
+    private PathEvaluator evaluator;
 
-    public XDecisionTree(){}
+    public XDecisionTree(){
+        this(null, new DefaultEvaluator());
+    }
+    
+    public XDecisionTree(PathEvaluator evaluator) {
+        this(null, evaluator );
+    }
     
     /**
      * Initialize root node with a default decision
      * @param decision
      */
     public XDecisionTree(T decision) {
-        this.decision = decision;
+        this(decision, new DefaultEvaluator());
     }
     
+    public XDecisionTree(T decision, PathEvaluator evaluator) {
+        this.decision = decision;
+        this.evaluator = evaluator;
+    }
+
     /**
      * Path is a two dimension array, the first column is factor name, the 2nd is factor value
      * @param path
      * @param decision
      */
     public void add(XDecisionPath<T> path) {
-        add(0, path);
+        add(0, path, evaluator);
     }
     
-    private void add(int depth, XDecisionPath<T> path) {
+    private void add(int depth, XDecisionPath<T> path, PathEvaluator evaluator) {
         setKeyIndex(path.getPathEntry(depth).getFactorName());
         Object key = path.getPathEntry(depth).getValue();
-        XDecisionTree<T> node = getNode(key);
+        XDecisionTree<T> node = getNode(key, evaluator);
         
         if ((depth + 1) == path.length()) {
             node.decision = path.getDecision();
         }
         else {
-            node.add(depth + 1, path);
+            node.add(depth + 1, path, evaluator);
         }
     }
     
@@ -49,11 +61,17 @@ public class XDecisionTree<T> {
             return decision;
         
         Object fact = facts.get(factorName);
-        XDecisionTree<T> node = nodes.get(fact);
+        
+        XDecisionTree<T> node = null;
+        
+        Object path = evaluator == null ? fact : evaluator.evaluate(facts, factorName, nodes.keySet().toArray());
+        
+        node = nodes.get(path);
+        
         return node == null ? decision : node.get(facts);
     }
     
-    private XDecisionTree<T> getNode(Object key) {
+    private XDecisionTree<T> getNode(Object key, PathEvaluator evaluator) {
     	XDecisionTree<T> node = null;
         if (nodes == null){
             nodes = new HashMap<Object, XDecisionTree<T>>();
@@ -62,7 +80,7 @@ public class XDecisionTree<T> {
             node = nodes.get(key);
         }
         else {
-            node = new XDecisionTree<T>();
+            node = new XDecisionTree<T>(evaluator);
             nodes.put(key, node);
         }
         return node;

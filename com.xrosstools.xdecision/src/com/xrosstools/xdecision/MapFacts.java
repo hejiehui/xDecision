@@ -23,4 +23,10 @@ public class MapFacts implements Facts {
 	public void reset() {
 		values.clear();
 	}
+
+    @Override
+    public String[] getNames() {
+        return values.keySet().toArray(new String[values.size()]);
+        
+    }
 }

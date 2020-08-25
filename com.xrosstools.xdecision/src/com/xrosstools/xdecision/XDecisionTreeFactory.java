@@ -22,6 +22,7 @@ public class XDecisionTreeFactory {
 	
 	public static final String COMMENTS = "comments";
 	public static final String PARSER = "parser";
+	public static final String EVALUATOR = "evaluator";
 	
 	public static final String FACTORS = "factors";
 	public static final String FACTOR = "factor";
@@ -47,23 +48,8 @@ public class XDecisionTreeFactory {
 	
 	private static final XDecisionTreeFactory factory = new XDecisionTreeFactory();
 
-	/**
-	 * Default implementation which just use the string as value
-	 * @author Jerry He
-	 */
-	private static class StringParser implements XDecisionTreeParser {
-		@Override
-		public Object parseFact(String name, String value) {
-			return value;
-		}
-
-		@Override
-		public Object parseDecision(String name) {
-			return name;
-		}
-	}
-	
-	private static final XDecisionTreeParser defaultParser = new StringParser();
+	private static final XDecisionTreeParser defaultParser = new DefaultParser();
+	private static final PathEvaluator defaultEvaluator = new DefaultEvaluator();
 
 	public static <T> XDecisionTree<T> create(URL url) throws Exception {
         return create(url.openStream());
@@ -110,12 +96,13 @@ public class XDecisionTreeFactory {
 	}
 
 	public <T> XDecisionTree<T> create(Document doc) throws Exception {
-		XDecisionTree<T> tree = new XDecisionTree<T>();
-		
 		XDecisionTreeParser parser = createParser(doc);
+		PathEvaluator evaluator = createEvaluator(doc);
 		Object[] decisions = createDecisions(doc, parser);
 		FactorDefinition[] factors = createFactors(doc, parser);
 
+        XDecisionTree<T> tree = new XDecisionTree<T>(evaluator);
+        
 		List<Node> pathNodes = getValidChildNodes(doc.getElementsByTagName(PATHS).item(0));
 		
 		for(int i = 0; i < pathNodes.size(); i++){
@@ -143,17 +130,25 @@ public class XDecisionTreeFactory {
 	}
 	
 	private XDecisionTreeParser createParser(Document doc) throws Exception {
-		Node parserNode = doc.getElementsByTagName(PARSER).item(0);
-		if(parserNode == null)
-			return defaultParser;
-
-		String parserClassName = parserNode.getTextContent();
-		if(parserClassName == null || parserClassName.trim().equals(""))
-			return defaultParser;
-		
-		return (XDecisionTreeParser)Class.forName(parserClassName).newInstance();
+	    return createPlugin(doc, PARSER, defaultParser);
 	}
 	
+    private PathEvaluator createEvaluator(Document doc) throws Exception {
+        return createPlugin(doc, EVALUATOR, defaultEvaluator);
+    }
+    
+    private <T> T createPlugin(Document doc, String pluginKey, T defaultImplementation) throws Exception {
+        Node pluginNode = doc.getElementsByTagName(pluginKey).item(0);
+        if(pluginNode == null)
+            return defaultImplementation;
+
+        String pluginClassName = pluginNode.getTextContent();
+        if(pluginClassName == null || pluginClassName.trim().equals(""))
+            return defaultImplementation;
+        
+        return (T)Class.forName(pluginClassName).newInstance();
+    }    
+    
 	private FactorDefinition[] createFactors(Document doc, XDecisionTreeParser parser) {
 		List<Node> factorNodes = getValidChildNodes(doc.getElementsByTagName(FACTORS).item(0));
 		
