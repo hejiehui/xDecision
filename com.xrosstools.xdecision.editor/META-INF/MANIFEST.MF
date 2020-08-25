@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: xDecision editor
 Bundle-SymbolicName: com.xrosstools.xdecision.editor;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Bundle-Activator: com.xrosstools.xdecision.editor.Activator
 Bundle-Vendor: he, jiehui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -17,6 +17,5 @@ Require-Bundle: org.eclipse.gef;bundle-version="3.6.2",
  org.eclipse.core.resources;bundle-version="3.6.1",
  org.eclipse.ui.console;bundle-version="3.5.0",
  org.junit,
- com.xrosstools.xdecision;bundle-version="1.0.0",
  com.xrosstools.common;bundle-version="1.0.0",
  org.eclipse.jdt.core

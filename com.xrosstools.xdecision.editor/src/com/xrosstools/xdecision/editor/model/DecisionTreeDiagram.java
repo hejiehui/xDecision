@@ -13,6 +13,9 @@ public class DecisionTreeDiagram implements IPropertySource {
 	private List<DecisionTreeFactor> factors = new ArrayList<DecisionTreeFactor>();
 	private String decisionDescription;
 	private List<String> decisions= new ArrayList<String>();
+	
+	private String parserClass;
+	private String evaluatorClass;
 
 	private List<DecisionTreeNode> nodes = new ArrayList<DecisionTreeNode>();;
 	private List<DecisionTreeRoot> roots = new ArrayList<DecisionTreeRoot>();
@@ -64,7 +67,19 @@ public class DecisionTreeDiagram implements IPropertySource {
 	public String getDecisionDescription() {
 		return decisionDescription;
 	}
-	public void setDecisionDescription(String decisionDescription) {
+	public String getParserClass() {
+        return parserClass;
+    }
+    public void setParserClass(String parserClass) {
+        this.parserClass = parserClass;
+    }
+    public String getEvaluatorClass() {
+        return evaluatorClass;
+    }
+    public void setEvaluatorClass(String evaluatorClass) {
+        this.evaluatorClass = evaluatorClass;
+    }
+    public void setDecisionDescription(String decisionDescription) {
 		this.decisionDescription = decisionDescription;
 	}
 	public String getDescription() {
