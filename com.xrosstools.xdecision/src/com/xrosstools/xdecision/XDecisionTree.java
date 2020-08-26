@@ -36,8 +36,7 @@ public class XDecisionTree<T> {
 
     /**
      * Path is a two dimension array, the first column is factor name, the 2nd is factor value
-     * @param path
-     * @param decision
+     * @param path the value list of factors that can reach to a decision
      */
     public void add(XDecisionPath<T> path) {
         add(0, path, evaluator);
