@@ -52,3 +52,13 @@ repository
 
 # Demo project
 [Demo](https://github.com/hejiehui/xDecision/tree/master/com.xrosstools.xdecision.sample)
+
+# 模型文件结构详解
+[model-file-structure](https://github.com/hejiehui/xDecision/wiki/model-file-structure)
+
+# 自定义插件
+从xdecision2.0.0开始支持用户自定义插件。包括决策树结构的自定义解析和执行过程路径自定义选择
+
+[结构解析plugin](https://github.com/hejiehui/xDecision/wiki/model-file-structure#parser)
+
+[路径选择plugin](https://github.com/hejiehui/xDecision/wiki/model-file-structure#evaluator)
