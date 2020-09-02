@@ -228,14 +228,7 @@ public class Figure implements ImageObserver {
 
     public Figure findFigureAt(int x, int y) {
         Figure found;
-        for(Figure child: components) {
-            found = child.findFigureAt(x, y);
-            if(found == null)
-                continue;
-
-            return found;
-        }
-
+        // Check connection first because endpoint of connection may overlap with under figure
         for (Connection conn: connections) {
             found = conn.findFigureAt(x, y);
             if(found == null)
@@ -244,6 +237,13 @@ public class Figure implements ImageObserver {
             return found;
         }
 
+        for(Figure child: components) {
+            found = child.findFigureAt(x, y);
+            if(found == null)
+                continue;
+
+            return found;
+        }
         if(!containsPoint(x, y))
             return null;
 

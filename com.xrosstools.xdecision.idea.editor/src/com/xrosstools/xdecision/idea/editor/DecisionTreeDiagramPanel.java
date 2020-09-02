@@ -660,11 +660,8 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
             gotoNext(ready);
         }
         private Command getCommand(Figure f) {
-            if(f.getPart().getEditPolicy().isSelectableSource(newModel)) {
-                Connection connection = ((Endpoint)lastSelected).getParentConnection();
-                return f.getPart().getEditPolicy().getReconnectSourceCommand(connection);
-            }
-            return null;
+            Connection connection = ((Endpoint)lastSelected).getParentConnection();
+            return f.getPart().getEditPolicy().getReconnectSourceCommand(connection.getConnectionPart());
         }
     };
 
@@ -680,12 +677,8 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
             gotoNext(ready);
         }
         private Command getCommand(Figure f) {
-////            if(f.getPart().getEditPolicy().getCreateConnectCommand(newModel, sourcePart) != null)
-//            if(f.getPart().getEditPolicy().isSelectableTarget(newModel)) {
-//                Connection connection = ((Endpoint)lastSelected).getParentConnection();
-//                return f.getPart().getEditPolicy().getReconnectTargetCommand(connection);
-//            }
-            return null;
+            Connection connection = ((Endpoint)lastSelected).getParentConnection();
+            return f.getPart().getEditPolicy().getReconnectTargetCommand(connection.getConnectionPart());
         }
     };
     private InteractionHandle curHandle = ready;

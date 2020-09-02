@@ -1,5 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.policies;
 
+import com.xrosstools.gef.parts.ConnectionEditPart;
 import com.xrosstools.gef.parts.EditPart;
 import com.xrosstools.gef.parts.EditPolicy;
 import com.xrosstools.gef.Command;
@@ -52,15 +53,15 @@ public class DecisionTreeNodeEditPolicy extends EditPolicy {
         return new CreatePathCommand((DecisionTreeNodeConnection) connectionModel, (DecisionTreeNode)sourcePart.getModel(), (DecisionTreeNode)getHost().getModel());
     }
 
-    public Command getReconnectSourceCommand(EditPart sourcePart) {
+    public Command getReconnectSourceCommand(ConnectionEditPart connectionPart) {
         return new ReconnectParentCommand(
-                (DecisionTreeNodeConnection)sourcePart.getModel(),
+                (DecisionTreeNodeConnection)connectionPart.getModel(),
                 (DecisionTreeNode)getHost().getModel());
     }
 
-    public Command getReconnectTargetCommand(EditPart targetPart) {
+    public Command getReconnectTargetCommand(ConnectionEditPart connectionPart) {
         return new ReconnectChildCommand(
-                (DecisionTreeNodeConnection)targetPart.getModel(),
+                (DecisionTreeNodeConnection)connectionPart.getModel(),
                 (DecisionTreeNode)getHost().getModel());
     }
 }

@@ -1,5 +1,7 @@
 package com.xrosstools.gef.figures;
 
+import com.xrosstools.gef.parts.EditPart;
+
 import java.awt.*;
 
 public class Endpoint extends Figure {
@@ -8,6 +10,11 @@ public class Endpoint extends Figure {
     public Endpoint() {
         setWidth(SIZE);
         setHeight(SIZE);
+    }
+
+    @Override
+    public EditPart getPart() {
+        return getParent().getPart();
     }
 
     public Connection getParentConnection() {
@@ -26,6 +33,10 @@ public class Endpoint extends Figure {
         return isConnectionEndpoint() && getParentConnection().getTargetEndpoint() == this;
     }
 
+    @Override
+    public boolean isSelectable() {
+        return true;
+    }
 
     @Override
     public void paint(Graphics graphics) {

@@ -19,7 +19,7 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
 	private Label label;
     protected Figure createFigure() {
         Connection conn = new Connection();
-        conn.setTargetDecoration(new PolygonDecoration());
+        conn.setTargetDecoration(new ArrowDecoration());
         conn.setRouter(new BendpointConnectionRouter());
         conn.setForeground(Color.black);
         

@@ -20,7 +20,7 @@ public class RightAngleRouter implements ConnectionRouter {
     @Override
     public void route(Connection conn) {
         PointList pl = conn.getPoints();
-        Point start = pl.getStartPoint();
+        Point start = pl.getFirst();
         Point end = pl.getLast();
 
         Point middle;

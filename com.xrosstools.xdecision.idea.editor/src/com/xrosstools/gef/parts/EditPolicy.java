@@ -43,17 +43,7 @@ public class EditPolicy {
 
     public Command getCreateConnectionCommand(Object newConnectionModel, EditPart sourcePart) {return null;}
 
-    /**
-     * If true, the selected connection need to show source anchor to allow frag and drop
-     */
-    public boolean isSourceReconnectable() {return false;}
+    public Command getReconnectSourceCommand(ConnectionEditPart connectionPart) {return null;}
 
-    /**
-     * If true, the selected connection need to show target anchor to allow frag and drop
-     */
-    public boolean isTargetReconnectable() {return false;}
-
-    public Command getReconnectSourceCommand(Connection connection) {return null;}
-
-    public Command getReconnectTargetCommand(Connection connection) {return null;}
+    public Command getReconnectTargetCommand(ConnectionEditPart connectionPart) {return null;}
 }

@@ -65,7 +65,7 @@ public class NewDecisionTreeAction extends AnAction {
                 try {
                     VirtualFile newFile = dir.createChildData(project, name + "." + XdecisionFileType.EXTENSION);
 
-                    BufferedInputStream in = new BufferedInputStream(getClass().getResourceAsStream("/template/template.xdecision"));
+                    BufferedInputStream in = new BufferedInputStream(getClass().getResourceAsStream("/templates/template.xdecision"));
                     int buf_size = 1024;
                     byte[] buffer = new byte[buf_size];
                     int len;

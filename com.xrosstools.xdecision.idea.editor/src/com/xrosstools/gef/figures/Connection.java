@@ -1,6 +1,5 @@
 package com.xrosstools.gef.figures;
 
-import com.sun.jna.platform.win32.WinUser;
 import com.xrosstools.gef.parts.ConnectionEditPart;
 import com.xrosstools.gef.routers.*;
 
@@ -22,6 +21,9 @@ public class Connection extends Figure {
         targetEndpoint = new Endpoint();
         add(sourceEndpoint, new ConnectionEndpointLocator(true));
         add(targetEndpoint, new ConnectionEndpointLocator(false));
+
+        targetDecoration = new ArrowDecoration();
+        add(targetDecoration, new ConnectionEndpointLocator(false));
     }
 
     public ConnectionEditPart getConnectionPart() {
@@ -43,6 +45,7 @@ public class Connection extends Figure {
 
         for(Map.Entry<Figure, ConnectionLocator> childEntry: children.entrySet()) {
             childEntry.getKey().setLocation(childEntry.getValue().getLocation(points));
+            childEntry.getKey().layout();
         }
     }
 
@@ -131,7 +134,7 @@ public class Connection extends Figure {
 
         @Override
         public Point getLocation(PointList points) {
-            Point p = source ? points.getStartPoint() : points.getLast();
+            Point p = source ? points.getFirst() : points.getLast();
             p = new Point(p);
             p.translate(-Endpoint.SIZE/2, -Endpoint.SIZE/2);
             return p;

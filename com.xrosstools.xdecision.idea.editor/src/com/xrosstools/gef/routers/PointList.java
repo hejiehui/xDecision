@@ -12,6 +12,10 @@ public class PointList {
         points.add(p);
     }
 
+    public int size() {
+        return points.size();
+    }
+
     public int[] getXPoints() {
         int[] x = new int[points.size()];
         for (int i = 0; i < points.size(); i++) {
@@ -31,7 +35,7 @@ public class PointList {
         return points.size();
     }
 
-    public Point getStartPoint() {
+    public Point getFirst() {
         return points.get(0);
     }
 
