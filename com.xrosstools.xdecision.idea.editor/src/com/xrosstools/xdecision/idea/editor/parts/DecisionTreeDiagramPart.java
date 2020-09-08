@@ -17,11 +17,7 @@ public class DecisionTreeDiagramPart extends EditPart {
 	private boolean isLayoutUpdated;
     protected List<DecisionTreeNode> getModelChildren() {
     	DecisionTreeDiagram diagram = (DecisionTreeDiagram)getModel();
-    	if(!isLayoutUpdated){
-    		new LayoutAlgorithm().layout(diagram);
-    		isLayoutUpdated = true;
-    	}
-    	
+        layout();
     	DecisionTreeManager manager = new DecisionTreeManager(diagram);
     	for(DecisionTreeNode node: diagram.getNodes())
     		if(!node.isDecisionTreeManagerSet())
@@ -35,12 +31,20 @@ public class DecisionTreeDiagramPart extends EditPart {
         return figure;
 	}
 
+	private void layout() {
+        DecisionTreeDiagram diagram = (DecisionTreeDiagram)getModel();
+        if(!isLayoutUpdated){
+            new LayoutAlgorithm().layout(diagram);
+            isLayoutUpdated = true;
+        }
+    }
+
 	public void propertyChange(PropertyChangeEvent evt) {
 		String prop = evt.getPropertyName();
 		if (DecisionTreeDiagram.LAYOUT.equals(prop)){
 			isLayoutUpdated = false;
 		}
-
+        layout();
 		refresh();
 	}
 

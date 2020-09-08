@@ -9,9 +9,9 @@ import java.util.List;
 
 public class DecisionTreeDiagram implements IPropertySource {
 	private String description;
-	private String factorDescription;
+	private String parserClass;
+	private String evaluatorClass;
 	private List<DecisionTreeFactor> factors = new ArrayList<DecisionTreeFactor>();
-	private String decisionDescription;
 	private List<String> decisions= new ArrayList<String>();
 
 	private List<DecisionTreeNode> nodes = new ArrayList<DecisionTreeNode>();;
@@ -55,18 +55,18 @@ public class DecisionTreeDiagram implements IPropertySource {
 		source.resetPropertyValue(propName);
 	}
 
-	public String getFactorDescription() {
-		return factorDescription;
-	}
-	public void setFactorDescription(String factorDescription) {
-		this.factorDescription = factorDescription;
-	}
-	public String getDecisionDescription() {
-		return decisionDescription;
-	}
-	public void setDecisionDescription(String decisionDescription) {
-		this.decisionDescription = decisionDescription;
-	}
+    public String getParserClass() {
+        return parserClass;
+    }
+    public void setParserClass(String parserClass) {
+        this.parserClass = parserClass;
+    }
+    public String getEvaluatorClass() {
+        return evaluatorClass;
+    }
+    public void setEvaluatorClass(String evaluatorClass) {
+        this.evaluatorClass = evaluatorClass;
+    }
 	public String getDescription() {
 		return description;
 	}

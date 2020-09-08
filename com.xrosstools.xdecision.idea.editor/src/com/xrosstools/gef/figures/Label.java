@@ -1,5 +1,7 @@
 package com.xrosstools.gef.figures;
 
+import java.awt.*;
+
 public class Label extends Figure {
     private IconFigure icon = new IconFigure();
     private Text text = new Text();
@@ -13,6 +15,10 @@ public class Label extends Figure {
         setLayout(new ToolbarLayout(true, ToolbarLayout.ALIGN_CENTER, 5));
         add(icon);
         add(text);
+    }
+
+    public void setForeground(Color foreground) {
+        this.text.setForeground(foreground);
     }
 
     public void setText(String text) {

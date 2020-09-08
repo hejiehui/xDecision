@@ -193,11 +193,13 @@ public class Figure implements ImageObserver {
     public Dimension getSize() {
         return new Dimension(width, height);
     }
-    public Dimension getPreferredSize() {
-//        if(preferredSize != null)
-//            return preferredSize;
 
-        preferredSize = layout == null ? new Dimension(width, height) : layout.preferredLayoutSize(this);
+    public void setPreferredSize(Dimension preferredSize) {
+        this.preferredSize = preferredSize;
+    }
+
+    public Dimension getPreferredSize() {
+        preferredSize = layout == null ? getSize() : layout.preferredLayoutSize(this);
 
         return preferredSize;
     }

@@ -5,7 +5,7 @@ import com.xrosstools.gef.parts.EditPart;
 import java.awt.*;
 
 public class Endpoint extends Figure {
-    public static final int SIZE = 5;
+    public static final int SIZE = 8;
 
     public Endpoint() {
         setWidth(SIZE);

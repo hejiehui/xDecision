@@ -11,13 +11,13 @@ public class FreeformLayout implements LayoutManager {
 
         for (Figure c: parent.getComponents()) {
             Dimension size = c.getPreferredSize();
-            c.setSize(size);
+            Point location = c.getLocation();
 
-            int cWidth = c.getX() + c.getWidth();
+            int cWidth = c.getX() + (int)size.getWidth();
             if(cWidth > width)
                 width = cWidth;
 
-            int cHeight = c.getY() + c.getHeight();
+            int cHeight = c.getY() + (int)size.getHeight();
             if(cHeight > height)
                 height = cHeight;
 
@@ -26,7 +26,12 @@ public class FreeformLayout implements LayoutManager {
     }
 
     @Override
-    public void layoutContainer(Figure parent) {}
+    public void layoutContainer(Figure parent) {
+        for (Figure c : parent.getComponents()) {
+            Dimension size = c.getPreferredSize();
+            c.setSize(size);
+        }
+    }
 
     @Override
     public int getInsertionIndex(Figure parent, Point insertionPoint) {
@@ -34,7 +39,5 @@ public class FreeformLayout implements LayoutManager {
     }
 
     @Override
-    public void paintInsertionFeedback(Figure parent, Point insertionPoint, Graphics gef) {
-
-    }
+    public void paintInsertionFeedback(Figure parent, Point insertionPoint, Graphics gef) {}
 }

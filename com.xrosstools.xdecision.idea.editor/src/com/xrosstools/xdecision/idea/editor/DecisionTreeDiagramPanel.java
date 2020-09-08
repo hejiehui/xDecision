@@ -122,7 +122,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
 
         palette.add(createPaletteButton(new DecisionTreeCreateDecisionAction(project, diagram), CREATE_NEW_DECISION, CREATE_NEW_DECISION_MSG));
         palette.add(createPaletteButton(new DecisionTreeCreateFactorAction(project, diagram), CREATE_NEW_FACTOR, CREATE_NEW_FACTOR_MSG));
-        palette.add(createPaletteButton(new DecisionTreeCodeGenAction(true), GEN_TEST_CODE, GEN_JUNIT_TEST_CODE_MSG));
+        palette.add(createPaletteButton(new DecisionTreeCodeGenAction(virtualFile, diagram), GEN_TEST_CODE, GEN_JUNIT_TEST_CODE_MSG));
 
         return palette;
     }
@@ -141,11 +141,11 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 1), ALIGN_RIGHT, ALIGN_RIGHT_MSG));
         toolbar.addSeparator();
 
-        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, false, true), INCREASE_NODE_HEIGHT, INCREASE_NODE_HEIGHT_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, false, false),DECREASE_NODE_HEIGHT, DECREASE_NODE_HEIGHT_MSG));
-
-        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, true, true), INCREASE_NODE_WIDTH, INCREASE_NODE_WIDTH_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, true, false), DECREASE_NODE_WIDTH, DECREASE_NODE_WIDTH_MSG));
+//        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, false, true), INCREASE_NODE_HEIGHT, INCREASE_NODE_HEIGHT_MSG));
+//        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, false, false),DECREASE_NODE_HEIGHT, DECREASE_NODE_HEIGHT_MSG));
+//
+//        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, true, true), INCREASE_NODE_WIDTH, INCREASE_NODE_WIDTH_MSG));
+//        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, true, false), DECREASE_NODE_WIDTH, DECREASE_NODE_WIDTH_MSG));
 
         toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, false, true, true), INCREASE_HORIZANTAL_SPACE, INCREASE_HORIZANTAL_SPACE_MSG));
         toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, false, true, false), DECREASE_HORIZANTAL_SPACE, DECREASE_HORIZANTAL_SPACE_MSG));
@@ -223,7 +223,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         return btn;
     }
 
-    private JButton createPaletteButton(Action action, String iconName, String tooltip) {
+    private JButton createPaletteButton(ActionListener action, String iconName, String tooltip) {
         JButton btn = new JButton(tooltip, IconLoader.findIcon(Activator.getIconPath(iconName)));
         btn.setContentAreaFilled(false);
         btn.addActionListener(action);
@@ -410,7 +410,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
     }
 
     private void showContexMenu(int x, int y) {
-        DecisionTreeContextMenuProvider builder = new DecisionTreeContextMenuProvider(project, diagram);
+        DecisionTreeContextMenuProvider builder = new DecisionTreeContextMenuProvider(project, virtualFile, diagram);
         builder.buildContextMenu(lastSelected.getPart()).show(unitPanel, x, y);
     }
 
@@ -540,12 +540,6 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
             updateHover(underPoint, getMoveCommand(underPoint, p), p);
         }
         public void mouseReleased(MouseEvent e) {
-            if(lastSelected.getPart().getModel() == diagram)
-                return;
-
-            if(lastSelected instanceof Connection)
-                return;
-
             // Drag and drop
             if (lastSelected != null && lastHover != null && lastSelected != lastHover) {
                 Point p = e.getPoint();

@@ -13,6 +13,7 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 	public static final String NAME = "Name";
 	public static final String VALUE_ = "Value ";
 	public static final String COMMENTS = "Comments";
+	public static final String CONFIGURE = "Configure";
 	public static final String OVERVIEW = "Overview";
 	public static final String SPACE = " ";
 	public static final String FACTOR_COMMENTS = "Factor comments";
@@ -22,6 +23,8 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 	public static final String DECISION = "Decision ";
 	public static final String LAYOUT = "layout";
 	public static final String NODE = "node";
+    public static final String PARSER = "Parser";
+    public static final String EVALUATOR = "Evaluator";
 	
 	private DecisionTreeDiagram diagram;
 	public DecisionTreeDiagramPropertySource(DecisionTreeDiagram diagram){
@@ -31,17 +34,17 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		List<IPropertyDescriptor> props = new ArrayList<IPropertyDescriptor>();
 		//new TextPropertyDescriptor(NAME, NAME),
-		PropertyDescriptor desc = new TextPropertyDescriptor(OVERVIEW);
-		desc.setCategory(COMMENTS);
-		props.add(desc);
-		
-		desc = new TextPropertyDescriptor(FACTOR_COMMENTS);
-		desc.setCategory(COMMENTS);
-		props.add(desc);
-		
-		desc = new TextPropertyDescriptor(DECISION_COMMENTS);
-		desc.setCategory(COMMENTS);
-		props.add(desc);
+        PropertyDescriptor desc = new TextPropertyDescriptor( COMMENTS);
+        desc.setCategory(CONFIGURE);
+        props.add(desc);
+
+        desc = new TextPropertyDescriptor(PARSER);
+        desc.setCategory(CONFIGURE);
+        props.add(desc);
+
+        desc = new TextPropertyDescriptor(EVALUATOR);
+        desc.setCategory(CONFIGURE);
+        props.add(desc);
 		
 		for(int i = 0; i < diagram.getFactors().size(); i++){
 			desc = new TextPropertyDescriptor(FACTOR + i);
@@ -71,10 +74,13 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 		
 		if (COMMENTS.equals(prop))
 			return diagram.getDescription();
-		
-		if(prop.startsWith(FACTOR_COMMENTS))
-			return diagram.getFactorDescription();
-		
+
+        if(prop.equals(PARSER))
+            return diagram.getParserClass();
+
+        if(prop.equals(EVALUATOR))
+            return diagram.getEvaluatorClass();
+
 		if(prop.startsWith(FACTOR) && !prop.contains(_VALUE_)){
 			int index = Integer.parseInt(prop.substring(prop.indexOf(SPACE) + 1));
 			return diagram.getFactors().get(index).getFactorName();
@@ -88,9 +94,6 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 			return diagram.getFactors().get(factorId).getFactorValues()[valueId];
 		}
 
-		if(prop.startsWith(DECISION_COMMENTS))
-			return diagram.getDecisionDescription();
-		
 		if(prop.startsWith(DECISION)){
 			int index = Integer.parseInt(prop.substring(prop.indexOf(SPACE) + 1));
 			return diagram.getDecisions().get(index);
@@ -105,9 +108,12 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 		
 		if (COMMENTS.equals(id))
 			diagram.setDescription((String)value);
-		
-		if (FACTOR_COMMENTS.equals(prop))
-			diagram.setFactorDescription(value);
+
+        if (PARSER.equals(prop))
+            diagram.setParserClass(value);
+
+        if (EVALUATOR.equals(prop))
+            diagram.setEvaluatorClass(value);
 		
 		if(prop.startsWith(FACTOR) && !prop.contains(_VALUE_)){
 			int index = Integer.parseInt(prop.substring(prop.indexOf(SPACE) + 1));
@@ -122,9 +128,6 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 			diagram.getFactors().get(factorId).getFactorValues()[valueId] = value;
 		}
 
-		if (DECISION_COMMENTS.equals(prop))
-			diagram.setDecisionDescription(value);
-		
 		if(prop.startsWith(DECISION)){
 			int index = Integer.parseInt(prop.substring(prop.indexOf(SPACE) + 1));
 			diagram.getDecisions().set(index, value);

@@ -19,6 +19,8 @@ public class DecisionTreeXMLSerializer {
 	public static final String DECISION_TREE = "decision_tree";
 	
 	public static final String COMMENTS = "comments";
+	public static final String PARSER = "parser";
+	public static final String EVALUATOR = "evaluator";
 
 	public static final String FACTORS = "factors";
 	public static final String FACTOR = "factor";
@@ -45,18 +47,20 @@ public class DecisionTreeXMLSerializer {
 	
 	public DecisionTreeModel readMode(Document doc) {
 		DecisionTreeModel model = new DecisionTreeModel();
-		model.setComments(getComments(doc));
-		model.setFactors(createFactors(doc));
+        model.setComments(getNodeValue(doc, COMMENTS, ""));
+        model.setParserClass(getNodeValue(doc, PARSER, ""));
+        model.setEvaluatorClass(getNodeValue(doc, EVALUATOR, ""));
+        model.setFactors(createFactors(doc));
 		model.setPathes(createPaths(doc));
 		model.setDecisions(createDecisions(doc));
 		return model;
 	}
-	
-	private String getComments(Document doc){
-		if(doc.getElementsByTagName(COMMENTS).getLength() == 0)
-			return "";
-		return doc.getElementsByTagName(COMMENTS).item(0).getNodeValue();
-	}
+
+    private String getNodeValue(Document doc, String nodeName, String defaultValue){
+        if(doc.getElementsByTagName(nodeName).getLength() == 0)
+            return "";
+        return doc.getElementsByTagName(nodeName).item(0).getTextContent();
+    }
 
 	private DecisionTreeFactor[] createFactors(Document doc) {
 		List<Node> factorNodes = getValidChildNodes(doc.getElementsByTagName(FACTORS).item(0));
@@ -138,10 +142,12 @@ public class DecisionTreeXMLSerializer {
 		Document doc = null;
 		try {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-			Element root = (Element)doc.createElement(DECISION_TREE);
+			Element root = doc.createElement(DECISION_TREE);
 			doc.appendChild(root);
-			setComments(doc, root, model.getComments());
-			
+            root.appendChild(createNode(doc, COMMENTS, model.getComments()));
+            root.appendChild(createNode(doc, PARSER, model.getParserClass()));
+            root.appendChild(createNode(doc, EVALUATOR, model.getEvaluatorClass()));
+
 			Element factorsNode = (Element)doc.createElement(FACTORS);
 			root.appendChild(factorsNode);
 			writeFactors(doc, factorsNode, model);
@@ -159,12 +165,12 @@ public class DecisionTreeXMLSerializer {
 			return null;
 		}
 	}
-	
-	private void setComments(Document doc, Element root, String comments){
-		Element commentsNode = (Element)doc.createElement(COMMENTS);
-		commentsNode.appendChild(doc.createTextNode(comments));
-	}
 
+    private Element createNode(Document doc, String nodeName, String value){
+        Element node = doc.createElement(nodeName);
+        node.appendChild(doc.createTextNode(value));
+        return node;
+    }
 	
 	private void writeFactors(Document doc, Element factorsNode, DecisionTreeModel model){
 		DecisionTreeFactor[] factors = model.getFactors();

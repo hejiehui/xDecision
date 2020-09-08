@@ -20,6 +20,9 @@ public class DecisionTreeDiagramLayoutPolicy extends EditPolicy {
 
     public Command getMoveCommand(EditPart child, Rectangle constraint) {
         MoveNodeCommand cmd = new MoveNodeCommand();
+        if(!(child.getModel() instanceof DecisionTreeNode))
+            return null;
+
         cmd.setNode((DecisionTreeNode) child.getModel());
         cmd.setConstraint(constraint);
         return cmd;

@@ -18,6 +18,9 @@ public class DecisionTreeDiagramFactory {
 	private DecisionTreeDiagram convert(DecisionTreeModel model){
 		DecisionTreeDiagram diagram = new DecisionTreeDiagram();
 		diagram.setDescription(model.getComments());
+		diagram.setParserClass(model.getParserClass());
+		diagram.setEvaluatorClass(model.getEvaluatorClass());
+
 		diagram.setAlignment(0.5f);
 		for(String decision: model.getDecisions())
 			diagram.getDecisions().add(decision);
@@ -74,6 +77,8 @@ public class DecisionTreeDiagramFactory {
 	public DecisionTreeModel convert(DecisionTreeDiagram diagram) {
 		DecisionTreeModel model = new DecisionTreeModel();
 		model.setComments(diagram.getDescription());
+		model.setParserClass(diagram.getParserClass());
+        model.setEvaluatorClass(diagram.getEvaluatorClass());
 		model.setDecisions(diagram.getDecisions().toArray(new String[0]));
 		model.setFactors(diagram.getFactors().toArray(new DecisionTreeFactor[0]));
 		model.setPathes(createPath(diagram));

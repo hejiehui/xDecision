@@ -30,27 +30,22 @@ public class ToolbarLayout implements LayoutManager {
         return horizontal;
     }
 
-//    public void addLayoutComponent(String name, Component comp) {
-//    }
-//
-//    public void removeLayoutComponent(Component comp) {
-//    }
-
     public void addLayoutComponent(String name, Figure comp) {
     }
 
     public void removeLayoutComponent(Figure comp) {
     }
 
+    @Override
     public Dimension preferredLayoutSize(Figure parent) {
-        synchronized (parent) {//.getTreeLock()
+        synchronized (parent) {
             Insets ins = parent.getInsets();
             int count = parent.getComponentCount();
             int width = 0;
             int height = 0;
             for(Figure c: parent.getComponents()) {
                 Dimension size = c.getPreferredSize();
-                c.setSize(size);
+//                c.setSize(size);
                 if (horizontal) {
                     width += size.width;
                     height = Math.max(height, size.height);
@@ -67,8 +62,9 @@ public class ToolbarLayout implements LayoutManager {
 
             width += parent.getMarginWidth();
             height += parent.getMarginHeight();
-            parent.setSize(width, height);
-            return parent.getSize();
+            return new Dimension(width, height);
+//            parent.setSize(width, height);
+//            return parent.getSize();
         }
     }
 
@@ -76,8 +72,9 @@ public class ToolbarLayout implements LayoutManager {
         return preferredLayoutSize(parent);
     }
 
+    @Override
     public void layoutContainer(Figure parent) {
-        synchronized (parent) {//.getTreeLock()
+        synchronized (parent) {
             Point innerLoc = parent.getInnerLocation();
             Dimension innerSize = parent.getInnerSize();
             int px = innerLoc.x;
@@ -87,7 +84,8 @@ public class ToolbarLayout implements LayoutManager {
             int nextPos = 0;
 
             for (Figure c :parent.getComponents()) {
-                Dimension size = c.getSize();
+                Dimension size = c.getPreferredSize();
+                c.setSize(size);
                 int minorPos = horizontal ? size.height : size.width;
 
                 switch (alignment) {
@@ -100,6 +98,8 @@ public class ToolbarLayout implements LayoutManager {
                     case ALIGN_BOTTOMRIGHT:
                         minorPos = horizontal ? size.height : size.width;
                         break;
+                    default:
+                        throw new IllegalArgumentException("Alignment is not supported: " + alignment);
                 }
                 if (horizontal) {
                     c.setLocation(px + nextPos, py + minorPos);

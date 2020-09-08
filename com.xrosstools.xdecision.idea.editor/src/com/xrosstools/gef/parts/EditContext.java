@@ -51,7 +51,14 @@ public class EditContext {
     }
 
     public Figure findFigure(Object model) {
-        return findContent(model).getEditPart().getFigure();
+        Trinity comp = findContent(model);
+        if(comp == null)
+            return null;
+
+        if(comp.getEditPart() == null)
+            return null;
+
+        return comp.getEditPart().getFigure();
     }
 
     private Trinity findContent(Object model) {

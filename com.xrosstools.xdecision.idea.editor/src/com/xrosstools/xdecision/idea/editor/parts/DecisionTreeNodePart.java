@@ -39,7 +39,7 @@ public class DecisionTreeNodePart extends EditPart {
     	DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
 
 		figure.setLocation(node.getLocation());
-		figure.setSize(node.getSize());
+		figure.setPreferredSize(node.getSize());
 
         String factor;
     	if(node.getFactorId() == -1)
