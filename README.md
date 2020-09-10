@@ -53,6 +53,9 @@ repository
 # Demo project
 [Demo](https://github.com/hejiehui/xDecision/tree/master/com.xrosstools.xdecision.sample)
 
+# IDEA编辑器
+[plugin](https://github.com/hejiehui/xDecision/blob/master/com.xrosstools.xdecision.idea.editor/com.xrosstools.xdecision.idea.editor.zip)
+
 # 模型文件结构详解
 [model-file-structure](https://github.com/hejiehui/xDecision/wiki/model-file-structure)
 
