@@ -12,6 +12,7 @@ public class DecisionTreeNodeFigure extends RoundedRectangle {
     private com.xrosstools.gef.figures.Label decisionLabel;
 
     public DecisionTreeNodeFigure() {
+        setMinSize(new Dimension(100, 50));
         setLayout(new ToolbarLayout(false, ToolbarLayout.ALIGN_TOPLEFT, 10));
         factorLabel = new Label();
 //        factorLabel .getInsets().set(BORDER_WIDTH, 0, BORDER_WIDTH, 0);

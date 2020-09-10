@@ -20,6 +20,7 @@ public class Figure implements ImageObserver {
     private int height;
     private int lineWidth = 1;
     private Dimension preferredSize;
+    private Dimension minSize;
 
     private boolean visible = true;
     private boolean selected = false;
@@ -200,6 +201,12 @@ public class Figure implements ImageObserver {
 
     public Dimension getPreferredSize() {
         preferredSize = layout == null ? getSize() : layout.preferredLayoutSize(this);
+
+        if(minSize == null)
+            return preferredSize;
+
+        preferredSize.height = Math.max(minSize.height, preferredSize.height);
+        preferredSize.width = Math.max(minSize.width, preferredSize.width);
 
         return preferredSize;
     }
@@ -433,5 +440,13 @@ public class Figure implements ImageObserver {
 
     public void setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
+    }
+
+    public Dimension getMinSize() {
+        return minSize;
+    }
+
+    public void setMinSize(Dimension minSize) {
+        this.minSize = minSize;
     }
 }
