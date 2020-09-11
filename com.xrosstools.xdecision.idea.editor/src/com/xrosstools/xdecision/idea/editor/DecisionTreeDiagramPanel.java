@@ -358,10 +358,10 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
     }
 
     private void gotoNext(InteractionHandle next) {
-        System.err.println("Leaving " + curHandle.id);
+//        System.err.println("Leaving " + curHandle.id);
         curHandle.leave();
 
-        System.err.println("Entering " + next.id);
+//        System.err.println("Entering " + next.id);
         next.enter();
         curHandle = next;
     }

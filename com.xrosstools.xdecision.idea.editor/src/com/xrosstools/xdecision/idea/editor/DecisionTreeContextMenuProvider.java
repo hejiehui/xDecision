@@ -31,15 +31,15 @@ public class DecisionTreeContextMenuProvider implements DecisionTreeMessages, Co
         menu.add(createItem(CREATE_NEW_DECISION_MSG, new DecisionTreeCreateDecisionAction(project, diagram)));
         menu.add(createItem(CREATE_NEW_FACTOR_MSG, new DecisionTreeCreateFactorAction(project, diagram)));
         menu.addSeparator();
-        JPopupMenu sub = new JPopupMenu("New value for factor");
+        JMenu sub = new JMenu("New value for factor");
     	getFactorActions(sub);
     	menu.add(sub);
 
     	return menu;
     }
     
-    private void getFactorActions(JPopupMenu menu){
+    private void getFactorActions(JMenu menu){
 		for(DecisionTreeFactor factor: diagram.getFactors())
-			menu.add(createItem(CREATE_NEW_FACTOR_VALUE_MSG, new DecisionTreeCreateValueAction(project, factor)));
+			menu.add(createItem(factor.getFactorName(), new DecisionTreeCreateValueAction(project, factor)));
     }
 }
