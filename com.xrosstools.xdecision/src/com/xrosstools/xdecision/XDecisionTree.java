@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A more user readable decision tree implementation
@@ -65,6 +65,9 @@ public class XDecisionTree<T> {
         
         Object path = evaluator == null ? fact : evaluator.evaluate(facts, factorName, nodes.keySet().toArray());
         
+        if(path == null)
+            return decision;
+        
         node = nodes.get(path);
         
         return node == null ? decision : node.get(facts);
@@ -73,7 +76,7 @@ public class XDecisionTree<T> {
     private XDecisionTree<T> getNode(Object key, PathEvaluator evaluator) {
     	XDecisionTree<T> node = null;
         if (nodes == null){
-            nodes = new HashMap<Object, XDecisionTree<T>>();
+            nodes = new ConcurrentHashMap<Object, XDecisionTree<T>>();
         }
         if(nodes.containsKey(key)) {
             node = nodes.get(key);
@@ -91,7 +94,7 @@ public class XDecisionTree<T> {
 
         // Not initialized yet
         if (this.factorName == null) {
-            nodes = new HashMap<Object, XDecisionTree<T>>();
+            nodes = new ConcurrentHashMap<Object, XDecisionTree<T>>();
             this.factorName = factorName;
         }
         else {

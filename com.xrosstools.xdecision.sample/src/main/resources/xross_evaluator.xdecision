@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decision_tree>
+ <comments/>
+ <parser>com.xrosstools.xdecision.ext.XrossEvaluator</parser>
+ <evaluator>com.xrosstools.xdecision.ext.XrossEvaluator</evaluator>
+ <factors>
+  <factor id="A" index="0">
+   <value>&lt; 3</value>
+   <value>&lt;= 2</value>
+   <value>== 3</value>
+   <value>&gt;=4</value>
+   <value>&gt; 3</value>
+   <value>&lt;&gt; 3</value>
+  </factor>
+  <factor id="B" index="1">
+   <value>IS NULL</value>
+   <value>IS NOT NULL</value>
+  </factor>
+  <factor id="C" index="2">
+   <value>STARTS WITH '123'</value>
+   <value>ENDS WITH 'abc'</value>
+   <value>CONTAINS '789'</value>
+  </factor>
+  <factor id="D" index="3">
+   <value>BETWEEN 1, 10</value>
+   <value>NOT BETWEEN 1, 10</value>
+   <value>BETWEEN E, F</value>
+   <value>NOT BETWEEN E, F</value>
+  </factor>
+  <factor id="F" index="4">
+   <value>IN 1, 2, 3, 4,5</value>
+   <value>IN G, 10, 11</value>
+   <value>NOT IN G, 10, 11</value>
+   <value>NOT IN 1, 2, 3, 4,5</value>
+  </factor>
+  <factor id="E" index="5">
+   <value>== 0</value>
+   <value>== 1</value>
+  </factor>
+  <factor id="G" index="6">
+   <value>== 0</value>
+   <value>== 1</value>
+  </factor>
+ </factors>
+ <paths>
+  <path index="2">0:2</path>
+  <path index="1">0:0</path>
+  <path index="3">0:0|0:1|1:0</path>
+  <path index="4">0:0|0:1|1:1</path>
+  <path index="5">0:2|2:0</path>
+  <path index="6">0:2|2:1</path>
+  <path index="3">0:4</path>
+  <path index="4">0:4|0:3</path>
+  <path index="0">0:2|2:2</path>
+  <path index="1">0:4|0:3|3:0</path>
+  <path index="2">0:4|0:3|3:1</path>
+  <path index="3">0:2|2:0|3:2</path>
+  <path index="4">0:2|2:0|3:3</path>
+  <path index="1">0:2|2:1|4:0</path>
+  <path index="2">0:2|2:1|4:3</path>
+  <path index="3">0:2|2:2|4:1</path>
+  <path index="4">0:2|2:2|4:2</path>
+ </paths>
+ <decisions>
+  <decision id="decision0" index="0"/>
+  <decision id="decision1" index="1"/>
+  <decision id="decision2" index="2"/>
+  <decision id="decision3" index="3"/>
+  <decision id="decision4" index="4"/>
+  <decision id="decision5" index="5"/>
+  <decision id="decision6" index="6"/>
+ </decisions>
+</decision_tree>
