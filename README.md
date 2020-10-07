@@ -7,17 +7,17 @@ A decision tree editor and runtime engine
 ### 商业智能领域常用的决策工具
 
 ### 利用树形模型表达复杂的决策制定过程
-![overview](https://github.com/hejiehui/xDecision/blob/master/doc/overview.png)
+![overview](https://oscimg.oschina.net/oscnet/up-2d4e231956aa24c47de8d32be0c8f9891a0.png)
 
 # Decision Tree 编辑器可以让开发者
 ## 以所见即所得的方式生成decision tree
-![edit](https://github.com/hejiehui/xDecision/blob/master/doc/create_decison_factor.png)
+![edit](https://oscimg.oschina.net/oscnet/up-b8bf88e63ebf86110aa599c1ad2c8ddab72.png)
 
 ## 依据模型生成单元测试的验证代码
-![generate test](https://github.com/hejiehui/xDecision/blob/master/doc/generate_unit_test.png)
+![generate test](https://oscimg.oschina.net/oscnet/up-fa974c5611b93a5c9d5d9f433292541fdce.png)
 
 ## 所有决策路径全覆盖
-![validation](https://github.com/hejiehui/xDecision/blob/master/doc/run_test.png)
+![validation](https://oscimg.oschina.net/oscnet/up-3aa52f77feb022afafbe99e1a2a25d5b897.png)
 
 # 优势
 纯模型，无代码
@@ -34,21 +34,9 @@ Depenency
 	<dependency>
 		<groupId>com.xrosstools</groupId>
 		<artifactId>xdecision</artifactId>
-		<version>0.9.0</version>
+		<version>${latest}</version>
 	</dependency>
 
-repository
-
-	<repositories>
-		<repository>
-			<id>xtools-repo</id>
-			<url>https://raw.github.com/hejiehui/xtools-repo/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
 
 # Demo project
 [Demo](https://github.com/hejiehui/xDecision/tree/master/com.xrosstools.xdecision.sample)
