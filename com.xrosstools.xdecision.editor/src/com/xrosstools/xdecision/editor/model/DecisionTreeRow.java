@@ -19,4 +19,7 @@ public class DecisionTreeRow {
 	public void setRowNodes(List<DecisionTreeNode> rowNodes) {
 		this.rowNodes = rowNodes;
 	}
+	public int getSize() {
+	    return rowNodes.size();
+	}
 }

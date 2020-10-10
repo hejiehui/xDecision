@@ -78,6 +78,8 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
         int factorId = nodeConn.getParent().getFactorId();
         
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getContents().getModel();
+        if(valueId == -1 || factorId == -1)
+            return;
     	label.setText(diagram.getFactors().get(factorId).getFactorValues()[valueId]);
     }
 }

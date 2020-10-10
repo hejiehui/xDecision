@@ -23,8 +23,10 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	private DecisionTreeManager manager;
+    private int virtualPos;//Horizontal children count
+    private int virtualWidth;//Horizontal children count
 	
-	public void setDecisionTreeManager(DecisionTreeManager manager){
+    public void setDecisionTreeManager(DecisionTreeManager manager){
 		this.manager = manager;
 	}
 	
@@ -106,6 +108,18 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 		this.size = size;
 		listeners.firePropertyChange(PROP_SIZE, null, size);
 	}
+    public int getVirtualPos() {
+        return virtualPos;
+    }
+    public void setVirtualPos(int virtualPos) {
+        this.virtualPos = virtualPos;
+    }
+    public int getVirtualWidth() {
+        return virtualWidth;
+    }
+    public void setVirtualWidth(int virtualWidth) {
+        this.virtualWidth = virtualWidth;
+    }	
 	public PropertyChangeSupport getListeners() {
 		return listeners;
 	}
