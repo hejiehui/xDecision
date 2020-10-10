@@ -29,18 +29,22 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
         
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getModel();
         label = new Label();
-        if(factorId == -1 || valueId == -1)
-        	label.setText("Not specified");
-        else{
-        	if(diagram.getFactors().get(factorId).getFactorValues().length <= valueId)
-        		label.setText("Incorrect value" + valueId);
-        	else
-        		label.setText(diagram.getFactors().get(factorId).getFactorValues()[valueId]);
-        }
+        setLabelText(valueId, factorId, diagram);
         	
         label.setOpaque(true);
         conn.add(label, new MidpointLocator());
         return conn;
+    }
+
+    private void setLabelText(int valueId, int factorId, DecisionTreeDiagram diagram) {
+        if(factorId == -1 || valueId == -1)
+            label.setText("Not specified");
+        else{
+            if(diagram.getFactors().get(factorId).getFactorValues().length <= valueId)
+                label.setText("Incorrect value" + valueId);
+            else
+                label.setText(diagram.getFactors().get(factorId).getFactorValues()[valueId]);
+        }
     }
 
     protected EditPolicy createEditPolicy() {
@@ -60,7 +64,7 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
         int factorId = nodeConn.getParent().getFactorId();
         
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getModel();
-    	label.setText(diagram.getFactors().get(factorId).getFactorValues()[valueId]);
+        setLabelText(valueId, factorId, diagram);
     }
 
     @Override
