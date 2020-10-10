@@ -33,6 +33,14 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
         
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getContents().getModel();
         label = new Label();
+        setLabelText(valueId, factorId, diagram);
+        	
+        label.setOpaque(true);
+        conn.add(label, new MidpointLocator(conn, 0));
+        return conn;
+    }
+
+    private void setLabelText(int valueId, int factorId, DecisionTreeDiagram diagram) {
         if(factorId == -1 || valueId == -1)
         	label.setText("Not specified");
         else{
@@ -41,10 +49,6 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
         	else
         		label.setText(diagram.getFactors().get(factorId).getFactorValues()[valueId]);
         }
-        	
-        label.setOpaque(true);
-        conn.add(label, new MidpointLocator(conn, 0));
-        return conn;
     }
 
     protected void createEditPolicies() {
@@ -78,8 +82,6 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
         int factorId = nodeConn.getParent().getFactorId();
         
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getContents().getModel();
-        if(valueId == -1 || factorId == -1)
-            return;
-    	label.setText(diagram.getFactors().get(factorId).getFactorValues()[valueId]);
+        setLabelText(valueId, factorId, diagram);
     }
 }
