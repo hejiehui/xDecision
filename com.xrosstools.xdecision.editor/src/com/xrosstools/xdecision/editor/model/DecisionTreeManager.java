@@ -68,6 +68,8 @@ public class DecisionTreeManager {
 	}
 	
 	public String[] getFactorValues(int factorId){
+	    if(factorId == -1)
+	        return new String[0];
 		return diagram.getFactors().get(factorId).getFactorValues();
 	}
 	

@@ -16,9 +16,15 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 
+import com.xrosstools.xdecision.editor.commands.CreateNodeCommand;
+import com.xrosstools.xdecision.editor.commands.CreatePathCommand;
+import com.xrosstools.xdecision.editor.commands.LayoutTreeCommand;
 import com.xrosstools.xdecision.editor.figures.DecisionTreeNodeFigure;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
@@ -49,17 +55,26 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
 	}
 
 	public void performRequest(Request req) {
-//		if (req.getType() == RequestConstants.REQ_DIRECT_EDIT){
-//            if (manager == null) {
-//                DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure) getFigure();
-//                manager = new DecisionTreeNodeDirectEditManager(this, ((DecisionTreeDiagram)getParent().getModel()).getFactors(), TextCellEditor.class, new DecisionTreeNodeCellEditorLocator(figure));
-//            }
-//            manager.show();
-//		}
+		if (req.getType() == RequestConstants.REQ_OPEN){
+            DecisionTreeDiagram diagram = getDiagram();
+            DecisionTreeNode child = new DecisionTreeNode();
+            Command createNode = new CreateNodeCommand(diagram, child, new Point(400, 400));
+            
+            CreatePathCommand linkNode = new CreatePathCommand();
+            linkNode.setParent((DecisionTreeNode)getModel());
+            linkNode.setChild(child);
+
+            LayoutTreeCommand layout = new LayoutTreeCommand(diagram, diagram.isHorizantal(), diagram.getAlignment());
+            
+            CommandStack statck = getViewer().getEditDomain().getCommandStack();
+            statck.execute(createNode);
+            statck.execute(linkNode);
+            statck.execute(layout);
+		}
 	}
 	
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DecisionTreeNodeDirectEditPolicy(((DecisionTreeDiagram)getParent().getModel()).getFactors()));
+//		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DecisionTreeNodeDirectEditPolicy(getDiagram().getFactors()));
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DecisionTreeNodeEditPolicy());
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new DecisionTreeGraphicNodeEditPolicy());
 	}
@@ -112,15 +127,18 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     	if(node.getFactorId() == -1)
     		factor = "";
     	else
-    		factor = ((DecisionTreeDiagram)getParent().getModel()).getFactors().get(node.getFactorId()).getFactorName();
+    		factor = getDiagram().getFactors().get(node.getFactorId()).getFactorName();
     	figure.setFactor(factor);
     	
         String decision;
     	if(node.getDecisionId() == -1)
     		decision = "";
     	else
-    		decision = ((DecisionTreeDiagram)getParent().getModel()).getDecisions().get(node.getDecisionId());
+    		decision = getDiagram().getDecisions().get(node.getDecisionId());
 
     	figure.setDecision(decision);
+    }
+    private DecisionTreeDiagram getDiagram() {
+        return (DecisionTreeDiagram)getParent().getModel();
     }
 }

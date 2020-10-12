@@ -22,16 +22,20 @@ public class DecisionTreeCreateValueAction extends WorkbenchPartAction implement
 		return true;
 	}
 	
-	//TODO move to command
 	public void run() {
-		InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Create new value for factor: ", "Value", "new factor value", null);
-		if (dlg.open() != Window.OK)
-			return;
-		String newValue = dlg.getValue();
-		int length = factor.getFactorValues().length;
-		String[] newValues = new String[length + 1];
-		System.arraycopy(factor.getFactorValues(), 0, newValues, 0, length);
-		newValues[length] = newValue;
-		execute(new AddFactorValueCommand(factor, factor.getFactorValues(), newValues));
+        execute(new AddFactorValueCommand(factor));
 	}
+	
+//	public static AddFactorValueCommand createFactorValue(DecisionTreeFactor factor) {
+//	    InputDialog dlg = new InputDialog(Display.getCurrent().getActiveShell(), "Create new value for factor: ", "Value", "new factor value", null);
+//	    if (dlg.open() != Window.OK)
+//	        return null;
+//        String newValue = dlg.getValue();
+//        int length = factor.getFactorValues().length;
+//        String[] newValues = new String[length + 1];
+//        System.arraycopy(factor.getFactorValues(), 0, newValues, 0, length);
+//        newValues[length] = newValue;
+//        return new AddFactorValueCommand(factor, factor.getFactorValues(), newValues);
+//    }
+
 }
