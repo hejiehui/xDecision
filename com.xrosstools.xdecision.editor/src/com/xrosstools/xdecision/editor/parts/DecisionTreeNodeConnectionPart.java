@@ -14,9 +14,12 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 
+import com.xrosstools.xdecision.editor.actions.CommandChain;
+import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateValueAction;
 import com.xrosstools.xdecision.editor.commands.AddFactorValueCommand;
 import com.xrosstools.xdecision.editor.commands.SetNewFactorValueCommand;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
@@ -79,13 +82,8 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
             DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getContents().getModel();
             
             DecisionTreeFactor factor = diagram.getFactors().get(factorId);
-            int oldSize = factor.getFactorValueNum();
             
-            getViewer().getEditDomain().getCommandStack().execute(new AddFactorValueCommand(factor));
-            if(factor.getFactorValueNum() != oldSize) {
-//                nodeConn.setValueId(factor.getFactorValueNum()-1);
-                getViewer().getEditDomain().getCommandStack().execute(new SetNewFactorValueCommand(nodeConn, factor.getFactorValueNum()-1));
-            }
+            getViewer().getEditDomain().getCommandStack().execute(DecisionTreeCreateValueAction.createAndSetValueCommand(factor, nodeConn));
         }
     }
     

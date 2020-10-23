@@ -22,6 +22,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 
+import com.xrosstools.xdecision.editor.actions.CommandChain;
 import com.xrosstools.xdecision.editor.commands.CreateNodeCommand;
 import com.xrosstools.xdecision.editor.commands.CreatePathCommand;
 import com.xrosstools.xdecision.editor.commands.LayoutTreeCommand;
@@ -30,7 +31,6 @@ import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.editor.policies.DecisionTreeGraphicNodeEditPolicy;
-import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeDirectEditPolicy;
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeEditPolicy;
 
 public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements PropertyChangeListener, NodeEditPart {
@@ -56,20 +56,22 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
 
 	public void performRequest(Request req) {
 		if (req.getType() == RequestConstants.REQ_OPEN){
+		    CommandChain cc = new CommandChain();
             DecisionTreeDiagram diagram = getDiagram();
             DecisionTreeNode child = new DecisionTreeNode();
-            Command createNode = new CreateNodeCommand(diagram, child, new Point(400, 400));
+		    
+		    cc.add(new LayoutTreeCommand(diagram, diagram.isHorizantal(), diagram.getAlignment()));
+            cc.add(new CreateNodeCommand(diagram, child, new Point(400, 400)));
             
             CreatePathCommand linkNode = new CreatePathCommand();
             linkNode.setParent((DecisionTreeNode)getModel());
             linkNode.setChild(child);
+            cc.add(linkNode);
 
-            LayoutTreeCommand layout = new LayoutTreeCommand(diagram, diagram.isHorizantal(), diagram.getAlignment());
+            cc.add(new LayoutTreeCommand(diagram, diagram.isHorizantal(), diagram.getAlignment()));
             
             CommandStack statck = getViewer().getEditDomain().getCommandStack();
-            statck.execute(createNode);
-            statck.execute(linkNode);
-            statck.execute(layout);
+            statck.execute(cc);
 		}
 	}
 	

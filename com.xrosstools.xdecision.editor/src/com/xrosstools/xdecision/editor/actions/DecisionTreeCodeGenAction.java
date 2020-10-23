@@ -40,7 +40,7 @@ public class DecisionTreeCodeGenAction extends WorkbenchPartAction implements De
 		IFile file = ((IFileEditorInput)editor.getEditorInput()).getFile();
 
 		String packageName, testName, path;
-		packageName = "com.ebay.xdomain.xcomponent";
+		packageName = "com.xrosstools.xdomain.xcomponent";
 		testName = file.getName().substring(0, file.getName().indexOf(".xdecision")) + "Test";
 		
 		path = file.getName();

@@ -11,13 +11,26 @@ import com.xrosstools.xdecision.editor.model.DecisionTreePath;
 import com.xrosstools.xdecision.editor.model.DecisionTreePathEntry;
 
 public class DecisionTreeJunit4TestCodeGen {
-	private static final String TEST_ASSIGN = 		"		test.set(\"?\", \"?\");\n";
-	private static final String ASSERT_DISPLAY = 	"		assertEquals(\"?\", tree.get(test));\n\n";
-	private static final String TEST_RESET = 		"		test = new MapFacts();\n";
+    private static final String METHOD_BODY = 
+                                                "\n" + 
+                                                "    @Test\n" + 
+                                                "    public void test_%d(){\n" + 
+                                                "        /*\n" + 
+                                                "%s" + 
+                                                "        */\n" + 
+                                                "%s\n" + 
+                                                "    }\n"; 
+    
+    private static final String COMMENTS =       "          %s\n";
+    private static final String TEST_RESET =       "        test = new MapFacts();\n";
+	private static final String TEST_ASSIGN = 		"        test.set(\"%s\", \"%s\");\n";
+	private static final String ASSERT_DISPLAY = 	"        assertEquals(\"%s\", tree.get(test));";
+	
+	
 	public String generate(DecisionTreeDiagram diagram, String packageName, String testName, String path){
 		DecisionTreeModel model = new DecisionTreeDiagramFactory().convert(diagram);
 		
-		StringBuffer codeBuf = getTemplate();
+		StringBuilder codeBuf = getTemplate();
 		replace(codeBuf, "!PACKAGE!", packageName);
 		replace(codeBuf, "!TEST_CLASS!", testName);
 		replace(codeBuf, "!MODEL_PATH!", path);
@@ -26,33 +39,38 @@ public class DecisionTreeJunit4TestCodeGen {
 		return codeBuf.toString();
 	}
 	
-	private void replace(StringBuffer codeBuf, String replacementMark, String replacement){
+	private void replace(StringBuilder codeBuf, String replacementMark, String replacement){
 		int start = codeBuf.indexOf(replacementMark);
 		codeBuf.replace(start, start + replacementMark.length(), replacement);
 	}
 	
 	private String generateVerify(DecisionTreeModel model){
-		StringBuffer codeBuf = new StringBuffer();
+		StringBuilder testCasesCode = new StringBuilder();
+		boolean hasEvaluator = model.getEvaluatorClass() != null;
 		
+		int index = 0;
 		for(DecisionTreePath path: model.getPathes()){
-			StringBuffer testReset = new StringBuffer(TEST_RESET);
-			codeBuf.append(testReset);
+            StringBuilder commentsBuf = new StringBuilder();
+		    StringBuilder codeBuf = new StringBuilder(TEST_RESET);
 			for(DecisionTreePathEntry entry: path.getPathEntries()){
-				StringBuffer testAssign = new StringBuffer(TEST_ASSIGN);
-				replace(testAssign, "?", String.valueOf(model.getFactors()[entry.getFactorIndex()].getFactorName()));
-				replace(testAssign, "?", String.valueOf(model.getFactors()[entry.getFactorIndex()].getFactorValues()[entry.getValueIndex()]));
-				codeBuf.append(testAssign);
+				StringBuilder testAssign = new StringBuilder(TEST_ASSIGN);
+				String factorName = model.getFactors()[entry.getFactorIndex()].getFactorName();
+				String factorValue = model.getFactors()[entry.getFactorIndex()].getFactorValues()[entry.getValueIndex()];
+				
+                StringBuilder commnets = new StringBuilder(factorName).append(hasEvaluator ? " " : " = ").append(factorValue);
+                commentsBuf.append(String.format(COMMENTS, commnets.toString()));
+                
+                codeBuf.append(String.format(TEST_ASSIGN, factorName, factorValue));
+				
 			}
-			
-			StringBuffer assignExpected = new StringBuffer(ASSERT_DISPLAY);
-			replace(assignExpected, "?", model.getDecisions()[path.getDecisionIndex()]);
-			codeBuf.append(assignExpected);
+			codeBuf.append(String.format(ASSERT_DISPLAY, model.getDecisions()[path.getDecisionIndex()]));
+			testCasesCode.append(String.format(METHOD_BODY, index++, commentsBuf.toString(), codeBuf.toString()));
 		}
-		return codeBuf.toString();
+		return testCasesCode.toString();
 	}
 	
-	private StringBuffer getTemplate(){
-		StringBuffer codeBuf = new StringBuffer();
+	private StringBuilder getTemplate(){
+		StringBuilder codeBuf = new StringBuilder();
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(DecisionTreeJunit4TestCodeGen.class.getResourceAsStream("/templates/Junit4TestTemplate.txt")));
 		String line;
