@@ -21,6 +21,7 @@ public abstract class BaseDialogAction extends Action {
 		this.dialogTitle = dialogTitle;
 		this.dialogMessage = dialogMessage;
 		this.initialValue = initialValue;
+		setText(dialogTitle);
 	}
 
 	public Project getProject() {
@@ -30,7 +31,7 @@ public abstract class BaseDialogAction extends Action {
 	abstract protected Command createCommand(String value);
 
 	public Command createCommand() {
-		Messages.InputDialog dialog = new Messages.InputDialog(project, dialogTitle, dialogMessage, IconLoader.findIcon(Activator.getIconPath("chain")), initialValue, new InputValidator() {
+		Messages.InputDialog dialog = new Messages.InputDialog(dialogTitle, dialogMessage, IconLoader.findIcon(Activator.getIconPath("chain")), initialValue, new InputValidator() {
 			@Override
 			public boolean checkInput(String s) {
 				return true;

@@ -1,5 +1,6 @@
 package com.xrosstools.gef.parts;
 
+import com.xrosstools.gef.Command;
 import com.xrosstools.gef.figures.AbstractAnchor;
 import com.xrosstools.gef.figures.ChopboxAnchor;
 import com.xrosstools.gef.figures.Connection;
@@ -34,6 +35,11 @@ public abstract class EditPart implements PropertyChangeListener {
     protected abstract EditPolicy createEditPolicy();
 
     protected void refreshVisuals() {}
+
+    public void execute(Command cmd) {
+        cmd.execute();
+        getRoot().build();
+    }
 
     /**
      * Being double clicked

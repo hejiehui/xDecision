@@ -1,8 +1,13 @@
 package com.xrosstools.xdecision.idea.editor.commands;
 
 import com.xrosstools.gef.Command;
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeManager;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CreatePathCommand extends Command {
 	private DecisionTreeNodeConnection path;
@@ -30,9 +35,27 @@ public class CreatePathCommand extends Command {
 	}
 
 	public void execute() {
-		path.setParent(parent);
-		path.setChild(child);
-	}
+//        path = new DecisionTreeNodeConnection(parent, child);
+        path.setParent(parent);
+        path.setChild(child);
+
+
+        DecisionTreeManager mgr = parent.getDecisionTreeManager();
+
+        if(parent.getFactorId() == -1)
+            return;
+
+        List<String> values = new ArrayList<String>(Arrays.asList(mgr.getFactorValues(parent.getFactorId())));
+        for (DecisionTreeNodeConnection path : parent.getOutputs()) {
+            if(path.getValueId() != -1)
+                values.remove(mgr.getFactorValue(parent.getFactorId(), path.getValueId()));
+        }
+
+        // Assign first unused factor value
+        if(values.size() > 0)
+            path.setValueId(mgr.getFactorValueId(parent.getFactorId(), values.get(0)));
+
+    }
 
 	public void redo() {
         path.setParent(parent);

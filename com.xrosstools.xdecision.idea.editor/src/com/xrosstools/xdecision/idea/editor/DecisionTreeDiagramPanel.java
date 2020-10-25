@@ -432,11 +432,12 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         unitPanel.grabFocus();
     }
 
-    private void update(Runnable action) {
+    private void update(Command action) {
         if(action == null)
             return;
 
         action.run();
+        root.execute(action);
         save();
     }
 
@@ -584,7 +585,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
 
             if(createCommand != null) {
                 update(createCommand);
-                underPoint.getPart().addChildModel(newModel, underPoint.getInsertionIndex());
+//                underPoint.getPart().addChildModel(newModel, underPoint.getInsertionIndex());
             }
 
             gotoNext(ready);
@@ -631,7 +632,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
 
             if(createConnectionCmd != null) {
                 update(createConnectionCmd);
-                f.getPart().addConnection(newModel);
+//                f.getPart().addConnection(newModel);
             }
 
             gotoNext(ready);

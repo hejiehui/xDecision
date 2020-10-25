@@ -28,6 +28,6 @@ public interface DecisionTreeMessages {
 	String GEN_JUNIT_TEST_CODE_MSG = "Generate test";
 	String CREATE_NEW_DECISION_MSG = "Create decision";
 	String CREATE_NEW_FACTOR_MSG = "Create factor";
-	String CREATE_NEW_FACTOR_VALUE_MSG = "Create new factor value";
+	String CREATE_NEW_FACTOR_VALUE_MSG = "Create new value";
 
 }

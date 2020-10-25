@@ -6,12 +6,24 @@ public abstract class Command implements Runnable {
         execute();
     }
 
+    public boolean canExecute() {
+        return true;
+    }
+
     public abstract void execute();
 
     public abstract String  getLabel();
 
+    public boolean canRedo() {
+        return true;
+    }
+
     public void redo() {
         execute();
+    }
+
+    public boolean canUndo() {
+        return true;
     }
 
     public abstract void undo();

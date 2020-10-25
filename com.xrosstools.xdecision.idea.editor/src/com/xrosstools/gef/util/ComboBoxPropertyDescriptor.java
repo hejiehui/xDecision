@@ -33,6 +33,6 @@ public class ComboBoxPropertyDescriptor extends PropertyDescriptor {
     }
 
     public String getValue(int index) {
-        return index < 0 ? "" : values[index];
+        return index < 0 || index >= values.length ? "" : values[index];
     }
 }

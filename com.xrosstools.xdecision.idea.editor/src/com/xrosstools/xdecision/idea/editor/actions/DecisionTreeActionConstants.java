@@ -31,4 +31,5 @@ public interface DecisionTreeActionConstants {
 	String CREATE_NEW_DECISION = "create_new_decision";
 	String CREATE_NEW_FACTOR = "create_new_factor";
 	String CREATE_NEW_FACTOR_VALUE = "create_new_factor_value";
+	String CHOSE_FACTOR_VALUE = "chose_factor_value";
 }

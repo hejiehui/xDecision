@@ -15,7 +15,7 @@ public class AddFactorValueCommand extends Command {
 	}
 	
     public void execute() {
-    	factor.setFactorValues(newValues);
+    	redo();
     }
 
     public String getLabel() {
@@ -23,7 +23,8 @@ public class AddFactorValueCommand extends Command {
     }
 
     public void redo() {
-        execute();
+        if(newValues != null)
+            factor.setFactorValues(newValues);
     }
 
     public void undo() {

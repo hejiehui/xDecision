@@ -1,7 +1,11 @@
 package com.xrosstools.xdecision.idea.editor.parts;
 
+import com.xrosstools.gef.CommandChain;
 import com.xrosstools.gef.parts.EditPart;
 import com.xrosstools.gef.parts.EditPolicy;
+import com.xrosstools.xdecision.idea.editor.commands.CreateNodeCommand;
+import com.xrosstools.xdecision.idea.editor.commands.CreatePathCommand;
+import com.xrosstools.xdecision.idea.editor.commands.LayoutTreeCommand;
 import com.xrosstools.xdecision.idea.editor.figures.DecisionTreeNodeFigure;
 import com.xrosstools.gef.figures.Figure;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
@@ -34,6 +38,22 @@ public class DecisionTreeNodePart extends EditPart {
     	return inputs;
     }
 
+    public void performAction() {
+        CommandChain cc = new CommandChain();
+        DecisionTreeDiagram diagram = getDiagram();
+        DecisionTreeNode child = new DecisionTreeNode();
+
+        cc.add(new LayoutTreeCommand(diagram, diagram.isHorizantal(), diagram.getAlignment()));
+        cc.add(new CreateNodeCommand(diagram, child, new Point(400, 400)));
+
+        CreatePathCommand linkNode = new CreatePathCommand(new DecisionTreeNodeConnection(), (DecisionTreeNode)getModel(), child);
+        cc.add(linkNode);
+
+        cc.add(new LayoutTreeCommand(diagram, diagram.isHorizantal(), diagram.getAlignment()));
+
+        execute(cc);
+    }
+
     protected void refreshVisuals() {
     	DecisionTreeNode node = (DecisionTreeNode) getModel();
     	DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
@@ -45,15 +65,19 @@ public class DecisionTreeNodePart extends EditPart {
     	if(node.getFactorId() == -1)
     		factor = "";
     	else
-    		factor = ((DecisionTreeDiagram)getParent().getModel()).getFactors().get(node.getFactorId()).getFactorName();
+    		factor = getDiagram().getFactors().get(node.getFactorId()).getFactorName();
     	figure.setFactor(factor);
     	
         String decision;
     	if(node.getDecisionId() == -1)
     		decision = "";
     	else
-    		decision = ((DecisionTreeDiagram)getParent().getModel()).getDecisions().get(node.getDecisionId());
+    		decision = getDiagram().getDecisions().get(node.getDecisionId());
 
     	figure.setDecision(decision);
+    }
+
+    private DecisionTreeDiagram getDiagram() {
+        return (DecisionTreeDiagram)getParent().getModel();
     }
 }

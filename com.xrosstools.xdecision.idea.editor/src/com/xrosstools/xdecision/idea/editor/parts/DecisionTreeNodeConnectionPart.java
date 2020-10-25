@@ -7,7 +7,9 @@ import com.xrosstools.gef.parts.EditPart;
 import com.xrosstools.gef.parts.EditPolicy;
 import com.xrosstools.gef.routers.BendpointConnectionRouter;
 import com.xrosstools.gef.routers.MidpointLocator;
+import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeCreateValueAction;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.policies.DecisionTreeNodeConnectionEditPolicy;
 
@@ -58,6 +60,18 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
             getFigure().setLineWidth(1);
     }
 
+    public void performAction() {
+        DecisionTreeNodeConnection nodeConn = (DecisionTreeNodeConnection)getModel();
+        int factorId = nodeConn.getParent().getFactorId();
+        if(factorId == -1)
+            return;
+
+        DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getModel();
+
+        DecisionTreeFactor factor = diagram.getFactors().get(factorId);
+
+        execute(new DecisionTreeCreateValueAction(null, factor, nodeConn).createCommand());
+    }
     public void propertyChange(PropertyChangeEvent event){
     	DecisionTreeNodeConnection nodeConn = (DecisionTreeNodeConnection)getModel();
         int valueId = nodeConn.getValueId();

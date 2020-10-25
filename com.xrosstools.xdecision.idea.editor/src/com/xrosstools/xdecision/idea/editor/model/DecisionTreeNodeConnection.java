@@ -60,7 +60,7 @@ public class DecisionTreeNodeConnection implements IPropertySource {
 		return valueId;
 	}
 	public void setValueId(int valueId) {
-		int oldValueId = -1;
+		int oldValueId = this.valueId;
 		this.valueId = valueId;
 		listeners.firePropertyChange(FACTOR_VALUE, valueId, oldValueId);
 	}

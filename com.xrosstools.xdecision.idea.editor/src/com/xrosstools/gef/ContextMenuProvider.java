@@ -9,9 +9,10 @@ public interface ContextMenuProvider {
 
     JPopupMenu buildContextMenu(EditPart selecte);
 
-    default JMenuItem createItem(String text, ActionListener action) {
-        JMenuItem item = new JMenuItem(text);
+    default JMenuItem createItem(Action action) {
+        JMenuItem item = new JMenuItem(action.getText());
         item.addActionListener(action);
+        item.setSelected(action.isChecked());
         return item;
     }
 

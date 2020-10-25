@@ -11,7 +11,7 @@ public class CreateNodeCommand extends Command {
     private DecisionTreeNode node;
     private Point location;
     
-    public CreateNodeCommand(
+    public  CreateNodeCommand(
     		DecisionTreeDiagram diagram, 
     		DecisionTreeNode node, 
     		Point location){

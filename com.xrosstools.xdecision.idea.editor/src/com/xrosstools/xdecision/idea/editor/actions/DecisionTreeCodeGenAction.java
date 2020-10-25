@@ -9,11 +9,14 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DecisionTreeCodeGenAction implements ActionListener, DecisionTreeActionConstants, DecisionTreeMessages{
+import static org.apache.batik.svggen.SVGStylingAttributes.set;
+
+public class DecisionTreeCodeGenAction extends Action implements DecisionTreeActionConstants, DecisionTreeMessages{
     private VirtualFile file;
 	private DecisionTreeDiagram diagram;
 	private DecisionTreeJunit4TestCodeGen junit4CodeGen = new DecisionTreeJunit4TestCodeGen();
 	public DecisionTreeCodeGenAction(VirtualFile file, DecisionTreeDiagram diagram){
+		setText(GEN_JUNIT_TEST_CODE_MSG);
 		this.diagram = diagram;
 		this.file = file;
 	}
@@ -27,4 +30,9 @@ public class DecisionTreeCodeGenAction implements ActionListener, DecisionTreeAc
 		String out = junit4CodeGen.generate(diagram, packageName, testName, file.getPath());
         Messages.showInfoMessage(out, "Generated Unit Test Source");
 	}
+
+    @Override
+    public Command createCommand() {
+        return null;
+    }
 }
