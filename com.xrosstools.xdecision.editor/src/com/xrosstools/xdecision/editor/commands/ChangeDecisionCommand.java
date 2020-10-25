@@ -28,6 +28,6 @@ public class ChangeDecisionCommand extends Command{
     }
 
     public void undo() {
-        node.setFactorId(oldDecisionId);
+        node.setDecisionId(oldDecisionId);
     }
 }

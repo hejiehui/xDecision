@@ -13,6 +13,7 @@ import org.eclipse.jface.action.Separator;
 import com.xrosstools.xdecision.editor.actions.CommandAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeActionConstants;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeChoseValueAction;
+import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateDecisionAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateFactorAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateValueAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
@@ -104,5 +105,6 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider {
         }
         
         menu.add(new Separator());
+        menu.add(new DecisionTreeCreateDecisionAction(editor, node));
     }
 }
