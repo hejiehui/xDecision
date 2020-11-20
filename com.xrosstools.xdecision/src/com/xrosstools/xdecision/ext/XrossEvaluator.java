@@ -1,56 +1,13 @@
 package com.xrosstools.xdecision.ext;
 
-import java.io.BufferedWriter;
 import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import com.xrosstools.xdecision.Facts;
 import com.xrosstools.xdecision.PathEvaluator;
 import com.xrosstools.xdecision.XDecisionTreeParser;
 
-public class XrossEvaluator implements XDecisionTreeParser, PathEvaluator {
-    private static final String EQUAL = "==";
-    private static final String NOT_EQUAL = "<>";
-    private static final String GREATER_THAN = ">";
-    private static final String GREATER_THAN_EQUAL = ">=";
-    private static final String LESS_THAN = "<";
-    private static final String LESS_THAN_EQUAL = "<=";
-    private static final String STARTS_WITH = "STARTS WITH";
-    private static final String ENDS_WITH = "ENDS WITH";
-    private static final String CONTAINS = "CONTAINS";
-    
-    private static final String IS_NULL = "IS NULL";
-    private static final String IS_NOT_NULL = "IS NOT NULL";
-    
-    private static final String BETWEEN = "BETWEEN";
-    private static final String NOT_BETWEEN = "NOT BETWEEN";
-    
-    private static final String IN = "IN";
-    private static final String NOT_IN = "NOT IN";
-    
-    private static final String STRING_DELIMITER = "'";
-    private static final Pattern VARIABLE = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
-    
-    
-    private static final String[] SINGLE_OPERAND_OPERATOR = new String[] {
-            IS_NULL, IS_NOT_NULL
-    };
-
-    private static final String[] DOUBLE_OPERAND_OPERATOR = new String[] {
-            EQUAL, NOT_EQUAL, GREATER_THAN_EQUAL, GREATER_THAN, LESS_THAN_EQUAL, LESS_THAN, STARTS_WITH, ENDS_WITH, CONTAINS
-    };
-
-    private static final String[] BETWEEN_OPERATOR = new String[] {
-            BETWEEN, NOT_BETWEEN
-    };
-
-    private static final String[] IN_OPERATOR = new String[] {
-            IN, NOT_IN
-    };
-
-    private Map<String, Expression> cache = new ConcurrentHashMap<>();
+public class XrossEvaluator implements XrossEvaluatorConstants, XDecisionTreeParser, PathEvaluator {
     
     @Override
     public Object evaluate(Facts facts, String factorName, Object[] paths) {
@@ -230,6 +187,10 @@ public class XrossEvaluator implements XDecisionTreeParser, PathEvaluator {
                 return leftExp.evaluate(facts) == null; 
             case IS_NOT_NULL:
                 return leftExp.evaluate(facts) != null; 
+            case IS_TRUE:
+                return leftExp.evaluate(facts) == Boolean.TRUE; 
+            case IS_FALSE:
+                return leftExp.evaluate(facts) == Boolean.FALSE; 
             default:
                 throw new IllegalArgumentException("Operator: " + operator + " is not supported!");
             }
@@ -254,31 +215,35 @@ public class XrossEvaluator implements XDecisionTreeParser, PathEvaluator {
             Object v1 = leftExp.evaluate(facts);
             Object v2 = rightExp.evaluate(facts);
             
-            if(v1 == null && v2 == null)
-                return operator.contains("=");//==, <=, <=
-            
-            if(v1 == null || v2 == null)
-                return false;
-            
             switch (operator) {
             case EQUAL:
-                return compare(v1, v2) == 0; 
+                return isAllNull(v1, v2) ? true : isNoneNull(v1, v2) ? compare(v1, v2) == 0 : false; 
             case NOT_EQUAL:
-                return compare(v1, v2) != 0;
+                return isAllNull(v1, v2) ? false : isNoneNull(v1, v2) ? compare(v1, v2) != 0 : true;
             case GREATER_THAN:
-                return compare(v1, v2) > 0;
+                return isAnyNull(v1, v2) ? false : compare(v1, v2) > 0;
             case GREATER_THAN_EQUAL:
-                return compare(v1, v2) >= 0;
+                return isAllNull(v1, v2) ? true : isNoneNull(v1, v2) ? compare(v1, v2) >= 0 : false;
             case LESS_THAN:
-                return compare(v1, v2) < 0;
+                return isNoneNull(v1, v2) ? compare(v1, v2) < 0 : false;
             case LESS_THAN_EQUAL:
-                return compare(v1, v2) <= 0;
+                return isAllNull(v1, v2) ? true : isNoneNull(v1, v2) ? compare(v1, v2) <= 0 : false;
             case STARTS_WITH:
-                return string(v1).startsWith(string(v2));
+                return isNoneNull(v1, v2) && isBothString(v1, v2) ? string(v1).startsWith(string(v2)) : false;
+            case NOT_STARTS_WITH:
+                return isNoneNull(v1, v2) && isBothString(v1, v2) ? !string(v1).startsWith(string(v2)) : false;
             case ENDS_WITH:
-                return string(v1).endsWith(string(v2));
+                return isNoneNull(v1, v2) && isBothString(v1, v2) ? string(v1).endsWith(string(v2)) : false;
+            case NOT_ENDS_WITH:
+                return isNoneNull(v1, v2) && isBothString(v1, v2) ? !string(v1).endsWith(string(v2)) : false;
             case CONTAINS:
-                return string(v1).contains(string(v2));
+                return isNoneNull(v1, v2) && isBothString(v1, v2) ? string(v1).contains(string(v2)) : false;
+            case NOT_CONTAINS:
+                return isNoneNull(v1, v2) && isBothString(v1, v2) ? !string(v1).contains(string(v2)) : false;
+            case MATCHES:
+                return isNoneNull(v1, v2) && isBothString(v1, v2) ? Pattern.matches(string(v2), string(v1)) : false;
+            case NOT_MATCHES:
+                return isNoneNull(v1, v2) && isBothString(v1, v2) ? !Pattern.matches(string(v2), string(v1)) : false;
             default:
                 throw new IllegalArgumentException("Operator: " + operator + " is not supported!");
             }
@@ -289,11 +254,27 @@ public class XrossEvaluator implements XDecisionTreeParser, PathEvaluator {
             return String.format("s% s% s%", String.valueOf(leftExp), operator, String.valueOf(rightExp));
         }
         
+        private static boolean isAnyNull(Object v1, Object v2) {
+            return v1 == null || v2 == null;
+        }
+
+        private static boolean isAllNull(Object v1, Object v2) {
+            return v1 == null && v2 == null;
+        }
+
+        private static boolean isNoneNull(Object v1, Object v2) {
+            return v1 != null && v2 != null;
+        }
+
+        private static boolean isBothString(Object v1, Object v2) {
+            return v1 instanceof String && v2 instanceof String ;
+        }
+
         private static String string(Object value) {
             if(value instanceof String)
                 return (String)value;
             
-            throw new IllegalArgumentException(String.format("s% is not a string type", String.valueOf(value)));
+            throw new IllegalArgumentException(String.valueOf(value) + " is not a string type");
         }        
     }
     
@@ -391,7 +372,13 @@ public class XrossEvaluator implements XDecisionTreeParser, PathEvaluator {
         if(v1 instanceof String && v2 instanceof String)
             return ((String)v1).compareTo((String)v2);
         
-        throw new IllegalArgumentException(String.format("s% can not be compared to s%", v1.toString(), v2.toString()));
+        if(v1 instanceof Comparable && v2 instanceof Comparable)
+            return ((Comparable)v1).compareTo((Comparable)v2);
+        
+        if(v1 == v2 || v1.equals(v2))
+            return 0;
+        
+        throw new IllegalArgumentException(String.valueOf(v1) + " can not be compared to " + v2);
     }
 }
 
