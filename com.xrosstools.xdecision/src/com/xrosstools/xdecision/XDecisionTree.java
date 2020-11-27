@@ -13,20 +13,8 @@ public class XDecisionTree<T> {
     private Map<Object, XDecisionTree<T>> nodes;
     private PathEvaluator evaluator;
 
-    public XDecisionTree(){
-        this(null, new DefaultEvaluator());
-    }
-    
     public XDecisionTree(PathEvaluator evaluator) {
         this(null, evaluator );
-    }
-    
-    /**
-     * Initialize root node with a default decision
-     * @param decision
-     */
-    public XDecisionTree(T decision) {
-        this(decision, new DefaultEvaluator());
     }
     
     public XDecisionTree(T decision, PathEvaluator evaluator) {
@@ -43,7 +31,7 @@ public class XDecisionTree<T> {
     }
     
     private void add(int depth, XDecisionPath<T> path, PathEvaluator evaluator) {
-        setKeyIndex(path.getPathEntry(depth).getFactorName());
+        setKeyIndex(path.getPathEntry(depth).getFactorExpression());
         Object key = path.getPathEntry(depth).getValue();
         XDecisionTree<T> node = getNode(key, evaluator);
         

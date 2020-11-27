@@ -12,10 +12,10 @@ public class AviatorPathEvaluator implements PathEvaluator {
     private AviatorEvaluatorInstance instance =  AviatorEvaluator.newInstance();
 
     @Override
-    public Object evaluate(Facts facts, String factorName, Object[] paths) {
+    public Object evaluate(Facts facts, String factorExpression, Object[] paths) {
         Map<String, Object> env = toEnv(facts);
         for(Object path: paths) {
-            Boolean match = (Boolean)instance.execute(String.format("%s %s", factorName, path), env, true);
+            Boolean match = (Boolean)instance.execute(String.format("%s %s", factorExpression, path), env, true);
             
             if(match)
                 return path;

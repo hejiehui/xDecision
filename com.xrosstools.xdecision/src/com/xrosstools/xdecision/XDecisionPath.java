@@ -4,16 +4,16 @@ import java.util.List;
 
 public class XDecisionPath<T> {
 	public static class XDecisionPathEntry {
-		private String factorName;
+		private String factorExpression;
 		private Object value;
 
-		public XDecisionPathEntry(String factorName, Object value) {
-			this.factorName = factorName;
+		public XDecisionPathEntry(String factorExpression, Object value) {
+			this.factorExpression = factorExpression;
 			this.value = value;
 		}
 		
-		public String getFactorName() {
-			return factorName;
+		public String getFactorExpression() {
+			return factorExpression;
 		}
 		
 		public Object getValue() {

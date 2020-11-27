@@ -7,7 +7,7 @@ import com.xrosstools.xdecision.Facts;
 import com.xrosstools.xdecision.PathEvaluator;
 import com.xrosstools.xdecision.XDecisionTreeParser;
 
-public class XrossEvaluator implements XrossEvaluatorConstants, XDecisionTreeParser, PathEvaluator {
+public class XrossEvaluator implements XrossEvaluatorConstants, XDecisionTreeParser<String>, PathEvaluator {
     
     @Override
     public Object evaluate(Facts facts, String factorName, Object[] paths) {
@@ -97,7 +97,7 @@ public class XrossEvaluator implements XrossEvaluatorConstants, XDecisionTreePar
      * Subclass can override this to customize decision
      */
     @Override
-    public Object parseDecision(String name) {
+    public String parseDecision(String name) {
         return name;
     }
     

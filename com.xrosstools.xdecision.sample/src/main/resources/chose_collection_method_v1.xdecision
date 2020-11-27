@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decision_tree>
+ <comments/>
+ <parser>com.xrosstools.xdecision.ext.XrossEvaluator</parser>
+ <evaluator>com.xrosstools.xdecision.ext.XrossEvaluator</evaluator>
+ <factors>
+  <factor id="overdueTime" index="0">
+   <value>BETWEEN 1, 29</value>
+   <value>BETWEEN 30, 98</value>
+   <value>BETWEEN 90, 180</value>
+   <value>&gt;180</value>
+  </factor>
+  <factor id="riskLevel" index="1">
+   <value>IN 'low', 'middle'</value>
+   <value>== 'high'</value>
+   <value>=='low'</value>
+   <value>IN 'middle', 'high'</value>
+  </factor>
+  <factor id="repaymentWilling" index="2">
+   <value>== 'A'</value>
+   <value>IN 'B', 'C'</value>
+   <value>== 'others'</value>
+  </factor>
+  <factor id="amount" index="3">
+   <value>&lt;= 3000</value>
+   <value>&gt; 3000</value>
+  </factor>
+  <factor id="sex" index="4">
+   <value>== 'male'</value>
+   <value>== 'female'</value>
+  </factor>
+  <factor id="homeVisited" index="5">
+   <value>IS TRUE</value>
+   <value>IS FALSE</value>
+  </factor>
+  <factor id="address" index="6">
+   <value>== 'hefei'</value>
+   <value>== 'other'</value>
+  </factor>
+ </factors>
+ <paths>
+  <path index="0">0:0|1:0</path>
+  <path index="1">0:0|1:1</path>
+  <path index="2">0:1|1:2</path>
+  <path index="3">0:1|1:3</path>
+  <path index="6">0:2|1:2|2:0</path>
+  <path index="5">0:2|1:2|2:1</path>
+  <path index="4">0:2|1:2|2:2</path>
+  <path index="12">0:2|1:3|3:0</path>
+  <path index="6">0:2|1:3|3:1</path>
+  <path index="7">0:3|1:0|4:0</path>
+  <path index="8">0:3|1:0|4:1</path>
+  <path index="9">0:3|1:1|5:0</path>
+  <path index="11">0:3|1:1|5:1|6:0</path>
+  <path index="10">0:3|1:1|5:1|6:1</path>
+ </paths>
+ <decisions>
+  <decision id="msg_1" index="0"/>
+  <decision id="msg_2" index="1"/>
+  <decision id="msg_2, call_2" index="2"/>
+  <decision id="call_3" index="3"/>
+  <decision id="call_4" index="4"/>
+  <decision id="call_5" index="5"/>
+  <decision id="call_6" index="6"/>
+  <decision id="call_7" index="7"/>
+  <decision id="call_8" index="8"/>
+  <decision id="mail_1, msg_2" index="9"/>
+  <decision id="mail_2, msg_3" index="10"/>
+  <decision id="hom_visit" index="11"/>
+  <decision id="call_2" index="12"/>
+ </decisions>
+</decision_tree>
