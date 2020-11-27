@@ -13,8 +13,9 @@ public class DecisionTreeDiagram implements IPropertySource {
 	private List<DecisionTreeFactor> factors = new ArrayList<DecisionTreeFactor>();
 	private String decisionDescription;
 	private List<String> decisions= new ArrayList<String>();
+	private List<UserDefinedType> userDefinedTypes = new ArrayList<UserDefinedType>();
 	
-	private String parserClass;
+    private String parserClass;
 	private String evaluatorClass;
 
 	private List<DecisionTreeNode> nodes = new ArrayList<DecisionTreeNode>();;
@@ -100,9 +101,25 @@ public class DecisionTreeDiagram implements IPropertySource {
 	public void setDecisions(List<String> decisions) {
 		this.decisions = decisions;
 	}
+    public List<UserDefinedType> getUserDefinedTypes() {
+        return userDefinedTypes;
+    }
+    public void setUserDefinedTypes(List<UserDefinedType> userDefinedTypes) {
+        this.userDefinedTypes = userDefinedTypes;
+    }
+    public UserDefinedType findUserDefinedType(String name) {
+        for(UserDefinedType type: userDefinedTypes) {
+            if(type.getName().equals(name))
+                return type;
+        }
+        return null;
+    }
 	public List<DecisionTreeNode> getNodes() {
 		return nodes;
 	}
+    public void setNodes(List<DecisionTreeNode> nodes) {
+        this.nodes = nodes;
+    }
 	public void addNode(DecisionTreeNode node) {
 		nodes.add(node);
 		listeners.firePropertyChange(NODE, null, null);

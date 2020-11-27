@@ -8,6 +8,10 @@ public class DecisionTreeModel {
 
 	private String[] decisions;
 	private DecisionTreeFactor[] factors;
+	private UserDefinedType[] types;
+	private DecisionTreeNode[] nodes;
+	
+	// for backward compatible
 	private DecisionTreePath[] pathes;
 	
 	public String getComments() {
@@ -40,10 +44,22 @@ public class DecisionTreeModel {
 	public void setFactors(DecisionTreeFactor[] factors) {
 		this.factors = factors;
 	}
-	public DecisionTreePath[] getPathes() {
-		return pathes;
-	}
-	public void setPathes(DecisionTreePath[] pathes) {
-		this.pathes = pathes;
-	}
+    public UserDefinedType[] getTypes() {
+        return types;
+    }
+    public void setTypes(UserDefinedType[] types) {
+        this.types = types;
+    }
+    public DecisionTreeNode[] getNodes() {
+        return nodes;
+    }
+    public void setNodes(DecisionTreeNode[] nodes) {
+        this.nodes = nodes;
+    }
+    public DecisionTreePath[] getPathes() {
+        return pathes;
+    }
+    public void setPathes(DecisionTreePath[] pathes) {
+        this.pathes = pathes;
+    }
 }

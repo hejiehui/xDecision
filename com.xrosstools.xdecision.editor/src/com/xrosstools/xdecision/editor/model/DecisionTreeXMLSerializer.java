@@ -2,11 +2,13 @@ package com.xrosstools.xdecision.editor.model;
 
 import static com.xrosstools.common.XmlHelper.getValidChildNodes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.draw2d.graph.NodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -25,9 +27,28 @@ public class DecisionTreeXMLSerializer {
 		
 	public static final String DECISIONS = "decisions";
 	public static final String DECISION = "decision";
+	
+	public static final String USER_DEFINED_TYPES = "user_defined_types";
+	public static final String USER_DEFINED_TYPE = "user_defined_type";
+	
+    public static final String NAME = "name";
+    public static final String LABEL = "label";
+    public static final String TYPE = "type";
+    public static final String TYPE_NAME = "type_name";
+    
+    public static final String FIELDS = "fields";
+    public static final String FIELD = "field";
 
-	public static final String PATHS = "paths";
+    public static final String NODES = "nodes";
+	public static final String NODE = "node";
+	public static final String FACTOR_INDEX = "factor_index";
+	public static final String DECISION_INDEX = "decision_index";
+	public static final String FACTOR_FIELD = "factor_field";
+	public static final String FUNCTION_NAME = "function_name";
+	public static final String VALUE_INDEX = "value_index";
+
 	public static final String PATH = "path";
+	public static final String NODE_INDEX = "node_index";
 	
 	public static final String ID = "id";
 	public static final String INDEX = "index";
@@ -38,8 +59,6 @@ public class DecisionTreeXMLSerializer {
 	public static final String TOTAL_PATH_NUMBER = "total_path_num";
 	
 	public static final String _DECISION = "_decision";
-	public static final String DELIMITER = "|";
-	public static final char FACTOR_VALUE_DELIMITER = ':';
 
 	
 	public DecisionTreeModel readMode(Document doc) {
@@ -48,8 +67,15 @@ public class DecisionTreeXMLSerializer {
 		model.setParserClass(getNodeValue(doc, PARSER, ""));
 		model.setEvaluatorClass(getNodeValue(doc, EVALUATOR, ""));
 		model.setFactors(createFactors(doc));
-		model.setPathes(createPaths(doc));
 		model.setDecisions(createDecisions(doc));
+		
+		if(DecisionTreeV1FormatReader.isV1Format(doc))
+		    model.setPathes(DecisionTreeV1FormatReader.createPaths(doc));
+		else {
+		    model.setTypes(createTypes(doc));
+		    model.setNodes(createNodes(doc));
+		}
+		
 		return model;
 	}
 	
@@ -57,6 +83,41 @@ public class DecisionTreeXMLSerializer {
 		if(doc.getElementsByTagName(nodeName).getLength() == 0)
 			return "";
 		return doc.getElementsByTagName(nodeName).item(0).getTextContent();
+	}
+
+	private UserDefinedType[] createTypes(Document doc) {
+	    if(doc.getElementsByTagName(USER_DEFINED_TYPES).item(0) == null)
+	        return new UserDefinedType[0];
+
+	    List<Node> typeNodes = getValidChildNodes(doc.getElementsByTagName(USER_DEFINED_TYPES).item(0));
+        
+        UserDefinedType[] types = new UserDefinedType[typeNodes.size()];
+        for(int i = 0; i < types.length; i++){
+            Node typeNode = typeNodes.get(i);
+            UserDefinedType type = new UserDefinedType();
+            
+            type.setName(getAttribute(typeNode, NAME));
+            type.setLabel(getAttribute(typeNode, LABEL));
+            types[getIntAttribute(typeNode, INDEX)] = type;
+            
+            List<Node> valueNodes = getValidChildNodes(typeNode);
+            List<FieldDefinition> fields = new ArrayList<FieldDefinition>();
+            type.setFields(fields);
+            for(int j = 0; j < valueNodes.size(); j++){
+                FieldDefinition field = new FieldDefinition();
+                field.setName(getAttribute(valueNodes.get(j), NAME));
+                field.setLabel(getAttribute(valueNodes.get(j), LABEL));
+                if(getAttribute(valueNodes.get(j), TYPE) != null)
+                    field.setType(FactorType.valueOf(getAttribute(valueNodes.get(j), TYPE)));
+
+                if(field.getType() == FactorType.USER_DEFINED && getAttribute(valueNodes.get(j), TYPE) != null)
+                    field.setCustomizedType(getAttribute(valueNodes.get(j), TYPE_NAME));
+                
+                fields.add(field);
+            }
+        }
+        
+        return types;    
 	}
 
 	private DecisionTreeFactor[] createFactors(Document doc) {
@@ -81,11 +142,52 @@ public class DecisionTreeXMLSerializer {
 		return factors;
 	}
 	
-	private int getIntAttribute(Node node, String attributeName){
+    private DecisionTreeNode[] createNodes(Document doc) {
+        if(doc.getElementsByTagName(NODES).getLength() == 0)
+            return null;
+
+        List<Node> nodeNodes = getValidChildNodes(doc.getElementsByTagName(NODES).item(0));
+        
+        DecisionTreeNode[] nodes = new DecisionTreeNode[nodeNodes.size()];
+        for(int i = 0; i < nodes.length; i++){
+            Node nodeNode = nodeNodes.get(i);
+            DecisionTreeNode node = new DecisionTreeNode();
+            
+            node.setFactorId(getIntAttribute(nodeNode, FACTOR_INDEX, -1));
+            node.setDecisionId(getIntAttribute(nodeNode, DECISION_INDEX, -1));
+            node.setFactorField(getAttribute(nodeNode, FACTOR_FIELD));
+            node.setFunctionName(getAttribute(nodeNode, FUNCTION_NAME));
+            nodes[i] = node;
+        }
+        
+        //Link nodes
+        for(int i = 0; i < nodes.length; i++)
+            createPaths(nodeNodes.get(i), nodes, nodes[i]);
+        
+        return nodes;
+    }
+    
+    private void createPaths(Node docNode, DecisionTreeNode[] nodes, DecisionTreeNode node) {
+        List<Node> pathNodes = getValidChildNodes(docNode);
+        for(int i = 0; i < pathNodes.size(); i++){
+            Node pathNode = pathNodes.get(i);
+            
+            DecisionTreeNode child = nodes[getIntAttribute(pathNode, NODE_INDEX)];
+            DecisionTreeNodeConnection conn = new DecisionTreeNodeConnection(node, child);
+            conn.setValueId(getIntAttribute(pathNode, VALUE_INDEX, -1));
+        }
+    }
+    
+    public static int getIntAttribute(Node node, String attributeName, int defaultValue){
+        String value = getAttribute(node, attributeName);
+        return value == null ? defaultValue : Integer.parseInt(value); 
+    }
+
+    public static int getIntAttribute(Node node, String attributeName){
 		return Integer.parseInt(getAttribute(node, attributeName));
 	}
 	
-	private String getAttribute(Node node, String attributeName){
+    public static String getAttribute(Node node, String attributeName){
 		NamedNodeMap map = node.getAttributes();
 		for(int i = 0; i < map.getLength(); i++){
 			if(attributeName.equals(map.item(i).getNodeName()))
@@ -93,35 +195,6 @@ public class DecisionTreeXMLSerializer {
 		}
 		
 		return null;
-	}
-	
-	private DecisionTreePath[] createPaths(Document doc) {
-		List<Node> pathNodes = getValidChildNodes(doc.getElementsByTagName(PATHS).item(0));
-		DecisionTreePath[] paths = new DecisionTreePath[pathNodes.size()];
-		for(int i = 0; i < paths.length; i++){
-			paths[i] = getDecisionTreePath(pathNodes.get(i).getTextContent(), getIntAttribute(pathNodes.get(i), INDEX));
-		}
-		return paths;
-	}
-	
-	/**
-	 * @param value looks like 1:2|2:1|..., which means factor 1, value 2
-	 * @return
-	 */
-	private DecisionTreePath getDecisionTreePath(String value, int decisionId){
-		StringTokenizer t = new StringTokenizer(value, DELIMITER);
-		DecisionTreePathEntry[] entries = new DecisionTreePathEntry[t.countTokens()];
-		
-		for(int i = 0; i < entries.length; i++){
-			String pair = t.nextToken();
-			int index = pair.indexOf(FACTOR_VALUE_DELIMITER);
-			String factorIndexStr = pair.substring(0, index);
-			String valueIndexStr = pair.substring(index+1, pair.length());
-			DecisionTreePathEntry entry = new DecisionTreePathEntry(new Integer(factorIndexStr), Integer.parseInt(valueIndexStr));
-			entries[i] = entry;
-		}
-
-		return new DecisionTreePath(entries, decisionId);
 	}
 	
 	private String[] createDecisions(Document doc) {
@@ -145,14 +218,18 @@ public class DecisionTreeXMLSerializer {
 			root.appendChild(createNode(doc, PARSER, model.getParserClass()));
 			root.appendChild(createNode(doc, EVALUATOR, model.getEvaluatorClass()));
 			
-			Element factorsNode = (Element)doc.createElement(FACTORS);
+            Element typesNode = (Element)doc.createElement(USER_DEFINED_TYPES);
+            root.appendChild(typesNode);
+            writeTypes(doc, typesNode, model);
+
+            Element factorsNode = (Element)doc.createElement(FACTORS);
 			root.appendChild(factorsNode);
 			writeFactors(doc, factorsNode, model);
 			
-			Element pathsNode = (Element)doc.createElement(PATHS);
-			root.appendChild(pathsNode);
-			writePathes(doc, pathsNode, model);
-			
+            Element treeNodes = (Element)doc.createElement(NODES);
+            root.appendChild(treeNodes);
+            writeNodes(doc, treeNodes, model);
+
 			Element decisionsNode = (Element)doc.createElement(DECISIONS);
 			root.appendChild(decisionsNode);
 			writeDecisions(doc, decisionsNode, model);
@@ -165,17 +242,47 @@ public class DecisionTreeXMLSerializer {
 	
 	private Element createNode(Document doc, String nodeName, String value){
 		Element node = (Element)doc.createElement(nodeName);
-		node.appendChild(doc.createTextNode(value));
+		if(value != null)
+		    node.appendChild(doc.createTextNode(value));
 		return node;
 	}
 
-	
+    private void writeTypes(Document doc, Element typesNode, DecisionTreeModel model){
+        UserDefinedType[] types = model.getTypes();
+        for(int i = 0; i < types.length; i++){
+            UserDefinedType type = types[i];
+            Element typeNode = (Element)doc.createElement(USER_DEFINED_TYPE);
+            typeNode.setAttribute(NAME, type.getName());
+            typeNode.setAttribute(LABEL, type.getLabel());
+            typeNode.setAttribute(INDEX, String.valueOf(i));
+            typesNode.appendChild(typeNode);
+            
+            for(int j = 0; j < type.getFields().size(); j++){
+                FieldDefinition field = type.getFields().get(j);
+                Element fieldNode = (Element)doc.createElement(FIELD);
+                fieldNode.setAttribute(NAME, field.getName());
+                fieldNode.setAttribute(LABEL, field.getLabel());
+                fieldNode.setAttribute(TYPE, field.getType().toString());
+                if(field.getType() == FactorType.USER_DEFINED)
+                    fieldNode.setAttribute(TYPE_NAME, field.getCustomizedType());
+                typeNode.appendChild(fieldNode);
+            }
+        }
+    }
+    	
 	private void writeFactors(Document doc, Element factorsNode, DecisionTreeModel model){
 		DecisionTreeFactor[] factors = model.getFactors();
 		for(int i = 0; i < factors.length; i++){
 			DecisionTreeFactor factor = factors[i];
 			Element factorNode = (Element)doc.createElement(FACTOR);
 			factorNode.setAttribute(ID, factor.getFactorName());
+
+			if(factor.getType() != null)
+			    factorNode.setAttribute(TYPE, factor.getType().toString());
+
+			if(factor.getType() == FactorType.USER_DEFINED && factor.getCustomizedType() != null)
+			    factorNode.setAttribute(TYPE_NAME, factor.getCustomizedType());
+
 			factorNode.setAttribute(INDEX, String.valueOf(i));
 			factorsNode.appendChild(factorNode);
 			
@@ -188,31 +295,48 @@ public class DecisionTreeXMLSerializer {
 		}
 	}
 	
-	private void writePathes(Document doc, Element pathsNode, DecisionTreeModel model){
-		DecisionTreePath[] pathes = model.getPathes();
-		
-		for(int i = 0; i < pathes.length; i++){
+    private void writeNodes(Document doc, Element treeNodes, DecisionTreeModel model){
+        DecisionTreeNode[] nodes = model.getNodes();
+        for(int i = 0; i < nodes.length; i++){
+            DecisionTreeNode node = nodes[i];
+            Element treeNode = doc.createElement(NODE);
+            
+            treeNode.setAttribute(INDEX, String.valueOf(i));
+
+            if(node.getFactorId() >= 0)
+                treeNode.setAttribute(FACTOR_INDEX, String.valueOf(node.getFactorId()));
+
+            if(node.getDecisionId() >= 0)
+                treeNode.setAttribute(DECISION_INDEX, String.valueOf(node.getDecisionId()));
+
+            if(node.getFactorField() != null)
+                treeNode.setAttribute(FACTOR_FIELD, node.getFactorField());
+
+            if(node.getFunctionName() != null)
+                treeNode.setAttribute(FUNCTION_NAME, node.getFunctionName());
+            
+            writePathes(doc, treeNode, nodes, node);
+
+            treeNodes.appendChild(treeNode);
+        }
+    }
+    
+	private void writePathes(Document doc, Element treeNode, DecisionTreeNode[] nodes, DecisionTreeNode node){
+		for(DecisionTreeNodeConnection conn: node.getOutputs()){
 			Element pathNode = (Element)doc.createElement(PATH);
-			pathNode.setAttribute(INDEX, String.valueOf(pathes[i].getDecisionIndex()));
-			pathsNode.appendChild(pathNode);
-			pathNode.appendChild(doc.createTextNode(buildDecisionTreePath(pathes[i])));
+			pathNode.setAttribute(NODE_INDEX, String.valueOf(indexOf(nodes, conn.getChild())));
+			pathNode.setAttribute(VALUE_INDEX, String.valueOf(conn.getValueId()));
+			treeNode.appendChild(pathNode);
 		}
 	}
 	
-	/**
-	 * @return looks like 1:2|2:1|..., which means factor 1, value 2
-	 */
-	private String buildDecisionTreePath(DecisionTreePath path){
-		DecisionTreePathEntry[] entries = path.getPathEntries();
-		StringBuffer sbf = new StringBuffer();
-		
-		for(int i = 0; i < entries.length; i++){
-			sbf.append(entries[i].getFactorIndex()).append(FACTOR_VALUE_DELIMITER).append(entries[i].getValueIndex());
-			if(i < entries.length - 1)
-				sbf.append(DELIMITER);	
-		}
-		
-		return sbf.toString();
+	private int indexOf(DecisionTreeNode[] nodes, DecisionTreeNode node) {
+	    for(int i = 0; i < nodes.length; i++)
+	        if(nodes[i] == node)
+	            return i;
+
+	    // No such case
+	    return -1;
 	}
 
 	private void writeDecisions(Document doc, Element decisionsNode, DecisionTreeModel model){

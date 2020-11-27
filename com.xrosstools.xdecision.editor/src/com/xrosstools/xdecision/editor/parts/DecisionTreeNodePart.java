@@ -17,10 +17,8 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
-import org.eclipse.gef.tools.DirectEditManager;
 
 import com.xrosstools.xdecision.editor.actions.CommandChain;
 import com.xrosstools.xdecision.editor.commands.CreateNodeCommand;
@@ -34,7 +32,6 @@ import com.xrosstools.xdecision.editor.policies.DecisionTreeGraphicNodeEditPolic
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeEditPolicy;
 
 public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements PropertyChangeListener, NodeEditPart {
-    private DirectEditManager manager;
 	protected IFigure createFigure() {
         return new DecisionTreeNodeFigure();
     }
@@ -93,17 +90,12 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(DecisionTreeNode.PROP_LOCATION))
-            refreshVisuals();
-        else if (evt.getPropertyName().equals(DecisionTreeNode.PROP_FACTOR_ID))
-            refreshVisuals();
-        else if (evt.getPropertyName().equals(DecisionTreeNode.PROP_DECISION_ID))
-            refreshVisuals();
-        else if (evt.getPropertyName().equals(DecisionTreeNode.PROP_INPUTS))
+        if (evt.getPropertyName().equals(DecisionTreeNode.PROP_INPUTS))
             refreshTargetConnections();
         else if (evt.getPropertyName().equals(DecisionTreeNode.PROP_OUTPUTS))
             refreshSourceConnections();
-
+        else
+            refreshVisuals();
     }
     
     public void activate() {
@@ -125,12 +117,7 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
         Rectangle rectangle = new Rectangle(loc, size);
         ((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rectangle);
     	
-        String factor;
-    	if(node.getFactorId() == -1)
-    		factor = "";
-    	else
-    		factor = getDiagram().getFactors().get(node.getFactorId()).getFactorName();
-    	figure.setFactor(factor);
+    	figure.setFactor(node.getFactorDisplayText());
     	
         String decision;
     	if(node.getDecisionId() == -1)

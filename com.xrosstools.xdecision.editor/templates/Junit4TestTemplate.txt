@@ -1,5 +1,6 @@
 package !PACKAGE!;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -10,7 +11,9 @@ import com.xrosstools.xdecision.XDecisionTreeFactory;
 
 public class !TEST_CLASS! {
     private XDecisionTree<String> tree;
-    @Setup
+    private MapFacts test;
+
+    @Before
     public void setUp(){
         try {
             // Please revise the path to correct value 
@@ -19,6 +22,4 @@ public class !TEST_CLASS! {
             e.printStackTrace();
             fail();
         }
-    }
-!TREE_VERIFY!
-}
+    }!TREE_VERIFY!}

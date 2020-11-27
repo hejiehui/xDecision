@@ -12,6 +12,9 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource {
 	private int factorId = -1;
+    private String factorField;
+	private String functionName;
+	
 	private int decisionId = -1;
 	private String description;
 
@@ -74,6 +77,21 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	public void resetPropertyValue(Object propName){
 	}
 	
+	public String getFactorDisplayText() {
+        StringBuffer displayText = new StringBuffer();
+        
+        if(factorId != -1)
+            displayText.append(manager.getFactorName(factorId));
+
+        if(factorField != null)
+            displayText.append(DecisionTreeConstants.FIELD_SEPARATOR).append(factorField);
+        
+        if(functionName != null)
+            displayText = new StringBuffer(String.format("%s(%s)", functionName, displayText.toString()));
+        
+        return displayText.toString();
+	}
+	
 	public int getFactorId() {
 		return factorId;
 	}
@@ -94,6 +112,20 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	public void setDescription(String description) {
 		this.description = description;
 	}
+    public String getFactorField() {
+        return factorField;
+    }
+    public void setFactorField(String factorField) {
+        this.factorField = factorField;
+        listeners.firePropertyChange(PROP_FIELD_NAME, null, factorField);
+    }
+    public String getFunctionName() {
+        return functionName;
+    }
+    public void setFunctionName(String functionName) {
+        this.functionName = functionName;
+        listeners.firePropertyChange(PROP_FUNCTION_NAME, null, functionName);
+    }
 	public Point getLocation() {
 		return location;
 	}

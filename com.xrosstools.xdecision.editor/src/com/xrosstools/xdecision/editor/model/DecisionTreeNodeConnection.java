@@ -11,9 +11,9 @@ public class DecisionTreeNodeConnection implements IPropertySource {
 	private DecisionTreeNode parent;
 	private DecisionTreeNode child;
 	
-	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+    private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 
-	public static String FACTOR_VALUE = "Factor value"; 
+	public static String FACTOR_VALUE = "Factor value";	
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] descriptors;
 		descriptors = new IPropertyDescriptor[] {

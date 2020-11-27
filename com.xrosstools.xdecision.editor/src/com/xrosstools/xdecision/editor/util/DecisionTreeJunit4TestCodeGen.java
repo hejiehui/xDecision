@@ -6,9 +6,9 @@ import java.io.InputStreamReader;
 
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagramFactory;
+import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.DecisionTreeModel;
-import com.xrosstools.xdecision.editor.model.DecisionTreePath;
-import com.xrosstools.xdecision.editor.model.DecisionTreePathEntry;
+import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 
 public class DecisionTreeJunit4TestCodeGen {
     private static final String METHOD_BODY = 
@@ -46,26 +46,31 @@ public class DecisionTreeJunit4TestCodeGen {
 	
 	private String generateVerify(DecisionTreeModel model){
 		StringBuilder testCasesCode = new StringBuilder();
-		boolean hasEvaluator = model.getEvaluatorClass() != null;
+		boolean hasEvaluator = model.getEvaluatorClass() != null && model.getEvaluatorClass().trim().length() > 0;
 		
 		int index = 0;
-		for(DecisionTreePath path: model.getPathes()){
+		for(DecisionTreeNode node: model.getNodes()){
+		    if(node.getDecisionId() < 0)
+		        continue;
+
+		    int decisionId = node.getDecisionId();
             StringBuilder commentsBuf = new StringBuilder();
-		    StringBuilder codeBuf = new StringBuilder(TEST_RESET);
-			for(DecisionTreePathEntry entry: path.getPathEntries()){
-				StringBuilder testAssign = new StringBuilder(TEST_ASSIGN);
-				String factorName = model.getFactors()[entry.getFactorIndex()].getFactorName();
-				String factorValue = model.getFactors()[entry.getFactorIndex()].getFactorValues()[entry.getValueIndex()];
-				
-                StringBuilder commnets = new StringBuilder(factorName).append(hasEvaluator ? " " : " = ").append(factorValue);
-                commentsBuf.append(String.format(COMMENTS, commnets.toString()));
+            StringBuilder codeBuf = new StringBuilder(TEST_RESET);
+
+            while(node.getInput() != null) {
+                DecisionTreeNode parent = node.getInput().getParent();
+                DecisionTreeFactor factor = model.getFactors()[parent.getFactorId()];
+                String factorValue = factor.getFactorValues()[node.getInput().getValueId()];
                 
-                codeBuf.append(String.format(TEST_ASSIGN, factorName, factorValue));
-				
-			}
-			codeBuf.append(String.format(ASSERT_DISPLAY, model.getDecisions()[path.getDecisionIndex()]));
-			testCasesCode.append(String.format(METHOD_BODY, index++, commentsBuf.toString(), codeBuf.toString()));
-		}
+                StringBuilder commnets = new StringBuilder(parent.getFactorDisplayText()).append(hasEvaluator ? " " : " = ").append(factorValue);
+                commentsBuf.insert(0, String.format(COMMENTS, commnets.toString()));
+                codeBuf.insert(0, String.format(TEST_ASSIGN, factor.getFactorName(), factorValue));
+		        
+		        node = parent;
+		    }
+            codeBuf.append(String.format(ASSERT_DISPLAY, model.getDecisions()[decisionId]));
+            testCasesCode.append(String.format(METHOD_BODY, index++, commentsBuf.toString(), codeBuf.toString()));
+		}		
 		return testCasesCode.toString();
 	}
 	

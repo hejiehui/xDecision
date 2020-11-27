@@ -70,15 +70,15 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 	
 	public Object getPropertyValue(Object propName) {
 		String prop = (String)propName;
-		
+
 		if (COMMENTS.equals(prop))
-			return diagram.getDescription();
+			return getValue(diagram.getDescription());
 
         if(prop.equals(PARSER))
-            return diagram.getParserClass();
+            return getValue(diagram.getParserClass());
 
         if(prop.equals(EVALUATOR))
-            return diagram.getEvaluatorClass();
+            return getValue(diagram.getEvaluatorClass());
 		
 		if(prop.startsWith(FACTOR) && !prop.contains(_VALUE_)){
 			int index = Integer.parseInt(prop.substring(prop.indexOf(SPACE) + 1));
@@ -131,6 +131,10 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 			int index = Integer.parseInt(prop.substring(prop.indexOf(SPACE) + 1));
 			diagram.getDecisions().set(index, value);
 		}
+	}
+	
+	private String getValue(String value) {
+	    return value == null ? "":value;
 	}
 	
 	public Object getEditableValue(){

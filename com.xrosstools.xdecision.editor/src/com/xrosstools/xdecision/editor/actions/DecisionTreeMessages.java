@@ -30,4 +30,15 @@ public interface DecisionTreeMessages {
 	String CREATE_NEW_FACTOR_MSG = "Create new factor";
 	String CREATE_NEW_FACTOR_VALUE_MSG = "Create new value";
 
+	String CREATE_NEW_USER_DEFINED_TYPE_MSG = "Create new factor type";
+	String CHANGE_FACTOR_TYPE_MSG = "Change factor type";
+	String CREATE_NEW_FIELD_DEFINITION_MSG = "Create new field";
+	String CHANGE_FIELD_TYPE_MSG = "Change field type";
+	String CHANGE_FIELD_NAME_MSG = "Change field name";
+	String DELETE_FIELD_MSG = "Delete field";
+	
+	String FACTOR_NAME_MSG = "Factor name";
+	String FIELD_NAME_MSG = "Field name";
+	String FACTOR_TYPE_NAME_MSG = "Type name";
+    String DECISION_NAME_MSG = "Decision name";
 }
