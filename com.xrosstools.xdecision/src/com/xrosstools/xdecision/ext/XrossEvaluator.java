@@ -19,10 +19,6 @@ public class XrossEvaluator implements XrossEvaluatorConstants, XDecisionTreePar
         return null;
     }
     
-    private static interface Expression {
-        Object evaluate(Facts facts);
-    }
-    
     private static interface FactParser {
         String[] operators();
         Object parse(String name, String operator, String expStr);
@@ -125,46 +121,6 @@ public class XrossEvaluator implements XrossEvaluatorConstants, XDecisionTreePar
             return new FactorValue(expStr);
         
         throw new IllegalArgumentException("Can not parse expression: " + expStr);
-    }
-    
-    private RawValue rawValue(Object value) {
-        return new RawValue(value);
-    }
-    
-    private static class RawValue implements Expression {
-        private Object value;
-        
-        public RawValue(Object value) {
-            this.value = value;
-        }
-
-        @Override
-        public Object evaluate(Facts facts) {
-            return value;
-        }
-        
-        @Override
-        public String toString() {
-            return String.valueOf(value);
-        }        
-    }
-    
-    private static class FactorValue implements Expression {
-        private String factorName;
-        
-        public FactorValue(String factorName) {
-            this.factorName = factorName;
-        }
-
-        @Override
-        public Object evaluate(Facts facts) {
-            return facts.get(factorName);
-        }
-        
-        @Override
-        public String toString() {
-            return factorName;
-        }
     }
     
     private static Expression factorValue(String factorName) {
