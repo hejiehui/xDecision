@@ -11,7 +11,6 @@ public class FactorValue implements Expression {
 
     @Override
     public Object evaluate(Facts facts) {
-        System.out.println(factorName);
         return facts.get(factorName);
     }
     

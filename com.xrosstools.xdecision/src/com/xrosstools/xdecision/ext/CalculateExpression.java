@@ -14,8 +14,6 @@ public class CalculateExpression extends LeftExpression {
     
     @Override
     public Double evaluate(Facts facts) {
-        System.out.println(operator);
-
         switch (operator) {
         case PLUS:
             return eval(leftExp, facts) + eval(rightExp, facts);
