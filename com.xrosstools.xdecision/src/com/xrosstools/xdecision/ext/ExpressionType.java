@@ -10,8 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.omg.IOP.ENCODING_CDR_ENCAPS;
-
+//TODO support negative expression
 public enum ExpressionType {
     /*
      * Raw grammar
@@ -72,8 +71,10 @@ public enum ExpressionType {
             return asList(PLUS_T_B, MINUS_T_B, FIN);
         }
         public Object compile(Grammar grammar, List<Object> segment) {
+            if(grammar == FIN)
+                return end();
+
             Expression exp = withLeft(exp1(segment), exp2(segment));
-            
             return new CalculateExpression(exp, grammar == PLUS_T_B ? PLUS: MINUS);
         }
 
@@ -142,6 +143,9 @@ public enum ExpressionType {
         protected List<Grammar> createGrammars() {
             return asList(A_L, FIN);
         }
+        public Object compile(Grammar grammar, List<Object> segment) {
+            return compileParameters(grammar, segment);
+        }
     },
     
     L(){
@@ -149,9 +153,8 @@ public enum ExpressionType {
             return asList(COMMA_A_L, FIN);
         }
         public Object compile(Grammar grammar, List<Object> segment) {
-            return null;
+            return compileParameters(grammar, segment);
         }
-
     },
     
     I(){
@@ -159,7 +162,13 @@ public enum ExpressionType {
             return asList(LSBRKT_A_RSBRKT_I, DOT_M, FIN);
         }
         public Object compile(Grammar grammar, List<Object> segment) {
-            return new InterExpression(segment, grammar);
+            if(grammar == FIN)
+                return end();
+
+            if(grammar == LSBRKT_A_RSBRKT_I)
+                return withLeft(new ElementOfExpression(exp(segment, 1)), exp(segment, 3));
+            
+            return segment.get(1);
         }
 
     },
@@ -169,7 +178,7 @@ public enum ExpressionType {
             return Collections.emptyList();
         }
         public Expression compile(Grammar grammar, List<Object> segment) {
-            return new EndExpression();
+            return end();
         }
 
     },;
@@ -199,7 +208,7 @@ public enum ExpressionType {
     protected abstract List<Grammar> createGrammars();
 
     public Object compile(Grammar grammar, List<Object> segment) {
-        Expression exp = new EndExpression();
+        Expression exp = end();
         for(int i = segment.size() - 1; i >= 0; i--) {
             exp = withLeft(exp(segment, i), exp);
         }
@@ -229,4 +238,17 @@ public enum ExpressionType {
     private static Expression withLeft(Expression leftExp, Expression basic) {
         return ((LeftExpression)basic).setLeftExp(leftExp);
     }
+
+    private static Object compileParameters(Grammar grammar, List<Object> segment) {
+        if(grammar == FIN)
+            return new ParametersExpression();
+
+        if(grammar == COMMA_A_L)
+            segment.remove(0);
+            
+        ParametersExpression params = (ParametersExpression)exp1(segment);
+        params.addParameter(exp0(segment));
+        return params;
+    }
+    
 }

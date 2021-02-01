@@ -14,35 +14,41 @@ public class ExpressionCompiler {
 
         List<Grammar> grammars = type.getGrammars();
         L: for(Grammar g: grammars) {
+            List<Object> segment = new ArrayList<>();
+            if(g.tokens.contains(END))
+                return type.compile(g, segment);
+
             if(words.isEmpty())
                 continue;
 
-            if(g.tokens.contains(END)) {
-                break;
-            }
-
-            List<Object> segment = new ArrayList<>();
-            
             for(Object token: g.tokens) {
+                Object exp = null;
                 if(token instanceof ExpressionType) {
-                    segment.add(compile((ExpressionType)token, words));
+                    exp = compile((ExpressionType)token, words);
                 }else {
                     if(words.isEmpty())
                         throw new IllegalArgumentException(String.format("Unexpected end of expression \"%s\",  next token of %s is: %s", bakWords, g.tokens, token.toString()));
                     
-                    if(words.getFirst().getType() == token ) {
-                        segment.add(words.removeFirst());
-                    }else {
-                        if(segment.size() > 0)
-                            throw new IllegalArgumentException("Expect " + token.toString() + " instead of " + words.getFirst().getType().toString());
-                        continue L;
-                    }
+                    exp = words.getFirst().getType() == token ? words.removeFirst() : NOT_MATCH;
                 }
+
+                if(exp == NOT_MATCH) {
+                    if(segment.isEmpty())
+                        continue L;
+
+                    String msg = words.isEmpty() ? EMPTY : words.getFirst().getType().toString();
+                    throw new IllegalArgumentException("Expect " + token.toString() + " instead of " + msg);
+                }
+                 
+                segment.add(exp);
             }
 
             return type.compile(g, segment);
         }
 
-        return new EndExpression();
+        return NOT_MATCH;
     }
+    
+    private static final Object NOT_MATCH = new Object();
+    private static final String EMPTY = "empty";
 }

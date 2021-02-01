@@ -12,6 +12,6 @@ public class ElementOfExpression extends LeftExpression {
     @Override
     public Object evaluate(Facts facts) {
         Object[] list = (Object[])leftExp.evaluate(facts);
-        return list[(int)index.evaluate(facts)];
+        return list[((Number)index.evaluate(facts)).intValue()];
     }
 }
