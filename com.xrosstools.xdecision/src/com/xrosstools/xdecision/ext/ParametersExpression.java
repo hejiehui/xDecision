@@ -15,14 +15,6 @@ public class ParametersExpression extends LeftExpression {
         params.addFirst(leftParametere);
     }
     
-    public Class<?>[] getParameterTypes(Object[] values) {
-        Class<?>[] types= new Class<?>[values.length];
-        
-        for(int i = 0; i < values.length; i++)
-            types[i] = values[i].getClass();
-        return types;
-    }
-
     @Override
     public Object evaluate(Facts facts) {
         Object[] values = new Object[params.size()];

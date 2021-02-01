@@ -110,7 +110,7 @@ public enum ExpressionType {
             if(isMatch(grammar, M))
                 return exp0(segment);
 
-            return new RawValue((Token)segment.get(0));
+            return RawValue.tokenOf((Token)segment.get(0));
         }
 
     },

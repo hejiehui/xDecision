@@ -39,7 +39,7 @@ public class ExpressionCompilerTest {
         Expression e = test.compile(p.parseToken("123"));
         
         assertNotNull(e);
-        assertEquals(123.0,  e.evaluate(f));
+        assertEquals(123,  e.evaluate(f));
       
         e = test.compile(p.parseToken("123.456"));
         assertEquals(123.456,  e.evaluate(f));
@@ -83,19 +83,15 @@ public class ExpressionCompilerTest {
         assertEquals(1,  e.evaluate(f));
       
         e = test.compile(p.parseToken("intArray[1]"));
-        assertNotNull(e);
         assertEquals(2,  e.evaluate(f));
       
         e = test.compile(p.parseToken("intArray[2]"));
-        assertNotNull(e);
         assertEquals(3,  e.evaluate(f));
       
         e = test.compile(p.parseToken("intArray[A]"));
-        assertNotNull(e);
         assertEquals(2,  e.evaluate(f));
 
         e = test.compile(p.parseToken("intArray[1+1]"));
-        assertNotNull(e);
         assertEquals(3,  e.evaluate(f));
 
     }
@@ -110,7 +106,9 @@ public class ExpressionCompilerTest {
 
         assertNotNull(e);
         assertEquals(3,  e.evaluate(f));
-      
+        
+        e = test.compile(p.parseToken("A.substring(1,2)"));
+        assertEquals("b",  e.evaluate(f));
     }
     
     @Test

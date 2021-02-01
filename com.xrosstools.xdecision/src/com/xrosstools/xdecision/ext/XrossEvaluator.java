@@ -109,11 +109,11 @@ public class XrossEvaluator implements XrossEvaluatorConstants, XDecisionTreePar
         expStr = expStr.trim();
         //Parse String
         if(expStr.startsWith(STRING_DELIMITER) && expStr.endsWith(STRING_DELIMITER))
-            return new RawValue(expStr.subSequence(1, expStr.length()-1));
+            return RawValue.stringOf(expStr.subSequence(1, expStr.length()-1));
         
         //Parse Number
         try {
-            return new RawValue(Double.parseDouble(expStr));
+            return RawValue.numberOf(expStr);
         } catch (NumberFormatException e) {
         }
         

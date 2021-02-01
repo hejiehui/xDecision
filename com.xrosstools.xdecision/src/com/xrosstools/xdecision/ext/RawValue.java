@@ -5,16 +5,25 @@ import com.xrosstools.xdecision.Facts;
 public class RawValue implements Expression {
     private Object value;
     
-    public RawValue(Double value) {
-        this.value = value;
+    public static RawValue numberOf(CharSequence value) {
+        boolean isDouble = false;
+        for(int i = 0; i < value.length(); i++) {
+            if(value.charAt(i) == '.')
+                isDouble = true;
+        }
+        
+        if(isDouble)
+            return new RawValue(new Double(value.toString()));
+        else
+            return new RawValue(new Integer(value.toString()));
     }
 
-    public RawValue(CharSequence value) {
-        this.value = value;
+    public static RawValue stringOf(CharSequence value) {
+        return new RawValue(value.toString());
     }
 
-    public RawValue(Token token) {
-        this.value = token.getType() == TokenType.STRING ? token.getValueStr() : Double.valueOf(token.getValueStr());
+    public static RawValue tokenOf(Token token) {
+        return token.getType() == TokenType.STRING ? stringOf(token.getValueStr()) : numberOf(token.getValueStr());
     }
 
     public RawValue(Object value) {
