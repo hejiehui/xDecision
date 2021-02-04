@@ -11,10 +11,8 @@ public class CalculateExpression extends LeftExpression {
     public CalculateExpression(Expression rightExp, TokenType operator) {
         if(operator == TokenType.MINUS && rightExp instanceof CalculateExpression) {
             CalculateExpression rightCal = (CalculateExpression)rightExp;
-//            if(rightCal.operator == TokenType.MINUS || rightCal.operator == TokenType.PLUS) {
-                rightCal.revseLeft = true;
-                operator = TokenType.PLUS;
-//            }
+            rightCal.revseLeft = true;
+            operator = TokenType.PLUS;
         }        
         
         this.rightExp = rightExp;

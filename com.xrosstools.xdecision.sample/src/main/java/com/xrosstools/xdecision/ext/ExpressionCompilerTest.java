@@ -189,7 +189,8 @@ public class ExpressionCompilerTest {
         f.set("B", 10);
         f.set("C", "abc");
         f.set("D", Arrays.asList(1, 2, 3 ,4, 5));
-        
+        f.set("E", new Integer[] {1, 2, 3});
+       
         Expression e = test.compile(p.parseToken("(A+B)/C.indexOf('b')"));
 
         assertNotNull(e);
@@ -197,5 +198,11 @@ public class ExpressionCompilerTest {
         
         e = test.compile(p.parseToken("(A+B)/C.indexOf('b') - 100 + 10"));
         assertEquals(20.0,  e.evaluate(f));
+
+        e = test.compile(p.parseToken("(A+B)/C.indexOf('b') - 100 + 10 - E[(20-A/(B+10))/5-1]"));
+        assertEquals(17.0,  e.evaluate(f));
+
+        e = test.compile(p.parseToken("((A+B)/C.indexOf('b') - 100 + 10 - E[(20-A/(B+10))/5-1])/17"));
+        assertEquals(1.0,  e.evaluate(f));
     }
 }
