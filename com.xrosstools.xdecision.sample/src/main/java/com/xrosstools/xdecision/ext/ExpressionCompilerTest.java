@@ -3,6 +3,8 @@ package com.xrosstools.xdecision.ext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 import com.xrosstools.xdecision.MapFacts;
@@ -59,16 +61,6 @@ public class ExpressionCompilerTest {
     }
 
     @Test
-    public void testCompileString() {
-        MapFacts f = new MapFacts();
-
-        Expression e = test.compile(p.parseToken("'123'"));
-        
-        assertNotNull(e);
-        assertEquals("123",  e.evaluate(f));
-    }
-
-    @Test
     public void testElementOf() {
         MapFacts f = new MapFacts();
       
@@ -109,6 +101,12 @@ public class ExpressionCompilerTest {
         
         e = test.compile(p.parseToken("A.substring(1,2)"));
         assertEquals("b",  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A.substring(1,2)"));
+        assertEquals("b",  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A.substring(1,2).charAt(0)"));
+        assertEquals("b",  e.evaluate(f));
     }
     
     @Test
@@ -138,9 +136,15 @@ public class ExpressionCompilerTest {
         
         e = test.compile(p.parseToken("A+B*C-D "));
         assertEquals(1.0,  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A-B-C-D "));
+        assertEquals(-4.0,  e.evaluate(f));
+
+        e = test.compile(p.parseToken("A-B*C-D "));
+        assertEquals(-3.0,  e.evaluate(f));
     }
 
-//    @Test
+    @Test
     public void testBracketComputation() {
         MapFacts f = new MapFacts();
         f.set("A", 1);
@@ -176,5 +180,22 @@ public class ExpressionCompilerTest {
 
         e = test.compile(p.parseToken("(A+(B*C)-D) "));
         assertEquals(1.0,  e.evaluate(f));
+    }
+    
+    @Test
+    public void testReallyComplicated() {
+        MapFacts f = new MapFacts();
+        f.set("A", 100);
+        f.set("B", 10);
+        f.set("C", "abc");
+        f.set("D", Arrays.asList(1, 2, 3 ,4, 5));
+        
+        Expression e = test.compile(p.parseToken("(A+B)/C.indexOf('b')"));
+
+        assertNotNull(e);
+        assertEquals(110.0,  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("(A+B)/C.indexOf('b') - 100 + 10"));
+        assertEquals(20.0,  e.evaluate(f));
     }
 }

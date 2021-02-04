@@ -15,7 +15,10 @@ public class MethodExpression extends LeftExpression {
     }
     
     public Expression setLeftExp(Expression leftExp) {
-        if(methodName == null && !(leftExp instanceof EndExpression)) {
+        if(leftExp instanceof EndExpression)
+            return this;
+
+        if(methodName == null) {
             methodName = leftExp.toString();
             return this;
         }
