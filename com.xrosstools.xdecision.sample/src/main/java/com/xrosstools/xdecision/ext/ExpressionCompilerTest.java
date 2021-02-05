@@ -46,8 +46,8 @@ public class ExpressionCompilerTest {
         e = test.compile(p.parseToken("123.456"));
         assertEquals(123.456,  e.evaluate(f));
         
-//        e = test.compile(p.parseToken("-123.456"));
-//        assertEquals(-123.456,  e.evaluate(f));
+        e = test.compile(p.parseToken("-123.456"));
+        assertEquals(-123.456,  e.evaluate(f));
     }
 
     @Test
@@ -86,6 +86,9 @@ public class ExpressionCompilerTest {
         e = test.compile(p.parseToken("intArray[1+1]"));
         assertEquals(3,  e.evaluate(f));
 
+        e = test.compile(p.parseToken("-intArray[1+1]"));
+        assertEquals(-3,  e.evaluate(f));
+
     }
   
     @Test
@@ -107,6 +110,11 @@ public class ExpressionCompilerTest {
         
         e = test.compile(p.parseToken("A.substring(1,2).charAt(0)"));
         assertEquals("b",  e.evaluate(f));
+        
+        f.set("C", "abc");
+       
+        e = test.compile(p.parseToken("-C.indexOf('b')"));
+        assertEquals(-1,  e.evaluate(f));
     }
     
     @Test
@@ -125,10 +133,28 @@ public class ExpressionCompilerTest {
         e = test.compile(p.parseToken("A-B"));
         assertEquals(0.0,  e.evaluate(f));
 
+        e = test.compile(p.parseToken("-A-B"));
+        assertEquals(-2.0,  e.evaluate(f));
+
         e = test.compile(p.parseToken("A*B"));
         assertEquals(1.0,  e.evaluate(f));
         
+        e = test.compile(p.parseToken("-A*B"));
+        assertEquals(-1.0,  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A*-B"));
+        assertEquals(-1.0,  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("-A*-B"));
+        assertEquals(1.0,  e.evaluate(f));
+        
         e = test.compile(p.parseToken("A/B"));
+        assertEquals(1.0,  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("-A/B"));
+        assertEquals(-1.0,  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("-A/-B"));
         assertEquals(1.0,  e.evaluate(f));
         
         e = test.compile(p.parseToken("A+B*C "));
@@ -166,6 +192,9 @@ public class ExpressionCompilerTest {
         e = test.compile(p.parseToken("(A/B)"));
         assertEquals(1.0,  e.evaluate(f));
 
+        e = test.compile(p.parseToken("-(A-B)"));
+        assertEquals(-0.0,  e.evaluate(f));
+
         e = test.compile(p.parseToken("A+(B*C) "));
         assertEquals(3.0,  e.evaluate(f));
         
@@ -179,6 +208,9 @@ public class ExpressionCompilerTest {
         assertEquals(1.0,  e.evaluate(f));
 
         e = test.compile(p.parseToken("(A+(B*C)-D) "));
+        assertEquals(1.0,  e.evaluate(f));
+
+        e = test.compile(p.parseToken("(A+(-B*-C)-D) "));
         assertEquals(1.0,  e.evaluate(f));
     }
     
@@ -204,5 +236,8 @@ public class ExpressionCompilerTest {
 
         e = test.compile(p.parseToken("((A+B)/C.indexOf('b') - 100 + 10 - E[(20-A/(B+10))/5-1])/17"));
         assertEquals(1.0,  e.evaluate(f));
+
+        e = test.compile(p.parseToken("-((A+B)/C.indexOf('b') - 100 + 10 - E[(20-A/(B+10))/5-1])/17"));
+        assertEquals(-1.0,  e.evaluate(f));
     }
 }

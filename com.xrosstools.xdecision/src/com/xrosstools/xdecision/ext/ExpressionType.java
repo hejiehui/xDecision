@@ -45,7 +45,9 @@ public enum ExpressionType {
      * T -> FU
      * U -> * FU|/ FU|e
      * 
-     * F -> (A)|M|STRING|NUMBER
+     * F -> -H|H
+     * 
+     * H -> (A)|M|STRING|NUMBER
      * 
      * M -> ID G I
      * G -> (P)|e
@@ -63,7 +65,6 @@ public enum ExpressionType {
         public Object compile(Grammar grammar, List<Object> segment) {
             return withLeft(exp0(segment), exp1(segment));
         }
-
     },
     
     B(){
@@ -77,7 +78,6 @@ public enum ExpressionType {
             Expression exp = withLeft(exp1(segment), exp2(segment));
             return new CalculateExpression(exp, grammar == PLUS_T_B ? PLUS: MINUS);
         }
-
     },
     
     T(){
@@ -96,10 +96,21 @@ public enum ExpressionType {
             
             return new CalculateExpression(exp1(segment), grammar == TIMES_F_U ? TIMES: DIVIDE);
         }
-
     },
     
     F(){
+        protected List<Grammar> createGrammars() {
+            return asList(MINUS_H, of(H));
+        }
+        public Object compile(Grammar grammar, List<Object> segment) {
+            if(grammar == MINUS_H)
+                return new NegtiveExpression(exp1(segment));
+
+            return exp0(segment);
+        }
+    },
+
+    H(){
         protected List<Grammar> createGrammars() {
             return asList(LBRKT_A_RBRKT, of(M), of(STRING), of(NUMBER));
         }
@@ -112,7 +123,6 @@ public enum ExpressionType {
 
             return RawValue.tokenOf((Token)segment.get(0));
         }
-
     },
     
     M(){
@@ -124,18 +134,17 @@ public enum ExpressionType {
             segment.set(0, expID);
             return super.compile(grammar, segment);
         }
-
     },
     
     G(){
         protected List<Grammar> createGrammars() {
-            return asList(LBRKT_P_RBRKT_I, FIN);
+            return asList(LBRKT_P_RBRKT, FIN);
         }
         public Object compile(Grammar grammar, List<Object> segment) {
             if(grammar == FIN)
                 return end();
             
-            return withLeft(new MethodExpression((ParametersExpression)exp(segment, 1)), exp(segment, 3));
+            return new MethodExpression((ParametersExpression)exp(segment, 1));
         }
     },
     
@@ -170,7 +179,6 @@ public enum ExpressionType {
             
             return segment.get(1);
         }
-
     },
     
     END(){
@@ -180,7 +188,6 @@ public enum ExpressionType {
         public Expression compile(Grammar grammar, List<Object> segment) {
             return end();
         }
-
     },;
 
     private static Grammar T_B = of(T, B);
@@ -189,9 +196,10 @@ public enum ExpressionType {
     private static Grammar F_U = of(F, U);
     private static Grammar TIMES_F_U = of(TIMES, F, U);
     private static Grammar DIVIDE_F_U = of(DIVIDE, F, U);
+    private static Grammar MINUS_H = of(MINUS, H);
     private static Grammar LBRKT_A_RBRKT= of(LBRKT, A, RBRKT);
     private static Grammar ID_G_I = of(ID, G, I);
-    private static Grammar LBRKT_P_RBRKT_I = of(LBRKT, P, RBRKT, I);
+    private static Grammar LBRKT_P_RBRKT = of(LBRKT, P, RBRKT);
     private static Grammar A_L = of(A, L);
     private static Grammar COMMA_A_L = of(COMMA, A, L);
     private static Grammar LSBRKT_A_RSBRKT_I = of(LSBRKT, A, RSBRKT, I);
