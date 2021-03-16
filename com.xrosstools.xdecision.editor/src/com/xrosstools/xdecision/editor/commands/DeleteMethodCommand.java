@@ -2,26 +2,26 @@ package com.xrosstools.xdecision.editor.commands;
 
 import org.eclipse.gef.commands.Command;
 
-import com.xrosstools.xdecision.editor.model.FieldDefinition;
+import com.xrosstools.xdecision.editor.model.MethodDefinition;
 import com.xrosstools.xdecision.editor.model.UserDefinedType;
 
-public class DeleteUserDefineidTypeFieldCommand extends Command{
+public class DeleteMethodCommand extends Command{
     private UserDefinedType parent;
-    private FieldDefinition field;
+    private MethodDefinition method;
     
-    public DeleteUserDefineidTypeFieldCommand(
+    public DeleteMethodCommand(
             UserDefinedType parent, 
-            FieldDefinition field){
+            MethodDefinition field){
         this.parent = parent;
-        this.field = field;
+        this.method = field;
     }
     
     public void execute() {
-        parent.getFields().remove(field);
+        parent.getMethods().remove(method);
     }
 
     public String getLabel() {
-        return "Delete field";
+        return "Delete methos";
     }
 
     public void redo() {
@@ -29,6 +29,6 @@ public class DeleteUserDefineidTypeFieldCommand extends Command{
     }
 
     public void undo() {
-        parent.getFields().add(field);
+        parent.getMethods().add(method);
     }
 }

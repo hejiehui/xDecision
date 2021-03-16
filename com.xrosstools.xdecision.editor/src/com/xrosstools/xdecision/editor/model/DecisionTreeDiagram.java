@@ -14,6 +14,7 @@ public class DecisionTreeDiagram implements IPropertySource {
 	private String decisionDescription;
 	private List<String> decisions= new ArrayList<String>();
 	private List<UserDefinedType> userDefinedTypes = new ArrayList<UserDefinedType>();
+	private UserDefinedType type = new UserDefinedType();
 	
     private String parserClass;
 	private String evaluatorClass;
@@ -95,17 +96,42 @@ public class DecisionTreeDiagram implements IPropertySource {
 	public void setFactors(List<DecisionTreeFactor> factors) {
 		this.factors = factors;
 	}
+	public DecisionTreeFactor getFactorById(int index) {
+	    return factors.get(index);
+	}
+	public int indexOf(DecisionTreeFactor factor) {
+	    return factors.indexOf(factor);
+	}
 	public List<String> getDecisions() {
 		return decisions;
 	}
 	public void setDecisions(List<String> decisions) {
 		this.decisions = decisions;
 	}
+    public UserDefinedType getType() {
+        return type;
+    }
+    public void setType(UserDefinedType type) {
+        this.type = type;
+    }
     public List<UserDefinedType> getUserDefinedTypes() {
         return userDefinedTypes;
     }
     public void setUserDefinedTypes(List<UserDefinedType> userDefinedTypes) {
         this.userDefinedTypes = userDefinedTypes;
+    }
+    public DataType getFactorType(int factorId) {
+        return getFactorById(factorId).getType();
+    }
+    public DataType getFactorType(String factorName) {
+        return getFactorType(getFactorId(factorName));
+    }
+    public int getFactorId(String factorName){
+        List<DecisionTreeFactor> factors = getFactors();
+        for(int i = 0; i < factors.size(); i++)
+            if(factors.get(i).getFactorName().equals(factorName))
+                return i;
+        return -1;
     }
     public UserDefinedType findUserDefinedType(String name) {
         for(UserDefinedType type: userDefinedTypes) {

@@ -2,7 +2,7 @@ package com.xrosstools.xdecision.editor.model;
 
 import java.util.List;
 
-public enum FactorType {
+public enum DataTypeEnum {
     STRING, 
     NUMBER, 
     BOOLEAN, 
@@ -13,8 +13,8 @@ public enum FactorType {
     USER_DEFINED, 
     ENUM;
     
-    public static FactorType[] getDisplayTypes() {
-        return new FactorType[] {STRING, NUMBER, BOOLEAN, DATE, LIST, SET, MAP};
+    public static DataTypeEnum[] getDisplayTypes() {
+        return new DataTypeEnum[] {STRING, NUMBER, BOOLEAN, DATE, LIST, SET, MAP};
     }
     
     public MethodDefinition[] getStaticMethods() {
@@ -37,11 +37,11 @@ public enum FactorType {
         }
     }
     
-    private static MethodDefinition md(String name, FactorType returnType) {
+    private static MethodDefinition md(String name, DataTypeEnum returnType) {
         return md(name, returnType, null);
     }
 
-    private static MethodDefinition md(String name, FactorType returnType, String hints) {
-        return new MethodDefinition(name, "", returnType, hints);
+    private static MethodDefinition md(String name, DataTypeEnum returnType, String hints) {
+        return new MethodDefinition(name, "", new DataType(returnType), hints);
     }
 }

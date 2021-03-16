@@ -1,26 +1,26 @@
 package com.xrosstools.xdecision.editor.commands;
 
-import com.xrosstools.xdecision.editor.model.FactorType;
+import com.xrosstools.xdecision.editor.model.DataType;
+import com.xrosstools.xdecision.editor.model.DataTypeEnum;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
 import com.xrosstools.xdecision.editor.model.UserDefinedType;
 
-public class CreateUserDefineidTypeFieldCommand extends InputTextCommand{
+public class CreateFieldCommand extends InputTextCommand{
     private UserDefinedType parent;
     private FieldDefinition fieldDef;
-    private FactorType type;
-    private String customizedType;
+    private DataType fieldType;
     
-    public CreateUserDefineidTypeFieldCommand(UserDefinedType parent, FactorType type, String customizedType){
+    public CreateFieldCommand(UserDefinedType parent, DataTypeEnum type, String customizedType){
         this.parent = parent;
-        this.type = type;
-        this.customizedType = customizedType;
+        this.fieldType = new DataType(type, customizedType);
+        fieldType.setType(type);
+        fieldType.setCustomizedType(customizedType);
     }
     
     public void execute() {
         fieldDef = new FieldDefinition();
+        fieldDef.setType(fieldType);
         fieldDef.setName(getInputText());
-        fieldDef.setType(type);
-        fieldDef.setCustomizedType(customizedType);
         redo();
     }
 

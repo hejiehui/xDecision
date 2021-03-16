@@ -1,30 +1,23 @@
 package com.xrosstools.xdecision.editor.commands;
 
+import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
-import com.xrosstools.xdecision.editor.model.FactorType;
 
 public class CreateFactorCommand extends InputTextCommand {
     private DecisionTreeDiagram diagram;
-    private FactorType factorType;
+    private DataType type;
     private DecisionTreeFactor factor;
-    private String customizedType;
 
-    public CreateFactorCommand(DecisionTreeDiagram diagram, FactorType factorType) {
+    public CreateFactorCommand(DecisionTreeDiagram diagram, DataType factorType) {
         this.diagram = diagram;
-        this.factorType = factorType;
-    }
-
-    public CreateFactorCommand(DecisionTreeDiagram diagram, FactorType factorType, String customizedType){
-        this(diagram, factorType);
-        this.customizedType = customizedType;
+        this.type = factorType;
     }
     
     public void execute() {
         factor = new DecisionTreeFactor();
         factor.setFactorName(getInputText());
-        factor.setType(factorType);
-        factor.setCustomizedType(customizedType);
+        factor.setType(type);
         
         redo();
     }

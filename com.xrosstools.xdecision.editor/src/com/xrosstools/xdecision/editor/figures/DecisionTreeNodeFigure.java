@@ -2,41 +2,44 @@ package com.xrosstools.xdecision.editor.figures;
 
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 
 public class DecisionTreeNodeFigure extends RoundedRectangle {
-    private Label factorLabel;
+    private Figure nodeExpression;
     private Label decisionLabel;
+    private BorderLayout layout= new BorderLayout();
 
     public DecisionTreeNodeFigure() {
-    	BorderLayout layout= new BorderLayout();
+    	layout= new BorderLayout();
     	setLayoutManager(layout);
     	this.setBorder(new MarginBorder(5));
-    	
-    	factorLabel = new Label();
-        factorLabel.setLabelAlignment(PositionConstants.CENTER);
-        factorLabel.setForegroundColor(ColorConstants.darkGreen);
-        add(factorLabel);
-    	layout.setConstraint(factorLabel, PositionConstants.BOTTOM);
     	
     	decisionLabel = new Label();
     	decisionLabel.setLabelAlignment(PositionConstants.CENTER);
     	decisionLabel.setForegroundColor(ColorConstants.black);
         add(decisionLabel);
     	layout.setConstraint(decisionLabel, PositionConstants.CENTER);
+    	
+        Figure widthLine = new Figure();
+        widthLine.setPreferredSize(new Dimension(90, 1));
+        add(widthLine);
+        layout.setConstraint(widthLine, PositionConstants.TOP);
     }
 
     public Rectangle getTextBounds() {
-        return factorLabel.getTextBounds();
+        return nodeExpression.getBounds();
     }
 
-    public void setFactor(String name) {
-    	factorLabel.setText(name);
-    	factorLabel.setToolTip(new Label(name));
+    public void setExpressionFigure(IFigure nodeExpression) {
+        add(nodeExpression);
+        layout.setConstraint(nodeExpression, PositionConstants.BOTTOM);
     	repaint();
     }
     

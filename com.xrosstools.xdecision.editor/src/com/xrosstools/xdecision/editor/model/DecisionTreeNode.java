@@ -10,7 +10,12 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 
+import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
+import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
+
 public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource {
+    private ExpressionDefinition expression = new PlaceholderExpression();
+    private String rawExpression;
 	private int factorId = -1;
     private String factorField;
 	private String functionName;
@@ -77,6 +82,23 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	public void resetPropertyValue(Object propName){
 	}
 	
+	public String getRawExpression() {
+        return rawExpression;
+    }
+
+    public void setRawExpression(String rawExpression) {
+        this.rawExpression = rawExpression;
+    }
+
+    public void setNodeExpression(ExpressionDefinition expression) {
+	    this.expression = expression;
+	    listeners.firePropertyChange(PROP_FACTOR_ID, null, factorId);
+	}
+
+	public ExpressionDefinition getNodeExpression() {
+	    return expression;
+	}
+
 	public String getFactorDisplayText() {
         StringBuffer displayText = new StringBuffer();
         

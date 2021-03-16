@@ -37,40 +37,26 @@ public class DecisionTreeManager {
 	public String[] getFactorNames(){
 		String[] names = new String[diagram.getFactors().size()];
 		for(int i = 0; i<names.length;i++)
-			names[i] = diagram.getFactors().get(i).getFactorName();
+			names[i] = getFactor(i).getFactorName();
 		return names;
 	}
 	
 	public String getFactorName(int factorId){
-		return diagram.getFactors().get(factorId).getFactorName();
+		return getFactor(factorId).getFactorName();
 	}
+
+	public DecisionTreeFactor getFactor(int factorId) {
+        return diagram.getFactors().get(factorId);
+    }
 	
 	public void changeFactorName(int factorId, String newName){
-		diagram.getFactors().get(factorId).setFactorName(newName);
+		getFactor(factorId).setFactorName(newName);
 	}
-	
-	/**
-	 * if name is already exist, returen the id,
-	 * if not, create a new factor and return the new id
-	 * @param factorName
-	 * @return
-	 */
-	public int getFactorId(String factorName){
-		List<DecisionTreeFactor> factors = diagram.getFactors();
-		for(int i = 0; i < factors.size(); i++)
-			if(factors.get(i).getFactorName().equals(factorName))
-				return i;
-		
-		DecisionTreeFactor factor = new DecisionTreeFactor();
-		factor.setFactorName(factorName);
-		factors.add(factor);
-		return factors.size()-1;
-	}
-	
+
 	public String[] getFactorValues(int factorId){
 	    if(factorId == -1)
 	        return new String[0];
-		return diagram.getFactors().get(factorId).getFactorValues();
+		return getFactor(factorId).getFactorValues();
 	}
 	
 	public String getFactorValue(int factorId, int valueId){
@@ -88,7 +74,7 @@ public class DecisionTreeManager {
 	 * @return
 	 */
 	public int getFactorValueId(int factorId, String factorName){
-		String[] values = diagram.getFactors().get(factorId).getFactorValues();
+		String[] values = getFactor(factorId).getFactorValues();
 		for(int i = 0; i < values.length; i++)
 			if(values[i].equals(factorName))
 				return i;
@@ -99,7 +85,7 @@ public class DecisionTreeManager {
 			newValues[i] = values[i];
 
 		newValues[values.length] = factorName;
-		diagram.getFactors().get(factorId).setFactorValues(newValues);
+		getFactor(factorId).setFactorValues(newValues);
 		return newValues.length-1;
 	}
 }

@@ -1,8 +1,11 @@
 package com.xrosstools.xdecision.editor.model;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.w3c.dom.Document;
+
+import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 
 public class DecisionTreeDiagramFactory {
 	public DecisionTreeDiagram getFromXML(Document doc){
@@ -21,15 +24,32 @@ public class DecisionTreeDiagramFactory {
 
 	    diagram.getDecisions().addAll(Arrays.asList(model.getDecisions()));
 	    diagram.getFactors().addAll(Arrays.asList(model.getFactors()));
+	    
+	    for(DecisionTreeFactor f: model.getFactors()) {
+	        FieldDefinition l = new FieldDefinition();
+	        l.setName(f.getName());
+	        l.setType(f.getType());
+	        diagram.getType().getFields().add(l);
+	    }
 
 		if(DecisionTreeV1FormatReader.isV1Format(model))
 		    DecisionTreeV1FormatReader.buildTree(model, diagram);
 		else {
 		    diagram.getUserDefinedTypes().addAll(Arrays.asList(model.getTypes()));
-		    diagram.getNodes().addAll(Arrays.asList(model.getNodes()));
+		    diagram.getNodes().addAll(parseExpression(diagram, model.getNodes()));
 		}
 
         return diagram;
+	}
+	
+	private List<DecisionTreeNode> parseExpression(DecisionTreeDiagram diagram, DecisionTreeNode[] nodes) {
+	    List<DecisionTreeNode> treeNodes = Arrays.asList(nodes);
+
+	    ExpressionParser parser = new ExpressionParser(new DecisionTreeManager(diagram));
+	    for(DecisionTreeNode node: treeNodes)
+	        node.setNodeExpression(parser.parse(node.getRawExpression()));
+
+	    return treeNodes;
 	}
 	
 	public DecisionTreeDiagram getEmptyDiagram(){

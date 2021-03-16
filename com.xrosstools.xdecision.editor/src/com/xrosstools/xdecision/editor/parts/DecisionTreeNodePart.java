@@ -12,6 +12,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
@@ -32,6 +33,20 @@ import com.xrosstools.xdecision.editor.policies.DecisionTreeGraphicNodeEditPolic
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeEditPolicy;
 
 public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements PropertyChangeListener, NodeEditPart {
+    protected List getModelChildren() {
+        List children = new ArrayList();
+        DecisionTreeNode node = (DecisionTreeNode) getModel();
+        children.add(node.getNodeExpression());
+        return children;
+    }
+    
+    protected void addChildVisual(EditPart childEditPart, int index) {
+        DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
+        
+        IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
+        figure.setExpressionFigure(childFigure);        
+    }
+    
 	protected IFigure createFigure() {
         return new DecisionTreeNodeFigure();
     }
@@ -90,6 +105,7 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
+        refresh();
         if (evt.getPropertyName().equals(DecisionTreeNode.PROP_INPUTS))
             refreshTargetConnections();
         else if (evt.getPropertyName().equals(DecisionTreeNode.PROP_OUTPUTS))
@@ -113,11 +129,11 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     	DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
 
 		Point loc = node.getLocation();
-		Dimension size = node.getSize();
+		Dimension size = new Dimension(-1, -1);
         Rectangle rectangle = new Rectangle(loc, size);
         ((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rectangle);
     	
-    	figure.setFactor(node.getFactorDisplayText());
+//    	figure.setFactor(nodeExpression);
     	
         String decision;
     	if(node.getDecisionId() == -1)

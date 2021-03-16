@@ -36,6 +36,10 @@ public interface DecisionTreeMessages {
 	String CHANGE_FIELD_TYPE_MSG = "Change field type";
 	String CHANGE_FIELD_NAME_MSG = "Change field name";
 	String DELETE_FIELD_MSG = "Delete field";
+    String CREATE_NEW_METHOD_DEFINITION_MSG = "Create new method";
+    String CHANGE_METHOD_TYPE_MSG = "Change method type";
+    String CHANGE_METHOD_NAME_MSG = "Change method name";
+    String DELETE_METHOD_MSG = "Delete method";
 	
 	String FACTOR_NAME_MSG = "Factor name";
 	String FIELD_NAME_MSG = "Field name";
