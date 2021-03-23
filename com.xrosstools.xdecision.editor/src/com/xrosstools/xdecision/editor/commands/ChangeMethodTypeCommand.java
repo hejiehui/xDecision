@@ -2,17 +2,16 @@ package com.xrosstools.xdecision.editor.commands;
 
 import org.eclipse.gef.commands.Command;
 
-import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.MethodDefinition;
 
 public class ChangeMethodTypeCommand extends Command{
     private MethodDefinition methoDef;
-    private DataType oldType;
-    private DataType newType;
+    private String oldType;
+    private String newType;
     
-    public ChangeMethodTypeCommand(MethodDefinition methodDef, DataType newType){
+    public ChangeMethodTypeCommand(MethodDefinition methodDef, String newType){
         this.methoDef = methodDef;
-        this.oldType = methodDef.getType();
+        this.oldType = methodDef.getTypeName();
         this.newType = newType;
     }
     
@@ -25,10 +24,10 @@ public class ChangeMethodTypeCommand extends Command{
     }
 
     public void redo() {
-        methoDef.setType(newType);
+        methoDef.setTypeName(newType);
     }
 
     public void undo() {
-        methoDef.setType(oldType);
+        methoDef.setTypeName(oldType);
     }
 }

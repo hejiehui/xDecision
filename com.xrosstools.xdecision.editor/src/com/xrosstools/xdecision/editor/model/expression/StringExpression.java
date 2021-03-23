@@ -20,5 +20,4 @@ public class StringExpression extends BasicExpression {
     public String getDisplayText() {
         return "'" + text + "'";
     }
-    
 }

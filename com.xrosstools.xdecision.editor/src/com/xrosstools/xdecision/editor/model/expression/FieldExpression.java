@@ -7,7 +7,7 @@ public class FieldExpression extends ExtensibleExpression implements Identifier 
         this.fieldName = fieldName;
     }
     
-    public String getDisplayText() {
+    public String getIdentifier() {
         return getFieldName();
     }
 
@@ -21,6 +21,6 @@ public class FieldExpression extends ExtensibleExpression implements Identifier 
     }
     
     public String getMainExpDisplayText() {
-        return getDisplayText();
+        return getIdentifier();
     }
 }

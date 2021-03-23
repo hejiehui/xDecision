@@ -22,7 +22,7 @@ public class FactorExpression extends ExtensibleExpression implements Identifier
         return factorId;
     }
 
-    public String getDisplayText() {
+    public String getIdentifier() {
         return manager.getFactor(factorId).getFactorName();
     }
 
@@ -32,6 +32,6 @@ public class FactorExpression extends ExtensibleExpression implements Identifier
     }
     
     public String getMainExpDisplayText() {
-        return getDisplayText();
+        return getIdentifier();
     }
 }

@@ -8,7 +8,7 @@ public class DecisionTreeModel {
 
 	private String[] decisions;
 	private DecisionTreeFactor[] factors;
-	private UserDefinedType[] types;
+	private DataType[] types;
 	private DecisionTreeNode[] nodes;
 	
 	// for backward compatible
@@ -44,10 +44,10 @@ public class DecisionTreeModel {
 	public void setFactors(DecisionTreeFactor[] factors) {
 		this.factors = factors;
 	}
-    public UserDefinedType[] getTypes() {
+    public DataType[] getTypes() {
         return types;
     }
-    public void setTypes(UserDefinedType[] types) {
+    public void setTypes(DataType[] types) {
         this.types = types;
     }
     public DecisionTreeNode[] getNodes() {

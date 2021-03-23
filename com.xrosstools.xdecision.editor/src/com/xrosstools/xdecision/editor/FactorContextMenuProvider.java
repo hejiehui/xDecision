@@ -8,13 +8,11 @@ import com.xrosstools.xdecision.editor.actions.CommandAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateValueAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.actions.InputTextCommandAction;
-import com.xrosstools.xdecision.editor.commands.ChangeFactorTypeCommand;
+import com.xrosstools.xdecision.editor.commands.ChangeTypeCommand;
 import com.xrosstools.xdecision.editor.commands.CreateFactorCommand;
 import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
-import com.xrosstools.xdecision.editor.model.DataTypeEnum;
-import com.xrosstools.xdecision.editor.model.UserDefinedType;
 import com.xrosstools.xdecision.editor.model.XrossEvaluatorConstants;
 
 public class FactorContextMenuProvider implements XrossEvaluatorConstants, DecisionTreeMessages {
@@ -46,12 +44,8 @@ public class FactorContextMenuProvider implements XrossEvaluatorConstants, Decis
     private MenuManager createNewFactorMeun(DecisionTreeDiagram diagram) {
         MenuManager subMenu = new MenuManager(CREATE_NEW_FACTOR_MSG);
         
-        for(DataTypeEnum type: DataTypeEnum.getDisplayTypes()) {
-            subMenu.add(new InputTextCommandAction(editor, type.toString(), CREATE_NEW_FACTOR_MSG, "", new CreateFactorCommand(diagram, new DataType(type))));
-        }
-        
-        for(UserDefinedType udfedType: diagram.getUserDefinedTypes()) {
-            subMenu.add(new InputTextCommandAction(editor, udfedType.getName(), CREATE_NEW_FACTOR_MSG, "", new CreateFactorCommand(diagram, new DataType(udfedType.getName()))));
+        for(String type: DataType.getPredefinedTypeNames()) {
+            subMenu.add(new InputTextCommandAction(editor, type, CREATE_NEW_FACTOR_MSG, "", new CreateFactorCommand(diagram, type)));
         }
         
         return subMenu;
@@ -70,12 +64,12 @@ public class FactorContextMenuProvider implements XrossEvaluatorConstants, Decis
     private MenuManager changeFactorTypeMeun(DecisionTreeDiagram diagram, DecisionTreeFactor factor) {
         MenuManager subMenu = new MenuManager(factor.getFactorName());
         
-        for(DataTypeEnum type: DataTypeEnum.getDisplayTypes()) {
-            subMenu.add(new CommandAction(editor, type.toString(), factor.getType().getType() == type, new ChangeFactorTypeCommand(factor, new DataType(type))));
+        for(String type: DataType.getPredefinedTypeNames()) {
+            subMenu.add(new CommandAction(editor, type, factor.getTypeName().equals(type), new ChangeTypeCommand(factor, type)));
         }
         
-        for(UserDefinedType udfedType: diagram.getUserDefinedTypes()) {
-            subMenu.add(new CommandAction(editor, udfedType.getName(), factor.getType().iSameType(udfedType), new ChangeFactorTypeCommand(factor, new DataType(udfedType.getName()))));
+        for(DataType type: diagram.getUserDefinedTypes()) {
+            subMenu.add(new CommandAction(editor, type.getName(), factor.getTypeName().equals(type.getName()), new ChangeTypeCommand(factor, type.getName())));
         }
         
         return subMenu;

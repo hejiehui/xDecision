@@ -36,4 +36,9 @@ public class ParameterListExpression extends CompositeExpression {
         set(index * 2, parameter);
         return this;
     }
+    
+    public String getTypesList() {
+        //TODO
+        return "";
+    }
 }

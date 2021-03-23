@@ -90,18 +90,17 @@ public class DecisionTreeXMLSerializer {
 		return doc.getElementsByTagName(nodeName).item(0).getTextContent();
 	}
 
-	private UserDefinedType[] createTypes(Document doc) {
+	private DataType[] createTypes(Document doc) {
 	    if(doc.getElementsByTagName(USER_DEFINED_TYPES).item(0) == null)
-	        return new UserDefinedType[0];
+	        return new DataType[0];
 
 	    List<Node> typeNodes = getValidChildNodes(doc.getElementsByTagName(USER_DEFINED_TYPES).item(0));
         
-        UserDefinedType[] types = new UserDefinedType[typeNodes.size()];
+	    DataType[] types = new DataType[typeNodes.size()];
         for(int i = 0; i < types.length; i++){
             Node typeNode = typeNodes.get(i);
-            UserDefinedType type = new UserDefinedType();
+            DataType type = new DataType(getAttribute(typeNode, NAME));
             
-            type.setName(getAttribute(typeNode, NAME));
             type.setLabel(getAttribute(typeNode, LABEL));
             types[getIntAttribute(typeNode, INDEX)] = type;
             
@@ -138,17 +137,7 @@ public class DecisionTreeXMLSerializer {
     private void readType(Node typeNode, FieldDefinition field) {
         field.setName(getAttribute(typeNode, NAME));
         field.setLabel(getAttribute(typeNode, LABEL));
-
-        DataTypeEnum factorType = null;
-        String userDefinedType = null;
-        if(getAttribute(typeNode, TYPE) != null)
-            factorType = DataTypeEnum.valueOf(getAttribute(typeNode, TYPE));
-
-        if(factorType == DataTypeEnum.USER_DEFINED && getAttribute(typeNode, TYPE_NAME) != null)
-            userDefinedType = getAttribute(typeNode, TYPE_NAME);
-        
-        DataType dataType = userDefinedType == null ? new DataType(factorType):new DataType(userDefinedType);
-        field.setType(dataType);
+        field.setTypeName(getAttribute(typeNode, TYPE));
     }
 
 	private DecisionTreeFactor[] createFactors(Document doc) {
@@ -158,21 +147,10 @@ public class DecisionTreeXMLSerializer {
 		for(int i = 0; i < factors.length; i++){
 			Node factorNode = factorNodes.get(i);
 			DecisionTreeFactor factor = new DecisionTreeFactor();
-			factor.setType(new DataType(DataTypeEnum.STRING));
 			
 			factor.setFactorName(getAttribute(factorNode, ID));
-			
-            DataTypeEnum factorType = null;
-            String userDefinedType = null;
-            if(getAttribute(factorNode, TYPE) != null)
-                factorType = DataTypeEnum.valueOf(getAttribute(factorNode, TYPE));
 
-            if(factorType == DataTypeEnum.USER_DEFINED && getAttribute(factorNode, TYPE_NAME) != null)
-                userDefinedType = getAttribute(factorNode, TYPE_NAME);
-            
-            DataType dataType = userDefinedType == null ? new DataType(factorType):new DataType(userDefinedType);
-            factor.setType(dataType);
-
+            factor.setTypeName(getAttribute(factorNode, TYPE));
 			factors[getIntAttribute(factorNode, INDEX)] = factor;
 			
 			List<Node> valueNodes = getValidChildNodes(factorNode);
@@ -295,9 +273,9 @@ public class DecisionTreeXMLSerializer {
 	}
 
     private void writeTypes(Document doc, Element typesNode, DecisionTreeModel model){
-        UserDefinedType[] types = model.getTypes();
+        DataType[] types = model.getTypes();
         for(int i = 0; i < types.length; i++){
-            UserDefinedType type = types[i];
+            DataType type = types[i];
             Element typeNode = (Element)doc.createElement(USER_DEFINED_TYPE);
             typeNode.setAttribute(NAME, type.getName());
             typeNode.setAttribute(LABEL, type.getLabel());
@@ -321,10 +299,7 @@ public class DecisionTreeXMLSerializer {
         Element fieldNode = (Element)doc.createElement(nodeName);
         fieldNode.setAttribute(NAME, field.getName());
         fieldNode.setAttribute(LABEL, field.getLabel());
-        fieldNode.setAttribute(TYPE, field.getType().getType().toString());
-        DataType fieldType = field.getType();
-        if(fieldType.getType() == DataTypeEnum.USER_DEFINED)
-            fieldNode.setAttribute(TYPE_NAME, fieldType.getCustomizedType());
+        fieldNode.setAttribute(TYPE, field.getTypeName());
         return fieldNode;
     }
         
@@ -335,11 +310,8 @@ public class DecisionTreeXMLSerializer {
 			Element factorNode = (Element)doc.createElement(FACTOR);
 			factorNode.setAttribute(ID, factor.getFactorName());
 
-			if(factor.getType() != null)
-			    factorNode.setAttribute(TYPE, factor.getType().getType().toString());
-
-			if(factor.getType().getType() == DataTypeEnum.USER_DEFINED && factor.getType().getCustomizedType() != null)
-			    factorNode.setAttribute(TYPE_NAME, factor.getType().getCustomizedType());
+			if(factor.getTypeName() != null)
+			    factorNode.setAttribute(TYPE, factor.getTypeName());
 
 			factorNode.setAttribute(INDEX, String.valueOf(i));
 			factorsNode.appendChild(factorNode);

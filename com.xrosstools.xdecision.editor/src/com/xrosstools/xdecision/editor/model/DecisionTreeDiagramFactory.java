@@ -28,7 +28,7 @@ public class DecisionTreeDiagramFactory {
 	    for(DecisionTreeFactor f: model.getFactors()) {
 	        FieldDefinition l = new FieldDefinition();
 	        l.setName(f.getName());
-	        l.setType(f.getType());
+	        l.setTypeName(f.getTypeName());
 	        diagram.getType().getFields().add(l);
 	    }
 
@@ -68,7 +68,7 @@ public class DecisionTreeDiagramFactory {
 		model.setEvaluatorClass(diagram.getEvaluatorClass());
 		model.setDecisions(diagram.getDecisions().toArray(new String[0]));
 		model.setFactors(diagram.getFactors().toArray(new DecisionTreeFactor[0]));
-		model.setTypes(diagram.getUserDefinedTypes().toArray(new UserDefinedType[0]));
+		model.setTypes(diagram.getUserDefinedTypes().toArray(new DataType[0]));
 		model.setNodes(diagram.getNodes().toArray(new DecisionTreeNode[0]));
 		
 		return model;

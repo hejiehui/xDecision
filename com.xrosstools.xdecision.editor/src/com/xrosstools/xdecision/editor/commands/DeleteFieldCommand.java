@@ -2,15 +2,15 @@ package com.xrosstools.xdecision.editor.commands;
 
 import org.eclipse.gef.commands.Command;
 
+import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
-import com.xrosstools.xdecision.editor.model.UserDefinedType;
 
 public class DeleteFieldCommand extends Command{
-    private UserDefinedType parent;
+    private DataType parent;
     private FieldDefinition field;
     
     public DeleteFieldCommand(
-            UserDefinedType parent, 
+            DataType parent, 
             FieldDefinition field){
         this.parent = parent;
         this.field = field;

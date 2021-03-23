@@ -8,20 +8,18 @@ import com.xrosstools.xdecision.editor.actions.CommandAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.actions.InputTextCommandAction;
 import com.xrosstools.xdecision.editor.commands.ChangeFieldNameCommand;
-import com.xrosstools.xdecision.editor.commands.ChangeFieldTypeCommand;
 import com.xrosstools.xdecision.editor.commands.ChangeMethodNameCommand;
 import com.xrosstools.xdecision.editor.commands.ChangeMethodTypeCommand;
+import com.xrosstools.xdecision.editor.commands.ChangeTypeCommand;
 import com.xrosstools.xdecision.editor.commands.CreateFieldCommand;
 import com.xrosstools.xdecision.editor.commands.CreateMethodCommand;
 import com.xrosstools.xdecision.editor.commands.CreateUserDefineidTypeCommand;
 import com.xrosstools.xdecision.editor.commands.DeleteFieldCommand;
 import com.xrosstools.xdecision.editor.commands.DeleteMethodCommand;
 import com.xrosstools.xdecision.editor.model.DataType;
-import com.xrosstools.xdecision.editor.model.DataTypeEnum;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
 import com.xrosstools.xdecision.editor.model.MethodDefinition;
-import com.xrosstools.xdecision.editor.model.UserDefinedType;
 import com.xrosstools.xdecision.editor.model.XrossEvaluatorConstants;
 
 public class UserDefinedTypeContextMenuProvider implements XrossEvaluatorConstants, DecisionTreeMessages {
@@ -37,7 +35,7 @@ public class UserDefinedTypeContextMenuProvider implements XrossEvaluatorConstan
         // create type
         menu.add(new InputTextCommandAction(editor, CREATE_NEW_USER_DEFINED_TYPE_MSG, FACTOR_TYPE_NAME_MSG, "", new CreateUserDefineidTypeCommand(diagram)));
         
-        for(UserDefinedType udfType: diagram.getUserDefinedTypes()) {
+        for(DataType udfType: diagram.getUserDefinedTypes()) {
             MenuManager typeSub = new MenuManager(udfType.getName());
             
             menu.add(createFieldMenu(typeSub, diagram, udfType));
@@ -46,15 +44,15 @@ public class UserDefinedTypeContextMenuProvider implements XrossEvaluatorConstan
         }
     }
 
-    private MenuManager createFieldMenu(MenuManager typeSub, DecisionTreeDiagram diagram, UserDefinedType udfType) {
+    private MenuManager createFieldMenu(MenuManager typeSub, DecisionTreeDiagram diagram, DataType udfType) {
         // create field
         MenuManager createFieldMenu = new MenuManager(CREATE_NEW_FIELD_DEFINITION_MSG);
-        for(DataTypeEnum type: DataTypeEnum.getDisplayTypes()) {
-            createFieldMenu.add(new InputTextCommandAction(editor, type.toString(), "Field Name", "", new CreateFieldCommand(udfType, type, null)));
+        for(String type: DataType.getPredefinedTypeNames()) {
+            createFieldMenu.add(new InputTextCommandAction(editor, type.toString(), "Field Name", "", new CreateFieldCommand(udfType, type)));
         }
         
-        for(UserDefinedType udfedType: diagram.getUserDefinedTypes()) {
-            createFieldMenu.add(new InputTextCommandAction(editor, udfedType.getName(), "Field Name", "", new CreateFieldCommand(udfType, DataTypeEnum.USER_DEFINED, udfedType.getName())));
+        for(DataType udfedType: diagram.getUserDefinedTypes()) {
+            createFieldMenu.add(new InputTextCommandAction(editor, udfedType.getName(), "Field Name", "", new CreateFieldCommand(udfType, udfedType.getName())));
         }
         typeSub.add(createFieldMenu);
         
@@ -72,12 +70,12 @@ public class UserDefinedTypeContextMenuProvider implements XrossEvaluatorConstan
             fieldMenu.add(new InputTextCommandAction(editor, CHANGE_FIELD_NAME_MSG, "New Name", field.getName(), new ChangeFieldNameCommand(field)));
             
             // change field type
-            for(DataTypeEnum type: DataTypeEnum.getDisplayTypes()) {
-                fieldMenu.add(new CommandAction(editor, type.toString(), field.getType().getType() == type, new ChangeFieldTypeCommand(field, new DataType(type))));
+            for(String type: DataType.getPredefinedTypeNames()) {
+                fieldMenu.add(new CommandAction(editor, type.toString(), field.getTypeName().equals(type), new ChangeTypeCommand(field, type)));
             }
             
-            for(UserDefinedType udfedType: diagram.getUserDefinedTypes()) {
-                fieldMenu.add(new CommandAction(editor, udfedType.getName(), field.getType().iSameType(udfedType), new ChangeFieldTypeCommand(field, new DataType(udfedType.getName()))));
+            for(DataType udfedType: diagram.getUserDefinedTypes()) {
+                fieldMenu.add(new CommandAction(editor, udfedType.getName(), field.getTypeName().equals(udfType.getName()), new ChangeTypeCommand(field, udfedType.getName())));
             }
             
             typeSub.add(fieldMenu);
@@ -85,15 +83,15 @@ public class UserDefinedTypeContextMenuProvider implements XrossEvaluatorConstan
         return typeSub;
     }
 
-    private MenuManager createMethodMenu(MenuManager typeSub, DecisionTreeDiagram diagram, UserDefinedType udfType) {
+    private MenuManager createMethodMenu(MenuManager typeSub, DecisionTreeDiagram diagram, DataType udfType) {
         // create method
         MenuManager createFieldMenu = new MenuManager(CREATE_NEW_METHOD_DEFINITION_MSG);
-        for(DataTypeEnum type: DataTypeEnum.getDisplayTypes()) {
-            createFieldMenu.add(new InputTextCommandAction(editor, type.toString(), "Method Name", "", new CreateMethodCommand(udfType, type, null)));
+        for(String type: DataType.getPredefinedTypeNames()) {
+            createFieldMenu.add(new InputTextCommandAction(editor, type.toString(), "Method Name", "", new CreateMethodCommand(udfType, type)));
         }
         
-        for(UserDefinedType udfedType: diagram.getUserDefinedTypes()) {
-            createFieldMenu.add(new InputTextCommandAction(editor, udfedType.getName(), "Method Name", "", new CreateMethodCommand(udfType, DataTypeEnum.USER_DEFINED, udfedType.getName())));
+        for(DataType udfedType: diagram.getUserDefinedTypes()) {
+            createFieldMenu.add(new InputTextCommandAction(editor, udfedType.getName(), "Method Name", "", new CreateMethodCommand(udfType, udfedType.getName())));
         }
         typeSub.add(createFieldMenu);
         
@@ -111,12 +109,12 @@ public class UserDefinedTypeContextMenuProvider implements XrossEvaluatorConstan
             fieldMenu.add(new InputTextCommandAction(editor, CHANGE_METHOD_NAME_MSG, "New Name", method.getName(), new ChangeMethodNameCommand(method)));
             
             // change method type
-            for(DataTypeEnum type: DataTypeEnum.getDisplayTypes()) {
-                fieldMenu.add(new CommandAction(editor, type.toString(), method.getType().getType() == type, new ChangeMethodTypeCommand(method, new DataType(type))));
+            for(String type: DataType.getPredefinedTypeNames()) {
+                fieldMenu.add(new CommandAction(editor, type.toString(), method.getTypeName().equals(type), new ChangeTypeCommand(method, type)));
             }
             
-            for(UserDefinedType udfedType: diagram.getUserDefinedTypes()) {
-                fieldMenu.add(new CommandAction(editor, udfedType.getName(), method.getType().iSameType(udfedType), new ChangeMethodTypeCommand(method, new DataType(udfedType.getName()))));
+            for(DataType udfedType: diagram.getUserDefinedTypes()) {
+                fieldMenu.add(new CommandAction(editor, udfedType.getName(), method.getTypeName().equals(udfedType.getName()), new ChangeMethodTypeCommand(method, udfedType.getName())));
             }
             
             typeSub.add(fieldMenu);

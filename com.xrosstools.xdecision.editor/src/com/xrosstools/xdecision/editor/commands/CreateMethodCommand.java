@@ -1,20 +1,16 @@
 package com.xrosstools.xdecision.editor.commands;
 
 import com.xrosstools.xdecision.editor.model.DataType;
-import com.xrosstools.xdecision.editor.model.DataTypeEnum;
 import com.xrosstools.xdecision.editor.model.MethodDefinition;
-import com.xrosstools.xdecision.editor.model.UserDefinedType;
 
 public class CreateMethodCommand extends InputTextCommand{
-    private UserDefinedType parent;
+    private DataType parent;
     private MethodDefinition methodDef;
-    private DataType returnType;
+    private String returnType;
     
-    public CreateMethodCommand(UserDefinedType parent, DataTypeEnum type, String customizedType){
+    public CreateMethodCommand(DataType parent, String type){
         this.parent = parent;
-        this.returnType = new DataType(type, customizedType);
-        returnType.setType(type);
-        returnType.setCustomizedType(customizedType);
+        this.returnType = type;
     }
     
     public void execute() {

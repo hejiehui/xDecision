@@ -8,16 +8,13 @@ import com.xrosstools.xdecision.editor.actions.CommandAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateDecisionAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateFactorAction;
 import com.xrosstools.xdecision.editor.commands.ChangeDecisionCommand;
-import com.xrosstools.xdecision.editor.commands.ChangeNodeFactorCommand;
 import com.xrosstools.xdecision.editor.commands.ChangeFactorFieldCommand;
-import com.xrosstools.xdecision.editor.commands.ChangeFunctionCommand;
+import com.xrosstools.xdecision.editor.commands.ChangeNodeFactorCommand;
+import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
-import com.xrosstools.xdecision.editor.model.DataTypeEnum;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
-import com.xrosstools.xdecision.editor.model.MethodDefinition;
-import com.xrosstools.xdecision.editor.model.UserDefinedType;
 import com.xrosstools.xdecision.editor.parts.DecisionTreeNodePart;
 
 public class NodeContextMenuProvider {
@@ -43,8 +40,6 @@ public class NodeContextMenuProvider {
         menu.add(new DecisionTreeCreateFactorAction(editor, node));
         menu.add(new Separator());
         
-        //Select function
-        selectFunctionMeun(menu, diagram, node);
         
         menu.add(new Separator());
         i = 0;
@@ -64,25 +59,10 @@ public class NodeContextMenuProvider {
         subMenu.add(new Separator());
         
         // select field
-        UserDefinedType type = diagram.findUserDefinedType(factor.getType().getCustomizedType());
+        DataType type = diagram.findDataType(factor.getTypeName());
         for(FieldDefinition field: type.getFields()) {
             subMenu.add(new CommandAction(editor, field.getName(), field.getName().equals(node.getFactorField()), new ChangeFactorFieldCommand(node, field.getName())));
         }
         return subMenu;
     }
-    
-    private void selectFunctionMeun(IMenuManager menu, DecisionTreeDiagram diagram, DecisionTreeNode node) {
-        for(DataTypeEnum type: DataTypeEnum.getDisplayTypes()) {
-            if(type.getStaticMethods().length == 0)
-                continue;
-            
-            MenuManager subMenu = new MenuManager(type.toString());
-            for(MethodDefinition mtd: type.getStaticMethods()) {
-                subMenu.add(new CommandAction(editor, mtd.getName(), mtd.getName().equals(node.getFunctionName()), new ChangeFunctionCommand(node, mtd.getName())));
-            }
-            menu.add(subMenu);
-        }
-    }
-    
-
 }

@@ -10,14 +10,14 @@ public class MethodDefinition extends FieldDefinition {
     
     public MethodDefinition() {}
     
-    public MethodDefinition(String name, String label, DataType returnType, List<FieldDefinition> parameters) {
+    public MethodDefinition(String name, String label, String returnType, List<FieldDefinition> parameters) {
         setName(name);
         setLabel(label);
-        setType(returnType);
+        setTypeName(returnType);
         this.parameters = parameters;
     }
     
-    public MethodDefinition(String name, String label, DataType returnType, String hints) {
+    public MethodDefinition(String name, String label, String returnType, String hints) {
         this(name, label, returnType, new ArrayList<FieldDefinition>());
         this.hints = hints;
     }
@@ -33,4 +33,14 @@ public class MethodDefinition extends FieldDefinition {
     public void setHints(String hints) {
         this.hints = hints;
     }    
+    @Override
+    public String getIdentifier() {
+        StringBuilder psb = new StringBuilder();
+        for(FieldDefinition p: parameters) {
+            //Fix this
+            psb.append(p.getName());
+            psb.append(", ");
+        }
+        return getName() + "(" + psb + ")";
+    }
 }

@@ -23,7 +23,7 @@ public class IdentifierExpressionPart extends ExtensibleExpressionPart {
     
     protected void refreshVisuals() {
         ExtensibleExpression exp = (ExtensibleExpression)getModel();
-        factorLabel.setText(((Identifier)exp).getDisplayText());
+        factorLabel.setText(((Identifier)exp).getIdentifier());
         jointLabel.setText(exp.hasChild() ? "." : "");
     }
 }

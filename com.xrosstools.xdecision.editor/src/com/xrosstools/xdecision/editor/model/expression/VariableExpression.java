@@ -7,7 +7,7 @@ public class VariableExpression extends ExtensibleExpression implements Identifi
         this.name = name;
     }
     
-    public String getDisplayText() {
+    public String getIdentifier() {
         return getName();
     }
 
@@ -21,6 +21,6 @@ public class VariableExpression extends ExtensibleExpression implements Identifi
     }
     
     public String getMainExpDisplayText() {
-        return getDisplayText();
+        return getIdentifier();
     }
 }

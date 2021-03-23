@@ -1,19 +1,18 @@
 package com.xrosstools.xdecision.editor.commands;
 
+import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
-import com.xrosstools.xdecision.editor.model.UserDefinedType;
 
 public class CreateUserDefineidTypeCommand extends InputTextCommand{
     private DecisionTreeDiagram diagram;
-    private UserDefinedType newType;
+    private DataType newType;
     
     public CreateUserDefineidTypeCommand(DecisionTreeDiagram diagram){
         this.diagram = diagram;
     }
     
     public void execute() {
-        newType = new UserDefinedType();
-        newType.setName(getInputText());
+        newType = new DataType(getInputText());
         diagram.getUserDefinedTypes().add(newType);
     }
 

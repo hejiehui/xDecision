@@ -1,10 +1,19 @@
 package com.xrosstools.xdecision.editor.model;
 
-public class FieldDefinition {
+import com.xrosstools.xdecision.editor.model.expression.Identifier;
+
+public class FieldDefinition implements Identifier {
     private String name;
     private String label;
-    private DataType type;
+    private String typeName;
+    private boolean staticMember;
     
+    public boolean isStatic() {
+        return staticMember;
+    }
+    public void setStatic(boolean staticMember) {
+        this.staticMember = staticMember;
+    }
     public String getName() {
         return name;
     }
@@ -17,10 +26,14 @@ public class FieldDefinition {
     public void setLabel(String label) {
         this.label = label;
     }
-    public DataType getType() {
-        return type;
+    public String getTypeName() {
+        return typeName;
     }
-    public void setType(DataType type) {
-        this.type = type;
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+    @Override
+    public String getIdentifier() {
+        return getName();
     }
 }

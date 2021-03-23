@@ -13,8 +13,9 @@ public class DecisionTreeDiagram implements IPropertySource {
 	private List<DecisionTreeFactor> factors = new ArrayList<DecisionTreeFactor>();
 	private String decisionDescription;
 	private List<String> decisions= new ArrayList<String>();
-	private List<UserDefinedType> userDefinedTypes = new ArrayList<UserDefinedType>();
-	private UserDefinedType type = new UserDefinedType();
+	private List<DataType> userDefinedTypes = new ArrayList<DataType>();
+	//This is root
+	private DataType type = new DataType("Factors");
 	
     private String parserClass;
 	private String evaluatorClass;
@@ -108,24 +109,24 @@ public class DecisionTreeDiagram implements IPropertySource {
 	public void setDecisions(List<String> decisions) {
 		this.decisions = decisions;
 	}
-    public UserDefinedType getType() {
+    public DataType getType() {
         return type;
     }
-    public void setType(UserDefinedType type) {
+    public void setType(DataType type) {
         this.type = type;
     }
-    public List<UserDefinedType> getUserDefinedTypes() {
+    public List<DataType> getUserDefinedTypes() {
         return userDefinedTypes;
     }
-    public void setUserDefinedTypes(List<UserDefinedType> userDefinedTypes) {
+    public void setUserDefinedTypes(List<DataType> userDefinedTypes) {
         this.userDefinedTypes = userDefinedTypes;
     }
-    public DataType getFactorType(int factorId) {
-        return getFactorById(factorId).getType();
-    }
-    public DataType getFactorType(String factorName) {
-        return getFactorType(getFactorId(factorName));
-    }
+//    public DataType getFactorType(int factorId) {
+//        return getFactorById(factorId).getTypeName();
+//    }
+//    public DataType getFactorType(String factorName) {
+//        return getFactorType(getFactorId(factorName));
+//    }
     public int getFactorId(String factorName){
         List<DecisionTreeFactor> factors = getFactors();
         for(int i = 0; i < factors.size(); i++)
@@ -133,12 +134,12 @@ public class DecisionTreeDiagram implements IPropertySource {
                 return i;
         return -1;
     }
-    public UserDefinedType findUserDefinedType(String name) {
-        for(UserDefinedType type: userDefinedTypes) {
+    public DataType findDataType(String name) {
+        for(DataType type: userDefinedTypes) {
             if(type.getName().equals(name))
                 return type;
         }
-        return null;
+        return DataType.getPredefinedType(name);
     }
 	public List<DecisionTreeNode> getNodes() {
 		return nodes;

@@ -2,15 +2,15 @@ package com.xrosstools.xdecision.editor.commands;
 
 import org.eclipse.gef.commands.Command;
 
+import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.MethodDefinition;
-import com.xrosstools.xdecision.editor.model.UserDefinedType;
 
 public class DeleteMethodCommand extends Command{
-    private UserDefinedType parent;
+    private DataType parent;
     private MethodDefinition method;
     
     public DeleteMethodCommand(
-            UserDefinedType parent, 
+            DataType parent, 
             MethodDefinition field){
         this.parent = parent;
         this.method = field;
