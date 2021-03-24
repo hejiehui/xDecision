@@ -118,6 +118,21 @@ public class DecisionTreeDiagram implements IPropertySource {
     public List<DataType> getUserDefinedTypes() {
         return userDefinedTypes;
     }
+    public List<String> getAllTypeNames() {
+        List<String> names = new ArrayList<String>();
+        names.addAll(DataType.getPredefinedTypeNames());
+        names.addAll(getUserDefinedTypeNames());
+        return names;
+    }
+    public List<String> getUserDefinedTypeNames() {
+        List<String> names = new ArrayList<String>();
+        
+        for(DataType udfedType: userDefinedTypes) {
+            names.add(udfedType.getName());
+        }
+        
+        return names;
+    }
     public void setUserDefinedTypes(List<DataType> userDefinedTypes) {
         this.userDefinedTypes = userDefinedTypes;
     }

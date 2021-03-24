@@ -55,6 +55,7 @@ public class ExpressionContextMenuProvider {
         menu.add(new Separator());
         
         // select method
+        //TODO static and instance method
         for(MethodDefinition method: parentType.getMethods())
             //TODO fix method identification
             createIdMenu(menu, method.getIdentifier(), method.getTypeName(), parentPart, childModel, extendChildren, new MethodExpression(method));
