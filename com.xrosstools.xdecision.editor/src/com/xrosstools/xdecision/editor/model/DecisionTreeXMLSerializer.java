@@ -122,7 +122,7 @@ public class DecisionTreeXMLSerializer {
                     readType(node, method);
                     for(Node paramNode: getValidChildNodes(node)) {
                         FieldDefinition param = new FieldDefinition();
-                        readType(node, param);
+                        readType(paramNode, param);
                         method.getParameters().add(param);
                     }
                     

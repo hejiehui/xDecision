@@ -24,7 +24,7 @@ public abstract class BaseDialogAction extends WorkbenchPartAction implements De
         this.initialValue = initialValue;
         
         setId(ID_PREFIX + dialogTitle + dialogMessage + initialValue);
-        setText(dialogTitle);
+        setText(dialogMessage);
     }
     
     protected boolean calculateEnabled() {

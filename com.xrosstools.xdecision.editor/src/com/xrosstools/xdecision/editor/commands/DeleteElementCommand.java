@@ -7,11 +7,11 @@ import org.eclipse.gef.commands.Command;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
 
 public class DeleteElementCommand extends Command{
-    private List<FieldDefinition> elements;
+    private List elements;
     private FieldDefinition element;
     
     public DeleteElementCommand(
-            List<FieldDefinition> elements,
+            List elements,
             FieldDefinition element){
         this.elements = elements;
         this.element = element;

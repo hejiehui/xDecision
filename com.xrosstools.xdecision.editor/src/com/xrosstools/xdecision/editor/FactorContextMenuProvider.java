@@ -45,7 +45,7 @@ public class FactorContextMenuProvider implements XrossEvaluatorConstants, Decis
         MenuManager subMenu = new MenuManager(CREATE_NEW_FACTOR_MSG);
         
         for(String type: DataType.getPredefinedTypeNames()) {
-            subMenu.add(new InputTextCommandAction(editor, type, CREATE_NEW_FACTOR_MSG, "", new CreateFactorCommand(diagram, type)));
+            subMenu.add(new InputTextCommandAction(editor, CREATE_NEW_FACTOR_MSG, type, "", new CreateFactorCommand(diagram, type)));
         }
         
         return subMenu;

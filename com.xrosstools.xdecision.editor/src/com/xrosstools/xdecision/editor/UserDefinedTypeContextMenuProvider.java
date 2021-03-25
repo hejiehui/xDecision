@@ -1,9 +1,7 @@
 package com.xrosstools.xdecision.editor;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -12,15 +10,10 @@ import com.xrosstools.xdecision.editor.actions.CommandAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.actions.InputTextCommandAction;
 import com.xrosstools.xdecision.editor.commands.ChangeFieldNameCommand;
-import com.xrosstools.xdecision.editor.commands.ChangeMethodNameCommand;
-import com.xrosstools.xdecision.editor.commands.ChangeMethodTypeCommand;
 import com.xrosstools.xdecision.editor.commands.ChangeTypeCommand;
 import com.xrosstools.xdecision.editor.commands.CreateElementCommand;
-import com.xrosstools.xdecision.editor.commands.CreateFieldCommand;
-import com.xrosstools.xdecision.editor.commands.CreateMethodCommand;
 import com.xrosstools.xdecision.editor.commands.CreateUserDefineidTypeCommand;
 import com.xrosstools.xdecision.editor.commands.DeleteElementCommand;
-import com.xrosstools.xdecision.editor.commands.DeleteMethodCommand;
 import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
@@ -38,7 +31,7 @@ public class UserDefinedTypeContextMenuProvider implements XrossEvaluatorConstan
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)editor.getRootEditPart().getContents().getModel();
         
         // create type
-        menu.add(new InputTextCommandAction(editor, CREATE_NEW_USER_DEFINED_TYPE_MSG, FACTOR_TYPE_NAME_MSG, "", new CreateUserDefineidTypeCommand(diagram)));
+        menu.add(new InputTextCommandAction(editor, FACTOR_TYPE_NAME_MSG, CREATE_NEW_USER_DEFINED_TYPE_MSG, "", new CreateUserDefineidTypeCommand(diagram)));
         
         List<String> types = diagram.getAllTypeNames();
         for(DataType udfType: diagram.getUserDefinedTypes()) {
@@ -54,56 +47,69 @@ public class UserDefinedTypeContextMenuProvider implements XrossEvaluatorConstan
         }
     }
 
-    private MenuManager createNamedTypeMenu(MenuManager typeSub, String category, List<String> types, List<FieldDefinition> elements, FieldDefinition newElement) {
+    private void createNamedTypeMenu(MenuManager typeSub, String category, List<String> types, List<?> elements, FieldDefinition newElement) {
         // create element
         MenuManager createElementMenu = new MenuManager(String.format(CREATE_MSG, category));
-        createElementMenu(createElementMenu, types, elements, newElement, "%s");
+        createElementMenu(createElementMenu, category, types, elements, newElement, "%s");
         
         MenuManager createListMenu = new MenuManager("List");
-        createElementMenu(createListMenu, types, elements, newElement, "List<%s>");
+        createElementMenu(createListMenu, category, types, elements, newElement, "List<%s>");
         createElementMenu.add(createListMenu);
         
         MenuManager createSetMenu = new MenuManager("Set");
-        createElementMenu(createSetMenu, types, elements, newElement, "Set<%s>");
+        createElementMenu(createSetMenu, category, types, elements, newElement, "Set<%s>");
         createElementMenu.add(createSetMenu);
         
         typeSub.add(createElementMenu);
 
         //Remove element
         MenuManager removeElementMenu = new MenuManager(String.format(REMOVE_MSG, category));
-        for(FieldDefinition element: elements) {
+        for(Object elementObj: elements) {
+            FieldDefinition element = (FieldDefinition)elementObj;
             removeElementMenu.add(new CommandAction(editor, element.getName(), false, new DeleteElementCommand(elements, element)));
         }
         typeSub.add(removeElementMenu);
         
         typeSub.add(new Separator());
         
-        for(FieldDefinition element: elements) {
+        for(Object elementObj: elements) {
+            FieldDefinition element = (FieldDefinition)elementObj;
             MenuManager fieldMenu = new MenuManager(element.getName());
             //Change Field Name
-            fieldMenu.add(new InputTextCommandAction(editor, String.format(CHANGE_NAME_MSG, category), "New Name", element.getName(), new ChangeFieldNameCommand(element)));
+            fieldMenu.add(new InputTextCommandAction(editor, "New Name", String.format(CHANGE_NAME_MSG, category), element.getName(), new ChangeFieldNameCommand(element)));
             
             // change field type
-            changeElementTypeMenu(fieldMenu, types, element, "%s");
+            MenuManager fieldTypeMenu = new MenuManager(String.format(CHANGE_TYPE_MSG, category));
+            changeElementTypeMenu(fieldTypeMenu, types, element, "%s");
+            fieldMenu.add(fieldTypeMenu);
             
             MenuManager changeListTypeMenu = new MenuManager("List");
             changeElementTypeMenu(changeListTypeMenu, types, element, "List<%s>");
-            fieldMenu.add(changeListTypeMenu);
+            fieldTypeMenu.add(changeListTypeMenu);
             
             MenuManager changeSetTypeMenu = new MenuManager("Set");
             changeElementTypeMenu(changeSetTypeMenu, types, element, "Set<%s>");
-            fieldMenu.add(changeSetTypeMenu);
+            fieldTypeMenu.add(changeSetTypeMenu);
+            
+            handleMethodParameters(fieldMenu, types, element);
             
             typeSub.add(fieldMenu);
         }
-        return typeSub;
 
     }
+    
+    private void handleMethodParameters(MenuManager methodMenu, List<String> types, FieldDefinition element) {
+        if(!MethodDefinition.class.isInstance(element))
+            return;
+            
+        methodMenu.add(new Separator());
+        createNamedTypeMenu(methodMenu, PARAMETER_MSG, types, ((MethodDefinition)element).getParameters(), new FieldDefinition());
+    }
 
-    private void createElementMenu(MenuManager createElementMenu, List<String> types, List<FieldDefinition> elements, FieldDefinition newElement, String typeTemplate) {
+    private void createElementMenu(MenuManager createElementMenu, String category, List<String> types, List<?> elements, FieldDefinition newElement, String typeTemplate) {
         for(String type: types) {
             String typeName = String.format(typeTemplate, type);
-            createElementMenu.add(new InputTextCommandAction(editor, typeName, "Set name", "", new CreateElementCommand(elements, newElement, typeName)));
+            createElementMenu.add(new InputTextCommandAction(editor, String.format("Set %s name", category), typeName, "", new CreateElementCommand(elements, newElement, typeName)));
         }
     }
 
@@ -119,10 +125,7 @@ public class UserDefinedTypeContextMenuProvider implements XrossEvaluatorConstan
     }
 
     private void createMethodMenu(MenuManager typeSub, List<String> types, DataType udfType) {
-        List<FieldDefinition> elements = new ArrayList<FieldDefinition>();
-        for(FieldDefinition f: udfType.getMethods()){
-            elements.add(f);
-        }
-        createNamedTypeMenu(typeSub, METHOD_MSG, types, elements, new MethodDefinition());
+        createNamedTypeMenu(typeSub, METHOD_MSG, types, udfType.getMethods(), new MethodDefinition());
+        
     }
 }
