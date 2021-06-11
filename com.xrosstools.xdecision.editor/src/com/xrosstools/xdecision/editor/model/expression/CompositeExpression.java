@@ -17,6 +17,14 @@ public class CompositeExpression extends ExpressionDefinition {
         return expressionChildren.get(index);
     }
     
+    public int indexOf(ExpressionDefinition exp) {
+        return expressionChildren.indexOf(exp);
+    }
+    
+    public void remove(ExpressionDefinition exp) {
+        expressionChildren.remove(exp);
+    }
+    
     public CompositeExpression add(int index, ExpressionDefinition exp) {
         expressionChildren.add(index, exp);
         return this;

@@ -35,6 +35,10 @@ public class MethodExpressionFigure extends Figure {
         layout.setConstraint(jointFigure, PositionConstants.CENTER);
     }
 
+    public Label getNameLabel() {
+        return nameLabel;
+    }
+
     public void setExpandedFigure(IFigure expandedFigure) {
         add(expandedFigure);
         layout.setConstraint(expandedFigure, PositionConstants.RIGHT);

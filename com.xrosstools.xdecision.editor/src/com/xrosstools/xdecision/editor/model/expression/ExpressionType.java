@@ -82,7 +82,7 @@ public enum ExpressionType {
                 return end();
 
             ExpressionDefinition exp = withLeft(exp1(segment), exp2(segment));
-            return CalculationExpression.calculate(grammar == PLUS_T_B ? OperatorEnum.PLUS: OperatorEnum.MINUS, exp);
+            return CalculationExpression.compile(grammar == PLUS_T_B ? OperatorEnum.PLUS: OperatorEnum.MINUS, exp);
         }
     },
     
@@ -103,7 +103,7 @@ public enum ExpressionType {
                 return end();
             
             ExpressionDefinition exp = withLeft(exp1(segment), exp2(segment));
-            return CalculationExpression.calculate(grammar == TIMES_F_U ? OperatorEnum.TIMES: OperatorEnum.DIVIDE, exp);
+            return CalculationExpression.compile(grammar == TIMES_F_U ? OperatorEnum.TIMES: OperatorEnum.DIVIDE, exp);
         }
     },
     

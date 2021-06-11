@@ -27,6 +27,7 @@ public class DataType {
     private List<FieldDefinition> fields = new ArrayList<FieldDefinition>();
     private List<MethodDefinition> methods = new ArrayList<MethodDefinition>();
     
+    public static final DataType NOT_MATCHED = new DataType("Not Matched!"); 
     
     static {
         reg(STRING, NO_FIELD, new MethodDefinition[]{
@@ -80,7 +81,20 @@ public class DataType {
     }
     
     public static DataType getPredefinedType(String name) {
-        return PREDEFINED_TYPES.get(name);
+        DataType type = PREDEFINED_TYPES.get(name);
+        if(type != null)
+            return type;
+
+        if(name.startsWith(LIST))
+            return CollectionType.parseList(name);
+        
+        if(name.startsWith(SET))
+            return CollectionType.parseSet(name);
+        
+//        if(name.startsWith(MAP))
+//            return MapType.
+        
+        return NOT_MATCHED;
     }
     
     public String getName() {

@@ -3,10 +3,12 @@ package com.xrosstools.xdecision.editor.parts.expression;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.swt.graphics.Color;
 
 import com.xrosstools.xdecision.editor.figures.ExpandableExpressionFigure;
 import com.xrosstools.xdecision.editor.figures.MethodExpressionFigure;
@@ -54,5 +56,10 @@ public class MethodExpressionPart extends ExtensibleExpressionPart {
         MethodExpression exp = (MethodExpression)getModel();
         methodFigure.setMethodName(exp.getName());
         jointLabel.setText(exp.hasChild() ? "." : "");
+        
+        if(exp.isValid())
+            methodFigure.getNameLabel().setForegroundColor(ColorConstants.black);
+        else
+            methodFigure.setForegroundColor(ColorConstants.red);
     }
 }

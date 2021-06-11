@@ -7,6 +7,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 
 import com.xrosstools.xdecision.editor.actions.CommandAction;
+import com.xrosstools.xdecision.editor.commands.expression.AddOperatorCommand;
 import com.xrosstools.xdecision.editor.commands.expression.ChangeChildCommand;
 import com.xrosstools.xdecision.editor.commands.expression.ChangeOperatorCommand;
 import com.xrosstools.xdecision.editor.model.DataType;
@@ -60,18 +61,20 @@ public class ExpressionContextMenuProvider {
             //TODO fix method identification
             createIdMenu(menu, method.getIdentifier(), method.getTypeName(), parentPart, childModel, extendChildren, new MethodExpression(method));
         
-        menu.add(new Separator());
+        if(extendChildren) {
+            menu.add(new Separator());
+            createOperatorMenu(menu, findChild(parentPart, childModel));
+        }
 
-//        if(else)
-//        menu.add(new Separator());
-//        
+        menu.add(new Separator());
+        
 //        createIdMenu(menu, "[index]", method.getType(), parentPart, childModel, extendChildren, new MethodExpression(method));
     }
     
     private void createIdMenu(IMenuManager menu, String definitionId, String defType, EditPart parentPart, Identifier childModel, boolean extendChildren, ExpressionDefinition childExp) {
         boolean selected = childModel == null ? false : definitionId.equals(childModel.getIdentifier());
         
-        if(selected && extendChildren && DataType.isCustomized(defType)) {
+        if(selected && extendChildren) {
             MenuManager subMenu = new MenuManager(definitionId);
             createChildMenu(subMenu, findChild(parentPart, childModel), false);
             menu.add(subMenu);
@@ -101,10 +104,25 @@ public class ExpressionContextMenuProvider {
         }
 
         DataType parentUDT = findDataType(part.getParent());
-        if(extExp instanceof MethodExpression)
-            return getDiagram().findDataType(parentUDT.findMethod(((MethodExpression)extExp).getName()).getTypeName());
+        VariableExpression exp = (VariableExpression)extExp;
+        
+        if(parentUDT == DataType.NOT_MATCHED) {
+            exp.setValid(false);
+            return DataType.NOT_MATCHED;
+        }
+
+        FieldDefinition fd;
+        if(exp instanceof MethodExpression)
+            fd = parentUDT.findMethod(exp.getName());
         else
-            return getDiagram().findDataType(parentUDT.findField(((VariableExpression)extExp).getName()).getTypeName());
+            fd = parentUDT.findField(exp.getName());
+        
+        exp.setValid(fd != null);
+        
+        if(fd == null)
+            return DataType.NOT_MATCHED;
+
+        return getDiagram().findDataType(fd.getTypeName());
     }
     
     private DecisionTreeDiagram getDiagram() {
@@ -115,5 +133,12 @@ public class ExpressionContextMenuProvider {
         for(OperatorEnum op: OperatorEnum.values()) {
             add(menu, op.getOperator(), op == opExp.getOperator(), new ChangeOperatorCommand(opExp, op));
         }
-    }    
+    }
+    
+    private void createOperatorMenu(IMenuManager menu, EditPart expPart) {
+        for(OperatorEnum op: OperatorEnum.values()) {
+            // TODO revise checked
+            add(menu, op.getOperator(), false, new AddOperatorCommand(expPart, op));
+        }
+    }
 }

@@ -11,7 +11,13 @@ public class CollectionType extends DataType {
         this.elementTypeName = elementTypeName;
     }
     
-    public static CollectionType list(String elementTypeName) {
+    private static String[] getEmbeddedType(String type, String compositType) {
+        return type.substring(compositType.length()+1, type.length()-1).split(",");
+    }
+    
+    public static CollectionType parseList(String type) {
+        String elementTypeName = getEmbeddedType(type, DataType.LIST)[0].trim();
+        
         CollectionType listType = new CollectionType("List<%s>", elementTypeName);
         listType.getMethods().addAll(getCommonMethod(elementTypeName));
         listType.add(mtd("indexOf", NUMBER));
@@ -21,7 +27,9 @@ public class CollectionType extends DataType {
         return listType;
     }
 
-    public static CollectionType set(String elementTypeName) {
+    public static CollectionType parseSet(String type) {
+        String elementTypeName = getEmbeddedType(type, DataType.LIST)[0].trim();
+        
         CollectionType setType = new CollectionType("Set<%s>", elementTypeName);
         setType.getMethods().addAll(getCommonMethod(elementTypeName));
         return setType;
