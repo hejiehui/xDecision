@@ -23,15 +23,18 @@ public class CompositeExpression extends ExpressionDefinition {
     
     public void remove(ExpressionDefinition exp) {
         expressionChildren.remove(exp);
+        propertyChanged();
     }
     
     public CompositeExpression add(int index, ExpressionDefinition exp) {
         expressionChildren.add(index, exp);
+        propertyChanged();
         return this;
     }
     
     public CompositeExpression addFirst(ExpressionDefinition exp) {
         expressionChildren.add(0, exp);
+        propertyChanged();
         return this;
     }
     
@@ -45,11 +48,13 @@ public class CompositeExpression extends ExpressionDefinition {
     
     public CompositeExpression add(ExpressionDefinition exp) {
         expressionChildren.add(exp);
+        propertyChanged();
         return this;
     }
 
     public void set(int index, ExpressionDefinition exp) {
         expressionChildren.set(index, exp);
+        propertyChanged();
     }
     
     @Override

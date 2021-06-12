@@ -7,9 +7,11 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 
 import com.xrosstools.xdecision.editor.actions.CommandAction;
+import com.xrosstools.xdecision.editor.actions.InputTextCommandAction;
 import com.xrosstools.xdecision.editor.commands.expression.AddOperatorCommand;
 import com.xrosstools.xdecision.editor.commands.expression.ChangeChildCommand;
 import com.xrosstools.xdecision.editor.commands.expression.ChangeOperatorCommand;
+import com.xrosstools.xdecision.editor.commands.expression.CreateExpressionCommand;
 import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
@@ -18,8 +20,10 @@ import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExtensibleExpression;
 import com.xrosstools.xdecision.editor.model.expression.Identifier;
 import com.xrosstools.xdecision.editor.model.expression.MethodExpression;
+import com.xrosstools.xdecision.editor.model.expression.NumberExpression;
 import com.xrosstools.xdecision.editor.model.expression.OperatorEnum;
 import com.xrosstools.xdecision.editor.model.expression.OperatorExpression;
+import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 import com.xrosstools.xdecision.editor.parts.expression.BaseExpressionPart;
 
@@ -37,6 +41,10 @@ public class ExpressionContextMenuProvider {
             createOperatorMenu(menu, (OperatorExpression)exp);
         else if(exp instanceof ExtensibleExpression)
             createExtensibleExpressionMenu(menu, expPart);
+        else if(exp instanceof PlaceholderExpression)
+            createPlaceholderExpressionMenu(menu, expPart);
+        else if(exp instanceof NumberExpression)
+            createOperatorMenu(menu, expPart);
     }
     
     //Only field or method expression goes here
@@ -140,5 +148,12 @@ public class ExpressionContextMenuProvider {
             // TODO revise checked
             add(menu, op.getOperator(), false, new AddOperatorCommand(expPart, op));
         }
+    }
+    
+    private void createPlaceholderExpressionMenu(IMenuManager menu, BaseExpressionPart expPart) {
+        Object parentModel = expPart.getParent().getModel();
+        ExpressionDefinition placeholder = (ExpressionDefinition)expPart.getModel();
+        menu.add(new InputTextCommandAction(editor, DataType.NUMBER, DataType.NUMBER, "0", new CreateExpressionCommand(parentModel, placeholder, DataType.NUMBER)));
+        menu.add(new InputTextCommandAction(editor, DataType.STRING, DataType.STRING, "", new CreateExpressionCommand(parentModel, placeholder, DataType.STRING)));
     }
 }

@@ -40,8 +40,13 @@ public class AddOperatorCommand extends Command{
         if(parentModel instanceof CalculationExpression) {
             CalculationExpression calExp = (CalculationExpression)parentModel;
             int index = calExp.indexOf(operant);
-            calExp.add(index, operatorExp);
-            calExp.add(index + 1, placeHolderExp);
+            if(index == calExp.size() - 1) {
+                calExp.add(operatorExp);
+                calExp.add(placeHolderExp);
+            }else {
+                calExp.add(index + 1, operatorExp);
+                calExp.add(index + 2, placeHolderExp);
+            }
         } else {
             CalculationExpression calExp = new CalculationExpression();
             calExp.add(operant);
