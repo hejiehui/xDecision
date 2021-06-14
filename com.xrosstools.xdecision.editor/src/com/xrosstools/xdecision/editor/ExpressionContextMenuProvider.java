@@ -49,17 +49,15 @@ public class ExpressionContextMenuProvider {
     
     //Only field or method expression goes here
     public void createExtensibleExpressionMenu(IMenuManager menu, EditPart part) {
-        createChildMenu(menu, part.getParent(), true);
+        createChildMenu(menu, part.getParent(), part, true);
     }
 
-    private void createChildMenu(IMenuManager menu, EditPart parentPart, boolean extendChildren) {
+    private void createChildMenu(IMenuManager menu, EditPart parentPart, EditPart part, boolean extendChildren) {
         DataType parentType = findDataType(parentPart);
-        Object parentModel = parentPart.getModel();
-        Identifier childModel = (Identifier)ChangeChildCommand.getChild(parentModel);
 
         // select field
         for(FieldDefinition field: parentType.getFields())
-            createIdMenu(menu, field.getIdentifier(), field.getTypeName(), parentPart, childModel, extendChildren, new VariableExpression(field.getName()));
+            createIdMenu(menu, field.getIdentifier(), field.getTypeName(), parentPart, part, extendChildren, new VariableExpression(field.getName()));
 
         menu.add(new Separator());
         
@@ -67,11 +65,11 @@ public class ExpressionContextMenuProvider {
         //TODO static and instance method
         for(MethodDefinition method: parentType.getMethods())
             //TODO fix method identification
-            createIdMenu(menu, method.getIdentifier(), method.getTypeName(), parentPart, childModel, extendChildren, new MethodExpression(method));
+            createIdMenu(menu, method.getIdentifier(), method.getTypeName(), parentPart, part, extendChildren, new MethodExpression(method));
         
         if(extendChildren) {
             menu.add(new Separator());
-            createOperatorMenu(menu, findChild(parentPart, childModel));
+            createOperatorMenu(menu, part);
         }
 
         menu.add(new Separator());
@@ -79,15 +77,16 @@ public class ExpressionContextMenuProvider {
 //        createIdMenu(menu, "[index]", method.getType(), parentPart, childModel, extendChildren, new MethodExpression(method));
     }
     
-    private void createIdMenu(IMenuManager menu, String definitionId, String defType, EditPart parentPart, Identifier childModel, boolean extendChildren, ExpressionDefinition childExp) {
+    private void createIdMenu(IMenuManager menu, String definitionId, String defType, EditPart parentPart, EditPart part, boolean extendChildren, ExpressionDefinition childExp) {
+        Identifier childModel = part == null ? null: (Identifier)part.getModel();
         boolean selected = childModel == null ? false : definitionId.equals(childModel.getIdentifier());
         
         if(selected && extendChildren) {
             MenuManager subMenu = new MenuManager(definitionId);
-            createChildMenu(subMenu, findChild(parentPart, childModel), false);
+            createChildMenu(subMenu, part, findChild(parentPart, childModel), false);
             menu.add(subMenu);
         } else
-            menu.add(new CommandAction(editor, definitionId, selected, new ChangeChildCommand(parentPart.getModel(), childExp)));
+            menu.add(new CommandAction(editor, definitionId, selected, new ChangeChildCommand(parentPart.getModel(), (ExpressionDefinition)childModel, childExp)));
     }
 
     private void add(IMenuManager menu, String text, boolean checked, Command command) {
@@ -155,5 +154,12 @@ public class ExpressionContextMenuProvider {
         ExpressionDefinition placeholder = (ExpressionDefinition)expPart.getModel();
         menu.add(new InputTextCommandAction(editor, DataType.NUMBER, DataType.NUMBER, "0", new CreateExpressionCommand(parentModel, placeholder, DataType.NUMBER)));
         menu.add(new InputTextCommandAction(editor, DataType.STRING, DataType.STRING, "", new CreateExpressionCommand(parentModel, placeholder, DataType.STRING)));
+
+        menu.add(new Separator());
+        
+        // select factors
+        for(FieldDefinition field: getDiagram().getType().getFields())
+            menu.add(new CommandAction(editor, field.getIdentifier(), false, new ChangeChildCommand(expPart.getParent().getModel(), placeholder, new VariableExpression(field.getName()))));
+
     }
 }

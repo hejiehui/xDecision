@@ -17,6 +17,7 @@ public class AddOperatorCommand extends Command{
     private OperatorExpression operatorExp;
     private PlaceholderExpression placeHolderExp;
     private Object parentModel;
+    private ExpressionDefinition newExp;
         
     public AddOperatorCommand(EditPart expPart, OperatorEnum operator){
         EditPart topExp = findTopExpressionPart(expPart);
@@ -52,7 +53,8 @@ public class AddOperatorCommand extends Command{
             calExp.add(operant);
             calExp.add(operatorExp);
             calExp.add(placeHolderExp);
-            ChangeChildCommand.setChild(parentModel, calExp);
+            ChangeChildCommand.setChild(parentModel, operant, calExp);
+            newExp = calExp;
         }
     }
 
@@ -70,7 +72,7 @@ public class AddOperatorCommand extends Command{
             calExp.remove(operatorExp);
             calExp.remove(placeHolderExp);
         } else {
-            ChangeChildCommand.setChild(parentModel, operant);
+            ChangeChildCommand.setChild(parentModel, newExp, operant);
         }
     }
 }

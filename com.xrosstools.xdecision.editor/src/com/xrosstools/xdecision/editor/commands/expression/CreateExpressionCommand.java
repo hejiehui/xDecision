@@ -6,7 +6,6 @@ import com.xrosstools.xdecision.editor.model.expression.CompositeExpression;
 import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.NumberExpression;
-import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 import com.xrosstools.xdecision.editor.model.expression.StringExpression;
 
 public class CreateExpressionCommand extends InputTextCommand {

@@ -3,38 +3,52 @@ package com.xrosstools.xdecision.editor.commands.expression;
 import org.eclipse.gef.commands.Command;
 
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
+import com.xrosstools.xdecision.editor.model.expression.CompositeExpression;
+import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExtensibleExpression;
 
 public class ChangeChildCommand extends Command{
     private Object parentModel;
     private ExpressionDefinition oldExp;
-    private ExpressionDefinition childExp;
+    private ExpressionDefinition newExp;
     
     
-    public ChangeChildCommand(Object parentModel, ExpressionDefinition childExp) {
+    public ChangeChildCommand(Object parentModel, ExpressionDefinition oldExp, ExpressionDefinition newExp) {
         this.parentModel = parentModel;
-        this.childExp = childExp;
+        this.newExp = newExp;
         
-        oldExp = getChild(parentModel);
+        this.oldExp = oldExp;
     }
     
-    public static ExpressionDefinition getChild(Object parentModel) {
-        if(parentModel instanceof ExtensibleExpression)
-            return ((ExtensibleExpression)parentModel).getChild();
-        else
-            return ((DecisionTreeNode)parentModel).getNodeExpression();
-    }
-    
-    public static void setChild(Object parentModel, ExpressionDefinition childExp) {
-        if(parentModel instanceof ExtensibleExpression)
-            ((ExtensibleExpression)parentModel).setChild(childExp);
-        else
-            ((DecisionTreeNode)parentModel).setNodeExpression(childExp);
+    public static void setChild(Object parentModel, ExpressionDefinition oldExp, ExpressionDefinition newExp) {
+        if(parentModel instanceof CompositeExpression) {
+            CompositeExpression parent = (CompositeExpression)parentModel;
+            parent.set(parent.indexOf(oldExp), newExp);
+            return;
+        }
+        
+        if(parentModel instanceof ElementExpression) {
+            ElementExpression parent = (ElementExpression)parentModel;
+            parent.setIndexExpression(newExp);
+            return;
+        }
+        
+        if(parentModel instanceof ExtensibleExpression) {
+            ((ExtensibleExpression)parentModel).setChild(newExp);
+            return;
+        }
+        
+        if(parentModel instanceof DecisionTreeNode) {
+            ((DecisionTreeNode)parentModel).setNodeExpression(newExp);
+            return;
+        }
+
+        throw new IllegalArgumentException("type not supported: " + parentModel.getClass());
     }
 
     public void execute() {
-        setChild(parentModel, childExp);
+        setChild(parentModel, oldExp, newExp);
     }
 
     public String getLabel() {
@@ -46,9 +60,6 @@ public class ChangeChildCommand extends Command{
     }
 
     public void undo() {
-        if(parentModel instanceof ExtensibleExpression)
-            ((ExtensibleExpression)parentModel).setChild(oldExp);
-        else
-            ((DecisionTreeNode)parentModel).setNodeExpression(oldExp);
+        setChild(parentModel, oldExp, newExp);
     }
 }

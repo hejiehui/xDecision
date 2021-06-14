@@ -1,16 +1,25 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-import static com.xrosstools.xdecision.editor.model.expression.Grammar.of;
-import static com.xrosstools.xdecision.editor.model.expression.TokenType.*;
 import static com.xrosstools.xdecision.editor.model.expression.EndExpression.end;
-
+import static com.xrosstools.xdecision.editor.model.expression.Grammar.of;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.COMMA;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.DIVIDE;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.DOT;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.ID;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.LBRKT;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.LSBRKT;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.MINUS;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.NUMBER;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.PLUS;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.RBRKT;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.RSBRKT;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.STRING;
+import static com.xrosstools.xdecision.editor.model.expression.TokenType.TIMES;
 import static java.util.Arrays.asList;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
-import com.xrosstools.xdecision.editor.model.DecisionTreeManager;
 
 //TODO support negative expression
 public enum ExpressionType {
@@ -287,7 +296,18 @@ public enum ExpressionType {
         if(leftExp instanceof EndExpression)
             return basic;
 
-        ((ExtensibleExpression)leftExp).setChild(basic);
+        if(basic instanceof CalculationExpression)
+            return ((CalculationExpression)basic).addFirst(leftExp);
+        
+        if(basic instanceof NegtiveExpression) {
+            ExpressionDefinition realBasic = ((NegtiveExpression)basic).getEnclosedExpression();
+            CalculationExpression calExp = new CalculationExpression();
+            return calExp.add(leftExp).add(new OperatorExpression(OperatorEnum.MINUS)).add(realBasic);
+        }
+            
+        if(leftExp instanceof ExtensibleExpression && basic instanceof ExtensibleExpression)
+            ((ExtensibleExpression)leftExp).setChild(basic);
+        
         return leftExp;
     }
 
