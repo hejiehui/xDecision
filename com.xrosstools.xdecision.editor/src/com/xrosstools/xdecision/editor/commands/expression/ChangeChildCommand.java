@@ -3,6 +3,7 @@ package com.xrosstools.xdecision.editor.commands.expression;
 import org.eclipse.gef.commands.Command;
 
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
+import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.editor.model.expression.CompositeExpression;
 import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
@@ -41,6 +42,11 @@ public class ChangeChildCommand extends Command{
         
         if(parentModel instanceof DecisionTreeNode) {
             ((DecisionTreeNode)parentModel).setNodeExpression(newExp);
+            return;
+        }
+        
+        if(parentModel instanceof BracktExpression) {
+            ((BracktExpression)parentModel).setEnclosedExpression(newExp);
             return;
         }
 

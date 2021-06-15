@@ -8,14 +8,20 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 
 import com.xrosstools.xdecision.editor.figures.EnclosedExpressionFigure;
+import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.editor.model.expression.EnclosedExpression;
 
 public class EnclosedExpressionPart extends BaseExpressionPart {
     @Override
     protected IFigure createFigure() {
+        if(getModel() instanceof BracktExpression)
+            return EnclosedExpressionFigure.createBracketFigure();
+
+        //TODO fix element figure
         if(getModel() instanceof ElementExpression)
             return EnclosedExpressionFigure.createElementFigure();
+
         return new EnclosedExpressionFigure();
     }
     

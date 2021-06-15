@@ -16,6 +16,7 @@ import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
 import com.xrosstools.xdecision.editor.model.MethodDefinition;
+import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExtensibleExpression;
 import com.xrosstools.xdecision.editor.model.expression.Identifier;
@@ -161,5 +162,14 @@ public class ExpressionContextMenuProvider {
         for(FieldDefinition field: getDiagram().getType().getFields())
             menu.add(new CommandAction(editor, field.getIdentifier(), false, new ChangeChildCommand(expPart.getParent().getModel(), placeholder, new VariableExpression(field.getName()))));
 
+        menu.add(new Separator());
+        
+        //add bracket
+        wrapBracketOperatorMenu(menu, expPart);
+    }
+    
+    private void wrapBracketOperatorMenu(IMenuManager menu, EditPart expPart) {
+        ExpressionDefinition exp = (ExpressionDefinition)expPart.getModel();
+        menu.add(new CommandAction(editor, "(...)", false, new ChangeChildCommand(expPart.getParent().getModel(), exp, new BracktExpression().setEnclosedExpression(exp))));        
     }
 }

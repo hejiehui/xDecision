@@ -8,6 +8,7 @@ public class EnclosedExpression extends ExpressionDefinition {
     }
     public EnclosedExpression setEnclosedExpression(ExpressionDefinition enclosedExpression) {
         this.enclosedExpression = enclosedExpression;
+        propertyChanged();
         return this;
     }
 }
