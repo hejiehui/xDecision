@@ -1,6 +1,12 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-public class StringExpression extends BasicExpression {
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
+
+public class StringExpression extends BasicExpression implements IPropertySource {
+    public static final String TEXT = "Text";
+
     private String text;
 
     public StringExpression(String text) {
@@ -14,10 +20,42 @@ public class StringExpression extends BasicExpression {
 
     public void setText(String text) {
         this.text = text;
+        propertyChanged();
     }
 
     @Override
     public String getDisplayText() {
         return "'" + text + "'";
+    }
+    
+    public IPropertyDescriptor[] getPropertyDescriptors() {
+        IPropertyDescriptor[] descriptors;
+        descriptors = new IPropertyDescriptor[] {
+                new TextPropertyDescriptor(TEXT, TEXT)
+            };
+        return descriptors;
+    }
+    
+    public Object getPropertyValue(Object propName) {
+        if (TEXT.equals(propName))
+            return text;
+
+        return null;
+    }
+
+    public void setPropertyValue(Object propName, Object value){
+        if (TEXT.equals(propName))
+            setText((String)value);
+    }
+    
+    public Object getEditableValue(){
+        return this;
+    }
+
+    public boolean isPropertySet(Object propName){
+        return true;
+    }
+
+    public void resetPropertyValue(Object propName){
     }
 }

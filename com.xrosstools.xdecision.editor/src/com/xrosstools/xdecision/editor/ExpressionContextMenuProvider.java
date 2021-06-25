@@ -25,6 +25,7 @@ import com.xrosstools.xdecision.editor.model.expression.NumberExpression;
 import com.xrosstools.xdecision.editor.model.expression.OperatorEnum;
 import com.xrosstools.xdecision.editor.model.expression.OperatorExpression;
 import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
+import com.xrosstools.xdecision.editor.model.expression.StringExpression;
 import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 import com.xrosstools.xdecision.editor.parts.expression.BaseExpressionPart;
 
@@ -45,7 +46,9 @@ public class ExpressionContextMenuProvider {
         else if(exp instanceof PlaceholderExpression)
             createPlaceholderExpressionMenu(menu, expPart);
         else if(exp instanceof NumberExpression)
-            createOperatorMenu(menu, expPart);
+            createNumberMenu(menu, expPart);
+        else if(exp instanceof StringExpression)
+            createStringMenu(menu, expPart);
     }
     
     //Only field or method expression goes here
@@ -70,7 +73,12 @@ public class ExpressionContextMenuProvider {
         
         if(extendChildren) {
             menu.add(new Separator());
+            addChangeToNumberMenu(menu, part);
+            addChangeToStringMenu(menu, part);
+            menu.add(new Separator());
             createOperatorMenu(menu, part);
+            menu.add(new Separator());
+            wrapBracketOperatorMenu(menu, part); 
         }
 
         menu.add(new Separator());
@@ -143,6 +151,22 @@ public class ExpressionContextMenuProvider {
         }
     }
     
+    private void createNumberMenu(IMenuManager menu, EditPart expPart) {
+        createOperatorMenu(menu, expPart);
+        menu.add(new Separator());
+        changeToFactorMenu(menu, expPart);
+
+        menu.add(new Separator());
+        addChangeToStringMenu(menu, expPart);
+        wrapBracketOperatorMenu(menu, expPart);
+    }
+
+    private void createStringMenu(IMenuManager menu, EditPart expPart) {
+        changeToFactorMenu(menu, expPart);
+        menu.add(new Separator());
+        addChangeToNumberMenu(menu, expPart);
+        wrapBracketOperatorMenu(menu, expPart);
+    }
     private void createOperatorMenu(IMenuManager menu, EditPart expPart) {
         for(OperatorEnum op: OperatorEnum.values()) {
             // TODO revise checked
@@ -151,16 +175,13 @@ public class ExpressionContextMenuProvider {
     }
     
     private void createPlaceholderExpressionMenu(IMenuManager menu, BaseExpressionPart expPart) {
-        Object parentModel = expPart.getParent().getModel();
         ExpressionDefinition placeholder = (ExpressionDefinition)expPart.getModel();
-        menu.add(new InputTextCommandAction(editor, DataType.NUMBER, DataType.NUMBER, "0", new CreateExpressionCommand(parentModel, placeholder, DataType.NUMBER)));
-        menu.add(new InputTextCommandAction(editor, DataType.STRING, DataType.STRING, "", new CreateExpressionCommand(parentModel, placeholder, DataType.STRING)));
+        addChangeToNumberMenu(menu, expPart);
+        addChangeToStringMenu(menu, expPart);
 
         menu.add(new Separator());
         
-        // select factors
-        for(FieldDefinition field: getDiagram().getType().getFields())
-            menu.add(new CommandAction(editor, field.getIdentifier(), false, new ChangeChildCommand(expPart.getParent().getModel(), placeholder, new VariableExpression(field.getName()))));
+        changeToFactorMenu(menu, expPart);
 
         menu.add(new Separator());
         
@@ -169,7 +190,23 @@ public class ExpressionContextMenuProvider {
     }
     
     private void wrapBracketOperatorMenu(IMenuManager menu, EditPart expPart) {
+        expPart = AddOperatorCommand.findTopExpressionPart(expPart);
         ExpressionDefinition exp = (ExpressionDefinition)expPart.getModel();
         menu.add(new CommandAction(editor, "(...)", false, new ChangeChildCommand(expPart.getParent().getModel(), exp, new BracktExpression().setEnclosedExpression(exp))));        
+    }
+    
+    private void changeToFactorMenu(IMenuManager menu, EditPart expPart) {
+        ExpressionDefinition placeholder = (ExpressionDefinition)expPart.getModel();
+        // select factors
+        for(FieldDefinition field: getDiagram().getType().getFields())
+            menu.add(new CommandAction(editor, field.getIdentifier(), false, new ChangeChildCommand(expPart.getParent().getModel(), placeholder, new VariableExpression(field.getName()))));
+    }
+    
+    private void addChangeToNumberMenu(IMenuManager menu, EditPart expPart) {
+        menu.add(new InputTextCommandAction(editor, DataType.NUMBER, DataType.NUMBER, "0", new CreateExpressionCommand(expPart, DataType.NUMBER)));        
+    }
+
+    private void addChangeToStringMenu(IMenuManager menu, EditPart expPart) {
+        menu.add(new InputTextCommandAction(editor, DataType.STRING, DataType.STRING, "", new CreateExpressionCommand(expPart, DataType.STRING)));        
     }
 }

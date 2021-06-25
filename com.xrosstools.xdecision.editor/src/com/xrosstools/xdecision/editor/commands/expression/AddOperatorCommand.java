@@ -27,7 +27,7 @@ public class AddOperatorCommand extends Command{
         this.parentModel = topExp.getParent().getModel();
     }
     
-    private EditPart findTopExpressionPart(EditPart expPart) {
+    public static EditPart findTopExpressionPart(EditPart expPart) {
         EditPart parentPart = expPart.getParent();
         Object parantExp = parentPart.getModel();
         if(parantExp instanceof VariableExpression || parantExp instanceof MethodExpression || parantExp instanceof ElementExpression)
