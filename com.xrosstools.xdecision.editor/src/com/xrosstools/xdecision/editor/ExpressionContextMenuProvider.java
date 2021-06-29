@@ -7,11 +7,13 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 
 import com.xrosstools.xdecision.editor.actions.CommandAction;
+import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.actions.InputTextCommandAction;
 import com.xrosstools.xdecision.editor.commands.expression.AddOperatorCommand;
 import com.xrosstools.xdecision.editor.commands.expression.ChangeChildCommand;
 import com.xrosstools.xdecision.editor.commands.expression.ChangeOperatorCommand;
 import com.xrosstools.xdecision.editor.commands.expression.CreateExpressionCommand;
+import com.xrosstools.xdecision.editor.commands.expression.RemoveExpressionCommand;
 import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
@@ -49,6 +51,8 @@ public class ExpressionContextMenuProvider {
             createNumberMenu(menu, expPart);
         else if(exp instanceof StringExpression)
             createStringMenu(menu, expPart);
+        
+        addRemoveMenu(menu, expPart);
     }
     
     //Only field or method expression goes here
@@ -175,7 +179,6 @@ public class ExpressionContextMenuProvider {
     }
     
     private void createPlaceholderExpressionMenu(IMenuManager menu, BaseExpressionPart expPart) {
-        ExpressionDefinition placeholder = (ExpressionDefinition)expPart.getModel();
         addChangeToNumberMenu(menu, expPart);
         addChangeToStringMenu(menu, expPart);
 
@@ -208,5 +211,9 @@ public class ExpressionContextMenuProvider {
 
     private void addChangeToStringMenu(IMenuManager menu, EditPart expPart) {
         menu.add(new InputTextCommandAction(editor, DataType.STRING, DataType.STRING, "", new CreateExpressionCommand(expPart, DataType.STRING)));        
+    }
+
+    private void addRemoveMenu(IMenuManager menu, EditPart expPart) {
+        menu.add(new CommandAction(editor, String.format(DecisionTreeMessages.REMOVE_MSG, expPart.getModel().toString()), false, new RemoveExpressionCommand(expPart)));        
     }
 }

@@ -36,7 +36,8 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     protected List getModelChildren() {
         List children = new ArrayList();
         DecisionTreeNode node = (DecisionTreeNode) getModel();
-        children.add(node.getNodeExpression());
+        if(node.getNodeExpression() != null)
+            children.add(node.getNodeExpression());
         return children;
     }
     
