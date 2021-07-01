@@ -178,10 +178,6 @@ public class DecisionTreeXMLSerializer {
             node.setDecisionId(getIntAttribute(nodeNode, DECISION_INDEX, -1));
             node.setRawExpression(getAttribute(nodeNode, EXPRESSION));
 
-            node.setFactorId(getIntAttribute(nodeNode, FACTOR_INDEX, -1));
-            node.setFactorField(getAttribute(nodeNode, FACTOR_FIELD));
-            node.setFunctionName(getAttribute(nodeNode, FUNCTION_NAME));
-
             nodes[i] = node;
         }
         
@@ -333,18 +329,9 @@ public class DecisionTreeXMLSerializer {
             
             treeNode.setAttribute(INDEX, String.valueOf(i));
 
-            if(node.getFactorId() >= 0)
-                treeNode.setAttribute(FACTOR_INDEX, String.valueOf(node.getFactorId()));
-
             if(node.getDecisionId() >= 0)
                 treeNode.setAttribute(DECISION_INDEX, String.valueOf(node.getDecisionId()));
 
-            if(node.getFactorField() != null)
-                treeNode.setAttribute(FACTOR_FIELD, node.getFactorField());
-
-            if(node.getFunctionName() != null)
-                treeNode.setAttribute(FUNCTION_NAME, node.getFunctionName());
-            
             if(node.getNodeExpression() != null)
                 treeNode.setAttribute(EXPRESSION, node.getNodeExpression().toString());
             

@@ -45,9 +45,11 @@ public class DecisionTreeDiagramFactory {
 	private List<DecisionTreeNode> parseExpression(DecisionTreeDiagram diagram, DecisionTreeNode[] nodes) {
 	    List<DecisionTreeNode> treeNodes = Arrays.asList(nodes);
 
-	    ExpressionParser parser = new ExpressionParser(new DecisionTreeManager(diagram));
-	    for(DecisionTreeNode node: treeNodes)
+	    ExpressionParser parser = new DecisionTreeManager(diagram).getParser();
+	    for(DecisionTreeNode node: treeNodes) {
+	        node.setParser(parser);
 	        node.setNodeExpression(parser.parse(node.getRawExpression()));
+	    }
 
 	    return treeNodes;
 	}

@@ -8,10 +8,11 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.xrosstools.xdecision.editor.DecisionTreeDiagramEditor;
 import com.xrosstools.xdecision.editor.commands.AddFactorCommand2;
-import com.xrosstools.xdecision.editor.commands.ChangeNodeFactorCommand;
+import com.xrosstools.xdecision.editor.commands.expression.ChangeChildCommand;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
+import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 
 public class DecisionTreeCreateFactorAction extends WorkbenchPartAction implements DecisionTreeActionConstants, DecisionTreeMessages{
     private DecisionTreeNode node;
@@ -46,7 +47,7 @@ public class DecisionTreeCreateFactorAction extends WorkbenchPartAction implemen
 		else {
 		    CommandChain cc = new CommandChain();
 		    cc.add(new AddFactorCommand2(diagram, factor));
-		    cc.add(new ChangeNodeFactorCommand(node, diagram.getFactors().size()));
+		    cc.add(new ChangeChildCommand(node, node.getNodeExpression(), new VariableExpression(factor.getFactorName())));
 		    execute(cc);
 		}
 	}

@@ -9,16 +9,16 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
+import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 
 public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource {
+    private ExpressionParser parser;
     private ExpressionDefinition expression = new PlaceholderExpression();
     private String rawExpression;
-	private int factorId = -1;
-    private String factorField;
-	private String functionName;
 	
 	private int decisionId = -1;
 	private String description;
@@ -38,7 +38,15 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 		this.manager = manager;
 	}
 	
-	public DecisionTreeManager getDecisionTreeManager(){
+	public ExpressionParser getParser() {
+        return parser;
+    }
+
+    public void setParser(ExpressionParser parser) {
+        this.parser = parser;
+    }
+
+    public DecisionTreeManager getDecisionTreeManager(){
 		return manager;
 	}
 
@@ -49,15 +57,15 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] descriptors;
 		descriptors = new IPropertyDescriptor[] {
-				new ComboBoxPropertyDescriptor(PROP_FACTOR_ID, PROP_FACTOR_ID, manager.getFactorNames()),
+				new TextPropertyDescriptor(PROP_EXPRESSION, PROP_EXPRESSION),
 				new ComboBoxPropertyDescriptor(PROP_DECISION_ID, PROP_DECISION_ID, manager.getDecisions()),
 			};
 		return descriptors;
 	}
 	
 	public Object getPropertyValue(Object propName) {
-		if (PROP_FACTOR_ID.equals(propName))
-			return factorId;
+		if (PROP_EXPRESSION.equals(propName))
+			return expression.toString();
 		if (PROP_DECISION_ID.equals(propName))
 			return decisionId;
 
@@ -65,8 +73,8 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	}
 
 	public void setPropertyValue(Object propName, Object value){
-		if (PROP_FACTOR_ID.equals(propName))
-			setFactorId((Integer)value);
+		if (PROP_EXPRESSION.equals(propName))
+			setNodeExpression(parser.parse((String)value));
 		if (PROP_DECISION_ID.equals(propName))
 			setDecisionId((Integer)value);
 	}
@@ -82,6 +90,24 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	public void resetPropertyValue(Object propName){
 	}
 	
+	public String getOutlineText() {
+        String expDes;
+        if(getNodeExpression() == null)
+            expDes = "Not specified";
+        else
+            expDes = getNodeExpression().toString();
+
+        
+        String decision;
+        if(getDecisionId() == -1)
+            decision = "No decision";
+        else
+            decision = manager.getDecision(getDecisionId());
+        
+        return "[" + decision + "] " + expDes;
+
+	}
+
 	public String getRawExpression() {
         return rawExpression;
     }
@@ -92,34 +118,11 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 
     public void setNodeExpression(ExpressionDefinition expression) {
 	    this.expression = expression;
-	    listeners.firePropertyChange(PROP_FACTOR_ID, null, factorId);
+	    listeners.firePropertyChange(PROP_EXPRESSION, null, expression);
 	}
 
 	public ExpressionDefinition getNodeExpression() {
 	    return expression;
-	}
-
-	public String getFactorDisplayText() {
-        StringBuffer displayText = new StringBuffer();
-        
-        if(factorId != -1)
-            displayText.append(manager.getFactorName(factorId));
-
-        if(factorField != null)
-            displayText.append(DecisionTreeConstants.FIELD_SEPARATOR).append(factorField);
-        
-        if(functionName != null)
-            displayText = new StringBuffer(String.format("%s(%s)", functionName, displayText.toString()));
-        
-        return displayText.toString();
-	}
-	
-	public int getFactorId() {
-		return factorId;
-	}
-	public void setFactorId(int factorId) {
-		this.factorId = factorId;
-		listeners.firePropertyChange(PROP_FACTOR_ID, null, factorId);
 	}
 	public int getDecisionId() {
 		return decisionId;
@@ -134,20 +137,6 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	public void setDescription(String description) {
 		this.description = description;
 	}
-    public String getFactorField() {
-        return factorField;
-    }
-    public void setFactorField(String factorField) {
-        this.factorField = factorField;
-        listeners.firePropertyChange(PROP_FIELD_NAME, null, factorField);
-    }
-    public String getFunctionName() {
-        return functionName;
-    }
-    public void setFunctionName(String functionName) {
-        this.functionName = functionName;
-        listeners.firePropertyChange(PROP_FUNCTION_NAME, null, functionName);
-    }
 	public Point getLocation() {
 		return location;
 	}

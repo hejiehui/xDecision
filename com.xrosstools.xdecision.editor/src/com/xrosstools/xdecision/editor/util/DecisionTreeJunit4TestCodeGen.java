@@ -59,12 +59,14 @@ public class DecisionTreeJunit4TestCodeGen {
 
             while(node.getInput() != null) {
                 DecisionTreeNode parent = node.getInput().getParent();
-                DecisionTreeFactor factor = model.getFactors()[parent.getFactorId()];
-                String factorValue = factor.getFactorValues()[node.getInput().getValueId()];
                 
-                StringBuilder commnets = new StringBuilder(parent.getFactorDisplayText()).append(hasEvaluator ? " " : " = ").append(factorValue);
+                StringBuilder commnets = new StringBuilder(parent.getNodeExpression().toString())
+                        .append(node.getInput().getOperator().getText())
+                        .append(node.getInput().getExpression());
                 commentsBuf.insert(0, String.format(COMMENTS, commnets.toString()));
-                codeBuf.insert(0, String.format(TEST_ASSIGN, factor.getFactorName(), factorValue));
+
+                //get all factors
+                codeBuf.insert(0, String.format(TEST_ASSIGN, "factor.getFactorName()", ""));
 		        
 		        node = parent;
 		    }

@@ -5,19 +5,26 @@ import java.beans.PropertyChangeSupport;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
+
+import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 
 public class DecisionTreeNodeConnection implements IPropertySource {
 	private int valueId = -1;
+	private OperatorReference operatorRef;
+	private ExpressionReference expressionRef;
 	private DecisionTreeNode parent;
 	private DecisionTreeNode child;
 	
     private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 
-	public static String FACTOR_VALUE = "Factor value";	
+	public static String EXPRESSION = "Expression";	
+	public static String CONDITION = "Condition";
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] descriptors;
 		descriptors = new IPropertyDescriptor[] {
-				new ComboBoxPropertyDescriptor(FACTOR_VALUE, FACTOR_VALUE, parent.getDecisionTreeManager().getFactorValues(parent.getFactorId())),
+		        operatorRef.getPropertyDescriptors()[0],
+		        expressionRef.getPropertyDescriptors()[0],
 			};
 
 		return descriptors;
@@ -27,16 +34,43 @@ public class DecisionTreeNodeConnection implements IPropertySource {
 		return listeners;
 	}
 
-	public Object getPropertyValue(Object propName) {
-		if (FACTOR_VALUE.equals(propName))
-			return new Integer(valueId);
+	public ConditionOperator getOperator() {
+        return operatorRef.getOperator();
+    }
+
+    public void setOperator(ConditionOperator operator) {
+        this.operatorRef.setOperator(operator);
+    }
+
+    public ExpressionReference getExpressionReference() {
+        return expressionRef;
+    }
+
+    public OperatorReference getOperatorReference() {
+        return operatorRef;
+    }
+
+    public void setExpression(ExpressionDefinition expression) {
+        this.expressionRef.setExpression(expression);;
+    }
+
+    public Object getPropertyValue(Object propName) {
+		if (EXPRESSION.equals(propName))
+			return expressionRef.getPropertyValue(propName);
+		
+		if (CONDITION.equals(propName))
+		    return operatorRef.getPropertyValue(propName);
 
 		return null;
 	}
 
 	public void setPropertyValue(Object propName, Object value){
-		if (FACTOR_VALUE.equals(propName))
-			setValueId((Integer)value);
+        if (CONDITION.equals(propName))
+            operatorRef.setPropertyValue(propName, value);
+		if (EXPRESSION.equals(propName))
+			 expressionRef.setPropertyValue(propName, value);
+		
+		listeners.firePropertyChange(EXPRESSION, null, value);
 	}
 	
 	public Object getEditableValue(){
@@ -50,19 +84,23 @@ public class DecisionTreeNodeConnection implements IPropertySource {
 	public void resetPropertyValue(Object propName){
 	}
 	
+
 	public DecisionTreeNodeConnection(DecisionTreeNode parent, DecisionTreeNode child){
 		this.parent = parent;
 		this.child = child;
 		parent.addOutput(this);
 		child.setInput(this);
+		operatorRef = new OperatorReference();
+	    expressionRef = new ExpressionReference(this);
 	}
+
 	public int getValueId() {
 		return valueId;
 	}
 	public void setValueId(int valueId) {
 		int oldValueId = this.valueId;
 		this.valueId = valueId;
-		listeners.firePropertyChange(FACTOR_VALUE, valueId, oldValueId);
+		listeners.firePropertyChange(EXPRESSION, valueId, oldValueId);
 	}
 	public DecisionTreeNode getParent() {
 		return parent;

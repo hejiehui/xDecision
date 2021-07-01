@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.editor.model;
 
 public interface DecisionTreeConstants {
-	String PROP_FACTOR_ID = "Factor";
+	String PROP_EXPRESSION = "Expression";
 	String PROP_FIELD_NAME = "Field name";
 	String PROP_FUNCTION_NAME = "Function name";
 	String PROP_DECISION_ID = "Decion";

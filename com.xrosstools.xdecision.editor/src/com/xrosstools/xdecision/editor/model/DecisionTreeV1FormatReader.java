@@ -10,6 +10,8 @@ import java.util.StringTokenizer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
+
 public class DecisionTreeV1FormatReader {
     public static final String DELIMITER = "|";
     public static final char FACTOR_VALUE_DELIMITER = ':';
@@ -68,7 +70,7 @@ public class DecisionTreeV1FormatReader {
                  parent = roots.get(rootFactor);
              
              for(DecisionTreePathEntry entry: path.getPathEntries()){
-                 parent.setFactorId(entry.getNodeIndex());
+                 parent.setNodeExpression(new VariableExpression(diagram.getFactorById(entry.getNodeIndex()).getFactorName()));
                  DecisionTreeNode child = null;
                  for(DecisionTreeNodeConnection conn: parent.getOutputs()){
                      if(conn.getValueId() != entry.getValueIndex())

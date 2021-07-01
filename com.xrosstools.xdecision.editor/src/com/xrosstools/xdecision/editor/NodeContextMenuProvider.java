@@ -11,6 +11,7 @@ import com.xrosstools.xdecision.editor.commands.expression.ChangeChildCommand;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
+import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 import com.xrosstools.xdecision.editor.parts.DecisionTreeNodePart;
 
@@ -27,7 +28,9 @@ public class NodeContextMenuProvider {
         
         int i = 0;
         for(DecisionTreeFactor factor: diagram.getFactors()) {
-            menu.add(new CommandAction(editor, factor.getFactorName(), node.getFactorId() == i, new ChangeChildCommand(node, node.getNodeExpression(), new VariableExpression(factor.getFactorName()))));
+            ExpressionDefinition exp = node.getNodeExpression();
+            boolean selected = exp != null && exp.toString().equals(factor.getFactorName());
+            menu.add(new CommandAction(editor, factor.getFactorName(), selected, new ChangeChildCommand(node, node.getNodeExpression(), new VariableExpression(factor.getFactorName()))));
         }
 
         menu.add(new Separator());

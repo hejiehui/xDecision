@@ -1,14 +1,26 @@
 package com.xrosstools.xdecision.editor.model;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
+import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 
 public class DecisionTreeManager {
 	private DecisionTreeDiagram diagram;
+	private ExpressionParser parser;
 	public DecisionTreeManager(DecisionTreeDiagram diagram){
 		this.diagram = diagram;
+		parser = new ExpressionParser(this);
 	}
 	
-	public String[] getDecisions(){
+	public ExpressionParser getParser() {
+        return parser;
+    }
+
+    public String[] getDecisions(){
 		return diagram.getDecisions().toArray(new String[diagram.getDecisions().size()]);
 	}
 	
@@ -59,6 +71,27 @@ public class DecisionTreeManager {
 		return getFactor(factorId).getFactorValues();
 	}
 	
+    public Map<String, Set<String>> getExpressionValues(ExpressionDefinition exp){
+        Map<String, Set<String>> choices = new LinkedHashMap<String, Set<String>>();
+        if(exp == null)
+            return choices;
+        
+//        for(DecisionTreeNode node: diagram.getNodes()) {
+//            ExpressionDefinition nodeExp = node.getNodeExpression();
+//            if(nodeExp == null || !nodeExp.toString().equals(exp.toString()))
+//                continue;
+//            
+//            for(DecisionTreeNodeConnection conn: node.getOutputs()) {
+//                choices.put(conn.get, value)
+//            }
+//                
+//        }
+//        
+//        
+//        return getFactor(factorId).getFactorValues();
+        return null;
+    }
+    
 	public String getFactorValue(int factorId, int valueId){
 		return getFactorValues(factorId)[valueId];
 	}
