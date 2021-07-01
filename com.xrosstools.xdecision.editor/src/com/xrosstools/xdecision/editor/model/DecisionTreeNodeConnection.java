@@ -8,11 +8,12 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
+import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 
 public class DecisionTreeNodeConnection implements IPropertySource {
 	private int valueId = -1;
 	private OperatorReference operatorRef;
-	private ExpressionReference expressionRef;
+	private ExpressionDefinition expression;
 	private DecisionTreeNode parent;
 	private DecisionTreeNode child;
 	
@@ -24,7 +25,7 @@ public class DecisionTreeNodeConnection implements IPropertySource {
 		IPropertyDescriptor[] descriptors;
 		descriptors = new IPropertyDescriptor[] {
 		        operatorRef.getPropertyDescriptors()[0],
-		        expressionRef.getPropertyDescriptors()[0],
+		        new TextPropertyDescriptor(EXPRESSION, EXPRESSION)
 			};
 
 		return descriptors;
@@ -42,8 +43,8 @@ public class DecisionTreeNodeConnection implements IPropertySource {
         this.operatorRef.setOperator(operator);
     }
 
-    public ExpressionReference getExpressionReference() {
-        return expressionRef;
+    public ExpressionDefinition getExpression() {
+        return expression;
     }
 
     public OperatorReference getOperatorReference() {
@@ -51,12 +52,14 @@ public class DecisionTreeNodeConnection implements IPropertySource {
     }
 
     public void setExpression(ExpressionDefinition expression) {
-        this.expressionRef.setExpression(expression);;
+        ExpressionDefinition oldExp = this.expression;
+        this.expression = expression;
+        listeners.firePropertyChange(EXPRESSION, expression, oldExp);
     }
 
     public Object getPropertyValue(Object propName) {
 		if (EXPRESSION.equals(propName))
-			return expressionRef.getPropertyValue(propName);
+		    return expression == null ? "":expression.toString();
 		
 		if (CONDITION.equals(propName))
 		    return operatorRef.getPropertyValue(propName);
@@ -68,9 +71,7 @@ public class DecisionTreeNodeConnection implements IPropertySource {
         if (CONDITION.equals(propName))
             operatorRef.setPropertyValue(propName, value);
 		if (EXPRESSION.equals(propName))
-			 expressionRef.setPropertyValue(propName, value);
-		
-		listeners.firePropertyChange(EXPRESSION, null, value);
+		    setExpression(getParent().getParser().parse((String)value));
 	}
 	
 	public Object getEditableValue(){
@@ -91,7 +92,7 @@ public class DecisionTreeNodeConnection implements IPropertySource {
 		parent.addOutput(this);
 		child.setInput(this);
 		operatorRef = new OperatorReference();
-	    expressionRef = new ExpressionReference(this);
+		expression = new PlaceholderExpression();
 	}
 
 	public int getValueId() {

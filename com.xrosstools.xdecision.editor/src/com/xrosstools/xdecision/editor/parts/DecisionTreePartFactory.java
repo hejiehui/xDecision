@@ -43,8 +43,6 @@ public class DecisionTreePartFactory implements EditPartFactory {
             part = new IdentifierExpressionPart();
         else if(model instanceof OperatorReference)
             part = new OperatorReferencePart();
-        else if(model instanceof ExpressionReference)
-            part = new ExpressionReferencePart();
             
 		part.setModel(model);
 		

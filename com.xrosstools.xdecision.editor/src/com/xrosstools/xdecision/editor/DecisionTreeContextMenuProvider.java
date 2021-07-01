@@ -14,6 +14,7 @@ import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.model.XrossEvaluatorConstants;
 import com.xrosstools.xdecision.editor.parts.DecisionTreeNodeConnectionPart;
 import com.xrosstools.xdecision.editor.parts.DecisionTreeNodePart;
+import com.xrosstools.xdecision.editor.parts.OperatorReferencePart;
 import com.xrosstools.xdecision.editor.parts.expression.BaseExpressionPart;
 
 public class DecisionTreeContextMenuProvider extends ContextMenuProvider implements XrossEvaluatorConstants, DecisionTreeMessages {
@@ -23,6 +24,7 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
 	private ExpressionContextMenuProvider expMenuProvider;
 	private FactorContextMenuProvider fcatorMenuProvider;
 	private UserDefinedTypeContextMenuProvider udfMenuProvider;
+	private ConditionOperatorContextMenuProvider conditionMenuProvider;
     public DecisionTreeContextMenuProvider(EditPartViewer viewer, ActionRegistry registry, DecisionTreeDiagramEditor editor) {
         super(viewer);
         actionRegistry = registry;
@@ -31,6 +33,7 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
         connMenuProvider = new ConnectionContextMenuProvider(editor);
         fcatorMenuProvider = new FactorContextMenuProvider(editor);
         udfMenuProvider = new UserDefinedTypeContextMenuProvider(editor);
+        conditionMenuProvider = new ConditionOperatorContextMenuProvider(editor);
     }
 
     public void buildContextMenu(IMenuManager menu) {
@@ -44,7 +47,10 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
                 nodeMenuProvider.buildContextMenu(menu, (DecisionTreeNodePart)model);
             }else if(model instanceof BaseExpressionPart ) {
                 expMenuProvider.buildContextMenu(menu, (BaseExpressionPart)model);
+            }else if(model instanceof OperatorReferencePart ) {
+                conditionMenuProvider.buildContextMenu(menu, (OperatorReferencePart)model);
             }
+            
             return;
         }
         

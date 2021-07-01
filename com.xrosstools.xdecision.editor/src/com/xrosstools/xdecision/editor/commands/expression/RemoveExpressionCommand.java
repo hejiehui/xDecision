@@ -4,6 +4,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
+import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.editor.model.expression.CompositeExpression;
 import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
@@ -48,6 +49,11 @@ public class RemoveExpressionCommand extends Command{
         
         if(parentModel instanceof DecisionTreeNode) {
             ((DecisionTreeNode)parentModel).setNodeExpression(null);
+            return;
+        }
+        
+        if(parentModel instanceof DecisionTreeNodeConnection) {
+            ((DecisionTreeNodeConnection)parentModel).setExpression(null);
             return;
         }
         

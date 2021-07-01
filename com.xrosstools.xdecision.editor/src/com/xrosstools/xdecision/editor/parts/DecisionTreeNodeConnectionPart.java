@@ -11,9 +11,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.MidpointLocator;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -23,11 +20,8 @@ import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 
 import com.xrosstools.xdecision.editor.figures.BranchConditionFigure;
-import com.xrosstools.xdecision.editor.figures.DecisionTreeNodeFigure;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
-import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
-import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeConnectionEditPolicy;
 
 public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart implements PropertyChangeListener{
@@ -37,8 +31,7 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
     protected List getModelChildren() {
         List children = new ArrayList();
         DecisionTreeNodeConnection nodeConn = (DecisionTreeNodeConnection)getModel();
-        if(nodeConn.getExpressionReference().getExpression() != null)
-            children.add(nodeConn.getExpressionReference().getExpression());
+        children.add(nodeConn.getExpression());
         children.add(nodeConn.getOperatorReference());
         return children;
     }
