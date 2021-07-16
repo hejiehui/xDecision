@@ -25,7 +25,7 @@ import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeConnectionEditPolicy;
 
 public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart implements PropertyChangeListener{
-    private PolylineConnection conn = new PolylineConnection();
+    private PolylineConnection conn;
 	private BranchConditionFigure condition;
 	
     protected List getModelChildren() {
@@ -39,9 +39,18 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
     protected void addChildVisual(EditPart childEditPart, int index) {
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
         if(childEditPart instanceof OperatorReferencePart)
-            condition.setOperatorFigure(childFigure);
+            condition.addOperatorFigure(childFigure);
         else //if(childEditPart instanceof ExpressionReferencePart)
-            condition.setExpressionFigure(childFigure);
+            condition.addExpressionFigure(childFigure);
+    }
+    
+    public IFigure getContentPane() {
+        return condition;
+    }
+    
+    protected void removeChildVisual(EditPart childEditPart) {
+//        IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
+//        condition.remove(childFigure);
     }
     
     protected IFigure createFigure() {

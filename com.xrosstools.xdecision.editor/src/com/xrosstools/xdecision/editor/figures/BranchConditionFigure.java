@@ -11,6 +11,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 public class BranchConditionFigure extends Figure {
     private IFigure operatorFigure;
     private IFigure expressionFigure;
+    private Figure widthLine;
     private BorderLayout layout= new BorderLayout();
 
     public BranchConditionFigure() {
@@ -18,28 +19,49 @@ public class BranchConditionFigure extends Figure {
         setLayoutManager(layout);
         this.setBorder(new MarginBorder(5));
         
-        Figure widthLine = new Figure();
+        widthLine = new Figure();
         widthLine.setPreferredSize(new Dimension(10, 10));
         widthLine.setForegroundColor(ColorConstants.black);
         add(widthLine);
         layout.setConstraint(widthLine, PositionConstants.CENTER);
     }
 
-    public void setExpressionFigure(IFigure expressionFigure) {
+    //first add then remove will be called
+    public void addExpressionFigure(IFigure expressionFigure) {
         if(this.expressionFigure != null)
             remove(this.expressionFigure);
+
         this.expressionFigure = expressionFigure;
+
+        if(expressionFigure == null)
+            return;
+
         add(expressionFigure);
-        layout.setConstraint(expressionFigure, PositionConstants.RIGHT);
-        repaint();
+        setConstraint(expressionFigure, PositionConstants.RIGHT);
+//        repaint();
     }
 
-    public void setOperatorFigure(IFigure operatorFigure) {
+    public void setConstraint(IFigure child, Object constraint) {
+        if(child == operatorFigure)
+            layout.setConstraint(child, PositionConstants.LEFT);
+        else if(child == expressionFigure)
+            layout.setConstraint(child, PositionConstants.RIGHT);
+        else
+            layout.setConstraint(child, PositionConstants.CENTER);
+    }
+
+    //first add then remove will be called
+    public void addOperatorFigure(IFigure operatorFigure) {
         if(this.operatorFigure != null)
             remove(this.operatorFigure);
+        
         this.operatorFigure = operatorFigure;
+
+        if(operatorFigure == null)
+            return;
+
         add(operatorFigure);
-        layout.setConstraint(operatorFigure, PositionConstants.LEFT);
-        repaint();
+        setConstraint(operatorFigure, PositionConstants.LEFT);
+//        repaint();
     }
 }
