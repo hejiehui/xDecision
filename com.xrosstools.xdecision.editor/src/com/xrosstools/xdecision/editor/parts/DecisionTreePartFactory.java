@@ -6,7 +6,6 @@ import org.eclipse.gef.EditPartFactory;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
-import com.xrosstools.xdecision.editor.model.ExpressionReference;
 import com.xrosstools.xdecision.editor.model.OperatorReference;
 import com.xrosstools.xdecision.editor.model.expression.BasicExpression;
 import com.xrosstools.xdecision.editor.model.expression.CompositeExpression;
