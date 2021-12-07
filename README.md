@@ -1,7 +1,7 @@
 xDecision
 =========
 
-A decision tree editor and runtime engine
+A decision tree editor and runtime engine.
 
 # 什么是decision tree
 ### 商业智能领域常用的决策工具
