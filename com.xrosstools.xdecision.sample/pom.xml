@@ -6,7 +6,7 @@
 	<version>0.0.1-SNAPSHOT</version>
     <properties>
         <file_encoding>UTF-8</file_encoding>
-        <aviator-version>4.2.8</aviator-version>
+        <aviator-version>5.2.7</aviator-version>
     </properties>
 	<dependencies>
 		<dependency>
