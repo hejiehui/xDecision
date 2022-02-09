@@ -1,0 +1,57 @@
+package com.xrosstools.xdecision.editor.model;
+
+import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+public class DataTypeArray extends DataType {
+    private static final String LENGTH = "length";
+
+    private DataType valueType = DataType.STRING_TYPE;
+    private String propertyType;
+    private FieldDefinition length;
+    
+    public DataTypeArray() {
+        super(DataTypeEnum.ARRAY);
+        propertyType = String.format(PROP_VALUE_TYPE_TPL, getType().getName());
+        length = new FieldDefinition(LENGTH, DataType.NUMBER_TYPE);
+        add(length);
+    }
+    
+    @Override
+    public String toString() {
+        return valueType.toString() + "[]";
+    }
+
+    public DataType getValueType() {
+        return valueType;
+    }
+
+    public void setValueType(DataType valueType) {
+        this.valueType = valueType;
+        length.setType(valueType);
+        firePropertyChange(propertyType, null,  valueType);
+    }
+    
+    public boolean isConcernedProperty(Object propName) {
+        return propName == propertyType;
+    }
+
+    @Override
+    public IPropertyDescriptor[] getPropertyDescriptors() {
+        //TODO add user defined types
+        return new IPropertyDescriptor[] {new ComboBoxPropertyDescriptor(propertyType, propertyType, DataTypeEnum.getValueTypeNames())};
+    }
+    
+    public Object getPropertyValue(Object propName) {
+        if (propertyType.equals(propName))
+            return valueType.getType().ordinal();
+
+        return super.getPropertyValue(propName);
+    }
+    
+
+    public void setPropertyValue(Object propName, Object value){
+        if (propertyType.equals(propName))
+            setValueType(DataTypeEnum.values()[(Integer)value].createDataType());
+    }
+}

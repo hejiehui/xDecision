@@ -13,6 +13,8 @@ import org.w3c.dom.Node;
 import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 
 public class DecisionTreeV1FormatReader {
+    private static final String INDEX = "index";
+
     public static final String DELIMITER = "|";
     public static final char FACTOR_VALUE_DELIMITER = ':';
     public static final String PATHS = "paths";
@@ -32,7 +34,7 @@ public class DecisionTreeV1FormatReader {
         List<Node> pathNodes = getValidChildNodes(doc.getElementsByTagName(PATHS).item(0));
         DecisionTreePath[] paths = new DecisionTreePath[pathNodes.size()];
         for(int i = 0; i < paths.length; i++){
-            paths[i] = getDecisionTreePath(pathNodes.get(i).getTextContent(), DecisionTreeXMLSerializer.getIntAttribute(pathNodes.get(i), DecisionTreeXMLSerializer.INDEX));
+            paths[i] = getDecisionTreePath(pathNodes.get(i).getTextContent(), DecisionTreeXMLSerializer.getIntAttribute(pathNodes.get(i), INDEX));
         }
         return paths;
     }

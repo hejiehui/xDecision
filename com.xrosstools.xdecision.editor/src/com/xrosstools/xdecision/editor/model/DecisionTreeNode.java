@@ -15,7 +15,7 @@ import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 
-public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource {
+public class DecisionTreeNode implements PropertyConstants, IPropertySource {
     private ExpressionParser parser;
     private ExpressionDefinition expression = new PlaceholderExpression();
     private String rawExpression;
@@ -58,7 +58,7 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 		IPropertyDescriptor[] descriptors;
 		descriptors = new IPropertyDescriptor[] {
 				new TextPropertyDescriptor(PROP_EXPRESSION, PROP_EXPRESSION),
-				new ComboBoxPropertyDescriptor(PROP_DECISION_ID, PROP_DECISION_ID, manager.getDecisions()),
+				new ComboBoxPropertyDescriptor(PROP_DECISION_ID, PROP_DECISION_ID, manager.getDecisions().getElementNames()),
 			};
 		return descriptors;
 	}
@@ -102,7 +102,7 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
         if(getDecisionId() == -1)
             decision = "No decision";
         else
-            decision = manager.getDecision(getDecisionId());
+            decision = manager.getDecision(getDecisionId()).getName();
         
         return "[" + decision + "] " + expDes;
 

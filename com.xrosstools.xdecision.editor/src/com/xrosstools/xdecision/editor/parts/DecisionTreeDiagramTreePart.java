@@ -1,18 +1,27 @@
 package com.xrosstools.xdecision.editor.parts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
 
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
-import com.xrosstools.xdecision.editor.model.DecisionTreeRoot;
 
 public class DecisionTreeDiagramTreePart extends AbstractTreeEditPart {
+    private DecisionTreeDiagram diagram;
     public DecisionTreeDiagramTreePart(Object model) {
         super(model);
+        diagram = (DecisionTreeDiagram)model;
      }
 
-    protected List<DecisionTreeRoot> getModelChildren() {
-    	return ((DecisionTreeDiagram)getModel()).getRoots();
+    protected List<?> getModelChildren() {
+        List children = new ArrayList();
+        children.addAll(diagram.getRoots());
+        children.add(diagram.getAllFactors());
+        children.add(diagram.getDecisions());
+        children.add(diagram.getAllUserDefinedTypes());
+        children.add(diagram.getUserDefinedConstants());
+        
+    	return children;
     }
 }

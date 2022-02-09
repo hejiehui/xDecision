@@ -7,7 +7,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-
+@Deprecated
 public class DecisionTreeDiagramPropertySource implements IPropertySource {
 	public static final String NAME = "Name";
 	public static final String VALUE_ = "Value ";
@@ -129,7 +129,7 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 
 		if(prop.startsWith(DECISION)){
 			int index = Integer.parseInt(prop.substring(prop.indexOf(SPACE) + 1));
-			diagram.getDecisions().set(index, value);
+			diagram.getDecisions().get(index).setName(value);
 		}
 	}
 	

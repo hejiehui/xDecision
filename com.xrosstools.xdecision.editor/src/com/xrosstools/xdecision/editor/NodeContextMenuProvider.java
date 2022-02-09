@@ -40,7 +40,7 @@ public class NodeContextMenuProvider {
         
         menu.add(new Separator());
         i = 0;
-        for(String decision: diagram.getDecisions()) {
+        for(String decision: diagram.getDecisions().getElementNames()) {
             menu.add(new CommandAction(editor, decision, node.getDecisionId() == i, new ChangeDecisionCommand(node, i++)));
         }
         

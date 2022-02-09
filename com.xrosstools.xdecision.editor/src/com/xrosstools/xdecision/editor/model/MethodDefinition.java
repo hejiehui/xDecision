@@ -1,46 +1,43 @@
 package com.xrosstools.xdecision.editor.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MethodDefinition extends FieldDefinition {
-    private List<FieldDefinition> parameters = new ArrayList<FieldDefinition>();
-    //For temp use
-    private String hints;
+import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
+
+public class MethodDefinition extends NamedType implements DecisionTreeMessages {
+    private NamedElementContainer<FieldDefinition> parameters = new NamedElementContainer<FieldDefinition>(PARAMETERS_MSG, NamedElementTypeEnum.PARTAMETER);
     
-    public MethodDefinition() {}
-    
-    public MethodDefinition(String name, String label, String returnType, List<FieldDefinition> parameters) {
-        setName(name);
-        setLabel(label);
-        setTypeName(returnType);
-        this.parameters = parameters;
+    public MethodDefinition() {
+        super(NamedElementTypeEnum.METHOD);
     }
     
-    public MethodDefinition(String name, String label, String returnType, String hints) {
-        this(name, label, returnType, new ArrayList<FieldDefinition>());
-        this.hints = hints;
+    public MethodDefinition(String name, DataType returnType) {
+        super(name, NamedElementTypeEnum.METHOD, returnType);
     }
-    public List<FieldDefinition> getParameters() {
+    public MethodDefinition(String name, DataType returnType, List<FieldDefinition> parameters) {
+        this(name, returnType);
+        this.parameters.setElements(parameters);
+    }
+    public MethodDefinition(String name, DataType returnType, List<FieldDefinition> parameters, String label) {
+        this(name, returnType, parameters);
+    }
+    public NamedElementContainer<FieldDefinition> getParameters() {
         return parameters;
     }
-    public void setParameters(List<FieldDefinition> parameters) {
-        this.parameters = parameters;
+    
+    public FieldDefinition findParameterByName(String name) {
+        return (FieldDefinition)parameters.findByName(name);
     }
-    public String getHints() {
-        return hints;
-    }
-    public void setHints(String hints) {
-        this.hints = hints;
-    }    
+
     @Override
-    public String getIdentifier() {
+    public String toString() {
         StringBuilder psb = new StringBuilder();
-        for(FieldDefinition p: parameters) {
-            //Fix this
-            psb.append(p.getName());
-            psb.append(", ");
+        String[] names = parameters.getElementNames();
+        for (int i = 0; i < names.length; i++) {
+            psb.append(names[i]);
+            if(i < names.length-1)
+                psb.append(", ");
         }
-        return getName() + "(" + psb + ")";
+        return getName() + "(" + psb + ")" +  ": " + (getType() != null ? getType().toString() : "-");
     }
 }

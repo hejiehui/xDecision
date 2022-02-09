@@ -1,7 +1,11 @@
 package com.xrosstools.xdecision.editor.model;
 
-public class DecisionTreeFactor extends FieldDefinition {
-	private String[] factorValues = new String[0];
+//TODO remove all values
+public class DecisionTreeFactor extends NamedType {
+	public DecisionTreeFactor() {
+        super(NamedElementTypeEnum.FACTOR);
+    }
+    private String[] factorValues = new String[0];
 	
     public String getFactorName() {
 		return getName();

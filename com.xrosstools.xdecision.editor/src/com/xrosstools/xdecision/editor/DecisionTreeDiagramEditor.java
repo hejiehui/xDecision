@@ -168,7 +168,7 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
 
     public Object getAdapter(Class type) {
         if (type == IContentOutlinePage.class)
-            return new OutlinePage();
+            return new OutlinePage(this);
         return super.getAdapter(type);
     }
 
@@ -215,9 +215,11 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
 
     private class OutlinePage extends ContentOutlinePage {
         private SashForm sash;
-
-        public OutlinePage() {
+        private DecisionTreeDiagramEditor editor;
+        
+        public OutlinePage(DecisionTreeDiagramEditor editor) {
             super(new TreeViewer());
+            this.editor = editor;
         }
         public void createControl(Composite parent) {
             sash = new SashForm(parent, SWT.VERTICAL);
@@ -227,6 +229,7 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
             getViewer().setEditDomain(getEditDomain());
             getViewer().setEditPartFactory(new DecisionTreeTreePartFactory());
             getViewer().setContents(diagram);
+            getViewer().setContextMenu(new DecisionTreeOutlineContextMenuProvider(getViewer(), editor));
 
             Canvas canvas = new Canvas(sash, SWT.BORDER);
             sash.setWeights(new int[]{3, 1});

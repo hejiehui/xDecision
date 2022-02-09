@@ -6,7 +6,7 @@ public class DecisionTreeModel {
 	private String parserClass;
 	private String evaluatorClass;
 
-	private String[] decisions;
+	private DecisionTreeDecision[] decisions;
 	private DecisionTreeFactor[] factors;
 	private DataType[] types;
 	private DecisionTreeNode[] nodes;
@@ -32,10 +32,10 @@ public class DecisionTreeModel {
     public void setEvaluatorClass(String evaluatorClass) {
         this.evaluatorClass = evaluatorClass;
     }
-    public String[] getDecisions() {
+    public DecisionTreeDecision[] getDecisions() {
 		return decisions;
 	}
-	public void setDecisions(String[] decisions) {
+	public void setDecisions(DecisionTreeDecision[] decisions) {
 		this.decisions = decisions;
 	}
 	public DecisionTreeFactor[] getFactors() {

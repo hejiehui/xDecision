@@ -1,19 +1,18 @@
 package com.xrosstools.xdecision.editor.commands;
 
-import java.util.List;
-
 import org.eclipse.gef.commands.Command;
 
-import com.xrosstools.xdecision.editor.model.FieldDefinition;
+import com.xrosstools.xdecision.editor.model.NamedElement;
+import com.xrosstools.xdecision.editor.model.NamedElementContainer;
 
 public class DeleteElementCommand extends Command{
-    private List elements;
-    private FieldDefinition element;
+    private NamedElementContainer<NamedElement> container;
+    private NamedElement element;
     
     public DeleteElementCommand(
-            List elements,
-            FieldDefinition element){
-        this.elements = elements;
+            NamedElementContainer<NamedElement> container,
+            NamedElement element){
+        this.container = container;
         this.element = element;
     }
     
@@ -22,14 +21,14 @@ public class DeleteElementCommand extends Command{
     }
 
     public String getLabel() {
-        return "Delete field";
+        return "Delete element";
     }
 
     public void redo() {
-        elements.remove(element);
+        container.remove(element);
     }
 
     public void undo() {
-        elements.add(element);
+        container.add(element);
     }
 }

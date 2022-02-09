@@ -1,69 +1,84 @@
 package com.xrosstools.xdecision.editor.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
+import static java.util.Arrays.asList;
+
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-public class DataType {
-    public static final String STRING = "String"; 
-    public static final String NUMBER = "Number";
-    public static final String BOOLEAN = "Boolean";
-    public static final String DATE = "Date";
-    public static final String LIST = "List";
-    public static final String SET = "Set";
-    public static final String MAP = "Map";
-    public static final String ENUM = "Enum";
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
+import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
+
+public class DataType extends NamedElement implements DecisionTreeMessages {
+    public static final DataType STRING_TYPE = new DataType(DataTypeEnum.STRING); 
+    public static final DataType NUMBER_TYPE = new DataType(DataTypeEnum.NUMBER);
+    public static final DataType BOOLEAN_TYPE = new DataType(DataTypeEnum.BOOLEAN);
+    public static final DataType DATE_TYPE = new DataType(DataTypeEnum.DATE);
     
-    private static final Map<String, DataType> PREDEFINED_TYPES = new LinkedHashMap<String, DataType>();
-
-    private static final FieldDefinition[] NO_FIELD = new FieldDefinition[0];
-    private static final MethodDefinition[] NO_METHOD = new MethodDefinition[0];
-
-    private String name;
+    public static final List<DataType> PREDEFINED_TYPES = Collections.unmodifiableList(asList(STRING_TYPE, NUMBER_TYPE, BOOLEAN_TYPE, DATE_TYPE));
+    
+    
+    private DataTypeEnum metaType;
     private String label;
-    private List<FieldDefinition> fields = new ArrayList<FieldDefinition>();
-    private List<MethodDefinition> methods = new ArrayList<MethodDefinition>();
+    private NamedElementContainer<FieldDefinition> fields = new NamedElementContainer<FieldDefinition>(FIELDS_MSG, NamedElementTypeEnum.FIELD);
+    private NamedElementContainer<MethodDefinition> methods = new NamedElementContainer<MethodDefinition>(METHODS_MSG, NamedElementTypeEnum.METHOD);
+
+    
+    //For map, we only support Integer and String as key type for now
+    private DataType keyType;
+    private DataType valueType;
     
     public static final DataType NOT_MATCHED = new DataType("Not Matched!"); 
     
-    static {
-        reg(STRING, NO_FIELD, new MethodDefinition[]{
-                staticMtd("valueOf", STRING),
-                mtd("length", NUMBER),
-        });
-
-        reg(NUMBER, NO_FIELD, new MethodDefinition[]{
-                staticMtd("valueOf", NUMBER),
-                mtd("abs", NUMBER),
-        });
-
-        reg(BOOLEAN, NO_FIELD, new MethodDefinition[]{
-                staticMtd("valueOf", BOOLEAN),
-        });
-        
-        reg(DATE, NO_FIELD, new MethodDefinition[]{
-                staticMtd("valueOf", DATE),
-        });
-        
-        reg(ENUM, NO_FIELD, NO_METHOD);        
+    public static DataType createEnumType(String name) {
+        return new UserDefinedEnum(name);
     }
     
-    private static void reg(String name, FieldDefinition[] fields, MethodDefinition[] methods) {
-        DataType type = new DataType(name);
-        type.fields = Arrays.asList(fields);
-        type.methods = Arrays.asList(methods);
-        PREDEFINED_TYPES.put(name, type);
+//    public static DataType createSetType(DataType elementType) {
+//        DataType setType = new DataType(String.format("Set<%s>", elementType.getName()));
+//        setType.setValueType(elementType);
+//        
+//        setType.getMethods().addAll(getCommonMethod(elementType));
+//        
+//        setType.add(new MethodDefinition("contains", BOOLEAN_TYPE, asList(new FieldDefinition("value", elementType))));
+//        setType.add(new MethodDefinition("containsAll", BOOLEAN_TYPE, asList(new FieldDefinition("value", setType))));
+//
+//        return setType;
+//    }
+//    
+//    public static DataType createMapType(DataType keyType, DataType valueType) {
+//        DataType mapType = new DataType(String.format("Set<%s>", valueType.getName()));
+//        mapType.setKeyType(keyType);
+//        mapType.setValueType(valueType);
+//        
+//        mapType.getMethods().addAll(getCommonMethod(valueType));
+//        
+//        mapType.add(new MethodDefinition("containsKey", BOOLEAN_TYPE, asList(new FieldDefinition("value", keyType))));
+//        mapType.add(new MethodDefinition("containsValue", BOOLEAN_TYPE, asList(new FieldDefinition("value", valueType))));
+//        mapType.add(new MethodDefinition("containsAll", BOOLEAN_TYPE, asList(new FieldDefinition("value", mapType))));
+//        mapType.add(new MethodDefinition("get", valueType, asList(new FieldDefinition("value", keyType))));
+//
+//        return mapType;
+//    }
+    
+    public DataType(DataTypeEnum metaType) {
+        super(metaType.getName(), NamedElementTypeEnum.DATA_TYPE);
+        this.metaType = metaType;
     }
 
     public DataType(String name) {
-        this.name = name;
+        super(name, NamedElementTypeEnum.DATA_TYPE);
     }
     
-    protected void init() {}
-
+    public boolean isConcernedProperty(Object propName) {
+        return false;
+    }
+    
+    @Override
+    public IPropertyDescriptor[] getPropertyDescriptors() {
+        return DataTypeEnum.isPredefined(metaType) ? NONE : super.getPropertyDescriptors();
+    }
+    
     protected void add(MethodDefinition method) {
         methods.add(method);
     }
@@ -71,103 +86,50 @@ public class DataType {
     protected void add(FieldDefinition field) {
         fields.add(field);
     }
-    
-    public static boolean isCustomized(String typeName) {
-        return PREDEFINED_TYPES.containsKey(typeName);
-    }
-    
-    public static Set<String> getPredefinedTypeNames() {
-        return PREDEFINED_TYPES.keySet();
-    }
-    
-    public static DataType getPredefinedType(String name) {
-        DataType type = PREDEFINED_TYPES.get(name);
-        if(type != null)
-            return type;
 
-        if(name.startsWith(LIST))
-            return CollectionType.parseList(name);
-        
-        if(name.startsWith(SET))
-            return CollectionType.parseSet(name);
-        
-//        if(name.startsWith(MAP))
-//            return MapType.
-        
-        return NOT_MATCHED;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
     public String getLabel() {
         return label;
     }
     public void setLabel(String label) {
         this.label = label;
-    }
-    
-    public boolean matches(String typeName) {
-        return name.equals(typeName);
+        firePropertyChange(PROP_LABEL, null, label);
     }
 
-    public boolean isCompositeType() {
-        return false;
+    public DataTypeEnum getType() {
+        return metaType;
     }
 
-    public String getKeyType(String typeName) {
-        return null;
+    public DataType getKeyType() {
+        return keyType;
     }
 
-    public String getValueType(String typeName) {
-        return null;
+    public void setKeyType(DataType keyType) {
+        this.keyType = keyType;
+        firePropertyChange(PROP_KEY_TYPE, null, keyType);
     }
 
-    public List<FieldDefinition> getFields() {
+    public DataType getValueType() {
+        return valueType;
+    }
+
+    public void setValueType(DataType valueType) {
+        this.valueType = valueType;
+        firePropertyChange(PROP_VALUE_TYPE, null, valueType);
+    }
+
+    public NamedElementContainer<FieldDefinition> getFields() {
         return fields;
     }
-    public void setFields(List<FieldDefinition> fields) {
-        this.fields = fields;
-    }
 
-    public List<MethodDefinition> getMethods() {
+    public NamedElementContainer<MethodDefinition> getMethods() {
         return methods;
     }
 
-    public void setMethods(List<MethodDefinition> methods) {
-        this.methods = methods;
-    }
-
     public FieldDefinition findField(String fieldName) {
-        for(FieldDefinition f: fields) {
-            if(f.getName().equals(fieldName))
-                return f;
-        }
-        return null;
+        return (FieldDefinition)fields.findByName(fieldName);
     }
 
     public MethodDefinition findMethod(String methodName) {
-        for(MethodDefinition f: methods) {
-            if(f.getName().equals(methodName))
-                return f;
-        }
-        return null;
-    }
-    
-    public static MethodDefinition mtd(String name, String returnType) {
-        return md(name, returnType, null, false);
-    }
-
-    public static MethodDefinition staticMtd(String name, String returnType) {
-        return md(name, returnType, null, true);
-    }
-
-    public static MethodDefinition md(String name, String returnType, String hints, boolean isStatic) {
-        MethodDefinition md = new MethodDefinition(name, "", returnType, hints);
-        md.setStatic(isStatic);
-        return md;
+        return (MethodDefinition)methods.findByName(methodName);
     }
 }

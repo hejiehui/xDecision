@@ -15,6 +15,8 @@ import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.editor.model.XrossEvaluatorConstants;
 import com.xrosstools.xdecision.editor.parts.DecisionTreeNodeConnectionPart;
 
+// TODO this context menu provider can be removed
+@Deprecated
 public class ConnectionContextMenuProvider implements XrossEvaluatorConstants {
     private DecisionTreeDiagramEditor editor;
     

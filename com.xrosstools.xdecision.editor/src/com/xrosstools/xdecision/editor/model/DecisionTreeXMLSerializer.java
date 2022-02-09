@@ -13,57 +13,57 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class DecisionTreeXMLSerializer {
-	public static final String DECISION_TREE = "decision_tree";
+	private static final String DECISION_TREE = "decision_tree";
 	
-	public static final String COMMENTS = "comments";
-    public static final String PARSER = "parser";
-    public static final String EVALUATOR = "evaluator";
+	private static final String COMMENTS = "comments";
+    private static final String PARSER = "parser";
+    private static final String EVALUATOR = "evaluator";
 
-	public static final String FACTORS = "factors";
-	public static final String FACTOR = "factor";
-	public static final String VALUE = "value";
+	private static final String FACTORS = "factors";
+	private static final String FACTOR = "factor";
+	private static final String VALUE = "value";
 		
-	public static final String DECISIONS = "decisions";
-	public static final String DECISION = "decision";
+	private static final String DECISIONS = "decisions";
+	private static final String DECISION = "decision";
 	
-	public static final String USER_DEFINED_TYPES = "user_defined_types";
-	public static final String USER_DEFINED_TYPE = "user_defined_type";
+	private static final String USER_DEFINED_TYPES = "user_defined_types";
+	private static final String USER_DEFINED_TYPE = "user_defined_type";
 	
-    public static final String NAME = "name";
-    public static final String LABEL = "label";
-    public static final String TYPE = "type";
-    public static final String TYPE_NAME = "type_name";
+    private static final String NAME = "name";
+    private static final String LABEL = "label";
+    private static final String TYPE = "type";
+    private static final String TYPE_NAME = "type_name";
     
-    public static final String FIELDS = "fields";
-    public static final String FIELD = "field";
+    private static final String FIELDS = "fields";
+    private static final String FIELD = "field";
 
-    public static final String METHODS = "methods";
-    public static final String METHOD = "method";
+    private static final String METHODS = "methods";
+    private static final String METHOD = "method";
     
-    public static final String PARAMETERS = "parameters";
-    public static final String PARAMETER = "parameter";
+    private static final String PARAMETERS = "parameters";
+    private static final String PARAMETER = "parameter";
     
-    public static final String NODES = "nodes";
-	public static final String NODE = "node";
-	public static final String FACTOR_INDEX = "factor_index";
-	public static final String DECISION_INDEX = "decision_index";
-	public static final String FACTOR_FIELD = "factor_field";
-	public static final String FUNCTION_NAME = "function_name";
-	public static final String VALUE_INDEX = "value_index";
-	public static final String EXPRESSION = "expression";
+    private static final String NODES = "nodes";
+	private static final String NODE = "node";
+	private static final String FACTOR_INDEX = "factor_index";
+	private static final String DECISION_INDEX = "decision_index";
+	private static final String FACTOR_FIELD = "factor_field";
+	private static final String FUNCTION_NAME = "function_name";
+	private static final String VALUE_INDEX = "value_index";
+	private static final String EXPRESSION = "expression";
 
-	public static final String PATH = "path";
-	public static final String NODE_INDEX = "node_index";
+	private static final String PATH = "path";
+	private static final String NODE_INDEX = "node_index";
 	
-	public static final String ID = "id";
-	public static final String INDEX = "index";
+	private static final String ID = "id";
+	private static final String INDEX = "index";
 
 	
-	public static final String TOTAL_FACTOR_NUMBER = "total_factor_num";
-	public static final String TOTAL_DECISION_NUMBER = "total_decision_num";
-	public static final String TOTAL_PATH_NUMBER = "total_path_num";
+	private static final String TOTAL_FACTOR_NUMBER = "total_factor_num";
+	private static final String TOTAL_DECISION_NUMBER = "total_decision_num";
+	private static final String TOTAL_PATH_NUMBER = "total_path_num";
 	
-	public static final String _DECISION = "_decision";
+	private static final String _DECISION = "_decision";
 
 	
 	public DecisionTreeModel readMode(Document doc) {
@@ -71,17 +71,18 @@ public class DecisionTreeXMLSerializer {
 		model.setComments(getNodeValue(doc, COMMENTS, ""));
 		model.setParserClass(getNodeValue(doc, PARSER, ""));
 		model.setEvaluatorClass(getNodeValue(doc, EVALUATOR, ""));
-		model.setFactors(createFactors(doc));
-		model.setDecisions(createDecisions(doc));
 		
 		if(DecisionTreeV1FormatReader.isV1Format(doc))
 		    model.setPathes(DecisionTreeV1FormatReader.createPaths(doc));
 		else {
-		    model.setTypes(createTypes(doc));
+		    model.setTypes(createTypes(doc, model));
 		    model.setNodes(createNodes(doc));
 		}
 		
-		return model;
+        model.setFactors(createFactors(doc, model));
+        model.setDecisions(createDecisions(doc));
+
+        return model;
 	}
 	
 	private String getNodeValue(Document doc, String nodeName, String defaultValue){
@@ -90,43 +91,45 @@ public class DecisionTreeXMLSerializer {
 		return doc.getElementsByTagName(nodeName).item(0).getTextContent();
 	}
 
-	private DataType[] createTypes(Document doc) {
+	private DataType[] createTypes(Document doc, DecisionTreeModel model) {
 	    if(doc.getElementsByTagName(USER_DEFINED_TYPES).item(0) == null)
 	        return new DataType[0];
 
 	    List<Node> typeNodes = getValidChildNodes(doc.getElementsByTagName(USER_DEFINED_TYPES).item(0));
         
 	    DataType[] types = new DataType[typeNodes.size()];
+	    //First init all DataTypes in case they refer to each other
         for(int i = 0; i < types.length; i++){
             Node typeNode = typeNodes.get(i);
             DataType type = new DataType(getAttribute(typeNode, NAME));
             
             type.setLabel(getAttribute(typeNode, LABEL));
             types[getIntAttribute(typeNode, INDEX)] = type;
-            
+        }
+
+        for(int i = 0; i < types.length; i++){
+            Node typeNode = typeNodes.get(i);
+            DataType type = types[getIntAttribute(typeNode, INDEX)];
+
             List<Node> valueNodes = getValidChildNodes(typeNode);
-            List<FieldDefinition> fields = new ArrayList<FieldDefinition>();
-            type.setFields(fields);
-            List<MethodDefinition> methods = new ArrayList<MethodDefinition>();
-            type.setMethods(methods);
             
             for(int j = 0; j < valueNodes.size(); j++){
                 Node node = valueNodes.get(j);
                 if(node.getNodeName().equals(FIELD)) {
                     FieldDefinition field = new FieldDefinition();
-                    readType(node, field);
-                    fields.add(field);
+                    readType(node, field, types);
+                    type.getFields().add(field);
                 }else {
                     //Methods
                     MethodDefinition method = new MethodDefinition();
-                    readType(node, method);
+                    readType(node, method, types);
                     for(Node paramNode: getValidChildNodes(node)) {
                         FieldDefinition param = new FieldDefinition();
-                        readType(paramNode, param);
+                        readType(paramNode, param, types);
                         method.getParameters().add(param);
                     }
                     
-                    methods.add(method);                    
+                    type.getMethods().add(method);                    
                 }
             }
         }
@@ -134,13 +137,28 @@ public class DecisionTreeXMLSerializer {
         return types;    
 	}
 
-    private void readType(Node typeNode, FieldDefinition field) {
+    private void readType(Node typeNode, NamedType field, DataType[] types) {
         field.setName(getAttribute(typeNode, NAME));
-        field.setLabel(getAttribute(typeNode, LABEL));
-        field.setTypeName(getAttribute(typeNode, TYPE));
+        //remove lable for now
+//        field.setLabel(getAttribute(typeNode, LABEL));
+        field.setType(findType(types, getAttribute(typeNode, TYPE)));
+    }
+    
+    public DataType findType(DataType[] types, String typeName) {
+        for(DataType type: DataType.PREDEFINED_TYPES)
+            if(type.getName().equals(typeName))
+                return type;
+        
+        for(DataType type: types)
+            if(type.getName().equals(typeName))
+                return type;
+
+        //TODO We should record error here,maybe popup an alert
+        return DataType.STRING_TYPE;
     }
 
-	private DecisionTreeFactor[] createFactors(Document doc) {
+    
+	private DecisionTreeFactor[] createFactors(Document doc, DecisionTreeModel model) {
 		List<Node> factorNodes = getValidChildNodes(doc.getElementsByTagName(FACTORS).item(0));
 		
 		DecisionTreeFactor[] factors = new DecisionTreeFactor[factorNodes.size()];
@@ -150,7 +168,7 @@ public class DecisionTreeXMLSerializer {
 			
 			factor.setFactorName(getAttribute(factorNode, ID));
 
-            factor.setTypeName(getAttribute(factorNode, TYPE));
+            factor.setType(findType(model.getTypes(), getAttribute(factorNode, TYPE)));
 			factors[getIntAttribute(factorNode, INDEX)] = factor;
 			
 			List<Node> valueNodes = getValidChildNodes(factorNode);
@@ -218,12 +236,12 @@ public class DecisionTreeXMLSerializer {
 		return null;
 	}
 	
-	private String[] createDecisions(Document doc) {
+	private DecisionTreeDecision[] createDecisions(Document doc) {
 		List<Node> decisionNodes = getValidChildNodes(doc.getElementsByTagName(DECISIONS).item(0));
-		String[] decisions = new String[decisionNodes.size()];
+		DecisionTreeDecision[] decisions = new DecisionTreeDecision[decisionNodes.size()];
 		
 		for(int i = 0; i < decisions.length; i++){
-			decisions[getIntAttribute(decisionNodes.get(i), INDEX)] = getAttribute(decisionNodes.get(i), ID);
+			decisions[getIntAttribute(decisionNodes.get(i), INDEX)] = new DecisionTreeDecision(getAttribute(decisionNodes.get(i), ID));
 		}
 
 		return decisions;
@@ -278,12 +296,12 @@ public class DecisionTreeXMLSerializer {
             typeNode.setAttribute(INDEX, String.valueOf(i));
             typesNode.appendChild(typeNode);
             
-            for(FieldDefinition field: type.getFields())
+            for(FieldDefinition field: type.getFields().getElements())
                 typeNode.appendChild(writeType(doc, FIELD, field));
             
-            for(MethodDefinition method: type.getMethods()) {
+            for(MethodDefinition method: type.getMethods().getElements()) {
                 Element methodNode = writeType(doc, METHOD, method);
-                for(FieldDefinition param: method.getParameters())
+                for(FieldDefinition param: method.getParameters().getElements())
                     methodNode.appendChild(writeType(doc, PARAMETER, param));
                 
                 typeNode.appendChild(methodNode);
@@ -291,10 +309,10 @@ public class DecisionTreeXMLSerializer {
         }
     }
 
-    private Element writeType(Document doc, String nodeName, FieldDefinition field) {
+    private Element writeType(Document doc, String nodeName, NamedType field) {
         Element fieldNode = (Element)doc.createElement(nodeName);
         fieldNode.setAttribute(NAME, field.getName());
-        fieldNode.setAttribute(LABEL, field.getLabel());
+//        fieldNode.setAttribute(LABEL, field.getLabel());
         fieldNode.setAttribute(TYPE, field.getTypeName());
         return fieldNode;
     }
@@ -360,11 +378,11 @@ public class DecisionTreeXMLSerializer {
 	}
 
 	private void writeDecisions(Document doc, Element decisionsNode, DecisionTreeModel model){
-		String[] decisions = model.getDecisions();
+		DecisionTreeDecision[] decisions = model.getDecisions();
 		
 		for(int i = 0; i < decisions.length; i++){
 			Element decisionNode = (Element)doc.createElement(DECISION);
-			decisionNode.setAttribute(ID, decisions[i]);
+			decisionNode.setAttribute(ID, decisions[i].getName());
 			decisionNode.setAttribute(INDEX, String.valueOf(i));
 			decisionsNode.appendChild(decisionNode);
 		}

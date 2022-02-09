@@ -140,7 +140,7 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     	if(node.getDecisionId() == -1)
     		decision = "";
     	else
-    		decision = getDiagram().getDecisions().get(node.getDecisionId());
+    		decision = getDiagram().getDecisions().get(node.getDecisionId()).getName();
 
     	figure.setDecision(decision);
     }

@@ -26,11 +26,14 @@ public interface DecisionTreeMessages {
 	
 	String GEN_TEST_CODE_MSG = "Generate stand alone test code";
 	String GEN_JUNIT_TEST_CODE_MSG = "Generate junit test code";
+	
+	String CREATE_NEW_TEMPLATE_MSG = "Create new %s";
+	
 	String CREATE_NEW_DECISION_MSG = "Create new decision";
 	String CREATE_NEW_FACTOR_MSG = "Create new factor";
 	String CREATE_NEW_FACTOR_VALUE_MSG = "Create new value";
 
-	String CREATE_NEW_USER_DEFINED_TYPE_MSG = "Create new factor type";
+	String CREATE_NEW_USER_DEFINED_TYPE_MSG = "Create new type";
 	String CHANGE_FACTOR_TYPE_MSG = "Change factor type";
 	String CREATE_NEW_FIELD_DEFINITION_MSG = "Create new field";
 	String CHANGE_FIELD_TYPE_MSG = "Change field type";
@@ -41,6 +44,19 @@ public interface DecisionTreeMessages {
     String CHANGE_METHOD_NAME_MSG = "Change method name";
     String DELETE_METHOD_MSG = "Delete method";
     
+    String FACTORS_MSG = "Factors";
+    String DECISIONS_MSG = "Decisions";
+    String CONSTANTS_MSG = "Constants";
+    String TYPES_MSG = "Types";
+    String FIELDS_MSG = "Fields";
+    String METHODS_MSG = "Methods";
+    String PARAMETERS_MSG = "Parameters";
+
+    String CONTAINER_MSG = "container";
+    String FACTOR_MSG = "factor";
+    String DECISION_MSG = "decision";
+    String CONSTANT_MSG = "constant";
+    String TYPE_MSG = "type";
     String FIELD_MSG = "field";
     String METHOD_MSG = "method";
     String PARAMETER_MSG = "parameter";
@@ -54,4 +70,22 @@ public interface DecisionTreeMessages {
 	String FIELD_NAME_MSG = "Field name";
 	String FACTOR_TYPE_NAME_MSG = "Type name";
     String DECISION_NAME_MSG = "Decision name";
+    
+    //Diagram level properties
+    String NAME = "Name";
+    String VALUE_ = "Value ";
+    String COMMENTS = "Comments";
+    String CONFIGURE = "Configure";
+    String OVERVIEW = "Overview";
+    String SPACE = " ";
+    String FACTOR_COMMENTS = "Factor comments";
+    String FACTOR = "Factor ";
+    String _VALUE_ = " value ";
+    String DECISION_COMMENTS = "Decision comments";
+    String DECISION = "Decision ";
+    String LAYOUT = "layout";
+    String NODE = "node";
+    String PARSER = "Parser";
+    String EVALUATOR = "Evaluator";
+
 }

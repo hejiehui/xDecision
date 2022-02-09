@@ -20,24 +20,20 @@ public class DecisionTreeManager {
         return parser;
     }
 
-    public String[] getDecisions(){
-		return diagram.getDecisions().toArray(new String[diagram.getDecisions().size()]);
+    public NamedElementContainer<DecisionTreeDecision> getDecisions(){
+		return diagram.getDecisions();
 	}
 	
-	public String getDecision(int decisionId){
-		return diagram.getDecisions().get(decisionId);
-	}
-	
-	public void changeDecision(int decisionId, String newValue){
-		diagram.getDecisions().set(decisionId, newValue);
+	public DecisionTreeDecision getDecision(int decisionId){
+		return diagram.getDecisions().getElements().get(decisionId);
 	}
 	
 	/**
 	 * if decision is already exist, return the id,
 	 * if not, create a new decision and return the new id
 	 */
-	public int getDecisionId(String decision){
-		List<String> decisions = diagram.getDecisions();
+	public int getDecisionId(DecisionTreeDecision decision){
+		List<DecisionTreeDecision> decisions = diagram.getDecisions().getElements();
 		for(int i = 0; i < decisions.size(); i++)
 			if(decisions.get(i).equals(decision))
 				return i;

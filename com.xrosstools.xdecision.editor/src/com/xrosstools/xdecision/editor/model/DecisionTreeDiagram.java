@@ -6,14 +6,29 @@ import java.util.List;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
-public class DecisionTreeDiagram implements IPropertySource {
+import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
+
+public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessages {
 	private String description;
 	private String factorDescription;
-	private List<DecisionTreeFactor> factors = new ArrayList<DecisionTreeFactor>();
 	private String decisionDescription;
-	private List<String> decisions= new ArrayList<String>();
-	private List<DataType> userDefinedTypes = new ArrayList<DataType>();
+
+	private NamedElementContainer<DecisionTreeDecision> decisions= new NamedElementContainer<DecisionTreeDecision>(DECISIONS_MSG, NamedElementTypeEnum.DECISION);
+	private NamedElementContainer<DecisionTreeFactor> factors = new NamedElementContainer<DecisionTreeFactor>(FACTORS_MSG, NamedElementTypeEnum.FACTOR);
+	private NamedElementContainer<DataType> userDefinedTypes = new NamedElementContainer<DataType>(TYPES_MSG, NamedElementTypeEnum.DATA_TYPE);
+    private NamedElementContainer<DecisionTreeConstant> userDefinedConstants = new NamedElementContainer<DecisionTreeConstant>(CONSTANTS_MSG, NamedElementTypeEnum.CONSTANT);
+
+	public NamedElementContainer<DecisionTreeFactor> getAllFactors(){
+        return factors;
+    }
+	public NamedElementContainer<DataType> getAllUserDefinedTypes(){
+	    return userDefinedTypes;
+	}
+	
+	
 	//This is root
 	private DataType type = new DataType("Factors");
 	
@@ -34,32 +49,71 @@ public class DecisionTreeDiagram implements IPropertySource {
 	public static final String LAYOUT = "layout";
 	public static final String NODE = "node";
 	
-	private DecisionTreeDiagramPropertySource source = new DecisionTreeDiagramPropertySource(this);
+//	private DecisionTreeDiagramPropertySource source = new DecisionTreeDiagramPropertySource(this);
 	
-	public IPropertyDescriptor[] getPropertyDescriptors() {
-		return source.getPropertyDescriptors();
-	}
+    public IPropertyDescriptor[] getPropertyDescriptors() {
+        List<IPropertyDescriptor> props = new ArrayList<IPropertyDescriptor>();
+        //new TextPropertyDescriptor(NAME, NAME),
+        PropertyDescriptor desc = new TextPropertyDescriptor(COMMENTS, COMMENTS);
+        desc.setCategory(CONFIGURE);
+        props.add(desc);
+        
+        desc = new TextPropertyDescriptor(PARSER, PARSER);
+        desc.setCategory(CONFIGURE);
+        props.add(desc);
+        
+        desc = new TextPropertyDescriptor(EVALUATOR, EVALUATOR);
+        desc.setCategory(CONFIGURE);
+        props.add(desc);
+        
+        return props.toArray(new IPropertyDescriptor[0]);
+    }	
+
+    public Object getPropertyValue(Object propName) {
+        String prop = (String)propName;
+
+        if (COMMENTS.equals(prop))
+            return getValue(getDescription());
+
+        if(prop.equals(PARSER))
+            return getValue(getParserClass());
+
+        if(prop.equals(EVALUATOR))
+            return getValue(getEvaluatorClass());
 	
-	public Object getPropertyValue(Object propName) {
-		return source.getPropertyValue(propName);
+	    return null;
 	}
 
+	private String getValue(String value) {
+        return value == null ? "":value;
+    }
+	
 	public void setPropertyValue(Object id, Object valueObj){
-		source.setPropertyValue(id, valueObj);
-		listeners.firePropertyChange(LAYOUT, null, null);
+        String prop = (String)id;
+        String value = (String)valueObj;
+        
+        if (COMMENTS.equals(id))
+            setDescription((String)value);
+
+        if (PARSER.equals(prop))
+            setParserClass(value);
+
+        if (EVALUATOR.equals(prop))
+            setEvaluatorClass(value);
+
+        listeners.firePropertyChange(LAYOUT, null, null);
 	}
 	
-	public Object getEditableValue(){
-		return this;
-	}
+    public Object getEditableValue(){
+        return this;
+    }
 
-	public boolean isPropertySet(Object propName){
-		return source.isPropertySet(propName);
-	}
+    public boolean isPropertySet(Object propName){
+        return true;
+    }
 
-	public void resetPropertyValue(Object propName){
-		source.resetPropertyValue(propName);
-	}
+    public void resetPropertyValue(Object propName){
+    }
 
 	public String getFactorDescription() {
 		return factorDescription;
@@ -92,22 +146,19 @@ public class DecisionTreeDiagram implements IPropertySource {
 		this.description = description;
 	}
 	public List<DecisionTreeFactor> getFactors() {
-		return factors;
+		return factors.getElements();
 	}
 	public void setFactors(List<DecisionTreeFactor> factors) {
-		this.factors = factors;
+		this.factors.setElements(factors);
 	}
 	public DecisionTreeFactor getFactorById(int index) {
-	    return factors.get(index);
+	    return getFactors().get(index);
 	}
 	public int indexOf(DecisionTreeFactor factor) {
-	    return factors.indexOf(factor);
+	    return getFactors().indexOf(factor);
 	}
-	public List<String> getDecisions() {
+	public NamedElementContainer<DecisionTreeDecision> getDecisions() {
 		return decisions;
-	}
-	public void setDecisions(List<String> decisions) {
-		this.decisions = decisions;
 	}
     public DataType getType() {
         return type;
@@ -116,27 +167,22 @@ public class DecisionTreeDiagram implements IPropertySource {
         this.type = type;
     }
     public List<DataType> getUserDefinedTypes() {
-        return userDefinedTypes;
+        return userDefinedTypes.getElements();
     }
-    public List<String> getAllTypeNames() {
-        List<String> names = new ArrayList<String>();
-        names.addAll(DataType.getPredefinedTypeNames());
-        names.addAll(getUserDefinedTypeNames());
-        return names;
-    }
-    public List<String> getUserDefinedTypeNames() {
-        List<String> names = new ArrayList<String>();
-        
-        for(DataType udfedType: userDefinedTypes) {
-            names.add(udfedType.getName());
-        }
-        
+    public List<DataType> getAllTypes() {
+        List<DataType> names = new ArrayList<DataType>();
+        names.addAll(DataType.PREDEFINED_TYPES);
+        names.addAll(userDefinedTypes.getElements());
         return names;
     }
     public void setUserDefinedTypes(List<DataType> userDefinedTypes) {
-        this.userDefinedTypes = userDefinedTypes;
+        this.userDefinedTypes.setElements(userDefinedTypes);
     }
-//    public DataType getFactorType(int factorId) {
+    public NamedElementContainer<DecisionTreeConstant> getUserDefinedConstants() {
+        return userDefinedConstants;
+    }
+
+    //    public DataType getFactorType(int factorId) {
 //        return getFactorById(factorId).getTypeName();
 //    }
 //    public DataType getFactorType(String factorName) {
@@ -148,13 +194,6 @@ public class DecisionTreeDiagram implements IPropertySource {
             if(factors.get(i).getFactorName().equals(factorName))
                 return i;
         return -1;
-    }
-    public DataType findDataType(String name) {
-        for(DataType type: userDefinedTypes) {
-            if(type.getName().equals(name))
-                return type;
-        }
-        return DataType.getPredefinedType(name);
     }
 	public List<DecisionTreeNode> getNodes() {
 		return nodes;

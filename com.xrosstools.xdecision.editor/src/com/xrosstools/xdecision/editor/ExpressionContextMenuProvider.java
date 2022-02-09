@@ -18,6 +18,8 @@ import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.FieldDefinition;
 import com.xrosstools.xdecision.editor.model.MethodDefinition;
+import com.xrosstools.xdecision.editor.model.NamedElement;
+import com.xrosstools.xdecision.editor.model.NamedType;
 import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExtensibleExpression;
@@ -40,7 +42,7 @@ public class ExpressionContextMenuProvider {
     
     public void buildContextMenu(IMenuManager menu, BaseExpressionPart expPart) {
         ExpressionDefinition exp = (ExpressionDefinition)expPart.getModel();
-        
+        //TODO all of the following can be optimized
         if(exp instanceof OperatorExpression)
             createOperatorMenu(menu, (OperatorExpression)exp);
         else if(exp instanceof ExtensibleExpression)
@@ -64,21 +66,23 @@ public class ExpressionContextMenuProvider {
         DataType parentType = findDataType(parentPart);
 
         // select field
-        for(FieldDefinition field: parentType.getFields())
-            createIdMenu(menu, field.getIdentifier(), field.getTypeName(), parentPart, part, extendChildren, new VariableExpression(field.getName()));
+        for(NamedElement field: parentType.getFields().getElements())
+            createIdMenu(menu, field.getName(), ((FieldDefinition)field).getTypeName(), parentPart, part, extendChildren, new VariableExpression(field.getName()));
 
         menu.add(new Separator());
         
         // select method
         //TODO static and instance method
-        for(MethodDefinition method: parentType.getMethods())
+        for(NamedElement method: parentType.getMethods().getElements())
             //TODO fix method identification
-            createIdMenu(menu, method.getIdentifier(), method.getTypeName(), parentPart, part, extendChildren, new MethodExpression(method));
+            createIdMenu(menu, method.getName(), ((MethodDefinition)method).getTypeName(), parentPart, part, extendChildren, new MethodExpression((MethodDefinition)method));
         
         if(extendChildren) {
             menu.add(new Separator());
             addChangeToNumberMenu(menu, part);
             addChangeToStringMenu(menu, part);
+            addChangeToConstMenu(menu, part);
+            addChangeToEnumMenu(menu, part);
             menu.add(new Separator());
             createOperatorMenu(menu, part);
             menu.add(new Separator());
@@ -99,7 +103,7 @@ public class ExpressionContextMenuProvider {
             createChildMenu(subMenu, part, findChild(parentPart, childModel), false);
             menu.add(subMenu);
         } else
-            menu.add(new CommandAction(editor, definitionId, selected, new ChangeChildCommand(parentPart.getModel(), (ExpressionDefinition)childModel, childExp)));
+            add(menu, definitionId, selected, new ChangeChildCommand(parentPart.getModel(), (ExpressionDefinition)childModel, childExp));
     }
 
     private void add(IMenuManager menu, String text, boolean checked, Command command) {
@@ -131,7 +135,7 @@ public class ExpressionContextMenuProvider {
             return DataType.NOT_MATCHED;
         }
 
-        FieldDefinition fd;
+        NamedType fd;
         if(exp instanceof MethodExpression)
             fd = parentUDT.findMethod(exp.getName());
         else
@@ -142,7 +146,7 @@ public class ExpressionContextMenuProvider {
         if(fd == null)
             return DataType.NOT_MATCHED;
 
-        return getDiagram().findDataType(fd.getTypeName());
+        return fd.getType();
     }
     
     private DecisionTreeDiagram getDiagram() {
@@ -195,22 +199,32 @@ public class ExpressionContextMenuProvider {
     private void wrapBracketOperatorMenu(IMenuManager menu, EditPart expPart) {
         expPart = AddOperatorCommand.findTopExpressionPart(expPart);
         ExpressionDefinition exp = (ExpressionDefinition)expPart.getModel();
-        menu.add(new CommandAction(editor, "(...)", false, new ChangeChildCommand(expPart.getParent().getModel(), exp, new BracktExpression().setEnclosedExpression(exp))));        
+        add(menu, "(...)", false, new ChangeChildCommand(expPart.getParent().getModel(), exp, new BracktExpression().setEnclosedExpression(exp)));        
     }
     
     private void changeToFactorMenu(IMenuManager menu, EditPart expPart) {
         ExpressionDefinition placeholder = (ExpressionDefinition)expPart.getModel();
         // select factors
-        for(FieldDefinition field: getDiagram().getType().getFields())
-            menu.add(new CommandAction(editor, field.getIdentifier(), false, new ChangeChildCommand(expPart.getParent().getModel(), placeholder, new VariableExpression(field.getName()))));
+        for(NamedElement field: getDiagram().getType().getFields().getElements())
+            menu.add(new CommandAction(editor, field.getName(), false, new ChangeChildCommand(expPart.getParent().getModel(), placeholder, new VariableExpression(field.getName()))));
     }
     
     private void addChangeToNumberMenu(IMenuManager menu, EditPart expPart) {
-        menu.add(new InputTextCommandAction(editor, DataType.NUMBER, DataType.NUMBER, "0", new CreateExpressionCommand(expPart, DataType.NUMBER)));        
+        menu.add(new InputTextCommandAction(editor, DataType.NUMBER_TYPE.getName(), DataType.NUMBER_TYPE.getName(), "0", new CreateExpressionCommand(expPart, DataType.NUMBER_TYPE.getName())));        
     }
 
     private void addChangeToStringMenu(IMenuManager menu, EditPart expPart) {
-        menu.add(new InputTextCommandAction(editor, DataType.STRING, DataType.STRING, "", new CreateExpressionCommand(expPart, DataType.STRING)));        
+        menu.add(new InputTextCommandAction(editor, DataType.STRING_TYPE.getName(), DataType.STRING_TYPE.getName(), "", new CreateExpressionCommand(expPart, DataType.STRING_TYPE.getName())));        
+    }
+
+    //TODO
+    private void addChangeToConstMenu(IMenuManager menu, EditPart expPart) {
+//        menu.add(new InputTextCommandAction(editor, DataType.STRING, DataType.STRING, "", new CreateExpressionCommand(expPart, DataType.STRING)));        
+    }
+
+    //TODO
+    private void addChangeToEnumMenu(IMenuManager menu, EditPart expPart) {
+//        menu.add(new InputTextCommandAction(editor, DataType.STRING, DataType.STRING, "", new CreateExpressionCommand(expPart, DataType.STRING)));        
     }
 
     private void addRemoveMenu(IMenuManager menu, EditPart expPart) {
