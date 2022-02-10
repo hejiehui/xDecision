@@ -16,21 +16,6 @@ public class DataTypeMap extends DataType {
     private String propertyKeyType;
     private String propertyValueType;
     
-    
-//  DataType mapType = new DataType(String.format("Set<%s>", valueType.getName()));
-//  mapType.setKeyType(keyType);
-//  mapType.setValueType(valueType);
-//  
-//  mapType.getMethods().addAll(getCommonMethod(valueType));
-//  
-//  mapType.add(new MethodDefinition("containsKey", BOOLEAN_TYPE, asList(new FieldDefinition("value", keyType))));
-//  mapType.add(new MethodDefinition("containsValue", BOOLEAN_TYPE, asList(new FieldDefinition("value", valueType))));
-//  mapType.add(new MethodDefinition("containsAll", BOOLEAN_TYPE, asList(new FieldDefinition("value", mapType))));
-//  mapType.add(new MethodDefinition("get", valueType, asList(new FieldDefinition("value", keyType))));
-//
-
-    
-    
     private MethodDefinition size = new MethodDefinition("size", DataType.NUMBER_TYPE);
     private MethodDefinition isEmpty = new MethodDefinition("isEmpty", DataType.BOOLEAN_TYPE);
     private MethodDefinition containsKey = new MethodDefinition("containsKey", DataType.BOOLEAN_TYPE, asList(new FieldDefinition(VALUE, keyType)));

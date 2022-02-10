@@ -18,16 +18,11 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 
 	private NamedElementContainer<DecisionTreeDecision> decisions= new NamedElementContainer<DecisionTreeDecision>(DECISIONS_MSG, NamedElementTypeEnum.DECISION);
 	private NamedElementContainer<DecisionTreeFactor> factors = new NamedElementContainer<DecisionTreeFactor>(FACTORS_MSG, NamedElementTypeEnum.FACTOR);
-	private NamedElementContainer<DataType> userDefinedTypes = new NamedElementContainer<DataType>(TYPES_MSG, NamedElementTypeEnum.DATA_TYPE);
     private NamedElementContainer<DecisionTreeConstant> userDefinedConstants = new NamedElementContainer<DecisionTreeConstant>(CONSTANTS_MSG, NamedElementTypeEnum.CONSTANT);
 
 	public NamedElementContainer<DecisionTreeFactor> getAllFactors(){
         return factors;
     }
-	public NamedElementContainer<DataType> getAllUserDefinedTypes(){
-	    return userDefinedTypes;
-	}
-	
 	
 	//This is root
 	private DataType type = new DataType("Factors");
@@ -167,16 +162,7 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
         this.type = type;
     }
     public List<DataType> getUserDefinedTypes() {
-        return userDefinedTypes.getElements();
-    }
-    public List<DataType> getAllTypes() {
-        List<DataType> names = new ArrayList<DataType>();
-        names.addAll(DataType.PREDEFINED_TYPES);
-        names.addAll(userDefinedTypes.getElements());
-        return names;
-    }
-    public void setUserDefinedTypes(List<DataType> userDefinedTypes) {
-        this.userDefinedTypes.setElements(userDefinedTypes);
+        return DataType.getUserDefinedTypes().getElements();
     }
     public NamedElementContainer<DecisionTreeConstant> getUserDefinedConstants() {
         return userDefinedConstants;

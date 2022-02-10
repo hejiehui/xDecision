@@ -56,7 +56,7 @@ public enum NamedElementTypeEnum implements DecisionTreeMessages {
         case FIELD:
         case METHOD:
         case PARTAMETER:
-            return diagram.getAllTypes();
+            return DataType.getAllTypes();
         case DECISION:
         case DATA_TYPE:
             return Collections.emptyList();

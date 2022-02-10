@@ -2,6 +2,7 @@ package com.xrosstools.xdecision.editor.model;
 
 import static java.util.Arrays.asList;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +15,9 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
     public static final DataType NUMBER_TYPE = new DataType(DataTypeEnum.NUMBER);
     public static final DataType BOOLEAN_TYPE = new DataType(DataTypeEnum.BOOLEAN);
     public static final DataType DATE_TYPE = new DataType(DataTypeEnum.DATE);
+    
+    //This is not a good idea to define a static data types reference
+    private static final NamedElementContainer<DataType> userDefinedTypes = new NamedElementContainer<DataType>(TYPES_MSG, NamedElementTypeEnum.DATA_TYPE);
     
     public static final List<DataType> PREDEFINED_TYPES = Collections.unmodifiableList(asList(STRING_TYPE, NUMBER_TYPE, BOOLEAN_TYPE, DATE_TYPE));
     
@@ -41,6 +45,17 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
     
     public boolean isConcernedProperty(Object propName) {
         return false;
+    }
+    
+    public static NamedElementContainer<DataType> getUserDefinedTypes() {
+        return userDefinedTypes;
+    }
+
+    public static List<DataType> getAllTypes() {
+        List<DataType> names = new ArrayList<DataType>();
+        names.addAll(PREDEFINED_TYPES);
+        names.addAll(userDefinedTypes.getElements());
+        return names;
     }
     
     @Override
