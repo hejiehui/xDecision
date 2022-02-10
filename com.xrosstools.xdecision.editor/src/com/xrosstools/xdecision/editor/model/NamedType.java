@@ -37,17 +37,15 @@ public class NamedType extends NamedElement implements PropertyConstants {
     }
 
     public void setPropertyValue(Object propName, Object value){
-        if (propertyType.equals(propName)) {
+        if (propertyType.equals(propName))
             setType(DataTypeEnum.values()[(Integer)value].createDataType());
-            return;
-        }
         
-        if(type.isConcernedProperty(propName)) {
+        if(type.isConcernedProperty(propName))
             type.setPropertyValue(propName, value);
-            return;
-        }
 
         super.setPropertyValue(propName, value);
+        
+        firePropertyChange((String)propName, null, value);
     }
 
     @Override

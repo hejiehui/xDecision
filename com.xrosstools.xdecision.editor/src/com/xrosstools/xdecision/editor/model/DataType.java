@@ -23,43 +23,11 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
     private NamedElementContainer<FieldDefinition> fields = new NamedElementContainer<FieldDefinition>(FIELDS_MSG, NamedElementTypeEnum.FIELD);
     private NamedElementContainer<MethodDefinition> methods = new NamedElementContainer<MethodDefinition>(METHODS_MSG, NamedElementTypeEnum.METHOD);
 
-    
-    //For map, we only support Integer and String as key type for now
-    private DataType keyType;
-    private DataType valueType;
-    
     public static final DataType NOT_MATCHED = new DataType("Not Matched!"); 
     
     public static DataType createEnumType(String name) {
         return new UserDefinedEnum(name);
     }
-    
-//    public static DataType createSetType(DataType elementType) {
-//        DataType setType = new DataType(String.format("Set<%s>", elementType.getName()));
-//        setType.setValueType(elementType);
-//        
-//        setType.getMethods().addAll(getCommonMethod(elementType));
-//        
-//        setType.add(new MethodDefinition("contains", BOOLEAN_TYPE, asList(new FieldDefinition("value", elementType))));
-//        setType.add(new MethodDefinition("containsAll", BOOLEAN_TYPE, asList(new FieldDefinition("value", setType))));
-//
-//        return setType;
-//    }
-//    
-//    public static DataType createMapType(DataType keyType, DataType valueType) {
-//        DataType mapType = new DataType(String.format("Set<%s>", valueType.getName()));
-//        mapType.setKeyType(keyType);
-//        mapType.setValueType(valueType);
-//        
-//        mapType.getMethods().addAll(getCommonMethod(valueType));
-//        
-//        mapType.add(new MethodDefinition("containsKey", BOOLEAN_TYPE, asList(new FieldDefinition("value", keyType))));
-//        mapType.add(new MethodDefinition("containsValue", BOOLEAN_TYPE, asList(new FieldDefinition("value", valueType))));
-//        mapType.add(new MethodDefinition("containsAll", BOOLEAN_TYPE, asList(new FieldDefinition("value", mapType))));
-//        mapType.add(new MethodDefinition("get", valueType, asList(new FieldDefinition("value", keyType))));
-//
-//        return mapType;
-//    }
     
     public DataType(DataTypeEnum metaType) {
         super(metaType.getName(), NamedElementTypeEnum.DATA_TYPE);
@@ -68,6 +36,7 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
 
     public DataType(String name) {
         super(name, NamedElementTypeEnum.DATA_TYPE);
+        this.metaType = DataTypeEnum.USER_DEFINED;
     }
     
     public boolean isConcernedProperty(Object propName) {
@@ -76,6 +45,7 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
     
     @Override
     public IPropertyDescriptor[] getPropertyDescriptors() {
+        // Do not allow name change for non predefined type
         return DataTypeEnum.isPredefined(metaType) ? NONE : super.getPropertyDescriptors();
     }
     
@@ -97,24 +67,6 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
 
     public DataTypeEnum getType() {
         return metaType;
-    }
-
-    public DataType getKeyType() {
-        return keyType;
-    }
-
-    public void setKeyType(DataType keyType) {
-        this.keyType = keyType;
-        firePropertyChange(PROP_KEY_TYPE, null, keyType);
-    }
-
-    public DataType getValueType() {
-        return valueType;
-    }
-
-    public void setValueType(DataType valueType) {
-        this.valueType = valueType;
-        firePropertyChange(PROP_VALUE_TYPE, null, valueType);
     }
 
     public NamedElementContainer<FieldDefinition> getFields() {

@@ -1,25 +1,40 @@
 package com.xrosstools.xdecision.editor.model;
 
+import static java.util.Arrays.asList;
+
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-public class DataTypeArray extends DataType {
-    private static final String LENGTH = "length";
-
-    private DataType valueType = DataType.STRING_TYPE;
+public class DataTypeCollection extends DataType {
+    public static final String VALUE = "value";
+    
+    public static final DataType DEFAULT_VALUE_TYPE = DataType.STRING_TYPE;
+    
+    private DataType valueType = DEFAULT_VALUE_TYPE;
     private String propertyType;
-    private FieldDefinition length;
     
-    public DataTypeArray() {
-        super(DataTypeEnum.ARRAY);
-        propertyType = String.format(PROP_VALUE_TYPE_TPL, getType().getName());
-        length = new FieldDefinition(LENGTH, DataType.NUMBER_TYPE);
-        add(length);
+    private MethodDefinition size = new MethodDefinition("size", DataType.NUMBER_TYPE);
+    private MethodDefinition isEmpty = new MethodDefinition("isEmpty", DataType.BOOLEAN_TYPE);
+    private MethodDefinition contains = new MethodDefinition("contains", DataType.BOOLEAN_TYPE, asList(new FieldDefinition(VALUE, valueType)));
+    private MethodDefinition containsAll = new MethodDefinition("containsAll", DataType.BOOLEAN_TYPE, asList(new FieldDefinition(VALUE, this)));
+    
+    public DataTypeCollection() {
+        super(DataTypeEnum.COLLECTION);
     }
-    
+
+    public DataTypeCollection(DataTypeEnum type) {
+        super(type);
+        propertyType = String.format(PROP_VALUE_TYPE_TPL, getType().getName());
+        
+        add(size);
+        add(isEmpty);
+        add(contains);
+        add(containsAll);
+    }
+
     @Override
     public String toString() {
-        return valueType.toString() + "[]";
+        return getType().getName() + "<" + valueType.toString() + ">";
     }
 
     public DataType getValueType() {
@@ -28,7 +43,9 @@ public class DataTypeArray extends DataType {
 
     public void setValueType(DataType valueType) {
         this.valueType = valueType;
-        length.setType(valueType);
+        
+        contains.findParameterByName(VALUE).setType(valueType);
+        
         firePropertyChange(propertyType, null,  valueType);
     }
     
@@ -49,7 +66,6 @@ public class DataTypeArray extends DataType {
 
         return null;
     }
-    
 
     public void setPropertyValue(Object propName, Object value){
         if (propertyType.equals(propName))
