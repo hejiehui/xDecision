@@ -1,5 +1,12 @@
 package com.xrosstools.xdecision.editor.model;
 
+import static java.util.Arrays.asList;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xrosstools.xdecision.editor.model.DataType.*;
+
 public enum DataTypeEnum implements PropertyConstants {
     STRING("String"),
 
@@ -22,6 +29,10 @@ public enum DataTypeEnum implements PropertyConstants {
     ENUM("Enum"),
     
     USER_DEFINED("User defined type");
+    
+    private static final NamedElementContainer<DataType> CONSTANT_TYPES = new NamedElementContainer<DataType>("Constant Types", NamedElementTypeEnum.DATA_TYPE, asList(STRING_TYPE, NUMBER_TYPE, BOOLEAN_TYPE, DATE_TYPE));
+    
+    private static final NamedElementContainer<DataType> PREDEFINED_TYPES = new NamedElementContainer<DataType>("Predefined Types", NamedElementTypeEnum.DATA_TYPE, asList(STRING_TYPE, NUMBER_TYPE, BOOLEAN_TYPE, DATE_TYPE));
     
     private DataTypeEnum(String name) {
         this.name = name;
@@ -60,26 +71,14 @@ public enum DataTypeEnum implements PropertyConstants {
         }
     }
     
-    public static boolean isPredefined(DataTypeEnum type) {
-        return !(type == USER_DEFINED || type == ENUM);
+    @Deprecated
+    public static List<DataType> getAllTypes() {
+        List<DataType> names = new ArrayList<DataType>();
+        names.addAll(PREDEFINED_TYPES.getElements());
+        return names;
     }
     
-    public static String[] getAllNames() {
-        return new String[] {STRING.name, NUMBER.name, BOOLEAN.name, DATE.name, ARRAY.name, LIST.name, SET.name, MAP.name};
-    }
-
-    public static String[] getKeyTypeNames() {
-        return new String[] {STRING.name, NUMBER.name};
-    }
-
-    public static String[] getValueTypeNames() {
-        return new String[] {STRING.name, NUMBER.name, BOOLEAN.name, DATE.name};
-    }
-
-    public static DataTypeEnum findByName(String name) {
-        for(DataTypeEnum e: DataTypeEnum.values())
-            if(e.getName().equals(name))
-                return e;
-        return null;
+    public static boolean isUserDefined(DataTypeEnum type) {
+        return !(type == USER_DEFINED || type == ENUM);
     }
 }

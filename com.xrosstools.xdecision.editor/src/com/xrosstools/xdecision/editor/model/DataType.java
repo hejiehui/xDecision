@@ -1,11 +1,5 @@
 package com.xrosstools.xdecision.editor.model;
 
-import static java.util.Arrays.asList;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
@@ -16,11 +10,26 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
     public static final DataType BOOLEAN_TYPE = new DataType(DataTypeEnum.BOOLEAN);
     public static final DataType DATE_TYPE = new DataType(DataTypeEnum.DATE);
     
-    //This is not a good idea to define a static data types reference
-    private static final NamedElementContainer<DataType> userDefinedTypes = new NamedElementContainer<DataType>(TYPES_MSG, NamedElementTypeEnum.DATA_TYPE);
+    private static final String[] PREDEFINED_ALL_TYPE_NAMES = new String[] {
+            DataTypeEnum.STRING.getName(),
+            DataTypeEnum.NUMBER.getName(),
+            DataTypeEnum.BOOLEAN.getName(),
+            DataTypeEnum.DATE.getName(),
+            DataTypeEnum.ARRAY.getName(),
+            DataTypeEnum.COLLECTION.getName(),
+            DataTypeEnum.LIST.getName(),
+            DataTypeEnum.SET.getName(),
+            DataTypeEnum.MAP.getName()};
     
-    public static final List<DataType> PREDEFINED_TYPES = Collections.unmodifiableList(asList(STRING_TYPE, NUMBER_TYPE, BOOLEAN_TYPE, DATE_TYPE));
-    
+    private static final String[] PREDEFINED_VALUE_TYPE_NAMES = new String[] {
+            DataTypeEnum.STRING.getName(),
+            DataTypeEnum.NUMBER.getName(),
+            DataTypeEnum.BOOLEAN.getName(),
+            DataTypeEnum.DATE.getName()};
+
+    private static final String[] CONSTANT_TYPE_NAMES = PREDEFINED_VALUE_TYPE_NAMES;
+
+    private static final NamedElementContainer<DataType> USER_DEFINED_TYPES = new NamedElementContainer<DataType>(DataTypeEnum.USER_DEFINED.getName(), NamedElementTypeEnum.DATA_TYPE);
     
     private DataTypeEnum metaType;
     private String label;
@@ -46,22 +55,53 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
     public boolean isConcernedProperty(Object propName) {
         return false;
     }
-    
+
     public static NamedElementContainer<DataType> getUserDefinedTypes() {
-        return userDefinedTypes;
+        return USER_DEFINED_TYPES;
     }
 
-    public static List<DataType> getAllTypes() {
-        List<DataType> names = new ArrayList<DataType>();
-        names.addAll(PREDEFINED_TYPES);
-        names.addAll(userDefinedTypes.getElements());
-        return names;
+    public static String[] combine(String[] str1, String[] str2) {
+        String[] allNames = new String[str1.length + str2.length];
+        
+        System.arraycopy(str1, 0, allNames, 0, str1.length);
+        System.arraycopy(str2, 0, allNames, str1.length, str2.length);
+
+        return allNames;
     }
     
+    public static String[] getAllTypeNames() {
+        return combine(PREDEFINED_ALL_TYPE_NAMES, USER_DEFINED_TYPES.getElementNames());
+    }
+    
+    public static String[] getConstantTypeNames() {
+        return CONSTANT_TYPE_NAMES;
+    }
+    
+    public static String[] getValueTypeNames() {
+        return combine(PREDEFINED_VALUE_TYPE_NAMES, USER_DEFINED_TYPES.getElementNames());
+    }
+
+    public static DataType findDataType(String name) {
+        DataType type = USER_DEFINED_TYPES.findByName(name);
+        
+        if(type != null)
+            return type;
+            
+        
+        return findByName(name).createDataType();
+    }
+
+    public static DataTypeEnum findByName(String name) {
+        for(DataTypeEnum e: DataTypeEnum.values())
+            if(e.getName().equals(name))
+                return e;
+        return DataTypeEnum.USER_DEFINED;
+    }
+
     @Override
     public IPropertyDescriptor[] getPropertyDescriptors() {
         // Do not allow name change for non predefined type
-        return DataTypeEnum.isPredefined(metaType) ? NONE : super.getPropertyDescriptors();
+        return DataTypeEnum.isUserDefined(metaType) ? super.getPropertyDescriptors() : NONE;
     }
     
     protected void add(MethodDefinition method) {

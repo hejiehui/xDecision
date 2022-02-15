@@ -145,13 +145,14 @@ public class DecisionTreeXMLSerializer {
     }
     
     public DataType findType(DataType[] types, String typeName) {
-        for(DataType type: DataType.PREDEFINED_TYPES)
-            if(type.getName().equals(typeName))
-                return type;
+        //use findBy
+        DataType type = DataType.findDataType(typeName);
+        if(type != null)
+            return type;
         
-        for(DataType type: types)
-            if(type.getName().equals(typeName))
-                return type;
+        for(DataType udType: types)
+            if(udType.getName().equals(typeName))
+                return udType;
 
         //TODO We should record error here,maybe popup an alert
         return DataType.STRING_TYPE;

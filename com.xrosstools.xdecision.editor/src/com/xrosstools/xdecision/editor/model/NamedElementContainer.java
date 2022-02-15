@@ -17,6 +17,11 @@ public class NamedElementContainer<T extends NamedElement> extends NamedElement 
         super(name, NamedElementTypeEnum.CONTAINER);
         this.elementType = elementType;
     }
+    
+    public NamedElementContainer(String name, NamedElementTypeEnum elementType, List<T> elements) {
+        this(name, elementType);
+        this.elements.addAll(elements);
+    }
 
     public int size() {
         return elements.size();
@@ -69,8 +74,8 @@ public class NamedElementContainer<T extends NamedElement> extends NamedElement 
         return findByName(name) != null;
     }
     
-    public NamedElement findByName(String name) {
-        for(NamedElement type: elements) {
+    public T findByName(String name) {
+        for(T type: elements) {
             if(name.equals(type.getName()))
                 return type;
         }

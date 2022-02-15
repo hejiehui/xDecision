@@ -39,8 +39,7 @@ public class DataTypeArray extends DataType {
 
     @Override
     public IPropertyDescriptor[] getPropertyDescriptors() {
-        //TODO add user defined types
-        return new IPropertyDescriptor[] {new ComboBoxPropertyDescriptor(propertyType, propertyType, DataTypeEnum.getValueTypeNames())};
+        return new IPropertyDescriptor[] {new ComboBoxPropertyDescriptor(propertyType, propertyType, getValueTypeNames())};
     }
     
     public Object getPropertyValue(Object propName) {
@@ -53,6 +52,6 @@ public class DataTypeArray extends DataType {
 
     public void setPropertyValue(Object propName, Object value){
         if (propertyType.equals(propName))
-            setValueType(DataTypeEnum.values()[(Integer)value].createDataType());
+            setValueType(findDataType(getValueTypeNames()[(Integer)value]));
     }
 }

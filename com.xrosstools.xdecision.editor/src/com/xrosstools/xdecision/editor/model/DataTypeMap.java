@@ -2,12 +2,12 @@ package com.xrosstools.xdecision.editor.model;
 
 import static java.util.Arrays.asList;
 
-import java.util.Map;
-
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 public class DataTypeMap extends DataType {
+    private static final String[] KEY_TYPE_NAMES = new String[] {DataTypeEnum.STRING.getName(), DataTypeEnum.NUMBER.getName()};
+    
     public static final String VALUE = "value";
     
     private DataType keyType = DataType.STRING_TYPE;
@@ -70,10 +70,9 @@ public class DataTypeMap extends DataType {
 
     @Override
     public IPropertyDescriptor[] getPropertyDescriptors() {
-        //TODO add user defined types
         return new IPropertyDescriptor[] {
-                new ComboBoxPropertyDescriptor(propertyKeyType, propertyKeyType, DataTypeEnum.getKeyTypeNames()),
-                new ComboBoxPropertyDescriptor(propertyValueType, propertyValueType, DataTypeEnum.getValueTypeNames()),
+                new ComboBoxPropertyDescriptor(propertyKeyType, propertyKeyType, KEY_TYPE_NAMES),
+                new ComboBoxPropertyDescriptor(propertyValueType, propertyValueType, getValueTypeNames()),
                 };
     }
     
@@ -89,9 +88,9 @@ public class DataTypeMap extends DataType {
 
     public void setPropertyValue(Object propName, Object value){
         if (propertyKeyType.equals(propName))
-            setKeyType(DataTypeEnum.findByName(DataTypeEnum.getKeyTypeNames()[(Integer)value]).createDataType());
+            setKeyType(findDataType(KEY_TYPE_NAMES[(Integer)value]));
 
         if (propertyValueType.equals(propName))
-            setValueType(DataTypeEnum.values()[(Integer)value].createDataType());
+            setValueType(findDataType(getValueTypeNames()[(Integer)value]));
     }
 }

@@ -22,7 +22,7 @@ public class NamedType extends NamedElement implements PropertyConstants {
         return combine(new IPropertyDescriptor[] {
                 getNameDescriptor(),
                 //TODO need to plus user defined types
-                new ComboBoxPropertyDescriptor(propertyType, propertyType, DataTypeEnum.getAllNames()),},
+                new ComboBoxPropertyDescriptor(propertyType, propertyType, DataType.getAllTypeNames()),},
                 type.getPropertyDescriptors());
     }
     
@@ -38,7 +38,7 @@ public class NamedType extends NamedElement implements PropertyConstants {
 
     public void setPropertyValue(Object propName, Object value){
         if (propertyType.equals(propName))
-            setType(DataTypeEnum.values()[(Integer)value].createDataType());
+            setType(DataType.findDataType(DataType.getAllTypeNames()[(Integer)value]));
         
         if(type.isConcernedProperty(propName))
             type.setPropertyValue(propName, value);

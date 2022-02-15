@@ -47,6 +47,8 @@ public interface DecisionTreeMessages {
     String FACTORS_MSG = "Factors";
     String DECISIONS_MSG = "Decisions";
     String CONSTANTS_MSG = "Constants";
+    String PREDEFINED_TYPES_MSG = "Predefined Types";
+    String USER_DEFINED_TYPES_MSG = "User Defined Types";
     String TYPES_MSG = "Types";
     String FIELDS_MSG = "Fields";
     String METHODS_MSG = "Methods";

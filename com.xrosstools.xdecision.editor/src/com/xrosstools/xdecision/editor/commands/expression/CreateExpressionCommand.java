@@ -22,10 +22,10 @@ public class CreateExpressionCommand extends InputTextCommand {
     }
     
     private ExpressionDefinition createExpression() {
-        if(type == DataType.NUMBER)
+        if(type == DataType.NUMBER_TYPE.getName())
            return new NumberExpression(getInputText()); 
         
-        if(type == DataType.STRING)
+        if(type == DataType.STRING_TYPE.getName())
             return new StringExpression(getInputText());
         
         throw new IllegalArgumentException("type not supported: " + parentModel.getClass());

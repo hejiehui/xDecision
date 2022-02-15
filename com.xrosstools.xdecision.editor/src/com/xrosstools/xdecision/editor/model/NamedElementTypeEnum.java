@@ -1,8 +1,5 @@
 package com.xrosstools.xdecision.editor.model;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 
 public enum NamedElementTypeEnum implements DecisionTreeMessages {
@@ -50,18 +47,19 @@ public enum NamedElementTypeEnum implements DecisionTreeMessages {
         return null;
     }
 
-    public List<DataType> getQualifiedDataTypes(DecisionTreeDiagram diagram) {
+    private static final String[] NONE = new String[] {};
+    public String[] getQualifiedDataTypes() {
         switch (this) {
         case FACTOR:
         case FIELD:
         case METHOD:
         case PARTAMETER:
-            return DataType.getAllTypes();
+            return DataType.getAllTypeNames();
         case DECISION:
         case DATA_TYPE:
-            return Collections.emptyList();
+            return NONE;
         case CONSTANT:
-            return DataType.PREDEFINED_TYPES;
+            return DataType.getConstantTypeNames();
         default:
             return null;
         }

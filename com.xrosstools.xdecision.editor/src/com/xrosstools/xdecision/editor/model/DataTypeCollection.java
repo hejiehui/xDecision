@@ -19,7 +19,7 @@ public class DataTypeCollection extends DataType {
     private MethodDefinition containsAll = new MethodDefinition("containsAll", DataType.BOOLEAN_TYPE, asList(new FieldDefinition(VALUE, this)));
     
     public DataTypeCollection() {
-        super(DataTypeEnum.COLLECTION);
+        this(DataTypeEnum.COLLECTION);
     }
 
     public DataTypeCollection(DataTypeEnum type) {
@@ -56,8 +56,7 @@ public class DataTypeCollection extends DataType {
 
     @Override
     public IPropertyDescriptor[] getPropertyDescriptors() {
-        //TODO add user defined types
-        return new IPropertyDescriptor[] {new ComboBoxPropertyDescriptor(propertyType, propertyType, DataTypeEnum.getValueTypeNames())};
+        return new IPropertyDescriptor[] {new ComboBoxPropertyDescriptor(propertyType, propertyType, getValueTypeNames())};
     }
     
     public Object getPropertyValue(Object propName) {
@@ -69,6 +68,6 @@ public class DataTypeCollection extends DataType {
 
     public void setPropertyValue(Object propName, Object value){
         if (propertyType.equals(propName))
-            setValueType(DataTypeEnum.values()[(Integer)value].createDataType());
+            setValueType(findDataType(getValueTypeNames()[(Integer)value]));
     }
 }
