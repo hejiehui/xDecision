@@ -9,7 +9,6 @@ import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.actions.InputTextCommandAction;
 import com.xrosstools.xdecision.editor.commands.ChangeElementNameCommand;
 import com.xrosstools.xdecision.editor.commands.ChangeElementTypeCommand;
-import com.xrosstools.xdecision.editor.commands.DeleteElementCommand;
 import com.xrosstools.xdecision.editor.model.NamedElement;
 import com.xrosstools.xdecision.editor.model.NamedElementContainer;
 import com.xrosstools.xdecision.editor.model.NamedElementTypeEnum;
@@ -35,7 +34,7 @@ public class NamedElementContextMenuProvider implements XrossEvaluatorConstants,
         changeTypeMenu(menu, element);
         
         menu.add(new Separator());
-        menu.add(new CommandAction(editor, String.format(REMOVE_MSG, element.getName()), false, new DeleteElementCommand((NamedElementContainer<NamedElement>)namedElementPart.getParent().getModel(), element)));
+        menu.add(new CommandAction(editor, String.format(REMOVE_MSG, element.getName()), false, type.createDeleteCommand(editor.getModel(), (NamedElementContainer<NamedElement>)namedElementPart.getParent().getModel(), element)));
     }
     
     public void changeTypeMenu(IMenuManager menu, NamedElement element) {

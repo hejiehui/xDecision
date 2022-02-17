@@ -1,6 +1,10 @@
 package com.xrosstools.xdecision.editor.model;
 
+import org.eclipse.gef.commands.Command;
+
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
+import com.xrosstools.xdecision.editor.commands.DeleteDecisionCommand;
+import com.xrosstools.xdecision.editor.commands.DeleteElementCommand;
 
 public enum NamedElementTypeEnum implements DecisionTreeMessages {
     FACTOR(FACTOR_MSG),
@@ -64,20 +68,18 @@ public enum NamedElementTypeEnum implements DecisionTreeMessages {
             return null;
         }
     }
+    
+    public Command createDeleteCommand(DecisionTreeDiagram diagram, NamedElementContainer container, NamedElement element) {
+        switch (this) {
+        case DECISION:
+            return new DeleteDecisionCommand(diagram, (DecisionTreeDecision)element);
+        default:
+            return new DeleteElementCommand(container, element);
+        }
+        
+    }
 
     public String getTypeName() {
         return typeName;
-    }
-    
-    public boolean allowCollections() {
-        switch (this) {
-        case FACTOR:
-        case FIELD:
-        case METHOD:
-        case PARTAMETER:
-            return true;
-        default:
-            return false;
-        }
     }
 }

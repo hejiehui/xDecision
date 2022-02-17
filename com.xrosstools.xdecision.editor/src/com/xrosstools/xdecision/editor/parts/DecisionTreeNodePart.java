@@ -114,9 +114,6 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        //TODO Handle decision remove event
-        
-        refresh();//?
         if (evt.getPropertyName().equals(DecisionTreeNode.PROP_INPUTS))
             refreshTargetConnections();
         else if (evt.getPropertyName().equals(DecisionTreeNode.PROP_OUTPUTS))
