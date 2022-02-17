@@ -9,7 +9,6 @@ public class CreateElementCommand extends InputTextCommand{
     
     public CreateElementCommand(NamedElementContainer container){
         this.container = container;
-        newElement = container.getElementType().newInstance();
     }
     
     public boolean canExecute() {
@@ -17,6 +16,7 @@ public class CreateElementCommand extends InputTextCommand{
     }
     
     public void execute() {
+        newElement = container.getElementType().newInstance();
         newElement.setName(getInputText());
         redo();
     }

@@ -72,15 +72,16 @@ public class DecisionTreeXMLSerializer {
 		model.setParserClass(getNodeValue(doc, PARSER, ""));
 		model.setEvaluatorClass(getNodeValue(doc, EVALUATOR, ""));
 		
-		if(DecisionTreeV1FormatReader.isV1Format(doc))
+        model.setDecisions(createDecisions(doc));
+
+        if(DecisionTreeV1FormatReader.isV1Format(doc))
 		    model.setPathes(DecisionTreeV1FormatReader.createPaths(doc));
 		else {
 		    model.setTypes(createTypes(doc, model));
-		    model.setNodes(createNodes(doc));
+		    model.setNodes(createNodes(doc, model));
 		}
 		
         model.setFactors(createFactors(doc, model));
-        model.setDecisions(createDecisions(doc));
 
         return model;
 	}
@@ -183,7 +184,7 @@ public class DecisionTreeXMLSerializer {
 		return factors;
 	}
 	
-    private DecisionTreeNode[] createNodes(Document doc) {
+    private DecisionTreeNode[] createNodes(Document doc, DecisionTreeModel model) {
         if(doc.getElementsByTagName(NODES).getLength() == 0)
             return null;
 
@@ -194,7 +195,10 @@ public class DecisionTreeXMLSerializer {
             Node nodeNode = nodeNodes.get(i);
             DecisionTreeNode node = new DecisionTreeNode();
             
-            node.setDecisionId(getIntAttribute(nodeNode, DECISION_INDEX, -1));
+            int deciionId = getIntAttribute(nodeNode, DECISION_INDEX, -1);
+            if(deciionId > -1)
+                node.setDecision(model.getDecisions()[deciionId]);
+
             node.setRawExpression(getAttribute(nodeNode, EXPRESSION));
 
             nodes[i] = node;

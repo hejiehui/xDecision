@@ -10,7 +10,7 @@ public interface PropertyConstants {
     
 	String PROP_FIELD_NAME = "Field name";
 	String PROP_FUNCTION_NAME = "Function name";
-	String PROP_DECISION_ID = "Decion";
+	String PROP_DECISION = "Decion";
 	String PROP_DESCRIPTION = "description";
 	String PROP_IDENTIFIER = "identifier";
 	

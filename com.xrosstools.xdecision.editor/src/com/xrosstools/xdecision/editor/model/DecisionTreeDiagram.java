@@ -20,7 +20,7 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 	private NamedElementContainer<DecisionTreeFactor> factors = new NamedElementContainer<DecisionTreeFactor>(FACTORS_MSG, NamedElementTypeEnum.FACTOR);
     private NamedElementContainer<DecisionTreeConstant> userDefinedConstants = new NamedElementContainer<DecisionTreeConstant>(CONSTANTS_MSG, NamedElementTypeEnum.CONSTANT);
 
-	public NamedElementContainer<DecisionTreeFactor> getAllFactors(){
+	public NamedElementContainer<DecisionTreeFactor> getFactors(){
         return factors;
     }
 	
@@ -140,17 +140,17 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public List<DecisionTreeFactor> getFactors() {
+	public List<DecisionTreeFactor> getFactorList() {
 		return factors.getElements();
 	}
 	public void setFactors(List<DecisionTreeFactor> factors) {
 		this.factors.setElements(factors);
 	}
 	public DecisionTreeFactor getFactorById(int index) {
-	    return getFactors().get(index);
+	    return getFactorList().get(index);
 	}
 	public int indexOf(DecisionTreeFactor factor) {
-	    return getFactors().indexOf(factor);
+	    return getFactorList().indexOf(factor);
 	}
 	public NamedElementContainer<DecisionTreeDecision> getDecisions() {
 		return decisions;
@@ -161,7 +161,10 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
     public void setType(DataType type) {
         this.type = type;
     }
-    public List<DataType> getUserDefinedTypes() {
+    public NamedElementContainer<DataType> getUserDefinedTypes() {
+        return DataType.getUserDefinedTypes();
+    }
+    public List<DataType> getUserDefinedTypeList() {
         return DataType.getUserDefinedTypes().getElements();
     }
     public NamedElementContainer<DecisionTreeConstant> getUserDefinedConstants() {
@@ -175,7 +178,7 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 //        return getFactorType(getFactorId(factorName));
 //    }
     public int getFactorId(String factorName){
-        List<DecisionTreeFactor> factors = getFactors();
+        List<DecisionTreeFactor> factors = getFactorList();
         for(int i = 0; i < factors.size(); i++)
             if(factors.get(i).getFactorName().equals(factorName))
                 return i;

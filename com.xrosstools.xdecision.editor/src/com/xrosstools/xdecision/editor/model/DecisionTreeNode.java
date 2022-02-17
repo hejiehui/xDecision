@@ -20,7 +20,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource {
     private ExpressionDefinition expression = new PlaceholderExpression();
     private String rawExpression;
 	
-	private int decisionId = -1;
+	private DecisionTreeDecision decision;
 	private String description;
 
 	private Point location;
@@ -58,7 +58,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource {
 		IPropertyDescriptor[] descriptors;
 		descriptors = new IPropertyDescriptor[] {
 				new TextPropertyDescriptor(PROP_EXPRESSION, PROP_EXPRESSION),
-				new ComboBoxPropertyDescriptor(PROP_DECISION_ID, PROP_DECISION_ID, manager.getDecisions().getElementNames()),
+				new ComboBoxPropertyDescriptor(PROP_DECISION, PROP_DECISION, manager.getDecisions().getElementNames()),
 			};
 		return descriptors;
 	}
@@ -66,8 +66,8 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource {
 	public Object getPropertyValue(Object propName) {
 		if (PROP_EXPRESSION.equals(propName))
 			return expression.toString();
-		if (PROP_DECISION_ID.equals(propName))
-			return decisionId;
+		if (PROP_DECISION.equals(propName))
+			return getDecisionId();
 
 		return null;
 	}
@@ -75,8 +75,8 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource {
 	public void setPropertyValue(Object propName, Object value){
 		if (PROP_EXPRESSION.equals(propName))
 			setNodeExpression(parser.parse((String)value));
-		if (PROP_DECISION_ID.equals(propName))
-			setDecisionId((Integer)value);
+		if (PROP_DECISION.equals(propName))
+			setDecision(manager.getDecisions().get((Integer)value));
 	}
 	
 	public Object getEditableValue(){
@@ -97,14 +97,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource {
         else
             expDes = getNodeExpression().toString();
 
-        
-        String decision;
-        if(getDecisionId() == -1)
-            decision = "No decision";
-        else
-            decision = manager.getDecision(getDecisionId()).getName();
-        
-        return "[" + decision + "] " + expDes;
+        return "[" + (decision == null ? "No decision": decision.getName()) + "] " + expDes;
 
 	}
 
@@ -124,12 +117,16 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource {
 	public ExpressionDefinition getNodeExpression() {
 	    return expression;
 	}
+
 	public int getDecisionId() {
-		return decisionId;
+	    return manager.getDecisions().indexOf(decision);
 	}
-	public void setDecisionId(int decisionId) {
-		this.decisionId = decisionId;
-		listeners.firePropertyChange(PROP_DECISION_ID, null, decisionId);
+	public DecisionTreeDecision getDecision() {
+	    return decision;
+	}
+	public void setDecision(DecisionTreeDecision decision) {
+		this.decision = decision;
+		listeners.firePropertyChange(PROP_DECISION, null, decision);
 	}
 	public String getDescription() {
 		return description;

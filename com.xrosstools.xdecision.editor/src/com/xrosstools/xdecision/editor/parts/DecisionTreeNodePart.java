@@ -33,19 +33,27 @@ import com.xrosstools.xdecision.editor.policies.DecisionTreeGraphicNodeEditPolic
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeEditPolicy;
 
 public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements PropertyChangeListener, NodeEditPart {
+    private DecisionTreeNode node;
+    
+    @Override
+    public void setModel(Object model) {
+        super.setModel(model);
+        node = (DecisionTreeNode)model;
+    }
     protected List getModelChildren() {
         List children = new ArrayList();
-        DecisionTreeNode node = (DecisionTreeNode) getModel();
+        
         if(node.getNodeExpression() != null)
             children.add(node.getNodeExpression());
+
         return children;
     }
     
     protected void addChildVisual(EditPart childEditPart, int index) {
         DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
-        
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
-        figure.setExpressionFigure(childFigure);        
+
+        figure.setExpressionFigure(childFigure);
     }
     
 	protected IFigure createFigure() {
@@ -67,6 +75,7 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
         return new ChopboxAnchor(getFigure());
 	}
 
+	//TODO revise this behavior
 	public void performRequest(Request req) {
 		if (req.getType() == RequestConstants.REQ_OPEN){
 		    CommandChain cc = new CommandChain();
@@ -89,7 +98,6 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
 	}
 	
 	protected void createEditPolicies() {
-//		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DecisionTreeNodeDirectEditPolicy(getDiagram().getFactors()));
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DecisionTreeNodeEditPolicy());
 		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new DecisionTreeGraphicNodeEditPolicy());
 	}
@@ -106,7 +114,9 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        refresh();
+        //TODO Handle decision remove event
+        
+        refresh();//?
         if (evt.getPropertyName().equals(DecisionTreeNode.PROP_INPUTS))
             refreshTargetConnections();
         else if (evt.getPropertyName().equals(DecisionTreeNode.PROP_OUTPUTS))
@@ -117,33 +127,31 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     
     public void activate() {
     	super.activate();
-    	((DecisionTreeNode) getModel()).getListeners().addPropertyChangeListener(this);
+    	node.getListeners().addPropertyChangeListener(this);
+    	node.getDecisionTreeManager().getDecisions().getListeners().addPropertyChangeListener(this);
+    	if(node.getDecision() != null)
+    	    node.getDecision().getListeners().addPropertyChangeListener(this);
     }
     
     public void deactivate() {
     	super.deactivate();
-    	((DecisionTreeNode) getModel()).getListeners().removePropertyChangeListener(this);
+    	node.getListeners().removePropertyChangeListener(this);
+    	node.getDecisionTreeManager().getDecisions().getListeners().removePropertyChangeListener(this);
+        if(node.getDecision() != null)
+            node.getDecision().getListeners().removePropertyChangeListener(this);
     }
 
     protected void refreshVisuals() {
-    	DecisionTreeNode node = (DecisionTreeNode) getModel();
     	DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
 
 		Point loc = node.getLocation();
 		Dimension size = new Dimension(-1, -1);
         Rectangle rectangle = new Rectangle(loc, size);
         ((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rectangle);
-    	
-//    	figure.setFactor(nodeExpression);
-    	
-        String decision;
-    	if(node.getDecisionId() == -1)
-    		decision = "";
-    	else
-    		decision = getDiagram().getDecisions().get(node.getDecisionId()).getName();
-
-    	figure.setDecision(decision);
+        
+        figure.setDecision(node.getDecision() == null ? "": node.getDecision().getName());
     }
+
     private DecisionTreeDiagram getDiagram() {
         return (DecisionTreeDiagram)getParent().getModel();
     }

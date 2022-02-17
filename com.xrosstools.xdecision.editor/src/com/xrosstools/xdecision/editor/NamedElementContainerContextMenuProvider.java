@@ -21,8 +21,10 @@ public class NamedElementContainerContextMenuProvider implements XrossEvaluatorC
     }
     
     public void buildContextMenu(IMenuManager menu, NamedElementContainerTreePart containerPart) {
-        NamedElementContainer<NamedElement> container = (NamedElementContainer<NamedElement>)containerPart.getModel();
-        
+        buildContextMenu(menu, (NamedElementContainer<NamedElement>)containerPart.getModel());
+    }
+    
+    public void buildContextMenu(IMenuManager menu, NamedElementContainer container) {
         String createMsg = String.format(CREATE_NEW_TEMPLATE_MSG, container.getElementType().getTypeName());
         
         String[] qualifiedTypes = container.getElementType().getQualifiedDataTypes();
@@ -43,7 +45,6 @@ public class NamedElementContainerContextMenuProvider implements XrossEvaluatorC
         MenuManager createElementMenu = new MenuManager(String.format(CREATE_NEW_TEMPLATE_MSG, category));
         
         // create element
-        NamedType newElement = (NamedType)container.getElementType().newInstance();
         for(String typeName: typeNames) {
             createElementMenu.add(new InputTextCommandAction(editor, typeName, String.format("Set %s name", category), "", new CreateNamedTypeCommand(container, typeName)));
         }

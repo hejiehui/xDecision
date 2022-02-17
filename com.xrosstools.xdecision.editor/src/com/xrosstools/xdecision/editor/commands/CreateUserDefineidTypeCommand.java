@@ -13,7 +13,7 @@ public class CreateUserDefineidTypeCommand extends InputTextCommand{
     
     public void execute() {
         newType = new DataType(getInputText());
-        diagram.getUserDefinedTypes().add(newType);
+        diagram.getUserDefinedTypeList().add(newType);
     }
 
     public String getLabel() {
@@ -21,10 +21,10 @@ public class CreateUserDefineidTypeCommand extends InputTextCommand{
     }
 
     public void redo() {
-        diagram.getUserDefinedTypes().add(newType);
+        diagram.getUserDefinedTypeList().add(newType);
     }
 
     public void undo() {
-        diagram.getUserDefinedTypes().remove(newType);
+        diagram.getUserDefinedTypeList().remove(newType);
     }
 }

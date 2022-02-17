@@ -2,21 +2,22 @@ package com.xrosstools.xdecision.editor.commands;
 
 import org.eclipse.gef.commands.Command;
 
+import com.xrosstools.xdecision.editor.model.DecisionTreeDecision;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 
 public class ChangeDecisionCommand extends Command{
     private DecisionTreeNode node;
-    private int oldDecisionId;
-    private int newDecisionId;
+    private DecisionTreeDecision oldDecision;
+    private DecisionTreeDecision newDecision;
     
-    public ChangeDecisionCommand(DecisionTreeNode node, int newDecisionId){
+    public ChangeDecisionCommand(DecisionTreeNode node, DecisionTreeDecision newDecision){
         this.node = node;
-        oldDecisionId = node.getDecisionId();
-        this.newDecisionId = newDecisionId;
+        oldDecision = node.getDecision();
+        this.newDecision = newDecision;
     }
     
     public void execute() {
-        node.setDecisionId(newDecisionId);
+        node.setDecision(newDecision);
     }
 
     public String getLabel() {
@@ -28,6 +29,6 @@ public class ChangeDecisionCommand extends Command{
     }
 
     public void undo() {
-        node.setDecisionId(oldDecisionId);
+        node.setDecision(oldDecision);
     }
 }

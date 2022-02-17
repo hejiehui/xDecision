@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.gef.editparts.AbstractTreeEditPart;
 
-import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 
 public class DecisionTreeDiagramTreePart extends AbstractTreeEditPart {
@@ -18,9 +17,9 @@ public class DecisionTreeDiagramTreePart extends AbstractTreeEditPart {
     protected List<?> getModelChildren() {
         List children = new ArrayList();
         children.addAll(diagram.getRoots());
-        children.add(diagram.getAllFactors());
+        children.add(diagram.getFactors());
         children.add(diagram.getDecisions());
-        children.add(DataType.getUserDefinedTypes());
+        children.add(diagram.getUserDefinedTypes());
         children.add(diagram.getUserDefinedConstants());
         
     	return children;

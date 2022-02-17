@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagramFactory;
-import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.DecisionTreeModel;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 
@@ -50,10 +49,9 @@ public class DecisionTreeJunit4TestCodeGen {
 		
 		int index = 0;
 		for(DecisionTreeNode node: model.getNodes()){
-		    if(node.getDecisionId() < 0)
+		    if(node.getDecision() == null)
 		        continue;
 
-		    int decisionId = node.getDecisionId();
             StringBuilder commentsBuf = new StringBuilder();
             StringBuilder codeBuf = new StringBuilder(TEST_RESET);
 
@@ -70,7 +68,7 @@ public class DecisionTreeJunit4TestCodeGen {
 		        
 		        node = parent;
 		    }
-            codeBuf.append(String.format(ASSERT_DISPLAY, model.getDecisions()[decisionId]));
+            codeBuf.append(String.format(ASSERT_DISPLAY, node.getDecision()));
             testCasesCode.append(String.format(METHOD_BODY, index++, commentsBuf.toString(), codeBuf.toString()));
 		}		
 		return testCasesCode.toString();

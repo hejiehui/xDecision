@@ -4,7 +4,7 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 public class NamedType extends NamedElement implements PropertyConstants {
-    private DataType type;
+    private DataType type = DataType.STRING_TYPE;
     private String propertyType;
     
     public NamedType(NamedElementTypeEnum type) {

@@ -8,6 +8,7 @@ import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateDecisionAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateFactorAction;
 import com.xrosstools.xdecision.editor.commands.ChangeDecisionCommand;
 import com.xrosstools.xdecision.editor.commands.expression.ChangeChildCommand;
+import com.xrosstools.xdecision.editor.model.DecisionTreeDecision;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
@@ -27,7 +28,7 @@ public class NodeContextMenuProvider {
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)editor.getRootEditPart().getContents().getModel();
         
         int i = 0;
-        for(DecisionTreeFactor factor: diagram.getFactors()) {
+        for(DecisionTreeFactor factor: diagram.getFactorList()) {
             ExpressionDefinition exp = node.getNodeExpression();
             boolean selected = exp != null && exp.toString().equals(factor.getFactorName());
             menu.add(new CommandAction(editor, factor.getFactorName(), selected, new ChangeChildCommand(node, node.getNodeExpression(), new VariableExpression(factor.getFactorName()))));
@@ -37,14 +38,13 @@ public class NodeContextMenuProvider {
         menu.add(new DecisionTreeCreateFactorAction(editor, node));
         menu.add(new Separator());
         
-        
-        menu.add(new Separator());
-        i = 0;
-        for(String decision: diagram.getDecisions().getElementNames()) {
-            menu.add(new CommandAction(editor, decision, node.getDecisionId() == i, new ChangeDecisionCommand(node, i++)));
-        }
-        
-        menu.add(new Separator());
-        menu.add(new DecisionTreeCreateDecisionAction(editor, node));
+//        
+//        menu.add(new Separator());
+//        for(DecisionTreeDecision decision: diagram.getDecisions().getElements()) {
+//            menu.add(new CommandAction(editor, decision, node.getDecision() == decision, new ChangeDecisionCommand(node, i++)));
+//        }
+//        
+//        menu.add(new Separator());
+//        menu.add(new DecisionTreeCreateDecisionAction(editor, node));
     }
 }

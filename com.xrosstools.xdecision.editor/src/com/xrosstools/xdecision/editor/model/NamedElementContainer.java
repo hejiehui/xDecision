@@ -74,6 +74,10 @@ public class NamedElementContainer<T extends NamedElement> extends NamedElement 
         return findByName(name) != null;
     }
     
+    public int indexOf(T element) {
+        return elements.indexOf(element);
+    }
+
     public T findByName(String name) {
         for(T type: elements) {
             if(name.equals(type.getName()))

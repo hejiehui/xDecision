@@ -23,7 +23,7 @@ public class DecisionTreeDiagramFactory {
 	    diagram.setAlignment(0.5f);
 
 	    diagram.getDecisions().addAll(Arrays.asList(model.getDecisions()));
-	    diagram.getFactors().addAll(Arrays.asList(model.getFactors()));
+	    diagram.getFactorList().addAll(Arrays.asList(model.getFactors()));
 	    
 	    for(DecisionTreeFactor f: model.getFactors()) {
 	        FieldDefinition l = new FieldDefinition();
@@ -35,7 +35,7 @@ public class DecisionTreeDiagramFactory {
 		if(DecisionTreeV1FormatReader.isV1Format(model))
 		    DecisionTreeV1FormatReader.buildTree(model, diagram);
 		else {
-		    diagram.getUserDefinedTypes().addAll(Arrays.asList(model.getTypes()));
+		    diagram.getUserDefinedTypeList().addAll(Arrays.asList(model.getTypes()));
 		    diagram.getNodes().addAll(parseExpression(diagram, model.getNodes()));
 		}
 
@@ -69,8 +69,8 @@ public class DecisionTreeDiagramFactory {
 		model.setParserClass(diagram.getParserClass());
 		model.setEvaluatorClass(diagram.getEvaluatorClass());
 		model.setDecisions(diagram.getDecisions().getElements().toArray(new DecisionTreeDecision[0]));
-		model.setFactors(diagram.getFactors().toArray(new DecisionTreeFactor[0]));
-		model.setTypes(diagram.getUserDefinedTypes().toArray(new DataType[0]));
+		model.setFactors(diagram.getFactorList().toArray(new DecisionTreeFactor[0]));
+		model.setTypes(diagram.getUserDefinedTypeList().toArray(new DataType[0]));
 		model.setNodes(diagram.getNodes().toArray(new DecisionTreeNode[0]));
 		
 		return model;

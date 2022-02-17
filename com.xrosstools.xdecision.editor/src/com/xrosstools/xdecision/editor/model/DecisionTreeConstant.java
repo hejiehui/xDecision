@@ -1,5 +1,7 @@
 package com.xrosstools.xdecision.editor.model;
 
+import java.util.Date;
+
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
@@ -8,8 +10,28 @@ public class DecisionTreeConstant extends NamedType {
         super(NamedElementTypeEnum.CONSTANT);
     }
 
-    //TODO We don't validate format of the value against data type for now
     private String value = "";
+    
+    @Override
+    public void setType(DataType type) {
+        super.setType(type);
+
+        //Make sure init proper value for type
+        switch (type.getType()) {
+        case STRING:
+            setValue("");
+            break;
+        case NUMBER:
+            setValue("0");
+        case BOOLEAN:
+            setValue("false");
+        case DATE:
+            setValue(new Date().toString());
+        default:
+            setValue("");
+            break;
+        }
+    }
     
     public String getValue() {
         return value;

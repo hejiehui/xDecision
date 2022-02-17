@@ -92,7 +92,7 @@ public class DecisionTreeV1FormatReader {
                  parent = child;
              }
              
-             parent.setDecisionId(path.getDecisionIndex());
+             parent.setDecision(model.getDecisions()[path.getDecisionIndex()]);
          }
     } 
 }

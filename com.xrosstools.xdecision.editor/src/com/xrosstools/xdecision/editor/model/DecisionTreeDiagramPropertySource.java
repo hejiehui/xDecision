@@ -45,11 +45,11 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
         desc.setCategory(CONFIGURE);
         props.add(desc);
         
-		for(int i = 0; i < diagram.getFactors().size(); i++){
+		for(int i = 0; i < diagram.getFactorList().size(); i++){
 			desc = new TextPropertyDescriptor(FACTOR + i, NAME);
 			desc.setCategory("Factor " + i);
 			props.add(desc);
-			DecisionTreeFactor factor = diagram.getFactors().get(i);
+			DecisionTreeFactor factor = diagram.getFactorList().get(i);
 			if(factor.getFactorValues() == null)
 				factor.setFactorValues(new String[]{"value 0", "value 1"});
 			for(int j = 0; j < factor.getFactorValues().length; j++ ){
@@ -82,7 +82,7 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 		
 		if(prop.startsWith(FACTOR) && !prop.contains(_VALUE_)){
 			int index = Integer.parseInt(prop.substring(prop.indexOf(SPACE) + 1));
-			return diagram.getFactors().get(index).getFactorName();
+			return diagram.getFactorList().get(index).getFactorName();
 		}
 		
 		if(prop.startsWith(FACTOR) && prop.contains(_VALUE_)){
@@ -90,7 +90,7 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 			int secondSpace = prop.indexOf(SPACE, firstSpace);
 			int factorId = Integer.parseInt(prop.substring(firstSpace, secondSpace));
 			int valueId = Integer.parseInt(prop.substring(prop.lastIndexOf(SPACE) + 1));
-			return diagram.getFactors().get(factorId).getFactorValues()[valueId];
+			return diagram.getFactorList().get(factorId).getFactorValues()[valueId];
 		}
 
 		if(prop.startsWith(DECISION)){
@@ -116,7 +116,7 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 		
 		if(prop.startsWith(FACTOR) && !prop.contains(_VALUE_)){
 			int index = Integer.parseInt(prop.substring(prop.indexOf(SPACE) + 1));
-			diagram.getFactors().get(index).setFactorName(value);
+			diagram.getFactorList().get(index).setFactorName(value);
 		}
 
 		if(prop.startsWith(FACTOR) && prop.contains(_VALUE_)){
@@ -124,7 +124,7 @@ public class DecisionTreeDiagramPropertySource implements IPropertySource {
 			int secondSpace = prop.indexOf(SPACE, firstSpace);
 			int factorId = Integer.parseInt(prop.substring(firstSpace, secondSpace));
 			int valueId = Integer.parseInt(prop.substring(prop.lastIndexOf(SPACE) + 1));
-			diagram.getFactors().get(factorId).getFactorValues()[valueId] = value;
+			diagram.getFactorList().get(factorId).getFactorValues()[valueId] = value;
 		}
 
 		if(prop.startsWith(DECISION)){

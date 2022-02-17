@@ -1,7 +1,6 @@
 package com.xrosstools.xdecision.editor.model;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,27 +22,9 @@ public class DecisionTreeManager {
     public NamedElementContainer<DecisionTreeDecision> getDecisions(){
 		return diagram.getDecisions();
 	}
-	
-	public DecisionTreeDecision getDecision(int decisionId){
-		return diagram.getDecisions().getElements().get(decisionId);
-	}
-	
-	/**
-	 * if decision is already exist, return the id,
-	 * if not, create a new decision and return the new id
-	 */
-	public int getDecisionId(DecisionTreeDecision decision){
-		List<DecisionTreeDecision> decisions = diagram.getDecisions().getElements();
-		for(int i = 0; i < decisions.size(); i++)
-			if(decisions.get(i).equals(decision))
-				return i;
-		
-		decisions.add(decision);
-		return decisions.size()-1;
-	}
 
 	public String[] getFactorNames(){
-		String[] names = new String[diagram.getFactors().size()];
+		String[] names = new String[diagram.getFactorList().size()];
 		for(int i = 0; i<names.length;i++)
 			names[i] = getFactor(i).getFactorName();
 		return names;
@@ -54,7 +35,7 @@ public class DecisionTreeManager {
 	}
 
 	public DecisionTreeFactor getFactor(int factorId) {
-        return diagram.getFactors().get(factorId);
+        return diagram.getFactorList().get(factorId);
     }
 	
 	public void changeFactorName(int factorId, String newName){

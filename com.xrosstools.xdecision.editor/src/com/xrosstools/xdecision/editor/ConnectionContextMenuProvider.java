@@ -33,7 +33,7 @@ public class ConnectionContextMenuProvider implements XrossEvaluatorConstants {
             return;
         
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)editor.getRootEditPart().getContents().getModel();
-        DecisionTreeFactor factor = diagram.getFactors().get(factorId);
+        DecisionTreeFactor factor = diagram.getFactorList().get(factorId);
         
         //Reuse existing factor evaluation expression
         int i = 0;
@@ -51,7 +51,7 @@ public class ConnectionContextMenuProvider implements XrossEvaluatorConstants {
     }
     
     private void createExpressionMeun(IMenuManager menu, DecisionTreeDiagram diagram, DecisionTreeNodeConnection conn) {
-        DecisionTreeFactor factor = diagram.getFactors().get(0);//conn.getParent().getFactorId()
+        DecisionTreeFactor factor = diagram.getFactorList().get(0);//conn.getParent().getFactorId()
         
         for(String operator: SINGLE_OPERAND_OPERATOR)
             menu.add(new CommandAction(editor, operator, false, new AddFactorOpratorValueCommand(factor, operator, conn)));
