@@ -38,13 +38,13 @@ public class NodeContextMenuProvider {
         menu.add(new DecisionTreeCreateFactorAction(editor, node));
         menu.add(new Separator());
         
-//        
-//        menu.add(new Separator());
-//        for(DecisionTreeDecision decision: diagram.getDecisions().getElements()) {
-//            menu.add(new CommandAction(editor, decision, node.getDecision() == decision, new ChangeDecisionCommand(node, i++)));
-//        }
-//        
-//        menu.add(new Separator());
-//        menu.add(new DecisionTreeCreateDecisionAction(editor, node));
+        
+        menu.add(new Separator());
+        for(DecisionTreeDecision decision: diagram.getDecisions().getElements()) {
+            menu.add(new CommandAction(editor, decision.getName(), node.getDecision() == decision, new ChangeDecisionCommand(node, decision)));
+        }
+        
+        menu.add(new Separator());
+        menu.add(new DecisionTreeCreateDecisionAction(editor, node));
     }
 }

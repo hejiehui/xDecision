@@ -6,18 +6,26 @@ import com.xrosstools.xdecision.editor.model.DecisionTreeDecision;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 
 public class ChangeDecisionCommand extends Command{
+    private boolean useLastCreated;
     private DecisionTreeNode node;
     private DecisionTreeDecision oldDecision;
     private DecisionTreeDecision newDecision;
     
-    public ChangeDecisionCommand(DecisionTreeNode node, DecisionTreeDecision newDecision){
+    public ChangeDecisionCommand(DecisionTreeNode node){
+        this(node, null);
+        useLastCreated = true;
+    }
+    
+    public ChangeDecisionCommand(DecisionTreeNode node, DecisionTreeDecision decision){
         this.node = node;
         oldDecision = node.getDecision();
-        this.newDecision = newDecision;
+        this.newDecision = decision;
     }
     
     public void execute() {
-        node.setDecision(newDecision);
+        if(useLastCreated)
+            newDecision = node.getDecisionTreeManager().getDecisions().get(node.getDecisionTreeManager().getDecisions().size() -1);
+        redo();
     }
 
     public String getLabel() {
@@ -25,7 +33,7 @@ public class ChangeDecisionCommand extends Command{
     }
 
     public void redo() {
-        execute();
+        node.setDecision(newDecision);
     }
 
     public void undo() {
