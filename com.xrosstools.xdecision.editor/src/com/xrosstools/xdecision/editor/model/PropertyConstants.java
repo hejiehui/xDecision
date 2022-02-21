@@ -1,5 +1,7 @@
 package com.xrosstools.xdecision.editor.model;
 
+import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
+
 public interface PropertyConstants {
 	String PROP_EXPRESSION = "Expression";
     String PROP_DATA_TYPE = "Data type";
@@ -19,7 +21,7 @@ public interface PropertyConstants {
 	String PROP_VALUE_TYPE_TPL = "%s value type";
 	String PROP_KEY_TYPE_TPL = "%s key type";
 	
-	String PROP_VALUE = "value";
+	String PROP_VALUE = DecisionTreeMessages.CONSTANT_MSG + " value";
 	String PROP_ELEMENTS = "elements";
 	String PROP_INPUTS = "inputs";
 	String PROP_OUTPUTS = "outputs";

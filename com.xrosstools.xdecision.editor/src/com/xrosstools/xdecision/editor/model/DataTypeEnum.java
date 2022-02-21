@@ -79,6 +79,6 @@ public enum DataTypeEnum implements PropertyConstants {
     }
     
     public static boolean isUserDefined(DataTypeEnum type) {
-        return !(type == USER_DEFINED || type == ENUM);
+        return type == USER_DEFINED || type == ENUM;
     }
 }
