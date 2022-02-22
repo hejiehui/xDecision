@@ -38,7 +38,7 @@ public class NamedElementContextMenuProvider implements XrossEvaluatorConstants,
     }
     
     public void changeTypeMenu(IMenuManager menu, NamedElement element) {
-        String[] qualifiedTypes = element.getElementType().getQualifiedDataTypes();
+        String[] qualifiedTypes = element.getElementType().getQualifiedDataTypes(editor.getModel());
         if(qualifiedTypes.length == 0)
             return;
         
@@ -47,7 +47,7 @@ public class NamedElementContextMenuProvider implements XrossEvaluatorConstants,
         
         NamedType nameType = (NamedType)element;
         for(String typeName: qualifiedTypes) {
-            changeTypeMenu.add(new CommandAction(editor, typeName, nameType.getType().getName().equals(typeName), new ChangeElementTypeCommand(nameType, typeName)));
+            changeTypeMenu.add(new CommandAction(editor, typeName, nameType.getType().getName().equals(typeName), new ChangeElementTypeCommand(editor.getModel(), nameType, typeName)));
         }
         
         menu.add(changeTypeMenu);

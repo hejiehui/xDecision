@@ -7,27 +7,24 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 public class NamedElement implements PropertyConstants, IPropertySource {
-    protected final static IPropertyDescriptor[] NONE = new IPropertyDescriptor[0];
+    protected static final IPropertyDescriptor[] NONE = new IPropertyDescriptor[0];
     
     private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
     private NamedElementTypeEnum type;
     private String name = "";
     private String propertyName;
     
-    
-    public NamedElement(NamedElementTypeEnum type) {
-        this.type = type;
-        propertyName = String.format(PROP_NAME_TPL, type.getTypeName());
-    }
 
     public NamedElement(String name, NamedElementTypeEnum type) {
-        this(type);
+        this.type = type;
         this.name = name;
+        propertyName = String.format(PROP_NAME_TPL, type.getTypeName());
     }
 
     public PropertyChangeSupport getListeners() {
         return listeners;
     }
+
     public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
         listeners.firePropertyChange(propertyName, oldValue, newValue);
     }
@@ -35,6 +32,7 @@ public class NamedElement implements PropertyConstants, IPropertySource {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
         firePropertyChange(propertyName, null, name);

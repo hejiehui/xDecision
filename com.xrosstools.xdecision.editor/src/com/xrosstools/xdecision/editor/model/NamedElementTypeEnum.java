@@ -29,36 +29,34 @@ public enum NamedElementTypeEnum implements DecisionTreeMessages {
         this.typeName = typeName;
     }
 
-    public NamedElement newInstance() {
+    public NamedElement newInstance(DecisionTreeDiagram diagram, String name) {
         switch (this) {
         case FACTOR:
-            return new DecisionTreeFactor();
+            return new DecisionTreeFactor(diagram, name);
         case DECISION:
-            return new DecisionTreeDecision();
+            return new DecisionTreeDecision(name);
         case DATA_TYPE:
-            return new DataType(DataTypeEnum.USER_DEFINED);
+            return new DataType(name);
         case FIELD:
-            return new FieldDefinition();
+            return new FieldDefinition(diagram, name);
         case METHOD:
-            return new MethodDefinition();
+            return new MethodDefinition(diagram, name);
         case PARTAMETER:
-            return new ParameterDefinition();
+            return new ParameterDefinition(diagram, name);
         case CONSTANT:
-            return new DecisionTreeConstant();
-        case CONTAINER:
-            return new NamedElementContainer<NamedElement>();
+            return new DecisionTreeConstant(diagram, name);
         }
         return null;
     }
 
     private static final String[] NONE = new String[] {};
-    public String[] getQualifiedDataTypes() {
+    public String[] getQualifiedDataTypes(DecisionTreeDiagram diagram) {
         switch (this) {
         case FACTOR:
         case FIELD:
         case METHOD:
         case PARTAMETER:
-            return DataType.getAllTypeNames();
+            return DataTypeTemplate.combine(DataType.PREDEFINED_ALL_TYPE_NAMES, diagram.getUserDefinedTypes().getElementNames());
         case DECISION:
         case DATA_TYPE:
             return NONE;
@@ -82,4 +80,5 @@ public enum NamedElementTypeEnum implements DecisionTreeMessages {
     public String getTypeName() {
         return typeName;
     }
+    
 }

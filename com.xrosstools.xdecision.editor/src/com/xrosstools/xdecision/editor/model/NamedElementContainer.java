@@ -9,20 +9,11 @@ public class NamedElementContainer<T extends NamedElement> extends NamedElement 
     private List<T> elements = new ArrayList<T>();
     private NamedElementTypeEnum elementType;
 
-    public NamedElementContainer() {
-        super(NamedElementTypeEnum.CONTAINER);
-    }
-
     public NamedElementContainer(String name, NamedElementTypeEnum elementType) {
         super(name, NamedElementTypeEnum.CONTAINER);
         this.elementType = elementType;
     }
     
-    public NamedElementContainer(String name, NamedElementTypeEnum elementType, List<T> elements) {
-        this(name, elementType);
-        this.elements.addAll(elements);
-    }
-
     public int size() {
         return elements.size();
     }
@@ -62,7 +53,7 @@ public class NamedElementContainer<T extends NamedElement> extends NamedElement 
 
     public void addAll(List<T> elements) {
         this.elements.addAll(elements);
-        firePropertyChange(PROP_ELEMENTS, null, elements);
+         firePropertyChange(PROP_ELEMENTS, null, elements);
     }
 
     public void remove(T element) {

@@ -5,7 +5,7 @@ import static java.util.Arrays.asList;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-public class DataTypeCollection extends DataType {
+public class DataTypeCollection extends DataTypeTemplate {
     public static final String VALUE = "value";
     
     public static final DataType DEFAULT_VALUE_TYPE = DataType.STRING_TYPE;
@@ -13,23 +13,23 @@ public class DataTypeCollection extends DataType {
     private DataType valueType = DEFAULT_VALUE_TYPE;
     private String propertyType;
     
-    private MethodDefinition size = new MethodDefinition("size", DataType.NUMBER_TYPE);
-    private MethodDefinition isEmpty = new MethodDefinition("isEmpty", DataType.BOOLEAN_TYPE);
-    private MethodDefinition contains = new MethodDefinition("contains", DataType.BOOLEAN_TYPE, asList(new FieldDefinition(VALUE, valueType)));
-    private MethodDefinition containsAll = new MethodDefinition("containsAll", DataType.BOOLEAN_TYPE, asList(new FieldDefinition(VALUE, this)));
+    private MethodDefinition size;
+    private MethodDefinition isEmpty;
+    private MethodDefinition contains;
+    private MethodDefinition containsAll;
     
-    public DataTypeCollection() {
-        this(DataTypeEnum.COLLECTION);
+    public DataTypeCollection(DecisionTreeDiagram diagram) {
+        this(diagram, DataTypeEnum.COLLECTION);
     }
 
-    public DataTypeCollection(DataTypeEnum type) {
-        super(type);
+    public DataTypeCollection(DecisionTreeDiagram diagram, DataTypeEnum type) {
+        super(diagram, type);
         propertyType = String.format(PROP_VALUE_TYPE_TPL, getType().getName());
         
-        add(size);
-        add(isEmpty);
-        add(contains);
-        add(containsAll);
+        add(size = new MethodDefinition(diagram, "size", DataType.NUMBER_TYPE));
+        add(isEmpty = new MethodDefinition(diagram, "isEmpty", DataType.BOOLEAN_TYPE));
+        add(contains = new MethodDefinition(diagram, "contains", DataType.BOOLEAN_TYPE, asList(new ParameterDefinition(diagram, VALUE, valueType))));
+        add(containsAll = new MethodDefinition(diagram, "containsAll", DataType.BOOLEAN_TYPE, asList(new ParameterDefinition(diagram, VALUE, this))));
     }
 
     @Override

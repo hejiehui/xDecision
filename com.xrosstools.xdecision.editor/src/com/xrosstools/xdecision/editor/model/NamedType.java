@@ -4,25 +4,29 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 public class NamedType extends NamedElement implements PropertyConstants {
+    public static final DataType DEFAULT_TYPE = DataType.STRING_TYPE;
+    
+    private DecisionTreeDiagram diagram;
+
     private DataType type = DataType.STRING_TYPE;
     private String propertyType;
-    
-    public NamedType(NamedElementTypeEnum type) {
-        super(type);
-        propertyType = String.format(PROP_TYPE_TPL, type.getTypeName());
-    }
-    
-    public NamedType(String name, NamedElementTypeEnum elementType, DataType type) {
+
+    public NamedType(DecisionTreeDiagram diagram, String name, NamedElementTypeEnum elementType, DataType type) {
         super(name, elementType);
+        this.diagram = diagram;
         this.type = type;
+        propertyType = String.format(PROP_TYPE_TPL, elementType.getTypeName());
     }
     
+    public DecisionTreeDiagram getDiagram() {
+        return diagram;
+    }
+
     @Override
     public IPropertyDescriptor[] getPropertyDescriptors() {
         return combine(new IPropertyDescriptor[] {
                 getNameDescriptor(),
-                //TODO need to plus user defined types
-                new ComboBoxPropertyDescriptor(propertyType, propertyType, getElementType().getQualifiedDataTypes()),},
+                new ComboBoxPropertyDescriptor(propertyType, propertyType, getElementType().getQualifiedDataTypes(getDiagram())),},
                 type.getPropertyDescriptors());
     }
     
@@ -38,7 +42,7 @@ public class NamedType extends NamedElement implements PropertyConstants {
 
     public void setPropertyValue(Object propName, Object value){
         if (propertyType.equals(propName))
-            setType(DataType.findDataType(getElementType().getQualifiedDataTypes()[(Integer)value]));
+            setType(getDiagram().findDataType(getElementType().getQualifiedDataTypes(getDiagram())[(Integer)value]));
         
         if(type.isConcernedProperty(propName))
             type.setPropertyValue(propName, value);

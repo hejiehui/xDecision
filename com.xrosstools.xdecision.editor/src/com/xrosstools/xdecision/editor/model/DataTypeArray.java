@@ -3,17 +3,17 @@ package com.xrosstools.xdecision.editor.model;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-public class DataTypeArray extends DataType {
+public class DataTypeArray extends DataTypeTemplate {
     private static final String LENGTH = "length";
 
     private DataType valueType = DataType.STRING_TYPE;
     private String propertyType;
     private FieldDefinition length;
     
-    public DataTypeArray() {
-        super(DataTypeEnum.ARRAY);
+    public DataTypeArray(DecisionTreeDiagram diagram) {
+        super(diagram, DataTypeEnum.ARRAY);
         propertyType = String.format(PROP_VALUE_TYPE_TPL, getType().getName());
-        length = new FieldDefinition(LENGTH, DataType.NUMBER_TYPE);
+        length = new FieldDefinition(diagram, LENGTH, DataType.NUMBER_TYPE);
         add(length);
     }
     

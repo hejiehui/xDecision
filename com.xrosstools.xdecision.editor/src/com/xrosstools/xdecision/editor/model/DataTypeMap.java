@@ -5,7 +5,7 @@ import static java.util.Arrays.asList;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-public class DataTypeMap extends DataType {
+public class DataTypeMap extends DataTypeTemplate {
     private static final String[] KEY_TYPE_NAMES = new String[] {DataTypeEnum.STRING.getName(), DataTypeEnum.NUMBER.getName()};
     
     public static final String VALUE = "value";
@@ -16,24 +16,24 @@ public class DataTypeMap extends DataType {
     private String propertyKeyType;
     private String propertyValueType;
     
-    private MethodDefinition size = new MethodDefinition("size", DataType.NUMBER_TYPE);
-    private MethodDefinition isEmpty = new MethodDefinition("isEmpty", DataType.BOOLEAN_TYPE);
-    private MethodDefinition containsKey = new MethodDefinition("containsKey", DataType.BOOLEAN_TYPE, asList(new FieldDefinition(VALUE, keyType)));
-    private MethodDefinition containsValue = new MethodDefinition("containsValue", DataType.BOOLEAN_TYPE, asList(new FieldDefinition(VALUE, valueType)));
-    private MethodDefinition containsAll = new MethodDefinition("containsAll", DataType.BOOLEAN_TYPE, asList(new FieldDefinition(VALUE, this)));
-    private MethodDefinition get = new MethodDefinition("get", valueType, asList(new FieldDefinition(VALUE, keyType)));
+    private MethodDefinition size;
+    private MethodDefinition isEmpty;
+    private MethodDefinition containsKey;
+    private MethodDefinition containsValue;
+    private MethodDefinition containsAll;
+    private MethodDefinition get;
     
-    public DataTypeMap() {
-        super(DataTypeEnum.MAP);
+    public DataTypeMap(DecisionTreeDiagram diagram) {
+        super(diagram, DataTypeEnum.MAP);
         propertyKeyType = String.format(PROP_KEY_TYPE_TPL, getType().getName());
         propertyValueType = String.format(PROP_VALUE_TYPE_TPL, getType().getName());
         
-        add(size);
-        add(isEmpty);
-        add(containsKey);
-        add(containsValue);
-        add(containsAll);
-        add(get);
+        add(size = new MethodDefinition(diagram, "size", DataType.NUMBER_TYPE));
+        add(isEmpty = new MethodDefinition(diagram, "isEmpty", DataType.BOOLEAN_TYPE));
+        add(containsKey = new MethodDefinition(diagram, "containsKey", DataType.BOOLEAN_TYPE, asList(new ParameterDefinition(diagram, VALUE, keyType))));
+        add(containsValue = new MethodDefinition(diagram, "containsValue", DataType.BOOLEAN_TYPE, asList(new ParameterDefinition(diagram, VALUE, valueType))));
+        add(containsAll = new MethodDefinition(diagram, "containsAll", DataType.BOOLEAN_TYPE, asList(new ParameterDefinition(diagram, VALUE, this))));
+        add(get = new MethodDefinition(diagram, "get", valueType, asList(new ParameterDefinition(diagram, VALUE, keyType))));
     }
 
     @Override

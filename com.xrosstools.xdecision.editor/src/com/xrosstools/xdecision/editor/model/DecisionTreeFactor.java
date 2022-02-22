@@ -2,8 +2,8 @@ package com.xrosstools.xdecision.editor.model;
 
 //TODO remove all values
 public class DecisionTreeFactor extends NamedType {
-	public DecisionTreeFactor() {
-        super(NamedElementTypeEnum.FACTOR);
+	public DecisionTreeFactor(DecisionTreeDiagram diagram, String name) {
+        super(diagram, name, NamedElementTypeEnum.FACTOR, DEFAULT_TYPE);
     }
     private String[] factorValues = new String[0];
 	

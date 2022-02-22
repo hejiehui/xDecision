@@ -26,7 +26,8 @@ public class UserDefinedEnum extends DataType {
     }
 
     public void add(String newValue) {
-        NamedElement enumValue = new NamedElement(NamedElementTypeEnum.FIELD);
+        //TODO add enum value
+        NamedElement enumValue = new NamedElement(newValue, NamedElementTypeEnum.FIELD);
         enumValue.setName(newValue);
         values.add(enumValue);
     }

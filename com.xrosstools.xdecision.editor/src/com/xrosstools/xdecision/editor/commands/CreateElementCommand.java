@@ -1,13 +1,16 @@
 package com.xrosstools.xdecision.editor.commands;
 
+import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.NamedElement;
 import com.xrosstools.xdecision.editor.model.NamedElementContainer;
 
 public class CreateElementCommand extends InputTextCommand{
+    protected DecisionTreeDiagram diagram;
     private NamedElementContainer container;
     protected NamedElement newElement;
     
-    public CreateElementCommand(NamedElementContainer container){
+    public CreateElementCommand(DecisionTreeDiagram diagram, NamedElementContainer container){
+        this.diagram = diagram;
         this.container = container;
     }
     
@@ -16,8 +19,7 @@ public class CreateElementCommand extends InputTextCommand{
     }
     
     public void execute() {
-        newElement = container.getElementType().newInstance();
-        newElement.setName(getInputText());
+        newElement = container.getElementType().newInstance(diagram, getInputText());
         redo();
     }
 

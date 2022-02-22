@@ -6,8 +6,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 public class DecisionTreeConstant extends NamedType {
-    public DecisionTreeConstant() {
-        super(NamedElementTypeEnum.CONSTANT);
+    public DecisionTreeConstant(DecisionTreeDiagram diagram, String name) {
+        super(diagram, name, NamedElementTypeEnum.CONSTANT, DEFAULT_TYPE);
     }
 
     private String value = "";

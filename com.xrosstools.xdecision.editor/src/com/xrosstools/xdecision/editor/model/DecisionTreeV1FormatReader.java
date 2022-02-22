@@ -59,9 +59,9 @@ public class DecisionTreeV1FormatReader {
         return new DecisionTreePath(entries, decisionId);
     }
     
-    public static void buildTree(DecisionTreeModel model, DecisionTreeDiagram diagram){
+    public static void buildTree(DecisionTreePath[] paths, DecisionTreeDiagram diagram){
         Map<Integer, DecisionTreeNode> roots = new HashMap<Integer, DecisionTreeNode>();
-         for(DecisionTreePath path: model.getPathes()){
+         for(DecisionTreePath path: paths){
              Integer rootFactor = new Integer(path.getPathEntries()[0].getNodeIndex());
              DecisionTreeNode parent = null;
              if(!roots.containsKey(rootFactor)){
@@ -92,7 +92,7 @@ public class DecisionTreeV1FormatReader {
                  parent = child;
              }
              
-             parent.setDecision(model.getDecisions()[path.getDecisionIndex()]);
+             parent.setDecision(diagram.getDecisions().get(path.getDecisionIndex()));
          }
     } 
 }

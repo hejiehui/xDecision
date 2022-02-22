@@ -5,28 +5,27 @@ import java.util.List;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 
 public class MethodDefinition extends NamedType implements DecisionTreeMessages {
-    private NamedElementContainer<FieldDefinition> parameters = new NamedElementContainer<FieldDefinition>(PARAMETERS_MSG, NamedElementTypeEnum.PARTAMETER);
+    private NamedElementContainer<ParameterDefinition> parameters = new NamedElementContainer<ParameterDefinition>(PARAMETERS_MSG, NamedElementTypeEnum.PARTAMETER);
     
-    public MethodDefinition() {
-        super(NamedElementTypeEnum.METHOD);
+    public MethodDefinition(DecisionTreeDiagram diagram, String name) {
+        super(diagram, name, NamedElementTypeEnum.METHOD, DEFAULT_TYPE);
+    } 
+            
+    public MethodDefinition(DecisionTreeDiagram diagram, String name, DataType returnType) {
+        super(diagram, name, NamedElementTypeEnum.METHOD, returnType);
     }
-    
-    public MethodDefinition(String name, DataType returnType) {
-        super(name, NamedElementTypeEnum.METHOD, returnType);
-    }
-    public MethodDefinition(String name, DataType returnType, List<FieldDefinition> parameters) {
-        this(name, returnType);
+
+    public MethodDefinition(DecisionTreeDiagram diagram, String name, DataType returnType, List<ParameterDefinition> parameters) {
+        this(diagram, name, returnType);
         this.parameters.setElements(parameters);
     }
-    public MethodDefinition(String name, DataType returnType, List<FieldDefinition> parameters, String label) {
-        this(name, returnType, parameters);
-    }
-    public NamedElementContainer<FieldDefinition> getParameters() {
+
+    public NamedElementContainer<ParameterDefinition> getParameters() {
         return parameters;
     }
     
-    public FieldDefinition findParameterByName(String name) {
-        return (FieldDefinition)parameters.findByName(name);
+    public ParameterDefinition findParameterByName(String name) {
+        return (ParameterDefinition)parameters.findByName(name);
     }
 
     @Override

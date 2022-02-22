@@ -18,6 +18,7 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 
 	private NamedElementContainer<DecisionTreeDecision> decisions= new NamedElementContainer<DecisionTreeDecision>(DECISIONS_MSG, NamedElementTypeEnum.DECISION);
 	private NamedElementContainer<DecisionTreeFactor> factors = new NamedElementContainer<DecisionTreeFactor>(FACTORS_MSG, NamedElementTypeEnum.FACTOR);
+	private NamedElementContainer<DataType> userDefinedTypes = new NamedElementContainer<DataType>(DataTypeEnum.USER_DEFINED.getName(), NamedElementTypeEnum.DATA_TYPE);
     private NamedElementContainer<DecisionTreeConstant> userDefinedConstants = new NamedElementContainer<DecisionTreeConstant>(CONSTANTS_MSG, NamedElementTypeEnum.CONSTANT);
 
 	public NamedElementContainer<DecisionTreeFactor> getFactors(){
@@ -37,7 +38,7 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 	private boolean isHorizantal;
 	private int verticalSpace = 50;
 	private int horizantalSpace = 50;
-	private float alignment = 0;
+	private float alignment = 0.5f;
 	private int nodeWidth = 100;
 	private int nodeHeight = 50;
 	
@@ -143,9 +144,6 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 	public List<DecisionTreeFactor> getFactorList() {
 		return factors.getElements();
 	}
-	public void setFactors(List<DecisionTreeFactor> factors) {
-		this.factors.setElements(factors);
-	}
 	public DecisionTreeFactor getFactorById(int index) {
 	    return getFactorList().get(index);
 	}
@@ -162,21 +160,25 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
         this.type = type;
     }
     public NamedElementContainer<DataType> getUserDefinedTypes() {
-        return DataType.getUserDefinedTypes();
+        return userDefinedTypes;
     }
     public List<DataType> getUserDefinedTypeList() {
-        return DataType.getUserDefinedTypes().getElements();
+        return userDefinedTypes.getElements();
     }
     public NamedElementContainer<DecisionTreeConstant> getUserDefinedConstants() {
         return userDefinedConstants;
     }
 
-    //    public DataType getFactorType(int factorId) {
-//        return getFactorById(factorId).getTypeName();
-//    }
-//    public DataType getFactorType(String factorName) {
-//        return getFactorType(getFactorId(factorName));
-//    }
+    public DataType findDataType(String name) {
+        DataType type = getUserDefinedTypes().findByName(name);
+        
+        if(type != null)
+            return type;
+            
+        
+        return DataTypeEnum.findByName(name).createDataType(this);
+    }
+    
     public int getFactorId(String factorName){
         List<DecisionTreeFactor> factors = getFactorList();
         for(int i = 0; i < factors.size(); i++)

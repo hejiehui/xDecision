@@ -1,12 +1,5 @@
 package com.xrosstools.xdecision.editor.model;
 
-import static java.util.Arrays.asList;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.xrosstools.xdecision.editor.model.DataType.*;
-
 public enum DataTypeEnum implements PropertyConstants {
     STRING("String"),
 
@@ -30,10 +23,6 @@ public enum DataTypeEnum implements PropertyConstants {
     
     USER_DEFINED("User defined type");
     
-    private static final NamedElementContainer<DataType> CONSTANT_TYPES = new NamedElementContainer<DataType>("Constant Types", NamedElementTypeEnum.DATA_TYPE, asList(STRING_TYPE, NUMBER_TYPE, BOOLEAN_TYPE, DATE_TYPE));
-    
-    private static final NamedElementContainer<DataType> PREDEFINED_TYPES = new NamedElementContainer<DataType>("Predefined Types", NamedElementTypeEnum.DATA_TYPE, asList(STRING_TYPE, NUMBER_TYPE, BOOLEAN_TYPE, DATE_TYPE));
-    
     private DataTypeEnum(String name) {
         this.name = name;
     }
@@ -44,7 +33,7 @@ public enum DataTypeEnum implements PropertyConstants {
         return name;
     }
 
-    public DataType createDataType() {
+    public DataType createDataType(DecisionTreeDiagram diagram) {
         switch(this) {
         case STRING:
             return DataType.STRING_TYPE;
@@ -55,15 +44,15 @@ public enum DataTypeEnum implements PropertyConstants {
         case DATE:
             return DataType.DATE_TYPE;
         case ARRAY:
-            return new DataTypeArray();
+            return new DataTypeArray(diagram);
         case COLLECTION:
-            return new DataTypeCollection();
+            return new DataTypeCollection(diagram);
         case LIST:
-            return new DataTypeList();
+            return new DataTypeList(diagram);
         case SET:
-            return new DataTypeSet();
+            return new DataTypeSet(diagram);
         case MAP:
-            return new DataTypeMap();
+            return new DataTypeMap(diagram);
         case ENUM:
             return null;
         default:
@@ -71,11 +60,13 @@ public enum DataTypeEnum implements PropertyConstants {
         }
     }
     
-    @Deprecated
-    public static List<DataType> getAllTypes() {
-        List<DataType> names = new ArrayList<DataType>();
-        names.addAll(PREDEFINED_TYPES.getElements());
-        return names;
+    public static DataTypeEnum findByName(String name) {
+        for(DataTypeEnum e: DataTypeEnum.values())
+            if(e.getName().equals(name))
+                return e;
+        
+        //TODO shall we just return null?
+        return DataTypeEnum.USER_DEFINED;
     }
     
     public static boolean isUserDefined(DataTypeEnum type) {
