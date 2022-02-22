@@ -4,8 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.xrosstools.xdecision.editor.model.DataType;
+import com.xrosstools.xdecision.editor.model.DecisionTreeDecision;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagramFactory;
+import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.DecisionTreeModel;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 
@@ -27,8 +30,12 @@ public class DecisionTreeJunit4TestCodeGen {
 	
 	
 	public String generate(DecisionTreeDiagram diagram, String packageName, String testName, String path){
-		DecisionTreeModel model = new DecisionTreeDiagramFactory().convert(diagram);
-		
+        DecisionTreeModel model = new DecisionTreeModel();
+        model.setDecisions(diagram.getDecisions().getElements().toArray(new DecisionTreeDecision[0]));
+        model.setFactors(diagram.getFactorList().toArray(new DecisionTreeFactor[0]));
+        model.setTypes(diagram.getUserDefinedTypeList().toArray(new DataType[0]));
+        model.setNodes(diagram.getNodes().toArray(new DecisionTreeNode[0]));
+
 		StringBuilder codeBuf = getTemplate();
 		replace(codeBuf, "!PACKAGE!", packageName);
 		replace(codeBuf, "!TEST_CLASS!", testName);

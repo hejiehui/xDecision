@@ -158,7 +158,7 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
     	} catch (Exception e) {
     		//This is just an example.  All exceptions caught here.
     		e.printStackTrace();
-    		diagram = diagramFactory.getEmptyDiagram();
+    		diagram = new DecisionTreeDiagram();
     	}
     }
     

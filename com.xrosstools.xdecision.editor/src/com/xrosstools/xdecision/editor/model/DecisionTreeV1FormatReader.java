@@ -34,7 +34,7 @@ public class DecisionTreeV1FormatReader {
         List<Node> pathNodes = getValidChildNodes(doc.getElementsByTagName(PATHS).item(0));
         DecisionTreePath[] paths = new DecisionTreePath[pathNodes.size()];
         for(int i = 0; i < paths.length; i++){
-            paths[i] = getDecisionTreePath(pathNodes.get(i).getTextContent(), DecisionTreeXMLSerializer.getIntAttribute(pathNodes.get(i), INDEX));
+            paths[i] = getDecisionTreePath(pathNodes.get(i).getTextContent(), DecisionTreeDiagramFactory.getIntAttribute(pathNodes.get(i), INDEX));
         }
         return paths;
     }
