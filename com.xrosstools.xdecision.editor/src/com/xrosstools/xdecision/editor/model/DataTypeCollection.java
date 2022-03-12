@@ -24,7 +24,7 @@ public class DataTypeCollection extends DataTypeTemplate {
 
     public DataTypeCollection(DecisionTreeDiagram diagram, DataTypeEnum type) {
         super(diagram, type);
-        propertyType = String.format(PROP_VALUE_TYPE_TPL, getType().getName());
+        propertyType = String.format(PROP_VALUE_TYPE_TPL, getMetaType().getName());
         
         add(size = new MethodDefinition(diagram, "size", DataType.NUMBER_TYPE));
         add(isEmpty = new MethodDefinition(diagram, "isEmpty", DataType.BOOLEAN_TYPE));
@@ -34,7 +34,7 @@ public class DataTypeCollection extends DataTypeTemplate {
 
     @Override
     public String toString() {
-        return getType().getName() + "<" + valueType.toString() + ">";
+        return getMetaType().getName() + "<" + valueType.toString() + ">";
     }
 
     public DataType getValueType() {
@@ -61,7 +61,7 @@ public class DataTypeCollection extends DataTypeTemplate {
     
     public Object getPropertyValue(Object propName) {
         if (propertyType.equals(propName))
-            return valueType.getType().ordinal();
+            return valueType.getMetaType().ordinal();
 
         return null;
     }

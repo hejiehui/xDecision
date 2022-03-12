@@ -80,7 +80,7 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
         firePropertyChange(PROP_LABEL, null, label);
     }
 
-    public DataTypeEnum getType() {
+    public DataTypeEnum getMetaType() {
         return metaType;
     }
 

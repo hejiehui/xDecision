@@ -32,7 +32,7 @@ public class NamedType extends NamedElement implements PropertyConstants {
     
     public Object getPropertyValue(Object propName) {
         if (propertyType.equals(propName))
-            return type.getType().ordinal();
+            return type.getMetaType().ordinal();
         
         if(type.isConcernedProperty(propName))
             return type.getPropertyValue(propName);

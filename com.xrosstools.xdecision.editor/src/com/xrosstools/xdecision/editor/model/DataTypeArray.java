@@ -12,7 +12,7 @@ public class DataTypeArray extends DataTypeTemplate {
     
     public DataTypeArray(DecisionTreeDiagram diagram) {
         super(diagram, DataTypeEnum.ARRAY);
-        propertyType = String.format(PROP_VALUE_TYPE_TPL, getType().getName());
+        propertyType = String.format(PROP_VALUE_TYPE_TPL, getMetaType().getName());
         length = new FieldDefinition(diagram, LENGTH, DataType.NUMBER_TYPE);
         add(length);
     }
@@ -44,7 +44,7 @@ public class DataTypeArray extends DataTypeTemplate {
     
     public Object getPropertyValue(Object propName) {
         if (propertyType.equals(propName))
-            return valueType.getType().ordinal();
+            return valueType.getMetaType().ordinal();
 
         return null;
     }

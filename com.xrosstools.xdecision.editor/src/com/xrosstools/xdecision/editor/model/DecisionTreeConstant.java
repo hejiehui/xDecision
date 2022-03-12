@@ -2,10 +2,12 @@ package com.xrosstools.xdecision.editor.model;
 
 import java.util.Date;
 
+import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 public class DecisionTreeConstant extends NamedType {
+    private static final String[] BOOLEAN_VALUES = new String[] {"false", "true"};
     public DecisionTreeConstant(DecisionTreeDiagram diagram, String name) {
         super(diagram, name, NamedElementTypeEnum.CONSTANT, DEFAULT_TYPE);
     }
@@ -17,7 +19,7 @@ public class DecisionTreeConstant extends NamedType {
         super.setType(type);
 
         //Make sure init proper value for type
-        switch (type.getType()) {
+        switch (type.getMetaType()) {
         case STRING:
             setValue("");
             break;
@@ -47,13 +49,20 @@ public class DecisionTreeConstant extends NamedType {
 
     @Override
     public IPropertyDescriptor[] getPropertyDescriptors() {
+        IPropertyDescriptor valueDesc = getType().getMetaType() == DataTypeEnum.BOOLEAN ? 
+                new ComboBoxPropertyDescriptor(PROP_VALUE, PROP_VALUE, BOOLEAN_VALUES) :
+                    new TextPropertyDescriptor(PROP_VALUE, PROP_VALUE);
+
         return combine(super.getPropertyDescriptors(),
-                new IPropertyDescriptor[] {new TextPropertyDescriptor(PROP_VALUE, PROP_VALUE)});
+                new IPropertyDescriptor[] {valueDesc});
     }
     
     public Object getPropertyValue(Object propName) {
-        if (PROP_VALUE.equals(propName))
-            return value;
+        if (PROP_VALUE.equals(propName)) {
+            return getType().getMetaType() == DataTypeEnum.BOOLEAN ? 
+                    value.equals(BOOLEAN_VALUES[0]) ? 0:1:
+                        value;
+        }            
 
         return super.getPropertyValue(propName);
     }
@@ -61,7 +70,11 @@ public class DecisionTreeConstant extends NamedType {
     public void setPropertyValue(Object propName, Object value){
         super.setPropertyValue(propName, value);
 
-        if (PROP_VALUE.equals(propName))
-            setValue((String)value);
+        if (PROP_VALUE.equals(propName)) {
+            if(getType().getMetaType() == DataTypeEnum.BOOLEAN)
+                setValue(BOOLEAN_VALUES[(Integer)value]);
+            else
+                setValue((String)value);
+        }
     }
 }

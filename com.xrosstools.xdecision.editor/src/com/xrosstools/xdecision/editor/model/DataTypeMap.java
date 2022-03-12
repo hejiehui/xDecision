@@ -25,8 +25,8 @@ public class DataTypeMap extends DataTypeTemplate {
     
     public DataTypeMap(DecisionTreeDiagram diagram) {
         super(diagram, DataTypeEnum.MAP);
-        propertyKeyType = String.format(PROP_KEY_TYPE_TPL, getType().getName());
-        propertyValueType = String.format(PROP_VALUE_TYPE_TPL, getType().getName());
+        propertyKeyType = String.format(PROP_KEY_TYPE_TPL, getMetaType().getName());
+        propertyValueType = String.format(PROP_VALUE_TYPE_TPL, getMetaType().getName());
         
         add(size = new MethodDefinition(diagram, "size", DataType.NUMBER_TYPE));
         add(isEmpty = new MethodDefinition(diagram, "isEmpty", DataType.BOOLEAN_TYPE));
@@ -38,7 +38,7 @@ public class DataTypeMap extends DataTypeTemplate {
 
     @Override
     public String toString() {
-        return getType().getName() + "<" + keyType.toString() + ", " + valueType.toString() + ">";
+        return getMetaType().getName() + "<" + keyType.toString() + ", " + valueType.toString() + ">";
     }
 
     public DataType getValueType() {
@@ -78,10 +78,10 @@ public class DataTypeMap extends DataTypeTemplate {
     
     public Object getPropertyValue(Object propName) {
         if (propertyKeyType.equals(propName))
-            return keyType.getType().ordinal();
+            return keyType.getMetaType().ordinal();
 
         if (valueType.equals(propName))
-            return valueType.getType().ordinal();
+            return valueType.getMetaType().ordinal();
 
         return null;
     }
