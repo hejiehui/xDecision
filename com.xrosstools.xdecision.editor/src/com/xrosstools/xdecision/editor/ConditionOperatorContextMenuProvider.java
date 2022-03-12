@@ -19,7 +19,6 @@ public class ConditionOperatorContextMenuProvider {
         OperatorReference oprRef = (OperatorReference)oprPart.getModel();
         
         //Reuse existing factor evaluation expression
-        int i = 0;
         for(ConditionOperator oprValue: ConditionOperator.values())
             menu.add(new CommandAction(editor, oprValue.getText(), oprRef.getOperator() == oprValue, new ChangeConditionOperatorCommand(oprRef, oprValue)));
     }

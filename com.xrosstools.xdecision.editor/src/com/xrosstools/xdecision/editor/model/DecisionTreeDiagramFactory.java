@@ -3,6 +3,7 @@ package com.xrosstools.xdecision.editor.model;
 import static com.xrosstools.common.XmlHelper.getValidChildNodes;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,6 +31,9 @@ public class DecisionTreeDiagramFactory {
 
     private static final String USER_DEFINED_TYPES = "user_defined_types";
     private static final String USER_DEFINED_TYPE = "user_defined_type";
+    
+    private static final String CONSTANTS = "constants";
+    private static final String CONSTANT = "constant";
 
     private static final String NAME = "name";
     private static final String LABEL = "label";
@@ -67,9 +71,10 @@ public class DecisionTreeDiagramFactory {
         else {
             createTypes(doc, diagram);
             diagram.getNodes().addAll(parseExpression(diagram, createNodes(doc, diagram)));
+            diagram.getUserDefinedConstants().addAll(createConstants(doc, diagram));
         }
 
-        diagram.getFactorList().addAll(Arrays.asList(createFactors(doc, diagram)));
+        diagram.getFactorList().addAll(createFactors(doc, diagram));
         
         if(DecisionTreeV1FormatReader.isV1Format(doc))
             DecisionTreeV1FormatReader.buildTree(paths, diagram);
@@ -149,7 +154,7 @@ public class DecisionTreeDiagramFactory {
         field.setType(diagram.findDataType(getAttribute(typeNode, TYPE)));
     }
 
-    private DecisionTreeFactor[] createFactors(Document doc, DecisionTreeDiagram diagram) {
+    private List<DecisionTreeFactor> createFactors(Document doc, DecisionTreeDiagram diagram) {
         List<Node> factorNodes = getValidChildNodes(doc.getElementsByTagName(FACTORS).item(0));
 
         DecisionTreeFactor[] factors = new DecisionTreeFactor[factorNodes.size()];
@@ -170,7 +175,7 @@ public class DecisionTreeDiagramFactory {
             }
         }
 
-        return factors;
+        return Arrays.asList(factors);
     }
 
     private DecisionTreeNode[] createNodes(Document doc, DecisionTreeDiagram diagram) {
@@ -242,6 +247,22 @@ public class DecisionTreeDiagramFactory {
         return Arrays.asList(decisions);
     }
 
+    private List<DecisionTreeConstant> createConstants(Document doc, DecisionTreeDiagram diagram) {
+        if (doc.getElementsByTagName(CONSTANTS).getLength() == 0)
+            return Collections.emptyList();
+        
+        List<Node> constantsNodes = getValidChildNodes(doc.getElementsByTagName(CONSTANTS).item(0));
+        DecisionTreeConstant[] constants = new DecisionTreeConstant[constantsNodes.size()];
+
+        for (int i = 0; i < constants.length; i++) {
+            constants[i] = new DecisionTreeConstant(diagram, getAttribute(constantsNodes.get(i), ID));
+            constants[i].setType(diagram.findDataType(getAttribute(constantsNodes.get(i), TYPE)));
+            constants[i].setValue(getAttribute(constantsNodes.get(i), VALUE));
+        }
+
+        return Arrays.asList(constants);
+    }
+
     public Document convertToXML(DecisionTreeDiagram diagram) {
         Document doc = null;
         try {
@@ -252,21 +273,26 @@ public class DecisionTreeDiagramFactory {
             root.appendChild(createNode(doc, PARSER, diagram.getParserClass()));
             root.appendChild(createNode(doc, EVALUATOR, diagram.getEvaluatorClass()));
 
-            Element typesNode = (Element) doc.createElement(USER_DEFINED_TYPES);
+            Element typesNode = doc.createElement(USER_DEFINED_TYPES);
             root.appendChild(typesNode);
             writeTypes(doc, typesNode, diagram.getUserDefinedTypeList().toArray(new DataType[0]));
 
-            Element factorsNode = (Element) doc.createElement(FACTORS);
+            Element factorsNode = doc.createElement(FACTORS);
             root.appendChild(factorsNode);
-            writeFactors(doc, factorsNode, diagram.getFactorList().toArray(new DecisionTreeFactor[0]));
+            writeFactors(doc, factorsNode, diagram.getFactors().getElements());
 
-            Element treeNodes = (Element) doc.createElement(NODES);
+            Element treeNodes = doc.createElement(NODES);
             root.appendChild(treeNodes);
             writeNodes(doc, treeNodes, diagram.getNodes().toArray(new DecisionTreeNode[0]));
 
-            Element decisionsNode = (Element) doc.createElement(DECISIONS);
+            Element decisionsNode = doc.createElement(DECISIONS);
             root.appendChild(decisionsNode);
-            writeDecisions(doc, decisionsNode, diagram.getDecisions().getElements().toArray(new DecisionTreeDecision[0]));
+            writeDecisions(doc, decisionsNode, diagram.getDecisions().getElements());
+
+            Element constantNode = doc.createElement(CONSTANTS);
+            root.appendChild(constantNode);
+            writeConstants(doc, constantNode, diagram.getUserDefinedConstants().getElements());
+
             return doc;
         } catch (Exception e) {
             e.printStackTrace();
@@ -275,7 +301,7 @@ public class DecisionTreeDiagramFactory {
     }
 
     private Element createNode(Document doc, String nodeName, String value) {
-        Element node = (Element) doc.createElement(nodeName);
+        Element node = doc.createElement(nodeName);
         if (value != null)
             node.appendChild(doc.createTextNode(value));
         return node;
@@ -284,7 +310,7 @@ public class DecisionTreeDiagramFactory {
     private void writeTypes(Document doc, Element typesNode, DataType[] types) {
         for (int i = 0; i < types.length; i++) {
             DataType type = types[i];
-            Element typeNode = (Element) doc.createElement(USER_DEFINED_TYPE);
+            Element typeNode = doc.createElement(USER_DEFINED_TYPE);
             typeNode.setAttribute(NAME, type.getName());
             typeNode.setAttribute(LABEL, type.getLabel());
             typeNode.setAttribute(INDEX, String.valueOf(i));
@@ -304,28 +330,28 @@ public class DecisionTreeDiagramFactory {
     }
 
     private Element writeType(Document doc, String nodeName, NamedType field) {
-        Element fieldNode = (Element) doc.createElement(nodeName);
+        Element fieldNode = doc.createElement(nodeName);
         fieldNode.setAttribute(NAME, field.getName());
         // fieldNode.setAttribute(LABEL, field.getLabel());
         fieldNode.setAttribute(TYPE, field.getTypeName());
         return fieldNode;
     }
 
-    private void writeFactors(Document doc, Element factorsNode, DecisionTreeFactor[] factors) {
-        for (int i = 0; i < factors.length; i++) {
-            DecisionTreeFactor factor = factors[i];
-            Element factorNode = (Element) doc.createElement(FACTOR);
+    private void writeFactors(Document doc, Element factorsNode, List<DecisionTreeFactor> factors) {
+        int i = 0;
+        for (DecisionTreeFactor factor: factors) {
+            Element factorNode = doc.createElement(FACTOR);
             factorNode.setAttribute(ID, factor.getFactorName());
 
             if (factor.getTypeName() != null)
                 factorNode.setAttribute(TYPE, factor.getTypeName());
 
-            factorNode.setAttribute(INDEX, String.valueOf(i));
+            factorNode.setAttribute(INDEX, String.valueOf(i++));
             factorsNode.appendChild(factorNode);
 
             String[] values = factor.getFactorValues();
             for (int j = 0; j < values.length; j++) {
-                Element valueNode = (Element) doc.createElement(VALUE);
+                Element valueNode = doc.createElement(VALUE);
                 valueNode.appendChild(doc.createTextNode(values[j]));
                 factorNode.appendChild(valueNode);
             }
@@ -353,7 +379,7 @@ public class DecisionTreeDiagramFactory {
 
     private void writePathes(Document doc, Element treeNode, DecisionTreeNode[] nodes, DecisionTreeNode node) {
         for (DecisionTreeNodeConnection conn : node.getOutputs()) {
-            Element pathNode = (Element) doc.createElement(PATH);
+            Element pathNode = doc.createElement(PATH);
             pathNode.setAttribute(NODE_INDEX, String.valueOf(indexOf(nodes, conn.getChild())));
             pathNode.setAttribute(VALUE_INDEX, String.valueOf(conn.getValueId()));
             treeNode.appendChild(pathNode);
@@ -369,12 +395,23 @@ public class DecisionTreeDiagramFactory {
         return -1;
     }
 
-    private void writeDecisions(Document doc, Element decisionsNode, DecisionTreeDecision[] decisions) {
-        for (int i = 0; i < decisions.length; i++) {
-            Element decisionNode = (Element) doc.createElement(DECISION);
-            decisionNode.setAttribute(ID, decisions[i].getName());
-            decisionNode.setAttribute(INDEX, String.valueOf(i));
+    private void writeDecisions(Document doc, Element decisionsNode, List<DecisionTreeDecision> decisions) {
+        int i = 0;
+        for (DecisionTreeDecision decision: decisions) {
+            Element decisionNode = doc.createElement(DECISION);
+            decisionNode.setAttribute(ID, decision.getName());
+            decisionNode.setAttribute(INDEX, String.valueOf(i++));
             decisionsNode.appendChild(decisionNode);
+        }
+    }    
+
+    private void writeConstants(Document doc, Element constantsNode, List<DecisionTreeConstant> constants) {
+        for (DecisionTreeConstant constant: constants) {
+            Element constantNode = doc.createElement(CONSTANT);
+            constantNode.setAttribute(ID, constant.getName());
+            constantNode.setAttribute(TYPE, constant.getTypeName());
+            constantNode.setAttribute(VALUE, constant.getValue());
+            constantsNode.appendChild(constantNode);
         }
     }    
 }
