@@ -38,6 +38,8 @@ public class DecisionTreeDiagramFactory {
     private static final String NAME = "name";
     private static final String LABEL = "label";
     private static final String TYPE = "type";
+    private static final String KEY_TYPE = "key_type";
+    private static final String VALUE_TYPE = "value_type";
 
     private static final String FIELD = "field";
 
@@ -151,7 +153,18 @@ public class DecisionTreeDiagramFactory {
 
     private void readType(Node typeNode, NamedType field, DecisionTreeDiagram diagram) {
         field.setName(getAttribute(typeNode, NAME));
-        field.setType(diagram.findDataType(getAttribute(typeNode, TYPE)));
+        
+        DataType type = diagram.findDataType(getAttribute(typeNode, TYPE));
+        
+        field.setType(type);
+        
+        if(!(type instanceof DataTypeTemplate))
+            return;
+        
+        if(type instanceof DataTypeMap)
+            ((DataTypeMap) type).setKeyType(diagram.findDataType(getAttribute(typeNode, KEY_TYPE)));
+        
+        ((DataTypeTemplate) type).setValueType(diagram.findDataType(getAttribute(typeNode, VALUE_TYPE)));
     }
 
     private List<DecisionTreeFactor> createFactors(Document doc, DecisionTreeDiagram diagram) {
@@ -333,7 +346,18 @@ public class DecisionTreeDiagramFactory {
         Element fieldNode = doc.createElement(nodeName);
         fieldNode.setAttribute(NAME, field.getName());
         // fieldNode.setAttribute(LABEL, field.getLabel());
-        fieldNode.setAttribute(TYPE, field.getTypeName());
+        
+        DataType type = field.getType();
+        fieldNode.setAttribute(TYPE, type.getName());
+        
+        if(!(type instanceof DataTypeTemplate))
+            return fieldNode;
+        
+        if(type instanceof DataTypeMap)
+            fieldNode.setAttribute(KEY_TYPE, ((DataTypeMap)type).getKeyType().getName());
+        
+        fieldNode.setAttribute(VALUE_TYPE, ((DataTypeTemplate)type).getValueType().getName());
+        
         return fieldNode;
     }
 

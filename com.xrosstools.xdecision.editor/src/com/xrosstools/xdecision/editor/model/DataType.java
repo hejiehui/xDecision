@@ -93,10 +93,10 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
     }
 
     public FieldDefinition findField(String fieldName) {
-        return (FieldDefinition)fields.findByName(fieldName);
+        return fields.findByName(fieldName);
     }
 
     public MethodDefinition findMethod(String methodName) {
-        return (MethodDefinition)methods.findByName(methodName);
+        return methods.findByName(methodName);
     }
 }

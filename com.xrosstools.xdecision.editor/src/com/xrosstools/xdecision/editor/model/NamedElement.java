@@ -10,13 +10,13 @@ public class NamedElement implements PropertyConstants, IPropertySource {
     protected static final IPropertyDescriptor[] NONE = new IPropertyDescriptor[0];
     
     private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
-    private NamedElementTypeEnum type;
+    private NamedElementTypeEnum elementType;
     private String name = "";
     private String propertyName;
     
 
     public NamedElement(String name, NamedElementTypeEnum type) {
-        this.type = type;
+        this.elementType = type;
         this.name = name;
         propertyName = String.format(PROP_NAME_TPL, type.getTypeName());
     }
@@ -39,7 +39,7 @@ public class NamedElement implements PropertyConstants, IPropertySource {
     }
     
     public NamedElementTypeEnum getElementType() {
-        return type;
+        return elementType;
     }
     
     @Override
