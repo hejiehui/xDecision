@@ -15,7 +15,7 @@ public class AddFactorCommand2 extends Command{
     }
     
     public void execute() {
-    	diagram.getFactorList().add(factor);
+    	diagram.getFactors().add(factor);
     }
 
     public String getLabel() {
@@ -27,6 +27,6 @@ public class AddFactorCommand2 extends Command{
     }
 
     public void undo() {
-    	diagram.getFactorList().remove(factor);
+    	diagram.getFactors().remove(factor);
     }
 }

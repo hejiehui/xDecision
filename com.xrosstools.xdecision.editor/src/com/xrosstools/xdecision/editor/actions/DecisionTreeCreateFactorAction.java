@@ -16,15 +16,17 @@ import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 
 public class DecisionTreeCreateFactorAction extends WorkbenchPartAction implements DecisionTreeActionConstants, DecisionTreeMessages{
     private DecisionTreeNode node;
+    private String typeName;
 	public DecisionTreeCreateFactorAction(IWorkbenchPart part){
 		super(part);
 		setId(ID_PREFIX + CREATE_NEW_FACTOR);
-		setText(CREATE_NEW_FACTOR_MSG);
 	}
 	
-	public DecisionTreeCreateFactorAction(IWorkbenchPart part, DecisionTreeNode node){
+	public DecisionTreeCreateFactorAction(IWorkbenchPart part, DecisionTreeNode node, String typeName){
 	    this(part);
 	    this.node = node;
+	    this.typeName = typeName;
+	    setText(typeName);
 	}
 	
 	protected boolean calculateEnabled() {
@@ -39,7 +41,8 @@ public class DecisionTreeCreateFactorAction extends WorkbenchPartAction implemen
 
 		DecisionTreeDiagramEditor editor = (DecisionTreeDiagramEditor)getWorkbenchPart();
 		DecisionTreeDiagram diagram = (DecisionTreeDiagram)editor.getRootEditPart().getContents().getModel();
-		DecisionTreeFactor factor = new DecisionTreeFactor(node.getDecisionTreeManager().getDiagram(), newValue);
+		DecisionTreeFactor factor = new DecisionTreeFactor(diagram, newValue);
+		factor.setType(diagram.findDataType(typeName));
 		
 		if(node == null)
 		    execute(new AddFactorCommand2(diagram, factor));
