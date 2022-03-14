@@ -19,7 +19,6 @@ public class ChangeChildCommand extends Command{
     public ChangeChildCommand(Object parentModel, ExpressionDefinition oldExp, ExpressionDefinition newExp) {
         this.parentModel = parentModel;
         this.newExp = newExp;
-        
         this.oldExp = oldExp;
     }
     
@@ -72,6 +71,6 @@ public class ChangeChildCommand extends Command{
     }
 
     public void undo() {
-        setChild(parentModel, oldExp, newExp);
+        setChild(parentModel, newExp, oldExp);
     }
 }

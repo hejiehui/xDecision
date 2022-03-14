@@ -39,8 +39,7 @@ public class DecisionTreeCreateFactorAction extends WorkbenchPartAction implemen
 
 		DecisionTreeDiagramEditor editor = (DecisionTreeDiagramEditor)getWorkbenchPart();
 		DecisionTreeDiagram diagram = (DecisionTreeDiagram)editor.getRootEditPart().getContents().getModel();
-		DecisionTreeFactor factor = new DecisionTreeFactor();
-		factor.setFactorName(newValue);
+		DecisionTreeFactor factor = new DecisionTreeFactor(node.getDecisionTreeManager().getDiagram(), newValue);
 		
 		if(node == null)
 		    execute(new AddFactorCommand2(diagram, factor));

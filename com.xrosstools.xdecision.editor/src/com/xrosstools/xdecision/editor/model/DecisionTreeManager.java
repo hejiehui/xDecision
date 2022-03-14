@@ -15,13 +15,21 @@ public class DecisionTreeManager {
 		parser = new ExpressionParser(this);
 	}
 	
-	public ExpressionParser getParser() {
+	public DecisionTreeDiagram getDiagram() {
+        return diagram;
+    }
+
+    public ExpressionParser getParser() {
         return parser;
     }
 
     public NamedElementContainer<DecisionTreeDecision> getDecisions(){
 		return diagram.getDecisions();
 	}
+
+    public NamedElementContainer<DecisionTreeFactor> getFactors(){
+        return diagram.getFactors();
+    }
 
 	public String[] getFactorNames(){
 		String[] names = new String[diagram.getFactorList().size()];

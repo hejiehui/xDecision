@@ -147,6 +147,7 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
         ((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rectangle);
         
         figure.setDecision(node.getDecision() == null ? "": node.getDecision().getName());
+        refreshChildren();
     }
 
     private DecisionTreeDiagram getDiagram() {
