@@ -15,11 +15,7 @@ import com.xrosstools.xdecision.editor.commands.expression.ChangeOperatorCommand
 import com.xrosstools.xdecision.editor.commands.expression.CreateExpressionCommand;
 import com.xrosstools.xdecision.editor.commands.expression.RemoveExpressionCommand;
 import com.xrosstools.xdecision.editor.model.DataType;
-import com.xrosstools.xdecision.editor.model.DecisionTreeConstant;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
-import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
-import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
-import com.xrosstools.xdecision.editor.model.FieldDefinition;
 import com.xrosstools.xdecision.editor.model.MethodDefinition;
 import com.xrosstools.xdecision.editor.model.NamedElement;
 import com.xrosstools.xdecision.editor.model.NamedElementContainer;
