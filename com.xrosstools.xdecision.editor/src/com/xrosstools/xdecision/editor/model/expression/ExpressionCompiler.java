@@ -1,12 +1,11 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-import static com.xrosstools.xdecision.editor.model.expression.ExpressionType.*;
+import static com.xrosstools.xdecision.editor.model.expression.ExpressionType.A;
+import static com.xrosstools.xdecision.editor.model.expression.ExpressionType.END;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.xrosstools.xdecision.editor.model.DecisionTreeManager;
 
 public class ExpressionCompiler {
     public ExpressionDefinition compile(List<Token> tokens) {

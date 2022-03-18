@@ -72,7 +72,6 @@ public class DecisionTreeDiagramFactory {
             paths = DecisionTreeV1FormatReader.createPaths(doc);
         else {
             createTypes(doc, diagram);
-            diagram.getNodes().addAll(parseExpression(diagram, createNodes(doc, diagram)));
             diagram.getUserDefinedConstants().addAll(createConstants(doc, diagram));
         }
 
@@ -80,7 +79,8 @@ public class DecisionTreeDiagramFactory {
         
         if(DecisionTreeV1FormatReader.isV1Format(doc))
             DecisionTreeV1FormatReader.buildTree(paths, diagram);
-
+        else
+            diagram.getNodes().addAll(parseExpression(diagram, createNodes(doc, diagram)));
 
         return diagram;
     }

@@ -13,6 +13,7 @@ public class ElementExpression extends ExtensibleExpression {
 
     public void setIndexExpression(ExpressionDefinition indexExpression) {
         this.indexExpression = indexExpression;
+        propertyChanged();
     }
 
     @Override

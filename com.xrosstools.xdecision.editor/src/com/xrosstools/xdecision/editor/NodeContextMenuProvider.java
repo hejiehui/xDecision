@@ -34,12 +34,11 @@ public class NodeContextMenuProvider implements DecisionTreeMessages {
         DecisionTreeNode node = (DecisionTreeNode)nodePart.getModel();
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)editor.getRootEditPart().getContents().getModel();
         
-        createAndSetFactorMenu(menu, node, diagram);
-        menu.add(new Separator());
-        
-        
-        menu.add(new Separator());
         createAndSetDecisionMenu(menu, node, diagram);
+        menu.add(new Separator());
+        
+        menu.add(new Separator());
+        createAndSetFactorMenu(menu, node, diagram);
     }
 
     private void createAndSetDecisionMenu(IMenuManager menu, DecisionTreeNode node, DecisionTreeDiagram diagram) {

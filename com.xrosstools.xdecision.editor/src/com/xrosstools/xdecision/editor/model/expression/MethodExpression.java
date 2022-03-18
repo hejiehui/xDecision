@@ -11,7 +11,8 @@ public class MethodExpression extends VariableExpression {
     }
     
     public MethodExpression(MethodDefinition definition){
-        this(definition.getName(), new ParameterListExpression());
+        super(definition);
+        setParameters(new ParameterListExpression());
     }
 
     public MethodExpression(ParameterListExpression parameters){

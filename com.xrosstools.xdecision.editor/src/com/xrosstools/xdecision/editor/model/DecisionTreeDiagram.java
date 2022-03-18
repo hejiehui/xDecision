@@ -25,9 +25,6 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
         return factors;
     }
 	
-	//This is root
-	private DataType type = new DataType("Factors");
-	
     private String parserClass;
 	private String evaluatorClass;
 
@@ -153,12 +150,6 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 	public NamedElementContainer<DecisionTreeDecision> getDecisions() {
 		return decisions;
 	}
-    public DataType getType() {
-        return type;
-    }
-    public void setType(DataType type) {
-        this.type = type;
-    }
     public NamedElementContainer<DataType> getUserDefinedTypes() {
         return userDefinedTypes;
     }
