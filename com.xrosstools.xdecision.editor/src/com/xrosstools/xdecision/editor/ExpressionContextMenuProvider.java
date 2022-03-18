@@ -104,28 +104,29 @@ public class ExpressionContextMenuProvider {
     private void createIdMenu(IMenuManager menu, NamedType element, EditPart parentPart, EditPart part, boolean extendChildren, ExpressionDefinition childExp) {
         String definitionId = element instanceof MethodDefinition ? element.getName() + "()" : element.getName();
         
-        Identifier childModel = part == null ? null: (Identifier)part.getModel();
-        boolean selected = childModel == null ? false : element == ((VariableExpression)childModel).getReferenceType();
+        ExtensibleExpression model = part == null ? null: (ExtensibleExpression)part.getModel();
+        boolean selected = model == null ? false : element == ((VariableExpression)model).getReferenceType();
         
         if(selected && extendChildren) {
             MenuManager subMenu = new MenuManager(definitionId);
-            createChildMenu(subMenu, part, findChild(parentPart, childModel), false);
+            
+            createChildMenu(subMenu, part, findChild(part, model.getChild()), false);
             menu.add(subMenu);
         } else
-            add(menu, definitionId, selected, new ChangeChildCommand(parentPart.getModel(), (ExpressionDefinition)childModel, childExp));
+            add(menu, definitionId, selected, new ChangeChildCommand(parentPart.getModel(), (ExpressionDefinition)model, childExp));
     }
 
     private void add(IMenuManager menu, String text, boolean checked, Command command) {
         menu.add(new CommandAction(editor, text, checked, command));
     }
 
-    private EditPart findChild(EditPart parentPart, Object child) {
-        if(child == null)
+    private EditPart findChild(EditPart parentPart, Object childModel) {
+        if(childModel == null)
             return null;
 
         for(Object childPartObj: parentPart.getChildren()) {
             EditPart childPart = (EditPart)childPartObj;
-            if(childPart.getModel() == child)
+            if(childPart.getModel() == childModel)
                 return childPart;
         }
 
