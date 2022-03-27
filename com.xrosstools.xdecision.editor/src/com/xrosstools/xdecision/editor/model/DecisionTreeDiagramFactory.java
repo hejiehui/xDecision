@@ -2,6 +2,7 @@ package com.xrosstools.xdecision.editor.model;
 
 import static com.xrosstools.common.XmlHelper.getValidChildNodes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +33,9 @@ public class DecisionTreeDiagramFactory {
     private static final String USER_DEFINED_TYPES = "user_defined_types";
     private static final String USER_DEFINED_TYPE = "user_defined_type";
     
+    private static final String USER_DEFINED_ENUMS = "user_defined_enums";
+    private static final String USER_DEFINED_ENUM = "user_defined_enum";
+
     private static final String CONSTANTS = "constants";
     private static final String CONSTANT = "constant";
 
@@ -103,27 +107,22 @@ public class DecisionTreeDiagramFactory {
         return doc.getElementsByTagName(nodeName).item(0).getTextContent();
     }
 
-    private DataType[] createTypes(Document doc, DecisionTreeDiagram diagram) {
-        if (doc.getElementsByTagName(USER_DEFINED_TYPES).item(0) == null)
-            return new DataType[0];
-
+    private void createTypes(Document doc, DecisionTreeDiagram diagram) {
         List<Node> typeNodes = getValidChildNodes(doc.getElementsByTagName(USER_DEFINED_TYPES).item(0));
+        List<Node> enumNodes = getValidChildNodes(doc.getElementsByTagName(USER_DEFINED_ENUMS).item(0));
 
-        DataType[] types = new DataType[typeNodes.size()];
-        // First init all DataTypes in case they refer to each other
-        for (int i = 0; i < types.length; i++) {
-            Node typeNode = typeNodes.get(i);
-            DataType type = new DataType(getAttribute(typeNode, NAME));
+        createTypeTemplate(doc, diagram, typeNodes, diagram.getUserDefinedTypes());
+        createTypeTemplate(doc, diagram, enumNodes, diagram.getUserDefinedEnums());
 
-            type.setLabel(getAttribute(typeNode, LABEL));
-            types[getIntAttribute(typeNode, INDEX)] = type;
-        }
-        diagram.getUserDefinedTypeList().addAll(Arrays.asList(types));
-        
-        
-        for (int i = 0; i < types.length; i++) {
+        createTypeMember(diagram, typeNodes, diagram.getUserDefinedTypes());
+        createTypeMember(diagram, enumNodes, diagram.getUserDefinedEnums());
+    }
+
+    private void createTypeMember(DecisionTreeDiagram diagram, List<Node> typeNodes, NamedElementContainer container) {
+        List elements = container.getElements();
+        for (int i = 0; i < elements.size(); i++) {
             Node typeNode = typeNodes.get(i);
-            DataType type = types[getIntAttribute(typeNode, INDEX)];
+            DataType type = (DataType)elements.get(i);
 
             List<Node> valueNodes = getValidChildNodes(typeNode);
 
@@ -133,7 +132,7 @@ public class DecisionTreeDiagramFactory {
                     FieldDefinition field = new FieldDefinition(diagram, "");
                     readType(node, field, diagram);
                     type.getFields().add(field);
-                } else {
+                } else if (node.getNodeName().equals(METHOD)) {
                     // Methods
                     MethodDefinition method = new MethodDefinition(diagram, "");
                     readType(node, method, diagram);
@@ -142,21 +141,31 @@ public class DecisionTreeDiagramFactory {
                         readType(paramNode, param, diagram);
                         method.getParameters().add(param);
                     }
-
                     type.getMethods().add(method);
+                } else if (node.getNodeName().equals(VALUE) && type instanceof EnumType) {
+                    EnumValue enumValue = new EnumValue(getAttribute(node, ID));
+                    ((EnumType)type).getValues().add(enumValue);
                 }
             }
         }
-
-        return types;
     }
 
-    private void readType(Node typeNode, NamedType field, DecisionTreeDiagram diagram) {
-        field.setName(getAttribute(typeNode, NAME));
+    private void createTypeTemplate(Document doc, DecisionTreeDiagram diagram, List<Node> enumNodes, NamedElementContainer container) {
+        List<EnumType> types = new ArrayList<EnumType>();
+        // First init all DataTypes in case they refer to each other
+        for (Node enumNode: enumNodes) {
+            DataType type = (DataType)container.getElementType().newInstance(diagram, getAttribute(enumNode, NAME));
+            type.setLabel(getAttribute(enumNode, LABEL));
+            container.add(type);
+        }
+    }
+
+    private void readType(Node typeNode, NamedType member, DecisionTreeDiagram diagram) {
+        member.setName(getAttribute(typeNode, NAME));
         
         DataType type = diagram.findDataType(getAttribute(typeNode, TYPE));
         
-        field.setType(type);
+        member.setType(type);
         
         if(!(type instanceof TemplateType))
             return;
@@ -288,7 +297,11 @@ public class DecisionTreeDiagramFactory {
 
             Element typesNode = doc.createElement(USER_DEFINED_TYPES);
             root.appendChild(typesNode);
-            writeTypes(doc, typesNode, diagram.getUserDefinedTypeList().toArray(new DataType[0]));
+            writeTypes(doc, typesNode, diagram.getUserDefinedTypes().getElements());
+
+            Element enumsNode = doc.createElement(USER_DEFINED_ENUMS);
+            root.appendChild(enumsNode);
+            writeEnums(doc, enumsNode, diagram.getUserDefinedEnums().getElements());
 
             Element factorsNode = doc.createElement(FACTORS);
             root.appendChild(factorsNode);
@@ -320,25 +333,54 @@ public class DecisionTreeDiagramFactory {
         return node;
     }
 
-    private void writeTypes(Document doc, Element typesNode, DataType[] types) {
-        for (int i = 0; i < types.length; i++) {
-            DataType type = types[i];
+    private void writeTypes(Document doc, Element typesNode, List<DataType> types) {
+        for (DataType type: types) {
             Element typeNode = doc.createElement(USER_DEFINED_TYPE);
             typeNode.setAttribute(NAME, type.getName());
             typeNode.setAttribute(LABEL, type.getLabel());
-            typeNode.setAttribute(INDEX, String.valueOf(i));
             typesNode.appendChild(typeNode);
 
-            for (FieldDefinition field : type.getFields().getElements())
-                typeNode.appendChild(writeType(doc, FIELD, field));
+            writeFields(doc, type, typeNode);
 
-            for (MethodDefinition method : type.getMethods().getElements()) {
-                Element methodNode = writeType(doc, METHOD, method);
-                for (ParameterDefinition param : method.getParameters().getElements())
-                    methodNode.appendChild(writeType(doc, PARAMETER, param));
+            writeMethods(doc, type, typeNode);
+        }
+    }
 
-                typeNode.appendChild(methodNode);
-            }
+    private void writeEnums(Document doc, Element typesNode, List<EnumType> types) {
+        for (EnumType type: types) {
+            Element typeNode = doc.createElement(USER_DEFINED_ENUM);
+            typeNode.setAttribute(NAME, type.getName());
+            typeNode.setAttribute(LABEL, type.getLabel());
+            typesNode.appendChild(typeNode);
+
+            writeEnumValues(doc, type, typeNode);
+            
+            writeFields(doc, type, typeNode);
+
+            writeMethods(doc, type, typeNode);
+        }
+    }
+
+    private void writeMethods(Document doc, DataType type, Element typeNode) {
+        for (MethodDefinition method : type.getMethods().getElements()) {
+            Element methodNode = writeType(doc, METHOD, method);
+            for (ParameterDefinition param : method.getParameters().getElements())
+                methodNode.appendChild(writeType(doc, PARAMETER, param));
+
+            typeNode.appendChild(methodNode);
+        }
+    }
+
+    private void writeFields(Document doc, DataType type, Element typeNode) {
+        for (FieldDefinition field : type.getFields().getElements())
+            typeNode.appendChild(writeType(doc, FIELD, field));
+    }
+
+    private void writeEnumValues(Document doc, EnumType type, Element typeNode) {
+        for (EnumValue value : type.getValues().getElements()) {
+            Element valueNode = doc.createElement(VALUE);
+            valueNode.setAttribute(ID, value.getName());
+            typeNode.appendChild(valueNode);
         }
     }
 

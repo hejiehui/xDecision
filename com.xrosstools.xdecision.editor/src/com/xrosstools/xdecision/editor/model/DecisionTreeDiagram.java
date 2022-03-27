@@ -170,6 +170,9 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
         if(type != null)
             return type;
             
+        type = getUserDefinedEnums().findByName(name);
+        if(type != null)
+            return type;
         
         return DataTypeEnum.findByName(name).createDataType(this);
     }
