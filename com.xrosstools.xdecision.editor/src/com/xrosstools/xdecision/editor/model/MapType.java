@@ -5,7 +5,7 @@ import static java.util.Arrays.asList;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-public class DataTypeMap extends DataTypeTemplate {
+public class MapType extends TemplateType {
     private static final String[] KEY_TYPE_NAMES = new String[] {DataTypeEnum.STRING.getName(), DataTypeEnum.NUMBER.getName()};
     
     public static final String VALUE = "value";
@@ -21,7 +21,7 @@ public class DataTypeMap extends DataTypeTemplate {
     private MethodDefinition containsAll;
     private MethodDefinition get;
     
-    public DataTypeMap(DecisionTreeDiagram diagram) {
+    public MapType(DecisionTreeDiagram diagram) {
         super(diagram, DataTypeEnum.MAP);
         propertyKeyType = String.format(PROP_KEY_TYPE_TPL, getMetaType().getName());
         

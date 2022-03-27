@@ -2,12 +2,12 @@ package com.xrosstools.xdecision.editor.model;
 
 import static java.util.Arrays.asList;
 
-public class DataTypeList extends DataTypeCollection {
+public class ListType extends CollectionType {
     private MethodDefinition indexOf;
     private MethodDefinition lastIndexOf;
     private MethodDefinition get;
     
-    public DataTypeList(DecisionTreeDiagram diagram) {
+    public ListType(DecisionTreeDiagram diagram) {
         super(diagram, DataTypeEnum.LIST);
 
         add(indexOf = new MethodDefinition(diagram, "indexOf", DataType.NUMBER_TYPE, asList(new ParameterDefinition(diagram, VALUE, getValueType()))));

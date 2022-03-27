@@ -2,7 +2,7 @@ package com.xrosstools.xdecision.editor.model;
 
 import static java.util.Arrays.asList;
 
-public class DataTypeCollection extends DataTypeTemplate {
+public class CollectionType extends TemplateType {
     public static final String VALUE = "value";
     
     private MethodDefinition size;
@@ -10,11 +10,11 @@ public class DataTypeCollection extends DataTypeTemplate {
     private MethodDefinition contains;
     private MethodDefinition containsAll;
     
-    public DataTypeCollection(DecisionTreeDiagram diagram) {
+    public CollectionType(DecisionTreeDiagram diagram) {
         this(diagram, DataTypeEnum.COLLECTION);
     }
 
-    public DataTypeCollection(DecisionTreeDiagram diagram, DataTypeEnum type) {
+    public CollectionType(DecisionTreeDiagram diagram, DataTypeEnum type) {
         super(diagram, type);
         
         add(size = new MethodDefinition(diagram, "size", DataType.NUMBER_TYPE));

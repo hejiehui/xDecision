@@ -158,13 +158,13 @@ public class DecisionTreeDiagramFactory {
         
         field.setType(type);
         
-        if(!(type instanceof DataTypeTemplate))
+        if(!(type instanceof TemplateType))
             return;
         
-        if(type instanceof DataTypeMap)
-            ((DataTypeMap) type).setKeyType(diagram.findDataType(getAttribute(typeNode, KEY_TYPE)));
+        if(type instanceof MapType)
+            ((MapType) type).setKeyType(diagram.findDataType(getAttribute(typeNode, KEY_TYPE)));
         
-        ((DataTypeTemplate) type).setValueType(diagram.findDataType(getAttribute(typeNode, VALUE_TYPE)));
+        ((TemplateType) type).setValueType(diagram.findDataType(getAttribute(typeNode, VALUE_TYPE)));
     }
 
     private List<DecisionTreeFactor> createFactors(Document doc, DecisionTreeDiagram diagram) {
@@ -350,13 +350,13 @@ public class DecisionTreeDiagramFactory {
         DataType type = field.getType();
         fieldNode.setAttribute(TYPE, type.getName());
         
-        if(!(type instanceof DataTypeTemplate))
+        if(!(type instanceof TemplateType))
             return fieldNode;
         
-        if(type instanceof DataTypeMap)
-            fieldNode.setAttribute(KEY_TYPE, ((DataTypeMap)type).getKeyType().getName());
+        if(type instanceof MapType)
+            fieldNode.setAttribute(KEY_TYPE, ((MapType)type).getKeyType().getName());
         
-        fieldNode.setAttribute(VALUE_TYPE, ((DataTypeTemplate)type).getValueType().getName());
+        fieldNode.setAttribute(VALUE_TYPE, ((TemplateType)type).getValueType().getName());
         
         return fieldNode;
     }

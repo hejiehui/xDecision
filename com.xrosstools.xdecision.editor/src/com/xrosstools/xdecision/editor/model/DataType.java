@@ -36,10 +36,6 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
 
     public static final DataType NOT_MATCHED = new DataType("Not Matched!"); 
     
-    public static DataType createEnumType(String name) {
-        return new UserDefinedEnum(name);
-    }
-    
     public DataType(DataTypeEnum metaType) {
         super(metaType.getName(), NamedElementTypeEnum.DATA_TYPE);
         this.metaType = metaType;

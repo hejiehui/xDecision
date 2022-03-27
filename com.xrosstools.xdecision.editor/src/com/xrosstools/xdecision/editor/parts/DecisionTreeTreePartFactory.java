@@ -7,6 +7,7 @@ import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.model.DecisionTreeRoot;
+import com.xrosstools.xdecision.editor.model.EnumType;
 import com.xrosstools.xdecision.editor.model.MethodDefinition;
 import com.xrosstools.xdecision.editor.model.NamedElement;
 import com.xrosstools.xdecision.editor.model.NamedElementContainer;
@@ -32,6 +33,9 @@ public class DecisionTreeTreePartFactory implements EditPartFactory {
         if(model instanceof NamedType)
             return new NamedTypeTreePart(model);
         
+        if(model instanceof EnumType)
+            return new EnumTypeTreePart(model);
+
         if(model instanceof DataType)
             return new DataTypeTreePart(model);
         

@@ -47,10 +47,12 @@ public interface DecisionTreeMessages {
     String FACTORS_MSG = "Factors";
     String DECISIONS_MSG = "Decisions";
     String CONSTANTS_MSG = "Constants";
+    String ENUMS_MSG = "Enums";
     String PREDEFINED_TYPES_MSG = "Predefined Types";
     String USER_DEFINED_TYPES_MSG = "User Defined Types";
     String TYPES_MSG = "Types";
     String FIELDS_MSG = "Fields";
+    String ENUM_VALUES_MSG = "Enum Values";
     String METHODS_MSG = "Methods";
     String PARAMETERS_MSG = "Parameters";
 
@@ -59,7 +61,9 @@ public interface DecisionTreeMessages {
     String DECISION_MSG = "decision";
     String CONSTANT_MSG = "constant";
     String TYPE_MSG = "type";
+    String ENUM_MSG = "enum";
     String FIELD_MSG = "field";
+    String ENUM_VALUE_MSG = "Enum Value";
     String METHOD_MSG = "method";
     String PARAMETER_MSG = "parameter";
     

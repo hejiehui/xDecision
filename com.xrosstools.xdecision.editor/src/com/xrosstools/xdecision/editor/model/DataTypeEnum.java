@@ -19,7 +19,7 @@ public enum DataTypeEnum implements PropertyConstants {
 
     MAP("Map"),
 
-    ENUM("Enum"),
+    ENUM("User defined enum"),
     
     USER_DEFINED("User defined type");
     
@@ -44,17 +44,17 @@ public enum DataTypeEnum implements PropertyConstants {
         case DATE:
             return DataType.DATE_TYPE;
         case ARRAY:
-            return new DataTypeArray(diagram);
+            return new ArrayType(diagram);
         case COLLECTION:
-            return new DataTypeCollection(diagram);
+            return new CollectionType(diagram);
         case LIST:
-            return new DataTypeList(diagram);
+            return new ListType(diagram);
         case SET:
-            return new DataTypeSet(diagram);
+            return new SetType(diagram);
         case MAP:
-            return new DataTypeMap(diagram);
+            return new MapType(diagram);
         case ENUM:
-            return null;
+            return new EnumType();
         default:
             return null;
         }

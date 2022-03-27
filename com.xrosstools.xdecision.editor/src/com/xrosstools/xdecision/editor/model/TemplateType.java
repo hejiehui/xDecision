@@ -5,12 +5,12 @@ import java.util.Arrays;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-public abstract class DataTypeTemplate extends DataType {
+public abstract class TemplateType extends DataType {
     private DecisionTreeDiagram diagram;
     private DataType valueType = DataType.STRING_TYPE;
     private String propertyValueType;
 
-    public DataTypeTemplate(DecisionTreeDiagram diagram, DataTypeEnum metaType) {
+    public TemplateType(DecisionTreeDiagram diagram, DataTypeEnum metaType) {
         super(metaType);
         this.diagram = diagram;
         propertyValueType = String.format(PROP_VALUE_TYPE_TPL, getMetaType().getName());

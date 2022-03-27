@@ -19,6 +19,7 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 	private NamedElementContainer<DecisionTreeDecision> decisions= new NamedElementContainer<DecisionTreeDecision>(DECISIONS_MSG, NamedElementTypeEnum.DECISION);
 	private NamedElementContainer<DecisionTreeFactor> factors = new NamedElementContainer<DecisionTreeFactor>(FACTORS_MSG, NamedElementTypeEnum.FACTOR);
 	private NamedElementContainer<DataType> userDefinedTypes = new NamedElementContainer<DataType>(DataTypeEnum.USER_DEFINED.getName(), NamedElementTypeEnum.DATA_TYPE);
+	private NamedElementContainer<EnumType> userDefinedEnums= new NamedElementContainer<EnumType>(DataTypeEnum.ENUM.getName(), NamedElementTypeEnum.ENUM);
     private NamedElementContainer<DecisionTreeConstant> userDefinedConstants = new NamedElementContainer<DecisionTreeConstant>(CONSTANTS_MSG, NamedElementTypeEnum.CONSTANT);
 
 	public NamedElementContainer<DecisionTreeFactor> getFactors(){
@@ -158,6 +159,9 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
     }
     public NamedElementContainer<DecisionTreeConstant> getUserDefinedConstants() {
         return userDefinedConstants;
+    }
+    public NamedElementContainer<EnumType> getUserDefinedEnums() {
+        return userDefinedEnums;
     }
 
     public DataType findDataType(String name) {

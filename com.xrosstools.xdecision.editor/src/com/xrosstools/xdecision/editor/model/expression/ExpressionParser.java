@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
 import com.xrosstools.xdecision.editor.model.DataType;
-import com.xrosstools.xdecision.editor.model.DataTypeArray;
+import com.xrosstools.xdecision.editor.model.ArrayType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeManager;
 import com.xrosstools.xdecision.editor.model.NamedType;
@@ -69,8 +69,8 @@ public class ExpressionParser {
         if (exp instanceof ElementExpression) { 
             matchVariables(((ElementExpression)exp).getIndexExpression());
             
-            if(parentType instanceof DataTypeArray)
-                resolve(((DataTypeArray) parentType).getValueType(), ((ElementExpression)exp).getChild());
+            if(parentType instanceof ArrayType)
+                resolve(((ArrayType) parentType).getValueType(), ((ElementExpression)exp).getChild());
 
             return;
         }

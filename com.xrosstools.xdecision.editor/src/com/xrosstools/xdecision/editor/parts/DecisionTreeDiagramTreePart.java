@@ -20,6 +20,7 @@ public class DecisionTreeDiagramTreePart extends AbstractTreeEditPart {
         children.add(diagram.getFactors());
         children.add(diagram.getDecisions());
         children.add(diagram.getUserDefinedTypes());
+        children.add(diagram.getUserDefinedEnums());
         children.add(diagram.getUserDefinedConstants());
         
     	return children;
