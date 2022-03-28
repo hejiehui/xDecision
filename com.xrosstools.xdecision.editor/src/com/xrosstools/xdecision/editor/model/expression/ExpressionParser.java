@@ -57,7 +57,7 @@ public class ExpressionParser {
         if(member == null)
             return;
         
-        varExp.setReferenceType(member);
+        varExp.setReferenceElement(member);
 
         resolve(member.getType(), varExp.getChild());
     }
@@ -80,7 +80,7 @@ public class ExpressionParser {
                 parentType.findMethod(varExp.getName()) :
                     parentType.findField(varExp.getName());
             
-        varExp.setReferenceType(member);
+        varExp.setReferenceElement(member);
         if(member != null)
             resolve(member.getType(), varExp.getChild());
     }

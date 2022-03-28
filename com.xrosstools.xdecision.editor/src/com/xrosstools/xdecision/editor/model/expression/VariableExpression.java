@@ -5,14 +5,14 @@ import com.xrosstools.xdecision.editor.model.NamedType;
 
 public class VariableExpression extends ExtensibleExpression implements Identifier {
     private String name;
-    private NamedType referenceType;
+    private NamedElement referenceElement;
 
     public VariableExpression(String name) {
         this.name = name;
     }
     
-    public VariableExpression(NamedType referenceType) {
-        this.referenceType = referenceType;
+    public VariableExpression(NamedElement referenceType) {
+        this.referenceElement = referenceType;
     }
     
     public String getIdentifier() {
@@ -20,7 +20,7 @@ public class VariableExpression extends ExtensibleExpression implements Identifi
     }
 
     public String getName() {
-        return referenceType == null ? name : referenceType.getName();
+        return referenceElement == null ? name : referenceElement.getName();
     }
 
     public void setName(String name) {
@@ -33,15 +33,15 @@ public class VariableExpression extends ExtensibleExpression implements Identifi
     }
 
     public boolean isValid() {
-        return referenceType != null;
+        return referenceElement != null;
     }
     
-    public NamedType getReferenceType() {
-        return referenceType;
+    public NamedElement getReferenceElement() {
+        return referenceElement;
     }
 
-    public void setReferenceType(NamedType member) {
-        this.referenceType = member;
+    public void setReferenceElement(NamedType member) {
+        this.referenceElement = member;
         propertyChanged();
     }
 }
