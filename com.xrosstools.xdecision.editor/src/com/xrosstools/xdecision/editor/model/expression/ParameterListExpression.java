@@ -2,14 +2,16 @@ package com.xrosstools.xdecision.editor.model.expression;
 
 import java.util.List;
 
+import com.xrosstools.xdecision.editor.model.NamedElementContainer;
+import com.xrosstools.xdecision.editor.model.ParameterDefinition;
+
 public class ParameterListExpression extends CompositeExpression {
     public ParameterListExpression() {
-        this(0);
     }
 
-    public ParameterListExpression(int parameterCount) {
-        for(int i = 0; i < parameterCount; i++)
-            addParameter(new PlaceholderExpression());
+    public ParameterListExpression(NamedElementContainer<ParameterDefinition> parameterDefinitions) {
+        for(ParameterDefinition definition: parameterDefinitions.getElements())
+            addParameter(new PlaceholderExpression(definition));
     }
 
     public ParameterListExpression(List<ExpressionDefinition> parameters) {

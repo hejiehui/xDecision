@@ -1,7 +1,6 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
 import com.xrosstools.xdecision.editor.model.NamedElement;
-import com.xrosstools.xdecision.editor.model.NamedType;
 
 public class VariableExpression extends ExtensibleExpression implements Identifier {
     private String name;

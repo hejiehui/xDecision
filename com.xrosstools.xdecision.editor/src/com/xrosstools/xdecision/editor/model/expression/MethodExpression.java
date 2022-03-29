@@ -12,7 +12,7 @@ public class MethodExpression extends VariableExpression {
     
     public MethodExpression(MethodDefinition definition){
         super(definition);
-        setParameters(new ParameterListExpression());
+        setParameters(new ParameterListExpression(definition.getParameters()));
     }
 
     public MethodExpression(ParameterListExpression parameters){
