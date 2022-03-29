@@ -4,6 +4,7 @@ import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.ArrayType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeManager;
+import com.xrosstools.xdecision.editor.model.NamedElement;
 import com.xrosstools.xdecision.editor.model.NamedType;
 
 public class ExpressionParser {
@@ -50,16 +51,19 @@ public class ExpressionParser {
         DecisionTreeDiagram diagram = manager.getDiagram();
         String name = varExp.getName();
 
-        NamedType member = diagram.getFactors().findByName(name);
+        NamedElement member = diagram.getFactors().findByName(name);
         if(member == null)
             member = diagram.getUserDefinedConstants().findByName(name);
 
         if(member == null)
-            return;
+            member = diagram.getUserDefinedEnums().findByName(name);
         
+        if(member == null)
+            return;
+
         varExp.setReferenceElement(member);
 
-        resolve(member.getType(), varExp.getChild());
+        resolve(DataType.getType(member), varExp.getChild());
     }
     
     public void resolve(DataType parentType, ExpressionDefinition exp) {

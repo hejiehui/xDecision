@@ -95,4 +95,14 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
     public MethodDefinition findMethod(String methodName) {
         return methods.findByName(methodName);
     }
+    
+    public static DataType getType(NamedElement refrenceElement) {
+        if(refrenceElement instanceof EnumType)
+            return (DataType)refrenceElement;
+        
+        if(refrenceElement instanceof NamedType)
+            return ((NamedType) refrenceElement).getType();
+        
+        return null;
+    }
 }

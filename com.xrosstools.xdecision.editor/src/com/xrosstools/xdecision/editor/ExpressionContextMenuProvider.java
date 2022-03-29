@@ -78,7 +78,7 @@ public class ExpressionContextMenuProvider {
             // It is a factor and can be replaced by other factors or constants
             NamedElement refrenceElement = ((VariableExpression)parentPart.getModel()).getReferenceElement();
             
-            DataType parentType = getType(refrenceElement);
+            DataType parentType = DataType.getType(refrenceElement);
             
             if(parentType == null)
                 return;
@@ -108,11 +108,6 @@ public class ExpressionContextMenuProvider {
             ExpressionDefinition exp = element instanceof MethodDefinition ? new MethodExpression((MethodDefinition)element): new VariableExpression(element);
             createIdMenu(menu, element, parentPart, part, extendChildren, exp);
         }
-    }
-    
-    private DataType getType(NamedElement refrenceElement) {
-        return refrenceElement instanceof EnumType ? (DataType)refrenceElement :
-            ((NamedType) refrenceElement).getType();
     }
     
     private void createIdMenu(IMenuManager menu, NamedElement element, EditPart parentPart, EditPart part, boolean extendChildren, ExpressionDefinition childExp) {

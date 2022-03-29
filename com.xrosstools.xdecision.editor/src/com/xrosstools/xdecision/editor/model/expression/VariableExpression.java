@@ -40,7 +40,7 @@ public class VariableExpression extends ExtensibleExpression implements Identifi
         return referenceElement;
     }
 
-    public void setReferenceElement(NamedType member) {
+    public void setReferenceElement(NamedElement member) {
         this.referenceElement = member;
         propertyChanged();
     }
