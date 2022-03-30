@@ -83,9 +83,11 @@ public class ExpressionParser {
         NamedType member = exp instanceof MethodExpression ? 
                 parentType.findMethod(varExp.getName()) :
                     parentType.findField(varExp.getName());
-            
+
+        if(member == null)
+            return;
+
         varExp.setReferenceElement(member);
-        if(member != null)
-            resolve(member.getType(), varExp.getChild());
+        resolve(member.getType(), varExp.getChild());
     }
 }

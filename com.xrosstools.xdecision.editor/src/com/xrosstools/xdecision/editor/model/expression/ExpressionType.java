@@ -320,6 +320,8 @@ public enum ExpressionType {
             
         ParameterListExpression params = (ParameterListExpression)exp1(segment);
         params.addFirst(new ParameterExpression().setEnclosedExpression((exp0(segment))));
+        
+        
         return params;
     }
     
