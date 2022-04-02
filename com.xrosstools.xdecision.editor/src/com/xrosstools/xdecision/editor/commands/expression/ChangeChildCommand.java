@@ -7,8 +7,10 @@ import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.editor.model.expression.CompositeExpression;
 import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
+import com.xrosstools.xdecision.editor.model.expression.EnclosedExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExtensibleExpression;
+import com.xrosstools.xdecision.editor.model.expression.ParameterExpression;
 
 public class ChangeChildCommand extends Command{
     private Object parentModel;
@@ -50,8 +52,14 @@ public class ChangeChildCommand extends Command{
             return;
         }
 
+        //TODO check negative expression
         if(parentModel instanceof BracktExpression) {
-            ((BracktExpression)parentModel).setEnclosedExpression(newExp);
+            ((EnclosedExpression)parentModel).setInnerExpression(newExp);
+            return;
+        }
+        
+        if(parentModel instanceof ParameterExpression) {
+            ((EnclosedExpression)parentModel).setInnerExpression(newExp);
             return;
         }
 

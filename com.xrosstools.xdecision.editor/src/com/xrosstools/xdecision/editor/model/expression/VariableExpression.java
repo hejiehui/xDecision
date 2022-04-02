@@ -1,11 +1,8 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import com.xrosstools.xdecision.editor.model.NamedElement;
 
-public class VariableExpression extends ExtensibleExpression implements Identifier, PropertyChangeListener {
+public class VariableExpression extends ExtensibleExpression implements Identifier {
     private String name;
     private NamedElement referenceElement;
 
@@ -45,11 +42,6 @@ public class VariableExpression extends ExtensibleExpression implements Identifi
     public void setReferenceElement(NamedElement referenceElement) {
         this.referenceElement = referenceElement;
         referenceElement.getListeners().addPropertyChangeListener(this);
-        propertyChanged();
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
         propertyChanged();
     }
 }

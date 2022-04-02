@@ -9,6 +9,7 @@ public abstract class ExtensibleExpression extends ExpressionDefinition {
 
     public void setChild(ExpressionDefinition child) {
         this.child = child;
+        child.getListeners().addPropertyChangeListener(this);
         propertyChanged();
     }
 

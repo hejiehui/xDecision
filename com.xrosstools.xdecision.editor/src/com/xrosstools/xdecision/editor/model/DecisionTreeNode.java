@@ -1,5 +1,7 @@
 package com.xrosstools.xdecision.editor.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 
-public class DecisionTreeNode implements PropertyConstants, IPropertySource {
+public class DecisionTreeNode implements PropertyConstants, IPropertySource, PropertyChangeListener {
     private ExpressionParser parser;
     private ExpressionDefinition expression = new PlaceholderExpression();
     private String rawExpression;
@@ -111,12 +113,18 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource {
 
     public void setNodeExpression(ExpressionDefinition expression) {
 	    this.expression = expression;
+	    expression.getListeners().addPropertyChangeListener(this);
 	    listeners.firePropertyChange(PROP_EXPRESSION, null, expression);
 	}
 
 	public ExpressionDefinition getNodeExpression() {
 	    return expression;
 	}
+	
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        listeners.firePropertyChange(PROP_EXPRESSION, null, expression);
+    }
 
 	public int getDecisionId() {
 	    return manager.getDecisions().indexOf(decision);

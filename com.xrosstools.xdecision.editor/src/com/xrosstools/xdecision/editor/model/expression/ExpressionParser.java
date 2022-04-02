@@ -37,7 +37,7 @@ public class ExpressionParser {
         }
         
         if(exp instanceof EnclosedExpression) {
-            matchVariables(((EnclosedExpression)exp).getEnclosedExpression());
+            matchVariables(((EnclosedExpression)exp).getInnerExpression());
             return;
         }
 

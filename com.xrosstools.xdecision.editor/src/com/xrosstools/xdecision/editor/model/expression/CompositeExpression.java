@@ -28,14 +28,13 @@ public class CompositeExpression extends ExpressionDefinition {
     
     public CompositeExpression add(int index, ExpressionDefinition exp) {
         elements.add(index, exp);
+        exp.getListeners().addPropertyChangeListener(this);
         propertyChanged();
         return this;
     }
     
     public CompositeExpression addFirst(ExpressionDefinition exp) {
-        elements.add(0, exp);
-        propertyChanged();
-        return this;
+        return add(0, exp);
     }
     
     public boolean isEmpty() {
@@ -47,13 +46,12 @@ public class CompositeExpression extends ExpressionDefinition {
     }
     
     public CompositeExpression add(ExpressionDefinition exp) {
-        elements.add(exp);
-        propertyChanged();
-        return this;
+        return add(elements.size(), exp);
     }
 
     public void set(int index, ExpressionDefinition exp) {
         elements.set(index, exp);
+        exp.getListeners().addPropertyChangeListener(this);
         propertyChanged();
     }
     

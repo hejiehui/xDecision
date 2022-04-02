@@ -4,7 +4,7 @@ public class ElementExpression extends ExtensibleExpression {
     private ExpressionDefinition indexExpression;
 
     public ElementExpression (ExpressionDefinition indexExpression) {
-        this.indexExpression = indexExpression;
+        setIndexExpression(indexExpression);
     }
 
     public ExpressionDefinition getIndexExpression() {
@@ -13,6 +13,7 @@ public class ElementExpression extends ExtensibleExpression {
 
     public void setIndexExpression(ExpressionDefinition indexExpression) {
         this.indexExpression = indexExpression;
+        indexExpression.getListeners().addPropertyChangeListener(this);
         propertyChanged();
     }
 

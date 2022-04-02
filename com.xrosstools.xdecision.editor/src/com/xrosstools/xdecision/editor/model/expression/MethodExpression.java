@@ -21,6 +21,7 @@ public class MethodExpression extends VariableExpression {
     
     public void setParameters(ParameterListExpression parameters) {
         this.parameters = parameters;
+        parameters.getListeners().addPropertyChangeListener(this);
     }
 
     public ParameterListExpression getParameters() {

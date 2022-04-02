@@ -192,7 +192,7 @@ public class ExpressionContextMenuProvider {
     private void wrapBracketOperatorMenu(IMenuManager menu, EditPart expPart) {
         expPart = AddOperatorCommand.findTopExpressionPart(expPart);
         ExpressionDefinition exp = (ExpressionDefinition)expPart.getModel();
-        add(menu, "(...)", false, new ChangeChildCommand(expPart.getParent().getModel(), exp, new BracktExpression().setEnclosedExpression(exp)));        
+        add(menu, "(...)", false, new ChangeChildCommand(expPart.getParent().getModel(), exp, new BracktExpression().setInnerExpression(exp)));        
     }
     
     private void changeToFactorMenu(IMenuManager menu, EditPart expPart) {

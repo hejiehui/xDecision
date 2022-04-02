@@ -29,7 +29,7 @@ public class EnclosedExpressionPart extends BaseExpressionPart {
     protected List getModelChildren() {
         EnclosedExpression exp = (EnclosedExpression)getModel();
         
-        return Arrays.asList(exp.getEnclosedExpression());
+        return Arrays.asList(exp.getInnerExpression());
     }
     
     protected void addChildVisual(EditPart childEditPart, int index) {

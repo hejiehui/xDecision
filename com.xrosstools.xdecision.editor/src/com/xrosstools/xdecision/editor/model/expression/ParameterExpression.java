@@ -13,6 +13,6 @@ public class ParameterExpression extends EnclosedExpression {
 
     @Override
     public String toString() {
-        return first ? getEnclosedExpression().toString() : ", " + getEnclosedExpression().toString();
+        return first ? getInnerExpression().toString() : ", " + getInnerExpression().toString();
     }
 }

@@ -124,7 +124,7 @@ public enum ExpressionType {
         @Override
         public Object compile(Grammar grammar, List<Object> segment) {
             if(grammar == MINUS_H)
-                return new NegtiveExpression().setEnclosedExpression(exp1(segment));
+                return new NegtiveExpression().setInnerExpression(exp1(segment));
 
             return exp0(segment);
         }
@@ -138,7 +138,7 @@ public enum ExpressionType {
         @Override
         public Object compile(Grammar grammar, List<Object> segment) {
             if(grammar == LBRKT_A_RBRKT)
-                return new BracktExpression().setEnclosedExpression(exp1(segment));
+                return new BracktExpression().setInnerExpression(exp1(segment));
             
             if(isMatch(grammar, M))
                 return exp0(segment);
@@ -300,7 +300,7 @@ public enum ExpressionType {
             return ((CalculationExpression)basic).addFirst(leftExp);
         
         if(basic instanceof NegtiveExpression) {
-            ExpressionDefinition realBasic = ((NegtiveExpression)basic).getEnclosedExpression();
+            ExpressionDefinition realBasic = ((NegtiveExpression)basic).getInnerExpression();
             CalculationExpression calExp = new CalculationExpression();
             return calExp.add(leftExp).add(new OperatorExpression(OperatorEnum.MINUS)).add(realBasic);
         }
@@ -319,7 +319,7 @@ public enum ExpressionType {
             segment.remove(0);
             
         ParameterListExpression params = (ParameterListExpression)exp1(segment);
-        params.addFirst(new ParameterExpression().setEnclosedExpression((exp0(segment))));
+        params.addFirst(new ParameterExpression().setInnerExpression((exp0(segment))));
         
         
         return params;

@@ -58,7 +58,7 @@ public class RemoveExpressionCommand extends Command{
         }
         
         if(parentModel instanceof BracktExpression) {
-            ((BracktExpression)parentModel).setEnclosedExpression(null);
+            ((BracktExpression)parentModel).setInnerExpression(null);
             return;
         }
 
