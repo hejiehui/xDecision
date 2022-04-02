@@ -6,7 +6,7 @@ public class PlaceholderExpression extends BasicExpression {
     private String text = "...";
     public PlaceholderExpression() {}
     public PlaceholderExpression(ParameterDefinition definition) {
-        this.text = String.format("[%s]", definition.getName());
+        this.text = definition.getName();
     }
     @Override
     public String getDisplayText() {

@@ -11,7 +11,6 @@ import org.eclipse.swt.graphics.Image;
 import com.xrosstools.xdecision.editor.Activator;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
-import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 
 public class DecisionTreeNodeTreePart extends AbstractTreeEditPart implements PropertyChangeListener {
     public DecisionTreeNodeTreePart(Object model) {
@@ -33,7 +32,7 @@ public class DecisionTreeNodeTreePart extends AbstractTreeEditPart implements Pr
     
     public void deactivate() {
         super.deactivate();
-        ((ExpressionDefinition) getModel()).getListeners().removePropertyChangeListener(this);
+        ((DecisionTreeNode) getModel()).getListeners().removePropertyChangeListener(this);
     }
 
     @Override

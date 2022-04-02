@@ -30,7 +30,6 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 	private String evaluatorClass;
 
 	private List<DecisionTreeNode> nodes = new ArrayList<DecisionTreeNode>();;
-	private List<DecisionTreeRoot> roots = new ArrayList<DecisionTreeRoot>();
 
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	private boolean isHorizantal;
@@ -198,11 +197,14 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 		nodes.remove(node);
 		listeners.firePropertyChange(NODE, null, null);
 	}
-	public List<DecisionTreeRoot> getRoots() {
-		return roots;
-	}
-	public void setRoots(List<DecisionTreeRoot> roots) {
-		this.roots = roots;
+	public List<DecisionTreeNode> getRoots() {
+        List<DecisionTreeNode> roots = new ArrayList<DecisionTreeNode>();
+        
+        for(DecisionTreeNode node: getNodes())
+            if(node.getInput() == null)
+                roots.add(node);
+        
+        return roots;
 	}
 
 	public int getVerticalSpace() {

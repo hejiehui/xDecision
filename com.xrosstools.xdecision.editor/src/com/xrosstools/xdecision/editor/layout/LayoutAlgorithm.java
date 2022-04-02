@@ -1,9 +1,7 @@
 package com.xrosstools.xdecision.editor.layout;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
@@ -16,9 +14,8 @@ import com.xrosstools.xdecision.editor.model.DecisionTreeRow;
 
 public class LayoutAlgorithm {
 	public void layout(DecisionTreeDiagram diagram){
-		findRoots(diagram);
 		int nextTreePos = 0;
-		for(DecisionTreeRoot root : diagram.getRoots()){
+		for(DecisionTreeRoot root : findRoots(diagram)){
 	        root.getRows().clear();
 	        root.setWidth(visit(root.getRows(), root.getRootNode(), 0, 0));
 			layout(diagram, root, nextTreePos);
@@ -26,27 +23,13 @@ public class LayoutAlgorithm {
 		}
 	}
 	
-	private void findRoots(DecisionTreeDiagram diagram){
+	private List<DecisionTreeRoot> findRoots(DecisionTreeDiagram diagram){
 		List<DecisionTreeRoot> newRoots = new ArrayList<DecisionTreeRoot>();
-		Set<DecisionTreeNode> proceed = new HashSet<DecisionTreeNode>();
+
+		for(DecisionTreeNode node: diagram.getRoots())
+			newRoots.add(new DecisionTreeRoot(node));
 		
-		// First keep old root at list start
-		for(DecisionTreeRoot root : diagram.getRoots()){
-			DecisionTreeNode node = root.getRootNode();
-			if(node.getInput() == null && diagram.getNodes().contains(node)){
-				newRoots.add(root);
-				proceed.add(node);
-			}
-		}
-		
-		for(DecisionTreeNode node: diagram.getNodes()){
-			if(proceed.contains(node))
-				continue;
-			if(node.getInput() == null)
-				newRoots.add(new DecisionTreeRoot(node));
-		}
-		
-		diagram.setRoots(newRoots);
+		return newRoots;
 	}
     
     private int visit(List<DecisionTreeRow> rows, DecisionTreeNode curNode, int depth, int pos){
