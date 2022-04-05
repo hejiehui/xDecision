@@ -162,11 +162,12 @@ public enum ExpressionType {
             String name = ((Token)segment.get(0)).getValueStr();
             ExpressionDefinition exp = exp1(segment);
             
-            if(exp instanceof MethodExpression)
-                ((MethodExpression)exp).setName(name);
+            if(exp instanceof ParameterListExpression)
+                exp = new MethodExpression(name, (ParameterListExpression)exp);
             else
                 exp = new VariableExpression(name);
 
+            exp = new ExtensibleExpression(exp);
             segment.set(0, exp);
             segment.remove(1);
             return super.compile(grammar, segment);
@@ -183,7 +184,7 @@ public enum ExpressionType {
             if(grammar == FIN)
                 return end();
             
-            return new MethodExpression((ParameterListExpression)exp1(segment));
+            return exp1(segment);
         }
     },
     
@@ -220,7 +221,7 @@ public enum ExpressionType {
                 return end();
 
             if(grammar == LSBRKT_A_RSBRKT_I)
-                return withLeft(new ElementExpression(exp1(segment)), exp(segment, 3));
+                return withLeft(new ExtensibleExpression(new ElementExpression(exp1(segment))), exp(segment, 3));
             
             return segment.get(1);
         }
@@ -323,6 +324,5 @@ public enum ExpressionType {
         
         
         return params;
-    }
-    
+    }    
 }

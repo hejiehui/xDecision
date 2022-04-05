@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.ArrayType;
+import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeManager;
 import com.xrosstools.xdecision.editor.model.NamedElement;
@@ -41,13 +41,16 @@ public class ExpressionParser {
             return;
         }
 
-        if(exp instanceof VariableExpression) {
-            resolve((VariableExpression)exp);
+        if(exp instanceof ExtensibleExpression) {
+            ExtensibleExpression extExp = (ExtensibleExpression)exp;
+            //The first one must be VariableExpression
+            NamedElement userDefined = resolve((VariableExpression)((ExtensibleExpression)exp).getBaseExpression());
+            resolve(DataType.getType(userDefined), extExp.getChild());
             return;
         }
     }
     
-    public void resolve(VariableExpression varExp) {
+    public NamedElement resolve(VariableExpression varExp) {
         DecisionTreeDiagram diagram = manager.getDiagram();
         String name = varExp.getName();
 
@@ -58,36 +61,36 @@ public class ExpressionParser {
         if(member == null)
             member = diagram.getUserDefinedEnums().findByName(name);
         
-        if(member == null)
-            return;
-
         varExp.setReferenceElement(member);
 
-        resolve(DataType.getType(member), varExp.getChild());
+        return member;
     }
     
     public void resolve(DataType parentType, ExpressionDefinition exp) {
         if(parentType == null || exp == null)
             return;
             
-        if (exp instanceof ElementExpression) { 
-            matchVariables(((ElementExpression)exp).getIndexExpression());
+        if(!(exp instanceof ExtensibleExpression))
+            return;
+            
+        ExtensibleExpression extExp = (ExtensibleExpression)exp;
+        ExpressionDefinition baseExp = extExp.getBaseExpression();
+            
+        if (baseExp instanceof ElementExpression) { 
+            matchVariables(((ElementExpression)baseExp).getIndexExpression());
             
             if(parentType instanceof ArrayType)
-                resolve(((ArrayType) parentType).getValueType(), ((ElementExpression)exp).getChild());
+                resolve(((ArrayType) parentType).getValueType(), extExp.getChild());
 
             return;
         }
         
-        VariableExpression varExp = (VariableExpression)exp;
+        VariableExpression varExp = (VariableExpression)baseExp;
         NamedType member = exp instanceof MethodExpression ? 
                 parentType.findMethod(varExp.getName()) :
                     parentType.findField(varExp.getName());
 
-        if(member == null)
-            return;
 
-        varExp.setReferenceElement(member);
-        resolve(member.getType(), varExp.getChild());
+        resolve(DataType.getType(member), extExp.getChild());
     }
 }

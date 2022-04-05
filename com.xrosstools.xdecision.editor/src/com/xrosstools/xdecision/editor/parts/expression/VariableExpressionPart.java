@@ -5,35 +5,27 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.swt.graphics.Color;
 
-import com.xrosstools.xdecision.editor.figures.ExpandableExpressionFigure;
 import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.NamedElement;
-import com.xrosstools.xdecision.editor.model.expression.ExtensibleExpression;
-import com.xrosstools.xdecision.editor.model.expression.Identifier;
+import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 
-public class IdentifierExpressionPart extends ExtensibleExpressionPart {
+public class VariableExpressionPart extends BaseExpressionPart {
     private Label identifierLabel;
-    private Label jointLabel;
+
     @Override
     protected IFigure createFigure() {
         identifierLabel = new Label();
-        jointLabel = new Label();
-        
-        ExpandableExpressionFigure figure = new ExpandableExpressionFigure();
-        figure.setBaseFigure(identifierLabel);
-        figure.setJointFigure(jointLabel);
-        return figure;
+        return identifierLabel;
     }
     
     protected void refreshVisuals() {
-        ExtensibleExpression exp = (ExtensibleExpression)getModel();
-        identifierLabel.setText(((Identifier)exp).getIdentifier());
+        VariableExpression exp = (VariableExpression)getModel();
+        identifierLabel.setText(exp.getName());
         identifierLabel.setForegroundColor(getColor(exp));
-        jointLabel.setText(exp.hasChild() ? "." : "");        
     }
     
-    private Color getColor(ExtensibleExpression exp) {
+    private Color getColor(ExpressionDefinition exp) {
         if(exp instanceof VariableExpression) {
             NamedElement element = ((VariableExpression)exp).getReferenceElement();
             if(element instanceof DecisionTreeFactor)

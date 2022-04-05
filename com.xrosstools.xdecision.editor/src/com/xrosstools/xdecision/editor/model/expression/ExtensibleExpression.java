@@ -1,26 +1,39 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-public abstract class ExtensibleExpression extends ExpressionDefinition {
-    private ExpressionDefinition child;
+public class ExtensibleExpression extends ExpressionDefinition {
+    private ExpressionDefinition baseExpression;
+    private ExpressionDefinition childExpression;
 
-    public ExpressionDefinition getChild() {
-        return child;
+    public ExtensibleExpression (ExpressionDefinition baseExpression) {
+        setBaseExpression(baseExpression);
     }
 
-    public void setChild(ExpressionDefinition child) {
-        this.child = child;
-        child.getListeners().addPropertyChangeListener(this);
+    public ExpressionDefinition getBaseExpression() {
+        return baseExpression;
+    }
+
+    public void setBaseExpression(ExpressionDefinition baseExpression) {
+        this.baseExpression = baseExpression;
+        baseExpression.getListeners().addPropertyChangeListener(this);
+        propertyChanged();
+    }
+
+    public ExpressionDefinition getChild() {
+        return childExpression;
+    }
+
+    public void setChild(ExpressionDefinition childExpression) {
+        this.childExpression = childExpression;
+        childExpression.getListeners().addPropertyChangeListener(this);
         propertyChanged();
     }
 
     public boolean hasChild() {
-        return child != null;
+        return childExpression != null;
     }
 
     @Override
     public String toString() {
-        return getMainExpDisplayText() + (hasChild() ? "." + child.toString() : "");
+        return baseExpression.toString() + (hasChild() ? "." + childExpression.toString() : "");
     }
-
-    public abstract String getMainExpDisplayText();
 }

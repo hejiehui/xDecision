@@ -3,10 +3,10 @@ package com.xrosstools.xdecision.editor.figures;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 
 public class ExpandableExpressionFigure extends Figure {
+    private IFigure jointFigure;
     private BorderLayout layout = new BorderLayout();
 
     public ExpandableExpressionFigure() {
@@ -20,8 +20,13 @@ public class ExpandableExpressionFigure extends Figure {
     }
 
     public void setJointFigure(IFigure jointFigure) {
+        this.jointFigure = jointFigure;
         add(jointFigure);
         layout.setConstraint(jointFigure, PositionConstants.CENTER);
+    }
+    
+    public IFigure getJointFigure() {
+        return jointFigure;
     }
 
     public void setExpandedFigure(IFigure expandedFigure) {

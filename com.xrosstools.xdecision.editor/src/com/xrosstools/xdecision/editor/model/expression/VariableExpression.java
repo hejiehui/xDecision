@@ -2,7 +2,7 @@ package com.xrosstools.xdecision.editor.model.expression;
 
 import com.xrosstools.xdecision.editor.model.NamedElement;
 
-public class VariableExpression extends ExtensibleExpression implements Identifier {
+public class VariableExpression extends ExpressionDefinition {
     private String name;
     private NamedElement referenceElement;
 
@@ -12,10 +12,6 @@ public class VariableExpression extends ExtensibleExpression implements Identifi
     
     public VariableExpression(NamedElement referenceElement) {
         setReferenceElement(referenceElement);
-    }
-    
-    public String getIdentifier() {
-        return getName();
     }
 
     public String getName() {
@@ -27,10 +23,6 @@ public class VariableExpression extends ExtensibleExpression implements Identifi
         propertyChanged();
     }
     
-    public String getMainExpDisplayText() {
-        return getIdentifier();
-    }
-
     public boolean isValid() {
         return referenceElement != null;
     }
@@ -43,5 +35,10 @@ public class VariableExpression extends ExtensibleExpression implements Identifi
         this.referenceElement = referenceElement;
         referenceElement.getListeners().addPropertyChangeListener(this);
         propertyChanged();
+    }
+    
+    @Override
+    public String toString() {
+        return getName();
     }
 }

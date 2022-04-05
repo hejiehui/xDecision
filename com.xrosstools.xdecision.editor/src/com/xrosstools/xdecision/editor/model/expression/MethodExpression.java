@@ -27,14 +27,9 @@ public class MethodExpression extends VariableExpression {
     public ParameterListExpression getParameters() {
         return parameters;
     }
-    
-    @Override
-    public String getIdentifier() {
-        return getName() + "(" + parameters.toString() + ")";
-    }
 
     @Override
-    public String getMainExpDisplayText() {
+    public String toString() {
         return getName() + "(" + parameters.toString() + ")";
     }
 }
