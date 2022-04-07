@@ -43,7 +43,7 @@ public class RemoveExpressionCommand extends Command{
         }
         
         if(parentModel instanceof ExtensibleExpression) {
-            ((ExtensibleExpression)parentModel).setChild(null);
+            ((ExtensibleExpression)parentModel).setChildExpression(null);
             return;
         }
         

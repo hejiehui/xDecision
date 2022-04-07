@@ -1,6 +1,5 @@
 package com.xrosstools.xdecision.editor.parts.expression;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
@@ -8,37 +7,38 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 
+import com.xrosstools.xdecision.editor.figures.ExpandableExpressionFigure;
 import com.xrosstools.xdecision.editor.figures.MethodExpressionFigure;
 import com.xrosstools.xdecision.editor.model.expression.MethodExpression;
 
-public class MethodExpressionPart extends BaseExpressionPart {
+public class MethodExpressionPart extends ExtensibleExpressionPart {
     private MethodExpressionFigure methodFigure;
 
     @Override
-    protected IFigure createFigure() {
+    protected void postCreateFigure(ExpandableExpressionFigure figure) {
         methodFigure = new MethodExpressionFigure();
-        return methodFigure;
+        figure.setBaseFigure(methodFigure);
     }
     
     @Override
-    protected List getModelChildren() {
-        MethodExpression exp = (MethodExpression)getModel();
-        List children = new ArrayList();
-        children.add(exp.getParameters());
-        return children;
+    protected void postGetModelChildren(List children) {
+        children.add(((MethodExpression)getModel()).getParameters());
     }
     
-    protected void addChildVisual(EditPart childEditPart, int index) {
+    @Override
+    protected void postAddChildVisual(EditPart childEditPart, int index) {
         MethodExpression exp = (MethodExpression)getModel();
         
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
-
-        methodFigure.setParameterFigure(childFigure);
+        
+        if(childEditPart.getModel() == exp.getParameters())
+            methodFigure.setParameterFigure(childFigure);
     }
     
-    protected void refreshVisuals() {
+    protected void postRefreshVisuals() {
         MethodExpression exp = (MethodExpression)getModel();
         methodFigure.setMethodName(exp.getName());
+
         if(exp.isValid())
             methodFigure.getNameLabel().setForegroundColor(ColorConstants.black);
         else

@@ -38,7 +38,7 @@ public class ChangeChildCommand extends Command{
         }
         
         if(parentModel instanceof ExtensibleExpression) {
-            ((ExtensibleExpression)parentModel).setChild(newExp);
+            ((ExtensibleExpression)parentModel).setChildExpression(newExp);
             return;
         }
         

@@ -21,8 +21,17 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
     protected IFigure createFigure() {
         ExpandableExpressionFigure figure = new ExpandableExpressionFigure();
         figure.setJointFigure(new Label());
+        postCreateFigure(figure);
         return figure;
     }
+    
+    protected void postCreateFigure(ExpandableExpressionFigure figure) {}
+    
+    protected void postGetModelChildren(List children) {}
+    
+    protected void postAddChildVisual(EditPart childEditPart, int index) {}
+    
+    protected void postRefreshVisuals() {}
     
     @Override
     public ExpandableExpressionFigure getFigure() {
@@ -32,13 +41,12 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
     @Override
     protected List getModelChildren() {
         List children = new ArrayList();
-
         ExtensibleExpression exp = getModel();
-        if(exp.getBaseExpression() != null)
-            children.add(exp.getBaseExpression());
         
-        if(exp.getChild() != null)
-            children.add(exp.getChild());
+        if(exp.getChildExpression() != null)
+            children.add(exp.getChildExpression());
+
+        postGetModelChildren(children);
 
         return children;
     }
@@ -50,19 +58,22 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
         Object childModel = childEditPart.getModel();
         
-        if(childModel ==  exp.getBaseExpression())
-            getFigure().setBaseFigure(childFigure);
-        
-        if(childModel == exp.getChild())
+        if(childModel == exp.getChildExpression()) {
             getFigure().setExpandedFigure(childFigure);
+            return;
+        }
+        
+        postAddChildVisual(childEditPart, index);
     }
-    
+
     protected void refreshVisuals() {
         ExtensibleExpression exp = getModel();
         Label jointLabel = (Label)getFigure().getJointFigure();
-        if(exp.getChild() == null || ((ExtensibleExpression)exp.getChild()).getBaseExpression() instanceof ElementExpression)
+        if(exp.getChildExpression() == null || exp.getChildExpression() instanceof ElementExpression)
             jointLabel.setText("");
         else
             jointLabel.setText(".");
-    }
+        
+        postRefreshVisuals();
+    }    
 }

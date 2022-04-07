@@ -119,7 +119,7 @@ public class ExpressionContextMenuProvider {
         if(selected && extendChildren) {
             MenuManager subMenu = new MenuManager(definitionId);
             
-            createChildMenu(subMenu, part, findChild(part, model.getChild()), false);
+            createChildMenu(subMenu, part, findChild(part, model.getChildExpression()), false);
             menu.add(subMenu);
         } else
             add(menu, definitionId, selected, new ChangeChildCommand(parentPart.getModel(), (ExpressionDefinition)model, childExp));

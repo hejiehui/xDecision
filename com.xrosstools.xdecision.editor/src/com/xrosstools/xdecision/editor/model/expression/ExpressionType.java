@@ -167,7 +167,6 @@ public enum ExpressionType {
             else
                 exp = new VariableExpression(name);
 
-            exp = new ExtensibleExpression(exp);
             segment.set(0, exp);
             segment.remove(1);
             return super.compile(grammar, segment);
@@ -221,7 +220,7 @@ public enum ExpressionType {
                 return end();
 
             if(grammar == LSBRKT_A_RSBRKT_I)
-                return withLeft(new ExtensibleExpression(new ElementExpression(exp1(segment))), exp(segment, 3));
+                return withLeft(new ElementExpression(exp1(segment)), exp(segment, 3));
             
             return segment.get(1);
         }
@@ -307,7 +306,7 @@ public enum ExpressionType {
         }
             
         if(leftExp instanceof ExtensibleExpression && basic instanceof ExtensibleExpression)
-            ((ExtensibleExpression)leftExp).setChild(basic);
+            ((ExtensibleExpression)leftExp).setChildExpression(basic);
         
         return leftExp;
     }

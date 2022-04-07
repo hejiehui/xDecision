@@ -18,10 +18,6 @@ public class EnclosedExpressionPart extends BaseExpressionPart {
         if(getModel() instanceof BracktExpression)
             return EnclosedExpressionFigure.createBracketFigure();
 
-        //TODO fix element figure
-        if(getModel() instanceof ElementExpression)
-            return EnclosedExpressionFigure.createElementFigure();
-
         return new EnclosedExpressionFigure();
     }
     

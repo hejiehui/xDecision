@@ -40,8 +40,6 @@ public class DecisionTreePartFactory implements EditPartFactory {
             part = new CompositeExpressionPart();
         else if(model instanceof EnclosedExpression)
             part = new EnclosedExpressionPart();
-        else if(model instanceof ExtensibleExpression)
-            part = new ExtensibleExpressionPart();
         else if(model instanceof MethodExpression)
             part = new MethodExpressionPart();
         else if(model instanceof VariableExpression)

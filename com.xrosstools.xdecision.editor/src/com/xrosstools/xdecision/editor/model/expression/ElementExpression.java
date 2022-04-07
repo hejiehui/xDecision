@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-public class ElementExpression extends ExpressionDefinition {
+public class ElementExpression extends ExtensibleExpression {
     private ExpressionDefinition indexExpression;
 
     public ElementExpression (ExpressionDefinition indexExpression) {
@@ -18,7 +18,7 @@ public class ElementExpression extends ExpressionDefinition {
     }
 
     @Override
-    public String toString() {
+    public String getBaseString() {
         return "[" + indexExpression.toString() + "]";
     }
 }

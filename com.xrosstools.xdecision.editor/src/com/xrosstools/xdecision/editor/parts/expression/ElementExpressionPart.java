@@ -1,6 +1,5 @@
 package com.xrosstools.xdecision.editor.parts.expression;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
@@ -8,36 +7,41 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 
 import com.xrosstools.xdecision.editor.figures.EnclosedExpressionFigure;
+import com.xrosstools.xdecision.editor.figures.ExpandableExpressionFigure;
 import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 
-public class ElementExpressionPart extends BaseExpressionPart {
+public class ElementExpressionPart extends ExtensibleExpressionPart {
+    private EnclosedExpressionFigure indexPanel;
+    private IFigure indexFigure;
     public ElementExpression getModel() {
         return (ElementExpression)super.getModel();
     }
 
     @Override
-    protected IFigure createFigure() {
-        return EnclosedExpressionFigure.createElementFigure();
+    protected void postCreateFigure(ExpandableExpressionFigure figure) {
+        indexPanel = EnclosedExpressionFigure.createElementFigure();
+        figure.setBaseFigure(indexPanel);
     }
     
     @Override
-    protected List getModelChildren() {
-        List children = new ArrayList();
-
-        ElementExpression exp = getModel();
-        if(exp.getIndexExpression() != null)
-            children.add(exp.getIndexExpression());
-
-        return children;
+    protected void postGetModelChildren(List children) {
+        if(getModel().getIndexExpression() != null)
+            children.add(getModel().getIndexExpression());
     }
     
-    protected void addChildVisual(EditPart childEditPart, int index) {
-        ElementExpression exp = getModel();
-        EnclosedExpressionFigure figure = (EnclosedExpressionFigure)getFigure();
-        
+    protected void postAddChildVisual(EditPart childEditPart, int index) {
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
-        Object childModel = childEditPart.getModel();
-        
-        figure.setEnclosedFigure(childFigure);
+
+        if(getModel().getIndexExpression() == childEditPart.getModel()) 
+            indexPanel.setEnclosedFigure(childFigure);
+    }
+    
+    @Override
+    protected void removeChildVisual(EditPart childEditPart) {
+        IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
+        if(indexPanel.getChildren().contains(childFigure)) {
+            indexPanel.remove(childFigure);
+        }else
+            super.removeChildVisual(childEditPart);
     }
 }

@@ -41,16 +41,13 @@ public class ExpressionParser {
             return;
         }
 
-        if(exp instanceof ExtensibleExpression) {
-            ExtensibleExpression extExp = (ExtensibleExpression)exp;
-            //The first one must be VariableExpression
-            NamedElement userDefined = resolve((VariableExpression)((ExtensibleExpression)exp).getBaseExpression());
-            resolve(DataType.getType(userDefined), extExp.getChild());
+        if(exp instanceof VariableExpression) {
+            resolve((VariableExpression)exp);
             return;
         }
     }
     
-    public NamedElement resolve(VariableExpression varExp) {
+    public void resolve(VariableExpression varExp) {
         DecisionTreeDiagram diagram = manager.getDiagram();
         String name = varExp.getName();
 
@@ -63,34 +60,29 @@ public class ExpressionParser {
         
         varExp.setReferenceElement(member);
 
-        return member;
+        resolve(DataType.getType(member), varExp.getChildExpression());
     }
     
     public void resolve(DataType parentType, ExpressionDefinition exp) {
         if(parentType == null || exp == null)
             return;
             
-        if(!(exp instanceof ExtensibleExpression))
-            return;
-            
-        ExtensibleExpression extExp = (ExtensibleExpression)exp;
-        ExpressionDefinition baseExp = extExp.getBaseExpression();
-            
-        if (baseExp instanceof ElementExpression) { 
-            matchVariables(((ElementExpression)baseExp).getIndexExpression());
+        if (exp instanceof ElementExpression) {
+            ElementExpression eleExp = (ElementExpression)exp;
+            matchVariables((eleExp).getIndexExpression());
             
             if(parentType instanceof ArrayType)
-                resolve(((ArrayType) parentType).getValueType(), extExp.getChild());
+                resolve(((ArrayType) parentType).getValueType(), eleExp.getChildExpression());
 
             return;
         }
         
-        VariableExpression varExp = (VariableExpression)baseExp;
+        VariableExpression varExp = (VariableExpression)exp;
         NamedType member = exp instanceof MethodExpression ? 
                 parentType.findMethod(varExp.getName()) :
                     parentType.findField(varExp.getName());
 
 
-        resolve(DataType.getType(member), extExp.getChild());
+        resolve(DataType.getType(member), varExp.getChildExpression());
     }
 }

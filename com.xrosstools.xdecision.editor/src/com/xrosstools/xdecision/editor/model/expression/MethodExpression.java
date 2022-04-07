@@ -20,8 +20,7 @@ public class MethodExpression extends VariableExpression {
     }
     
     public void setParameters(ParameterListExpression parameters) {
-        this.parameters = parameters;
-        parameters.getListeners().addPropertyChangeListener(this);
+        this.parameters = replaceExpression(this.parameters, parameters);
     }
 
     public ParameterListExpression getParameters() {
@@ -29,7 +28,7 @@ public class MethodExpression extends VariableExpression {
     }
 
     @Override
-    public String toString() {
+    public String getBaseString() {
         return getName() + "(" + parameters.toString() + ")";
     }
 }
