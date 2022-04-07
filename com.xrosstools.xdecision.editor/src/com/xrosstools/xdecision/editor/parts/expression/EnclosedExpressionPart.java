@@ -1,6 +1,7 @@
 package com.xrosstools.xdecision.editor.parts.expression;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
@@ -9,7 +10,6 @@ import org.eclipse.gef.GraphicalEditPart;
 
 import com.xrosstools.xdecision.editor.figures.EnclosedExpressionFigure;
 import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
-import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.editor.model.expression.EnclosedExpression;
 
 public class EnclosedExpressionPart extends BaseExpressionPart {
@@ -24,8 +24,10 @@ public class EnclosedExpressionPart extends BaseExpressionPart {
     @Override
     protected List getModelChildren() {
         EnclosedExpression exp = (EnclosedExpression)getModel();
-        
-        return Arrays.asList(exp.getInnerExpression());
+        if(exp.getInnerExpression() != null)
+            return Arrays.asList(exp.getInnerExpression());
+        else
+            return Collections.emptyList();
     }
     
     protected void addChildVisual(EditPart childEditPart, int index) {

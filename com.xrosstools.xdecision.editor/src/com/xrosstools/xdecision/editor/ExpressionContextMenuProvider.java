@@ -14,6 +14,7 @@ import com.xrosstools.xdecision.editor.commands.expression.ChangeChildCommand;
 import com.xrosstools.xdecision.editor.commands.expression.ChangeOperatorCommand;
 import com.xrosstools.xdecision.editor.commands.expression.CreateExpressionCommand;
 import com.xrosstools.xdecision.editor.commands.expression.RemoveExpressionCommand;
+import com.xrosstools.xdecision.editor.model.ArrayType;
 import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
@@ -23,6 +24,7 @@ import com.xrosstools.xdecision.editor.model.NamedElement;
 import com.xrosstools.xdecision.editor.model.NamedElementContainer;
 import com.xrosstools.xdecision.editor.model.NamedType;
 import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
+import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExtensibleExpression;
 import com.xrosstools.xdecision.editor.model.expression.MethodExpression;
@@ -83,6 +85,10 @@ public class ExpressionContextMenuProvider {
             if(parentType == null)
                 return;
 
+            if(parentType instanceof ArrayType) {
+                changeToArray(menu, parentPart, part);
+            }
+                
             if(parentType instanceof EnumType)
                 buildReplacementMenu(menu, ((EnumType)parentType).getValues(), parentPart, part, extendChildren);
             
@@ -102,7 +108,7 @@ public class ExpressionContextMenuProvider {
         
 //        createIdMenu(menu, "[index]", method.getType(), parentPart, childModel, extendChildren, new MethodExpression(method));
     }
-    
+
     private void buildReplacementMenu(IMenuManager menu, NamedElementContainer<?> container, EditPart parentPart, EditPart part, boolean extendChildren) {
         for(NamedElement element: container.getElements()) {
             ExpressionDefinition exp = element instanceof MethodDefinition ? new MethodExpression((MethodDefinition)element): new VariableExpression(element);
@@ -114,7 +120,7 @@ public class ExpressionContextMenuProvider {
         String definitionId = element instanceof MethodDefinition ? element.getName() + "()" : element.getName();
         
         ExtensibleExpression model = part == null ? null: (ExtensibleExpression)part.getModel();
-        boolean selected = model == null ? false : element == ((VariableExpression)model).getReferenceElement();
+        boolean selected = model == null || model instanceof ElementExpression ? false : element == ((VariableExpression)model).getReferenceElement();
         
         if(selected && extendChildren) {
             MenuManager subMenu = new MenuManager(definitionId);
@@ -200,11 +206,15 @@ public class ExpressionContextMenuProvider {
     }
     
     private void changeToNumberMenu(IMenuManager menu, EditPart expPart) {
-        menu.add(new InputTextCommandAction(editor, DataType.NUMBER_TYPE.getName() + DIALOG, DataType.NUMBER_TYPE.getName(), "0", new CreateExpressionCommand(expPart, DataType.NUMBER_TYPE.getName())));        
+        changeToTypeMenu(menu, expPart, DataType.NUMBER_TYPE);        
     }
 
     private void changeToStringMenu(IMenuManager menu, EditPart expPart) {
-        menu.add(new InputTextCommandAction(editor, DataType.STRING_TYPE.getName() + DIALOG, DataType.STRING_TYPE.getName(), "", new CreateExpressionCommand(expPart, DataType.STRING_TYPE.getName())));        
+        changeToTypeMenu(menu, expPart, DataType.STRING_TYPE);
+    }
+
+    private void changeToTypeMenu(IMenuManager menu, EditPart expPart, DataType type) {
+        menu.add(new InputTextCommandAction(editor, type.getName() + DIALOG, type.getName(), "", new CreateExpressionCommand(expPart, type)));
     }
 
     private void changeToConstMenu(IMenuManager menu, EditPart expPart) {
@@ -213,6 +223,13 @@ public class ExpressionContextMenuProvider {
 
     private void changeToEnumMenu(IMenuManager menu, EditPart expPart) {
         changeToElementMenu(menu, expPart, getDiagram().getUserDefinedEnums());
+    }
+    
+    private void changeToArray(IMenuManager menu, EditPart parentPart, EditPart part) {
+        VariableExpression exp = (VariableExpression)parentPart.getModel();
+        boolean selected = part != null ? part.getModel() instanceof ElementExpression : false;
+        Object model = part == null ? null : part.getModel();
+        add(menu, "[index]", selected, new ChangeChildCommand(exp, (ExpressionDefinition)model, new ElementExpression()));
     }
 
     private <T extends NamedElement> void changeToElementMenu(IMenuManager menu, EditPart expPart, NamedElementContainer<T> container) {

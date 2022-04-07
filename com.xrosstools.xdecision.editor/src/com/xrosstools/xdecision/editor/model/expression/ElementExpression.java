@@ -3,6 +3,9 @@ package com.xrosstools.xdecision.editor.model.expression;
 public class ElementExpression extends ExtensibleExpression {
     private ExpressionDefinition indexExpression;
 
+    public ElementExpression () {
+        this(new PlaceholderExpression("index"));
+    }
     public ElementExpression (ExpressionDefinition indexExpression) {
         setIndexExpression(indexExpression);
     }

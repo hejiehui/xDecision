@@ -30,7 +30,7 @@ public class AddOperatorCommand extends Command{
     public static EditPart findTopExpressionPart(EditPart expPart) {
         EditPart parentPart = expPart.getParent();
         Object parantExp = parentPart.getModel();
-        if(parantExp instanceof VariableExpression || parantExp instanceof MethodExpression || parantExp instanceof ElementExpression)
+        if(parantExp instanceof VariableExpression || parantExp instanceof MethodExpression)
             return findTopExpressionPart(parentPart);
         else
             return expPart;
