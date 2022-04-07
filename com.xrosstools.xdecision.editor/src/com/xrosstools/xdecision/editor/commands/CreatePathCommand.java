@@ -15,6 +15,7 @@ public class CreatePathCommand extends Command {
 	private DecisionTreeNode parent;
 	private DecisionTreeNode child;
 
+	@Override
 	public boolean canExecute() {
 		if(child != null && child.getInput() != null)
 			return false;

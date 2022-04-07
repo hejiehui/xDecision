@@ -9,7 +9,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 public class OperatorReference implements IPropertySource {
     public static String CONDITION = "Condition";
 
-    private ConditionOperator operator;
+    private ConditionOperator operator = ConditionOperator.EQUAL;
     private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
     
     

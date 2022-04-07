@@ -2,7 +2,6 @@ package com.xrosstools.xdecision.editor.model;
 
 import java.beans.PropertyChangeSupport;
 
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
@@ -12,8 +11,8 @@ import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 
 public class DecisionTreeNodeConnection implements IPropertySource {
 	private int valueId = -1;
-	private OperatorReference operatorRef;
-	private ExpressionDefinition expression;
+	private OperatorReference operatorRef = new OperatorReference();
+	private ExpressionDefinition expression = new PlaceholderExpression();
 	private DecisionTreeNode parent;
 	private DecisionTreeNode child;
 	
@@ -91,8 +90,6 @@ public class DecisionTreeNodeConnection implements IPropertySource {
 		this.child = child;
 		parent.addOutput(this);
 		child.setInput(this);
-		operatorRef = new OperatorReference();
-		expression = new PlaceholderExpression();
 	}
 
 	public int getValueId() {
