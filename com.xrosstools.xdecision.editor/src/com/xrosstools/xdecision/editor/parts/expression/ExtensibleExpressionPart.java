@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 
@@ -20,7 +19,6 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
     @Override
     protected IFigure createFigure() {
         ExpandableExpressionFigure figure = new ExpandableExpressionFigure();
-        figure.setJointFigure(new Label());
         postCreateFigure(figure);
         return figure;
     }
@@ -68,11 +66,11 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
 
     protected void refreshVisuals() {
         ExtensibleExpression exp = getModel();
-        Label jointLabel = (Label)getFigure().getJointFigure();
+        ExpandableExpressionFigure figure = getFigure();
         if(exp.getChildExpression() == null || exp.getChildExpression() instanceof ElementExpression)
-            jointLabel.setText("");
+            figure.setJointText("");
         else
-            jointLabel.setText(".");
+            figure.setJointText(".");
         
         postRefreshVisuals();
     }    

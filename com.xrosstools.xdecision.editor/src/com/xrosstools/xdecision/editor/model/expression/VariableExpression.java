@@ -7,7 +7,7 @@ public class VariableExpression extends ExtensibleExpression {
     private NamedElement referenceElement;
 
     public VariableExpression(String name) {
-        this.name = name;
+        setName(name);
     }
     
     public VariableExpression(NamedElement referenceElement) {
@@ -32,7 +32,9 @@ public class VariableExpression extends ExtensibleExpression {
     }
 
     public void setReferenceElement(NamedElement newReferenceElement) {
-        this.referenceElement = replaceElement(this.referenceElement, newReferenceElement);
+        this.referenceElement = newReferenceElement;
+        this.referenceElement.getListeners().addPropertyChangeListener(this);
+        propertyChanged();
     }
 
     @Override

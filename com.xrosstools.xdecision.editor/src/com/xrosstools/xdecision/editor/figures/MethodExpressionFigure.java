@@ -1,6 +1,7 @@
 package com.xrosstools.xdecision.editor.figures;
 
 import org.eclipse.draw2d.BorderLayout;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -30,13 +31,8 @@ public class MethodExpressionFigure extends Figure {
         paramPanel.setEnclosedFigure(parameterFigure);
     }
 
-    public void setJointFigure(IFigure jointFigure) {
-        add(jointFigure);
-        layout.setConstraint(jointFigure, PositionConstants.CENTER);
-    }
-
-    public Label getNameLabel() {
-        return nameLabel;
+    public void setMethodValidation(boolean valid) {
+        nameLabel.setForegroundColor(valid ? ColorConstants.black: ColorConstants.red);
     }
 
     public void setExpandedFigure(IFigure expandedFigure) {

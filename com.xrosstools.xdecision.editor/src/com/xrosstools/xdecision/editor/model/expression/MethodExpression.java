@@ -19,8 +19,10 @@ public class MethodExpression extends VariableExpression {
         this("", parameters);
     }
     
-    public void setParameters(ParameterListExpression parameters) {
-        this.parameters = replaceExpression(this.parameters, parameters);
+    public void setParameters(ParameterListExpression newParameters) {
+        this.parameters = newParameters;
+        this.parameters.getListeners().addPropertyChangeListener(this);
+        propertyChanged();
     }
 
     public ParameterListExpression getParameters() {

@@ -35,7 +35,7 @@ public class ElementExpressionPart extends ExtensibleExpressionPart {
         if(getModel().getIndexExpression() == childEditPart.getModel()) 
             indexPanel.setEnclosedFigure(childFigure);
     }
-    
+
     @Override
     protected void removeChildVisual(EditPart childEditPart) {
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();

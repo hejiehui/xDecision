@@ -38,10 +38,6 @@ public class MethodExpressionPart extends ExtensibleExpressionPart {
     protected void postRefreshVisuals() {
         MethodExpression exp = (MethodExpression)getModel();
         methodFigure.setMethodName(exp.getName());
-
-        if(exp.isValid())
-            methodFigure.getNameLabel().setForegroundColor(ColorConstants.black);
-        else
-            methodFigure.setForegroundColor(ColorConstants.red);
+        methodFigure.setMethodValidation(exp.isValid());
     }
 }
