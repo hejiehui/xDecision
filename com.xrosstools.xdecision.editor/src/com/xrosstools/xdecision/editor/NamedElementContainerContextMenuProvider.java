@@ -5,13 +5,13 @@ import org.eclipse.jface.action.MenuManager;
 
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.actions.InputTextCommandAction;
-import com.xrosstools.xdecision.editor.commands.CreateElementCommand;
-import com.xrosstools.xdecision.editor.commands.CreateNamedTypeCommand;
-import com.xrosstools.xdecision.editor.model.NamedElement;
-import com.xrosstools.xdecision.editor.model.NamedElementContainer;
-import com.xrosstools.xdecision.editor.model.NamedType;
+import com.xrosstools.xdecision.editor.commands.definition.CreateElementCommand;
+import com.xrosstools.xdecision.editor.commands.definition.CreateNamedTypeCommand;
 import com.xrosstools.xdecision.editor.model.XrossEvaluatorConstants;
-import com.xrosstools.xdecision.editor.parts.NamedElementContainerTreePart;
+import com.xrosstools.xdecision.editor.model.definition.NamedElement;
+import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
+import com.xrosstools.xdecision.editor.model.definition.NamedType;
+import com.xrosstools.xdecision.editor.parts.definition.NamedElementContainerTreePart;
 
 public class NamedElementContainerContextMenuProvider implements XrossEvaluatorConstants, DecisionTreeMessages {
     private DecisionTreeDiagramEditor editor;

@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-import com.xrosstools.xdecision.editor.model.MethodDefinition;
+import com.xrosstools.xdecision.editor.model.definition.MethodDefinition;
 
 public class MethodExpression extends VariableExpression {
     private ParameterListExpression parameters;

@@ -1,5 +1,8 @@
 package com.xrosstools.xdecision.editor.model;
 
+import com.xrosstools.xdecision.editor.model.definition.NamedElementTypeEnum;
+import com.xrosstools.xdecision.editor.model.definition.NamedType;
+
 //TODO remove all values
 public class DecisionTreeFactor extends NamedType {
 	public DecisionTreeFactor(DecisionTreeDiagram diagram, String name) {

@@ -3,7 +3,7 @@ package com.xrosstools.xdecision.editor.commands.expression;
 import org.eclipse.gef.EditPart;
 
 import com.xrosstools.xdecision.editor.commands.InputTextCommand;
-import com.xrosstools.xdecision.editor.model.DataType;
+import com.xrosstools.xdecision.editor.model.definition.DataType;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.NumberExpression;
 import com.xrosstools.xdecision.editor.model.expression.StringExpression;

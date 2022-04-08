@@ -1,5 +1,6 @@
 package com.xrosstools.xdecision.editor.model;
 
+import com.xrosstools.xdecision.editor.model.definition.DataType;
 
 public class DecisionTreeModel {
 	private String comments;

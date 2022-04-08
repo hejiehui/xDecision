@@ -7,14 +7,14 @@ import org.eclipse.jface.action.Separator;
 import com.xrosstools.xdecision.editor.actions.CommandAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.actions.InputTextCommandAction;
-import com.xrosstools.xdecision.editor.commands.ChangeElementNameCommand;
-import com.xrosstools.xdecision.editor.commands.ChangeElementTypeCommand;
-import com.xrosstools.xdecision.editor.model.NamedElement;
-import com.xrosstools.xdecision.editor.model.NamedElementContainer;
-import com.xrosstools.xdecision.editor.model.NamedElementTypeEnum;
-import com.xrosstools.xdecision.editor.model.NamedType;
+import com.xrosstools.xdecision.editor.commands.definition.ChangeElementNameCommand;
+import com.xrosstools.xdecision.editor.commands.definition.ChangeElementTypeCommand;
 import com.xrosstools.xdecision.editor.model.XrossEvaluatorConstants;
-import com.xrosstools.xdecision.editor.parts.NamedElementTreePart;
+import com.xrosstools.xdecision.editor.model.definition.NamedElement;
+import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
+import com.xrosstools.xdecision.editor.model.definition.NamedElementTypeEnum;
+import com.xrosstools.xdecision.editor.model.definition.NamedType;
+import com.xrosstools.xdecision.editor.parts.definition.NamedElementTreePart;
 
 public class NamedElementContextMenuProvider implements XrossEvaluatorConstants, DecisionTreeMessages {
     protected DecisionTreeDiagramEditor editor;

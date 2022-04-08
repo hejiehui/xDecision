@@ -3,14 +3,20 @@ package com.xrosstools.xdecision.editor.parts;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
-import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
-import com.xrosstools.xdecision.editor.model.EnumType;
-import com.xrosstools.xdecision.editor.model.MethodDefinition;
-import com.xrosstools.xdecision.editor.model.NamedElement;
-import com.xrosstools.xdecision.editor.model.NamedElementContainer;
-import com.xrosstools.xdecision.editor.model.NamedType;
+import com.xrosstools.xdecision.editor.model.definition.DataType;
+import com.xrosstools.xdecision.editor.model.definition.EnumType;
+import com.xrosstools.xdecision.editor.model.definition.MethodDefinition;
+import com.xrosstools.xdecision.editor.model.definition.NamedElement;
+import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
+import com.xrosstools.xdecision.editor.model.definition.NamedType;
+import com.xrosstools.xdecision.editor.parts.definition.DataTypeTreePart;
+import com.xrosstools.xdecision.editor.parts.definition.EnumTypeTreePart;
+import com.xrosstools.xdecision.editor.parts.definition.MethodDefinitionTreePart;
+import com.xrosstools.xdecision.editor.parts.definition.NamedElementContainerTreePart;
+import com.xrosstools.xdecision.editor.parts.definition.NamedElementTreePart;
+import com.xrosstools.xdecision.editor.parts.definition.NamedTypeTreePart;
 
 public class DecisionTreeTreePartFactory implements EditPartFactory {
 	public EditPart createEditPart(EditPart context, Object model) {

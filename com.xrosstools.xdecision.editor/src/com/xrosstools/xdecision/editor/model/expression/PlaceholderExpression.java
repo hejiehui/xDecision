@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-import com.xrosstools.xdecision.editor.model.ParameterDefinition;
+import com.xrosstools.xdecision.editor.model.definition.ParameterDefinition;
 
 public class PlaceholderExpression extends BasicExpression {
     private String text = "...";

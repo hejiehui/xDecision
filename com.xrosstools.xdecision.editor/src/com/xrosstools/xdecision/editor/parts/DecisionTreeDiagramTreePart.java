@@ -1,5 +1,7 @@
 package com.xrosstools.xdecision.editor.parts;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,7 @@ import org.eclipse.gef.editparts.AbstractTreeEditPart;
 
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 
-public class DecisionTreeDiagramTreePart extends AbstractTreeEditPart {
+public class DecisionTreeDiagramTreePart extends AbstractTreeEditPart implements PropertyChangeListener {
     private DecisionTreeDiagram diagram;
     public DecisionTreeDiagramTreePart(Object model) {
         super(model);
@@ -24,5 +26,20 @@ public class DecisionTreeDiagramTreePart extends AbstractTreeEditPart {
         children.add(diagram.getUserDefinedConstants());
         
     	return children;
+    }
+
+    public void activate() {
+        super.activate();
+        ((DecisionTreeDiagram) getModel()).getListeners().addPropertyChangeListener(this);
+    }
+    
+    public void deactivate() {
+        super.deactivate();
+        ((DecisionTreeDiagram) getModel()).getListeners().removePropertyChangeListener(this);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        refresh();
     }
 }

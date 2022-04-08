@@ -14,6 +14,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+import com.xrosstools.xdecision.editor.model.definition.DataType;
+import com.xrosstools.xdecision.editor.model.definition.EnumType;
+import com.xrosstools.xdecision.editor.model.definition.EnumValue;
+import com.xrosstools.xdecision.editor.model.definition.FieldDefinition;
+import com.xrosstools.xdecision.editor.model.definition.MapType;
+import com.xrosstools.xdecision.editor.model.definition.MethodDefinition;
+import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
+import com.xrosstools.xdecision.editor.model.definition.NamedType;
+import com.xrosstools.xdecision.editor.model.definition.ParameterDefinition;
+import com.xrosstools.xdecision.editor.model.definition.TemplateType;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 
 public class DecisionTreeDiagramFactory {

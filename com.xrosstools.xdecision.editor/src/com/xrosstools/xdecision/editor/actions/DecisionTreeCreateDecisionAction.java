@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.xrosstools.xdecision.editor.commands.ChangeDecisionCommand;
-import com.xrosstools.xdecision.editor.commands.CreateElementCommand;
+import com.xrosstools.xdecision.editor.commands.definition.CreateElementCommand;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 
 public class DecisionTreeCreateDecisionAction extends WorkbenchPartAction

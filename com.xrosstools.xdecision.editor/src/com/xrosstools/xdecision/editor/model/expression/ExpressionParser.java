@@ -1,11 +1,11 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-import com.xrosstools.xdecision.editor.model.ArrayType;
-import com.xrosstools.xdecision.editor.model.DataType;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeManager;
-import com.xrosstools.xdecision.editor.model.NamedElement;
-import com.xrosstools.xdecision.editor.model.NamedType;
+import com.xrosstools.xdecision.editor.model.definition.ArrayType;
+import com.xrosstools.xdecision.editor.model.definition.DataType;
+import com.xrosstools.xdecision.editor.model.definition.NamedElement;
+import com.xrosstools.xdecision.editor.model.definition.NamedType;
 
 public class ExpressionParser {
     private DecisionTreeManager manager;

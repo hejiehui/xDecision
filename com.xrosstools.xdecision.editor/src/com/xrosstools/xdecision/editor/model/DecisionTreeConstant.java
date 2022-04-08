@@ -6,6 +6,11 @@ import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.xrosstools.xdecision.editor.model.definition.DataType;
+import com.xrosstools.xdecision.editor.model.definition.DataTypeEnum;
+import com.xrosstools.xdecision.editor.model.definition.NamedElementTypeEnum;
+import com.xrosstools.xdecision.editor.model.definition.NamedType;
+
 public class DecisionTreeConstant extends NamedType {
     private static final String[] BOOLEAN_VALUES = new String[] {"false", "true"};
     public DecisionTreeConstant(DecisionTreeDiagram diagram, String name) {

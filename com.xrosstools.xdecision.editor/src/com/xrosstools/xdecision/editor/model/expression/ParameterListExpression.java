@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-import com.xrosstools.xdecision.editor.model.NamedElementContainer;
-import com.xrosstools.xdecision.editor.model.ParameterDefinition;
+import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
+import com.xrosstools.xdecision.editor.model.definition.ParameterDefinition;
 
 public class ParameterListExpression extends CompositeExpression {
     public ParameterListExpression() {

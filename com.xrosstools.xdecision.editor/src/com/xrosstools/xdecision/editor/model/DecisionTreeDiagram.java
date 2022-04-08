@@ -10,6 +10,11 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
+import com.xrosstools.xdecision.editor.model.definition.DataType;
+import com.xrosstools.xdecision.editor.model.definition.DataTypeEnum;
+import com.xrosstools.xdecision.editor.model.definition.EnumType;
+import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
+import com.xrosstools.xdecision.editor.model.definition.NamedElementTypeEnum;
 
 public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessages {
 	private String description;
