@@ -33,7 +33,8 @@ public class VariableExpression extends ExtensibleExpression {
 
     public void setReferenceElement(NamedElement newReferenceElement) {
         this.referenceElement = newReferenceElement;
-        this.referenceElement.getListeners().addPropertyChangeListener(this);
+        if(referenceElement != null)
+            this.referenceElement.getListeners().addPropertyChangeListener(this);
         propertyChanged();
     }
 

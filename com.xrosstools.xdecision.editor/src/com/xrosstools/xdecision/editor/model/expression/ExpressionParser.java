@@ -83,6 +83,11 @@ public class ExpressionParser {
                     parentType.findField(varExp.getName());
 
 
+        varExp.setReferenceElement(member);
+        
+        if(varExp instanceof MethodExpression)
+            matchVariables(((MethodExpression)varExp).getParameters());
+        
         resolve(DataType.getType(member), varExp.getChildExpression());
     }
 }
