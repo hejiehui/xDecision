@@ -7,11 +7,10 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.jface.action.IMenuManager;
 
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
-import com.xrosstools.xdecision.editor.model.XrossEvaluatorConstants;
 import com.xrosstools.xdecision.editor.parts.definition.NamedElementContainerTreePart;
 import com.xrosstools.xdecision.editor.parts.definition.NamedElementTreePart;
 
-public class DecisionTreeOutlineContextMenuProvider extends ContextMenuProvider implements XrossEvaluatorConstants, DecisionTreeMessages {
+public class DecisionTreeOutlineContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
     private NamedElementContainerContextMenuProvider namedElementContainerProvider;
     private NamedElementContextMenuProvider namedElementContextMenuProvider;
 

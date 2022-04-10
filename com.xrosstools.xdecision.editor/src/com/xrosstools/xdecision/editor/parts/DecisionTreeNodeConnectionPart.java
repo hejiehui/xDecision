@@ -22,6 +22,7 @@ import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 import com.xrosstools.xdecision.editor.figures.BranchConditionFigure;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
+import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeConnectionEditPolicy;
 
 public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart implements PropertyChangeListener{
@@ -31,17 +32,16 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
     protected List getModelChildren() {
         List children = new ArrayList();
         DecisionTreeNodeConnection nodeConn = (DecisionTreeNodeConnection)getModel();
-        children.add(nodeConn.getExpression());
-        children.add(nodeConn.getOperatorReference());
+        if(nodeConn.getExpression() != null)
+            children.add(nodeConn.getExpression());
+        
         return children;
     }
     
     protected void addChildVisual(EditPart childEditPart, int index) {
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
-        if(childEditPart instanceof OperatorReferencePart)
-            condition.addOperatorFigure(childFigure);
-        else //if(childEditPart instanceof ExpressionReferencePart)
-            condition.addExpressionFigure(childFigure);
+        if(childEditPart.getModel() instanceof ExpressionDefinition)
+            condition.setExpressionFigure(childFigure);
     }
     
     public IFigure getContentPane() {
@@ -106,16 +106,10 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
     
     public void propertyChange(PropertyChangeEvent event){
         refresh();
-//    	DecisionTreeNodeConnection nodeConn = (DecisionTreeNodeConnection)getModel();
-//        int valueId = nodeConn.getValueId();
-//        int factorId = nodeConn.getParent().getFactorId();
-//        
-//        DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getContents().getModel();
-//        setLabelText(valueId, factorId, diagram);
     }
     
-//    protected void refreshVisuals() {
-//        DecisionTreeNodeConnection conn = (DecisionTreeNodeConnection) getModel();
-//        condition.setCondition(conn.getOperator());
-//    }
+    protected void refreshVisuals() {
+        DecisionTreeNodeConnection conn = (DecisionTreeNodeConnection) getModel();
+        condition.setOperator(conn.getOperator());
+    }
 }

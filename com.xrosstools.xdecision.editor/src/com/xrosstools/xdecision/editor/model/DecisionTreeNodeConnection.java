@@ -2,74 +2,67 @@ package com.xrosstools.xdecision.editor.model;
 
 import java.beans.PropertyChangeSupport;
 
+import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
+import com.xrosstools.xdecision.editor.model.definition.PropertyConstants;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 
-public class DecisionTreeNodeConnection implements IPropertySource {
+public class DecisionTreeNodeConnection implements PropertyConstants, IPropertySource {
 	private int valueId = -1;
-	private OperatorReference operatorRef = new OperatorReference();
-	private ExpressionDefinition expression = new PlaceholderExpression();
+	private ConditionOperator operator = ConditionOperator.EQUAL;
+	private ExpressionDefinition expression = new PlaceholderExpression("value");
 	private DecisionTreeNode parent;
 	private DecisionTreeNode child;
 	
     private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 
-	public static String EXPRESSION = "Expression";	
-	public static String CONDITION = "Condition";
 	public IPropertyDescriptor[] getPropertyDescriptors() {
-		IPropertyDescriptor[] descriptors;
-		descriptors = new IPropertyDescriptor[] {
-		        operatorRef.getPropertyDescriptors()[0],
-		        new TextPropertyDescriptor(EXPRESSION, EXPRESSION)
+		return new IPropertyDescriptor[] {
+		        new ComboBoxPropertyDescriptor(PROP_CONDITION, PROP_CONDITION, ConditionOperator.getAllOperatorText()),
+		        new TextPropertyDescriptor(PROP_EXPRESSION, PROP_EXPRESSION)
 			};
-
-		return descriptors;
 	}
 	
 	public PropertyChangeSupport getListeners() {
 		return listeners;
 	}
 
-	public ConditionOperator getOperator() {
-        return operatorRef.getOperator();
+    public void setOperator(ConditionOperator operator) {
+        this.operator = operator;
+        listeners.firePropertyChange(PROP_CONDITION, null, operator);
     }
 
-    public void setOperator(ConditionOperator operator) {
-        this.operatorRef.setOperator(operator);
+    public ConditionOperator getOperator() {
+        return operator;
     }
 
     public ExpressionDefinition getExpression() {
         return expression;
     }
 
-    public OperatorReference getOperatorReference() {
-        return operatorRef;
-    }
-
     public void setExpression(ExpressionDefinition expression) {
-        ExpressionDefinition oldExp = this.expression;
         this.expression = expression;
-        listeners.firePropertyChange(EXPRESSION, expression, oldExp);
+        listeners.firePropertyChange(PROP_EXPRESSION, null, expression);
     }
 
     public Object getPropertyValue(Object propName) {
-		if (EXPRESSION.equals(propName))
-		    return expression == null ? "":expression.toString();
+		if (PROP_EXPRESSION.equals(propName))
+		    return expression == null ? "" : expression.toString();
 		
-		if (CONDITION.equals(propName))
-		    return operatorRef.getPropertyValue(propName);
+		if (PROP_CONDITION.equals(propName))
+		    return operator == null? -1 : operator.ordinal();
 
 		return null;
 	}
 
 	public void setPropertyValue(Object propName, Object value){
-        if (CONDITION.equals(propName))
-            operatorRef.setPropertyValue(propName, value);
-		if (EXPRESSION.equals(propName))
+        if (PROP_CONDITION.equals(propName))
+            setOperator(ConditionOperator.values()[(Integer)value]);
+		if (PROP_EXPRESSION.equals(propName))
 		    setExpression(getParent().getParser().parse((String)value));
 	}
 	
@@ -98,7 +91,7 @@ public class DecisionTreeNodeConnection implements IPropertySource {
 	public void setValueId(int valueId) {
 		int oldValueId = this.valueId;
 		this.valueId = valueId;
-		listeners.firePropertyChange(EXPRESSION, valueId, oldValueId);
+		listeners.firePropertyChange(PROP_EXPRESSION, valueId, oldValueId);
 	}
 	public DecisionTreeNode getParent() {
 		return parent;

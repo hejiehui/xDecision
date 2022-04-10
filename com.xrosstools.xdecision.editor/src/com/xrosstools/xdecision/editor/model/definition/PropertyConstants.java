@@ -5,6 +5,7 @@ import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 public interface PropertyConstants {
 	String PROP_EXPRESSION = "Expression";
     String PROP_DATA_TYPE = "Data type";
+    String PROP_CONDITION = "Condition";
     
     String PROP_LABEL = "label";
     String PROP_KEY_TYPE = "keyType";
@@ -12,7 +13,7 @@ public interface PropertyConstants {
     
 	String PROP_FIELD_NAME = "Field name";
 	String PROP_FUNCTION_NAME = "Function name";
-	String PROP_DECISION = "Decion";
+	String PROP_DECISION = "Decision";
 	String PROP_DESCRIPTION = "description";
 	String PROP_IDENTIFIER = "identifier";
 	

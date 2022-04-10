@@ -12,23 +12,18 @@ import org.eclipse.jface.action.Separator;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeActionConstants;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
-import com.xrosstools.xdecision.editor.model.XrossEvaluatorConstants;
 import com.xrosstools.xdecision.editor.parts.DecisionTreeNodeConnectionPart;
 import com.xrosstools.xdecision.editor.parts.DecisionTreeNodePart;
-import com.xrosstools.xdecision.editor.parts.OperatorReferencePart;
 import com.xrosstools.xdecision.editor.parts.expression.BaseExpressionPart;
 
-public class DecisionTreeContextMenuProvider extends ContextMenuProvider implements XrossEvaluatorConstants, DecisionTreeMessages {
+public class DecisionTreeContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
     private DecisionTreeDiagram diagram;
 	private ActionRegistry actionRegistry;
 	private NodeContextMenuProvider nodeMenuProvider;
 	private ConnectionContextMenuProvider connMenuProvider;
 	private ExpressionContextMenuProvider expMenuProvider;
-	
 	private NamedElementContainerContextMenuProvider elementContainerMenuProvider;
 	
-	
-	private ConditionOperatorContextMenuProvider conditionMenuProvider;
     public DecisionTreeContextMenuProvider(EditPartViewer viewer, ActionRegistry registry, DecisionTreeDiagramEditor editor) {
         super(viewer);
         actionRegistry = registry;
@@ -38,7 +33,6 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
         connMenuProvider = new ConnectionContextMenuProvider(editor);
         
         elementContainerMenuProvider = new NamedElementContainerContextMenuProvider(editor);
-        conditionMenuProvider = new ConditionOperatorContextMenuProvider(editor);
     }
 
     public void buildContextMenu(IMenuManager menu) {
@@ -52,8 +46,6 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
                 nodeMenuProvider.buildContextMenu(menu, (DecisionTreeNodePart)model);
             }else if(model instanceof BaseExpressionPart ) {
                 expMenuProvider.buildContextMenu(menu, (BaseExpressionPart)model);
-            }else if(model instanceof OperatorReferencePart ) {
-                conditionMenuProvider.buildContextMenu(menu, (OperatorReferencePart)model);
             }
             
             return;

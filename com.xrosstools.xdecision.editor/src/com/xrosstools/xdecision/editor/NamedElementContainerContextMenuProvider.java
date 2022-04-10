@@ -7,13 +7,11 @@ import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.actions.InputTextCommandAction;
 import com.xrosstools.xdecision.editor.commands.definition.CreateElementCommand;
 import com.xrosstools.xdecision.editor.commands.definition.CreateNamedTypeCommand;
-import com.xrosstools.xdecision.editor.model.XrossEvaluatorConstants;
 import com.xrosstools.xdecision.editor.model.definition.NamedElement;
 import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
-import com.xrosstools.xdecision.editor.model.definition.NamedType;
 import com.xrosstools.xdecision.editor.parts.definition.NamedElementContainerTreePart;
 
-public class NamedElementContainerContextMenuProvider implements XrossEvaluatorConstants, DecisionTreeMessages {
+public class NamedElementContainerContextMenuProvider implements DecisionTreeMessages {
     private DecisionTreeDiagramEditor editor;
 
     public NamedElementContainerContextMenuProvider(DecisionTreeDiagramEditor editor) {

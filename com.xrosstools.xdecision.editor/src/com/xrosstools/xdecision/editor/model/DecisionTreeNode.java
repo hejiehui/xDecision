@@ -19,9 +19,7 @@ import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 
 public class DecisionTreeNode implements PropertyConstants, IPropertySource, PropertyChangeListener {
-    private ExpressionParser parser;
     private ExpressionDefinition expression = new PlaceholderExpression();
-    private String rawExpression;
 	
 	private DecisionTreeDecision decision;
 	private String description;
@@ -42,11 +40,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 	}
 	
 	public ExpressionParser getParser() {
-        return parser;
-    }
-
-    public void setParser(ExpressionParser parser) {
-        this.parser = parser;
+        return manager.getParser();
     }
 
     public DecisionTreeManager getDecisionTreeManager(){
@@ -77,7 +71,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 
 	public void setPropertyValue(Object propName, Object value){
 		if (PROP_EXPRESSION.equals(propName))
-			setNodeExpression(parser.parse((String)value));
+			setNodeExpression(getParser().parse((String)value));
 		if (PROP_DECISION.equals(propName))
 			setDecision(manager.getDecisions().get((Integer)value));
 	}
@@ -103,14 +97,6 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
         return "[" + (decision == null ? "No decision": decision.getName()) + "] " + expDes;
 
 	}
-
-	public String getRawExpression() {
-        return rawExpression;
-    }
-
-    public void setRawExpression(String rawExpression) {
-        this.rawExpression = rawExpression;
-    }
 
     public void setNodeExpression(ExpressionDefinition expression) {
 	    this.expression = expression;

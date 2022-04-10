@@ -25,6 +25,7 @@ import com.xrosstools.xdecision.editor.model.definition.NamedType;
 import com.xrosstools.xdecision.editor.model.definition.ParameterDefinition;
 import com.xrosstools.xdecision.editor.model.definition.TemplateType;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
+import com.xrosstools.xdecision.editor.model.expression.OperatorEnum;
 
 public class DecisionTreeDiagramFactory {
     private static final String DECISION_TREE = "decision_tree";
@@ -69,6 +70,8 @@ public class DecisionTreeDiagramFactory {
 
     private static final String PATH = "path";
     private static final String NODE_INDEX = "node_index";
+    private static final String OPERATOR = "operator";
+    private static final String CONDITION = "condition";
 
     private static final String ID = "id";
     private static final String INDEX = "index";
@@ -94,21 +97,9 @@ public class DecisionTreeDiagramFactory {
         if(DecisionTreeV1FormatReader.isV1Format(doc))
             DecisionTreeV1FormatReader.buildTree(paths, diagram);
         else
-            diagram.getNodes().addAll(parseExpression(diagram, createNodes(doc, diagram)));
+            diagram.getNodes().addAll(createNodes(doc, diagram));
 
         return diagram;
-    }
-
-    private List<DecisionTreeNode> parseExpression(DecisionTreeDiagram diagram, DecisionTreeNode[] nodes) {
-        List<DecisionTreeNode> treeNodes = Arrays.asList(nodes);
-
-        ExpressionParser parser = new DecisionTreeManager(diagram).getParser();
-        for (DecisionTreeNode node : treeNodes) {
-            node.setParser(parser);
-            node.setNodeExpression(parser.parse(node.getRawExpression()));
-        }
-
-        return treeNodes;
     }
 
     private String getNodeValue(Document doc, String nodeName, String defaultValue) {
@@ -210,14 +201,16 @@ public class DecisionTreeDiagramFactory {
         return Arrays.asList(factors);
     }
 
-    private DecisionTreeNode[] createNodes(Document doc, DecisionTreeDiagram diagram) {
+    private List<DecisionTreeNode> createNodes(Document doc, DecisionTreeDiagram diagram) {
         if (doc.getElementsByTagName(NODES).getLength() == 0)
             return null;
+        
+        ExpressionParser parser = new DecisionTreeManager(diagram).getParser();
 
         List<Node> nodeNodes = getValidChildNodes(doc.getElementsByTagName(NODES).item(0));
 
-        DecisionTreeNode[] nodes = new DecisionTreeNode[nodeNodes.size()];
-        for (int i = 0; i < nodes.length; i++) {
+        List<DecisionTreeNode> nodes = new ArrayList<DecisionTreeNode>();
+        for (int i = 0; i < nodeNodes.size(); i++) {
             Node nodeNode = nodeNodes.get(i);
             DecisionTreeNode node = new DecisionTreeNode();
 
@@ -225,26 +218,30 @@ public class DecisionTreeDiagramFactory {
             if (deciionId > -1)
                 node.setDecision(diagram.getDecisions().get(deciionId));
 
-            node.setRawExpression(getAttribute(nodeNode, EXPRESSION));
+            String rawExpression = getAttribute(nodeNode, EXPRESSION);
+            node.setNodeExpression(parser.parse(rawExpression));
 
-            nodes[i] = node;
+            nodes.add(node);
         }
 
         // Link nodes
-        for (int i = 0; i < nodes.length; i++)
-            createPaths(nodeNodes.get(i), nodes, nodes[i]);
+        for (int i = 0; i < nodeNodes.size(); i++)
+            createPaths(nodeNodes.get(i), nodes, nodes.get(i), parser);
 
         return nodes;
     }
 
-    private void createPaths(Node docNode, DecisionTreeNode[] nodes, DecisionTreeNode node) {
+    private void createPaths(Node docNode, List<DecisionTreeNode> nodes, DecisionTreeNode node, ExpressionParser parser) {
+        
         List<Node> pathNodes = getValidChildNodes(docNode);
         for (int i = 0; i < pathNodes.size(); i++) {
             Node pathNode = pathNodes.get(i);
 
-            DecisionTreeNode child = nodes[getIntAttribute(pathNode, NODE_INDEX)];
+            DecisionTreeNode child = nodes.get(getIntAttribute(pathNode, NODE_INDEX));
             DecisionTreeNodeConnection conn = new DecisionTreeNodeConnection(node, child);
             conn.setValueId(getIntAttribute(pathNode, VALUE_INDEX, -1));
+            conn.setOperator(ConditionOperator.locate(getAttribute(pathNode, OPERATOR)));
+            conn.setExpression(parser.parse(getAttribute(pathNode, EXPRESSION)));
         }
     }
 
@@ -458,6 +455,13 @@ public class DecisionTreeDiagramFactory {
             Element pathNode = doc.createElement(PATH);
             pathNode.setAttribute(NODE_INDEX, String.valueOf(indexOf(nodes, conn.getChild())));
             pathNode.setAttribute(VALUE_INDEX, String.valueOf(conn.getValueId()));
+
+            if(conn.getOperator() != null)
+                pathNode.setAttribute(OPERATOR, String.valueOf(conn.getOperator().getText()));
+
+            if(conn.getExpression() != null)
+                pathNode.setAttribute(EXPRESSION, String.valueOf(conn.getExpression()));
+
             treeNode.appendChild(pathNode);
         }
     }

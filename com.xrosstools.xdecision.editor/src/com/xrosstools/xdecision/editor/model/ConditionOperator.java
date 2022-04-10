@@ -48,9 +48,13 @@ public enum ConditionOperator {
     }
 
     public static ConditionOperator locate(String operatorStr) {
+        if(operatorStr == null)
+            return null;
+
         for(ConditionOperator op: ConditionOperator.values())
             if(op.getText().equals(operatorStr))
                 return op;
+
         return null;
     }
 

@@ -16,6 +16,9 @@ public class ExpressionParser {
         this.manager = manager;
     }
     public ExpressionDefinition parse(String expressionRawText) {
+        if(expressionRawText == null || expressionRawText.trim().length() == 0)
+            return null;
+
         ExpressionDefinition rawExpression = compiler.compile(tokenParser.parseToken(expressionRawText));
         
         matchVariables(rawExpression);
