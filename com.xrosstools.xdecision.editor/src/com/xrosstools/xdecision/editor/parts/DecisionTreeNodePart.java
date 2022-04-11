@@ -8,6 +8,7 @@ import java.util.List;
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -34,6 +35,7 @@ import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeEditPolicy;
 
 public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements PropertyChangeListener, NodeEditPart {
     private DecisionTreeNode node;
+    private Label placeHolder = new Label();
     
     @Override
     public void setModel(Object model) {

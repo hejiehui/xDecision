@@ -17,9 +17,14 @@ public class ExpressionParser {
     }
     public ExpressionDefinition parse(String expressionRawText) {
         if(expressionRawText == null || expressionRawText.trim().length() == 0)
-            return null;
+            return new PlaceholderExpression("");
 
-        ExpressionDefinition rawExpression = compiler.compile(tokenParser.parseToken(expressionRawText));
+        ExpressionDefinition rawExpression;
+        try {
+            rawExpression = compiler.compile(tokenParser.parseToken(expressionRawText));
+        } catch (Exception e) {
+            throw new IllegalArgumentException(String.format("Expression: \"%s\"\n is INVALID!\nNested error: %s", expressionRawText, e.getMessage()));
+        }
         
         matchVariables(rawExpression);
             
