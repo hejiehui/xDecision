@@ -36,14 +36,6 @@ public class BranchConditionFigure extends Figure {
 
     //first add then remove will be called
     public void setExpressionFigure(IFigure expressionFigure) {
-//        if(this.expressionFigure != null)
-//            remove(this.expressionFigure);
-//
-//        this.expressionFigure = expressionFigure;
-//
-//        if(expressionFigure == null)
-//            return;
-//
         add(expressionFigure);
         setConstraint(expressionFigure, PositionConstants.RIGHT);
     }

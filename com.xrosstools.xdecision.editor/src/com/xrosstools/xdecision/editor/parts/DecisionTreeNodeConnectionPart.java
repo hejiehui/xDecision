@@ -14,13 +14,10 @@ import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 
 import com.xrosstools.xdecision.editor.figures.BranchConditionFigure;
-import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeConnectionEditPolicy;
@@ -47,12 +44,7 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
     public IFigure getContentPane() {
         return condition;
     }
-    
-    protected void removeChildVisual(EditPart childEditPart) {
-//        IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
-//        condition.remove(childFigure);
-    }
-    
+
     protected IFigure createFigure() {
         conn = new PolylineConnection();
         conn.setTargetDecoration(new PolygonDecoration());
@@ -76,31 +68,14 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
         else
             ((PolylineConnection) getFigure()).setLineWidth(1);
     }
-    
-    public void performRequest(Request req) {
-        if (req.getType() == RequestConstants.REQ_OPEN){
-//            DecisionTreeNodeConnection nodeConn = (DecisionTreeNodeConnection)getModel();
-//            int factorId = nodeConn.getParent().getFactorId();
-//            if(factorId == -1)
-//                return;
-//            
-//            DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getContents().getModel();
-//            
-//            DecisionTreeFactor factor = diagram.getFactors().get(factorId);
-//            
-//            getViewer().getEditDomain().getCommandStack().execute(DecisionTreeCreateValueAction.createAndSetValueCommand(factor, nodeConn));
-        }
-    }
-    
+
     public void activate() {
     	super.activate();
-    	((DecisionTreeDiagram)getRoot().getContents().getModel()).getListeners().addPropertyChangeListener(this);
     	((DecisionTreeNodeConnection) getModel()).getListeners().addPropertyChangeListener(this);
     }
     
     public void deactivate() {
     	super.deactivate();
-    	((DecisionTreeDiagram)getRoot().getContents().getModel()).getListeners().removePropertyChangeListener(this);
     	((DecisionTreeNodeConnection) getModel()).getListeners().removePropertyChangeListener(this);
     }
     
@@ -111,5 +86,6 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
     protected void refreshVisuals() {
         DecisionTreeNodeConnection conn = (DecisionTreeNodeConnection) getModel();
         condition.setOperator(conn.getOperator());
+        condition.setOpaque(conn.getOperator() != null || !(conn.getExpression() == null || conn.getExpression().toString().equals("")));
     }
 }
