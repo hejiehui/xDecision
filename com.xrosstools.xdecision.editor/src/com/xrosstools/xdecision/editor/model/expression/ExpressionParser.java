@@ -15,13 +15,14 @@ public class ExpressionParser {
     public ExpressionParser(DecisionTreeManager manager) {
         this.manager = manager;
     }
-    public ExpressionDefinition parse(String expressionRawText) {
+
+    public ExpressionDefinition parseParameters(ExpressionType type, String expressionRawText) {
         if(expressionRawText == null || expressionRawText.trim().length() == 0)
             return new PlaceholderExpression("");
 
         ExpressionDefinition rawExpression;
         try {
-            rawExpression = compiler.compile(tokenParser.parseToken(expressionRawText));
+            rawExpression = compiler.compile(type, tokenParser.parseToken(expressionRawText));
         } catch (Exception e) {
             throw new IllegalArgumentException(String.format("Expression: \"%s\"\n is INVALID!\nNested error: %s", expressionRawText, e.getMessage()));
         }
@@ -29,6 +30,10 @@ public class ExpressionParser {
         matchVariables(rawExpression);
             
         return rawExpression;
+    }
+
+    public ExpressionDefinition parseExpression(String expressionRawText) {
+        return parseParameters(ExpressionType.A, expressionRawText);
     }
     
     private void matchVariables(ExpressionDefinition exp) {

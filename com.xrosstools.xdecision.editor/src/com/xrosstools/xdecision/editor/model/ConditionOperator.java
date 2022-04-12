@@ -58,4 +58,15 @@ public enum ConditionOperator {
         return null;
     }
 
+    public boolean requireParameter() {
+        switch (this) {
+        case IS_NULL:
+        case IS_NOT_NULL:
+        case IS_TRUE:
+        case IS_FALSE:
+            return false;
+        default:
+            return true;
+        }
+    }
 }

@@ -219,7 +219,7 @@ public class DecisionTreeDiagramFactory {
                 node.setDecision(diagram.getDecisions().get(deciionId));
 
             String rawExpression = getAttribute(nodeNode, EXPRESSION);
-            node.setNodeExpression(parser.parse(rawExpression));
+            node.setNodeExpression(parser.parseExpression(rawExpression));
 
             nodes.add(node);
         }
@@ -241,7 +241,7 @@ public class DecisionTreeDiagramFactory {
             DecisionTreeNodeConnection conn = new DecisionTreeNodeConnection(node, child);
             conn.setValueId(getIntAttribute(pathNode, VALUE_INDEX, -1));
             conn.setOperator(ConditionOperator.locate(getAttribute(pathNode, OPERATOR)));
-            conn.setExpression(parser.parse(getAttribute(pathNode, EXPRESSION)));
+            conn.parseExpression(parser, getAttribute(pathNode, EXPRESSION));
         }
     }
 

@@ -75,7 +75,7 @@ public enum ExpressionType {
         }
         
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             return withLeft(exp0(segment), exp1(segment));
         }
     },
@@ -86,7 +86,7 @@ public enum ExpressionType {
         }
         
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             if(grammar == FIN)
                 return end();
 
@@ -107,7 +107,7 @@ public enum ExpressionType {
         }
         
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             if(grammar == FIN)
                 return end();
             
@@ -122,7 +122,7 @@ public enum ExpressionType {
         }
 
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             if(grammar == MINUS_H)
                 return new NegtiveExpression().setInnerExpression(exp1(segment));
 
@@ -136,7 +136,7 @@ public enum ExpressionType {
         }
         
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             if(grammar == LBRKT_A_RBRKT)
                 return new BracktExpression().setInnerExpression(exp1(segment));
             
@@ -158,7 +158,7 @@ public enum ExpressionType {
         }
         
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             String name = ((Token)segment.get(0)).getValueStr();
             ExpressionDefinition exp = exp1(segment);
             
@@ -179,7 +179,7 @@ public enum ExpressionType {
         }
 
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             if(grammar == FIN)
                 return end();
             
@@ -193,7 +193,7 @@ public enum ExpressionType {
         }
         
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             return compileParameters(grammar, segment);
         }
     },
@@ -204,7 +204,7 @@ public enum ExpressionType {
         }
 
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             return compileParameters(grammar, segment);
         }
     },
@@ -215,14 +215,14 @@ public enum ExpressionType {
         }
         
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             if(grammar == FIN)
                 return end();
 
             if(grammar == LSBRKT_A_RSBRKT_I)
                 return withLeft(new ElementExpression(exp1(segment)), exp(segment, 3));
             
-            return segment.get(1);
+            return exp1(segment);
         }
     },
     
@@ -232,7 +232,7 @@ public enum ExpressionType {
         }
         
         @Override
-        public Object compile(Grammar grammar, List<Object> segment) {
+        public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             return end();
         }
     },;
@@ -262,7 +262,7 @@ public enum ExpressionType {
 
     protected abstract List<Grammar> createGrammars();
 
-    public Object compile(Grammar grammar, List<Object> segment) {
+    public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
         ExpressionDefinition exp = end();
         for(int i = segment.size() - 1; i >= 0; i--) {
             exp = withLeft(exp(segment, i), exp);
@@ -311,7 +311,7 @@ public enum ExpressionType {
         return leftExp;
     }
 
-    private static Object compileParameters(Grammar grammar, List<Object> segment) {
+    private static ExpressionDefinition compileParameters(Grammar grammar, List<Object> segment) {
         if(grammar == FIN)
             return new ParameterListExpression();
 

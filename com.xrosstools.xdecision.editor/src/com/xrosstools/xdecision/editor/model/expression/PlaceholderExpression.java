@@ -3,8 +3,9 @@ package com.xrosstools.xdecision.editor.model.expression;
 import com.xrosstools.xdecision.editor.model.definition.ParameterDefinition;
 
 public class PlaceholderExpression extends BasicExpression {
-    private String text = "...";
-    public PlaceholderExpression() {}
+    public static final PlaceholderExpression EMPTY = new PlaceholderExpression("");
+    private String text = "";
+
     public PlaceholderExpression(String name) {
         this.text = name;
     }

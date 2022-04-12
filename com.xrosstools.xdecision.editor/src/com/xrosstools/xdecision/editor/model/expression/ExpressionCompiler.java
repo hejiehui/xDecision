@@ -9,11 +9,15 @@ import java.util.List;
 
 public class ExpressionCompiler {
     public ExpressionDefinition compile(List<Token> tokens) {
-        return (ExpressionDefinition)compile(A, new LinkedList<Token>(tokens));
+        return compileType(A, new LinkedList<Token>(tokens));
+    }
+    
+    public ExpressionDefinition compile(ExpressionType type, List<Token> tokens) {
+        return compileType(type, new LinkedList<Token>(tokens));
     }
     
     // Assume there is no common prefix
-    public Object compile(ExpressionType type, LinkedList<Token> words) {
+    private ExpressionDefinition compileType(ExpressionType type, LinkedList<Token> words) {
         List<Token> bakWords = new ArrayList<Token>(words);
 
         List<Grammar> grammars = type.getGrammars();
@@ -28,7 +32,7 @@ public class ExpressionCompiler {
             for(Object token: g.tokens) {
                 Object exp = null;
                 if(token instanceof ExpressionType) {
-                    exp = compile((ExpressionType)token, words);
+                    exp = compileType((ExpressionType)token, words);
                 }else {
                     if(words.isEmpty())
                         throw new IllegalArgumentException(String.format("Unexpected end of expression \"%s\",  next token of %s is: %s", bakWords, g.tokens, token.toString()));
@@ -53,6 +57,6 @@ public class ExpressionCompiler {
         return NOT_MATCH;
     }
     
-    private static final Object NOT_MATCH = new Object();
+    private static final PlaceholderExpression NOT_MATCH = new PlaceholderExpression("NOT MATCHED!!!");
     private static final String EMPTY = "empty";
 }

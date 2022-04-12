@@ -9,6 +9,8 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.xrosstools.xdecision.editor.model.definition.PropertyConstants;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
+import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
+import com.xrosstools.xdecision.editor.model.expression.ExpressionType;
 import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 
 public class DecisionTreeNodeConnection implements PropertyConstants, IPropertySource {
@@ -62,10 +64,15 @@ public class DecisionTreeNodeConnection implements PropertyConstants, IPropertyS
 	public void setPropertyValue(Object propName, Object value){
         if (PROP_CONDITION.equals(propName))
             setOperator(ConditionOperator.values()[(Integer)value]);
-		if (PROP_EXPRESSION.equals(propName))
-		    setExpression(getParent().getParser().parse((String)value));
+		if (PROP_EXPRESSION.equals(propName)) {
+		    parseExpression(getParent().getParser(), (String)value);
+		}
 	}
 	
+	public void parseExpression(ExpressionParser parser, String rawExpression) {
+        setExpression(parser.parseParameters(ExpressionType.P, rawExpression));
+	}
+
 	public Object getEditableValue(){
 		return this;
 	}
@@ -76,7 +83,6 @@ public class DecisionTreeNodeConnection implements PropertyConstants, IPropertyS
 
 	public void resetPropertyValue(Object propName){
 	}
-	
 
 	public DecisionTreeNodeConnection(DecisionTreeNode parent, DecisionTreeNode child){
 		this.parent = parent;
