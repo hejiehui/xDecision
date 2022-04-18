@@ -26,6 +26,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 
 	private Point location;
 	private Dimension size;
+	private int actualWidth;
 	
 	private DecisionTreeNodeConnection input;
 	private List<DecisionTreeNodeConnection> outputs = new ArrayList<DecisionTreeNodeConnection>();
@@ -110,7 +111,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 	
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        listeners.firePropertyChange(PROP_EXPRESSION, null, expression);
+        listeners.firePropertyChange(evt);
     }
 
 	public int getDecisionId() {
@@ -149,13 +150,22 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
     public void setVirtualPos(int virtualPos) {
         this.virtualPos = virtualPos;
     }
-    public int getVirtualWidth() {
+    public int getBranchWidth() {
         return virtualWidth;
     }
-    public void setVirtualWidth(int virtualWidth) {
+    public void setBranchWidth(int virtualWidth) {
         this.virtualWidth = virtualWidth;
     }	
-	public PropertyChangeSupport getListeners() {
+    public int getActualWidth() {
+        return actualWidth;
+    }
+    public void setActualWidth(int actualWidth) {
+        if(this.actualWidth != actualWidth) {
+            this.actualWidth = actualWidth;
+            getDecisionTreeManager().getDiagram().fireLayoutChange();
+        }
+    }
+    public PropertyChangeSupport getListeners() {
 		return listeners;
 	}
 	public DecisionTreeNodeConnection getInput() {

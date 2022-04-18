@@ -86,6 +86,9 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
     protected void refreshVisuals() {
         DecisionTreeNodeConnection conn = (DecisionTreeNodeConnection) getModel();
         condition.setOperator(conn.getOperator());
-        condition.setOpaque(conn.getOperator() != null || !(conn.getExpression() == null || conn.getExpression().toString().equals("")));
+        boolean opaque = conn.getOperator() != null || !(conn.getExpression() == null || conn.getExpression().toString().equals(""));
+        condition.setOpaque(opaque);
+
+        conn.setActualWidth(opaque ? condition.getPreferredSize().width : 0);
     }
 }

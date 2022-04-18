@@ -1,5 +1,7 @@
 package com.xrosstools.xdecision.editor.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -13,12 +15,14 @@ import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionType;
 import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 
-public class DecisionTreeNodeConnection implements PropertyConstants, IPropertySource {
+public class DecisionTreeNodeConnection implements PropertyConstants, IPropertySource, PropertyChangeListener {
 	private int valueId = -1;
 	private ConditionOperator operator = ConditionOperator.EQUAL;
 	private ExpressionDefinition expression = new PlaceholderExpression("value");
 	private DecisionTreeNode parent;
 	private DecisionTreeNode child;
+	
+	private int actualWidth;
 	
     private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 
@@ -48,7 +52,19 @@ public class DecisionTreeNodeConnection implements PropertyConstants, IPropertyS
 
     public void setExpression(ExpressionDefinition expression) {
         this.expression = expression;
+        expression.getListeners().addPropertyChangeListener(this);
         listeners.firePropertyChange(PROP_EXPRESSION, null, expression);
+    }
+
+    public int getActualWidth() {
+        return actualWidth;
+    }
+
+    public void setActualWidth(int actualWidth) {
+        if(this.actualWidth != actualWidth) {
+            this.actualWidth = actualWidth;
+            getChild().getDecisionTreeManager().getDiagram().fireLayoutChange();
+        }
     }
 
     public Object getPropertyValue(Object propName) {
@@ -111,4 +127,9 @@ public class DecisionTreeNodeConnection implements PropertyConstants, IPropertyS
 	public void setChild(DecisionTreeNode child) {
 		this.child = child;
 	}
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        listeners.firePropertyChange(evt);
+    }
 }

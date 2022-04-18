@@ -85,6 +85,7 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
 
     protected void initializeGraphicalViewer() {
         getGraphicalViewer().setContents(diagram);
+        diagram.fireLayoutChange();
     }
 
     public void doSave(IProgressMonitor monitor) {
