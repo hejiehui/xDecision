@@ -52,7 +52,7 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
         conn.setForegroundColor(ColorConstants.black);
         
         condition = new BranchConditionFigure();
-        conn.add(condition, new MidpointLocator(conn, 0));
+        conn.add(condition, new DecisionTreeConditionLocator(conn, 0, this));
         return conn;
     }
 
