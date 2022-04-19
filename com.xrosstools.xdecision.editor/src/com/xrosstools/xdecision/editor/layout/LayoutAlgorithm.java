@@ -40,13 +40,15 @@ public class LayoutAlgorithm {
         }
 
         branchWidth = branchWidth == 0 ? 0 : branchWidth - horizantalSpace;
+        
+        branchWidth = Math.max(branchWidth, getConnWidth(node.getInput()));
 
         int x = leftPos + (branchWidth == 0 ? 0 : (int) ((branchWidth - width) * alignment));
         int y = margin + (depth) * (verticalSpace + nodeHeight);
 
         node.setLocation(new Point(x, y));
 
-        return Math.max(width, branchWidth) + getConnWidth(node.getInput());
+        return Math.max(width, branchWidth);
     }
 
     private int getNodeWidth(DecisionTreeNode node) {
