@@ -160,10 +160,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
         return actualWidth;
     }
     public void setActualWidth(int actualWidth) {
-        if(this.actualWidth != actualWidth) {
-            this.actualWidth = actualWidth;
-            getDecisionTreeManager().getDiagram().fireLayoutChange();
-        }
+        this.actualWidth = actualWidth;
     }
     public PropertyChangeSupport getListeners() {
 		return listeners;

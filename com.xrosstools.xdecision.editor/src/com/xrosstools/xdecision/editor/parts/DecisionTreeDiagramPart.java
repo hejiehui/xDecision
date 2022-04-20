@@ -18,13 +18,13 @@ import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.policies.DecisionTreeDiagramLayoutPolicy;
 
 public class DecisionTreeDiagramPart extends AbstractGraphicalEditPart implements PropertyChangeListener{
-	private boolean isLayoutUpdated;
+//	private boolean isLayoutUpdated;
     protected List<DecisionTreeNode> getModelChildren() {
     	DecisionTreeDiagram diagram = (DecisionTreeDiagram)getModel();
-    	if(!isLayoutUpdated){
-    		new LayoutAlgorithm().layout(diagram);
-    		isLayoutUpdated = true;
-    	}
+//    	if(!isLayoutUpdated){
+//    		new LayoutAlgorithm().layout(diagram);
+//    		isLayoutUpdated = true;
+//    	}
     	
     	DecisionTreeManager manager = new DecisionTreeManager(diagram);
     	for(DecisionTreeNode node: diagram.getNodes())
@@ -42,7 +42,7 @@ public class DecisionTreeDiagramPart extends AbstractGraphicalEditPart implement
 	public void propertyChange(PropertyChangeEvent evt) {
 		String prop = evt.getPropertyName();
 		if (DecisionTreeDiagram.LAYOUT.equals(prop)){
-			isLayoutUpdated = false;
+		    new LayoutAlgorithm().layout((DecisionTreeDiagram)getModel());
 		}
 
 		refreshChildren();

@@ -61,10 +61,7 @@ public class DecisionTreeNodeConnection implements PropertyConstants, IPropertyS
     }
 
     public void setActualWidth(int actualWidth) {
-        if(this.actualWidth != actualWidth) {
-            this.actualWidth = actualWidth;
-            getChild().getDecisionTreeManager().getDiagram().fireLayoutChange();
-        }
+        this.actualWidth = actualWidth;
     }
 
     public Object getPropertyValue(Object propName) {

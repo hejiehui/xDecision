@@ -46,6 +46,7 @@ import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateFactorAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeLayoutAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeResizeAction;
+import com.xrosstools.xdecision.editor.layout.LayoutAlgorithm;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagramFactory;
 import com.xrosstools.xdecision.editor.parts.DecisionTreePartFactory;
@@ -84,7 +85,10 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
     }
 
     protected void initializeGraphicalViewer() {
+        //First with no actual width
+        new LayoutAlgorithm().layout(diagram);
         getGraphicalViewer().setContents(diagram);
+        //Then with actual width
         diagram.fireLayoutChange();
     }
 
