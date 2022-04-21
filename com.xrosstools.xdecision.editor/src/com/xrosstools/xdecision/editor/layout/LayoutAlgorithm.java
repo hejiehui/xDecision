@@ -25,30 +25,41 @@ public class LayoutAlgorithm {
 
         alignment = diagram.getAlignment();
 
+        int branchWidth = 0;
+        int nextLeftPos = margin;
         for (DecisionTreeNode node : diagram.getRoots()) {
-            layout(margin, node, 0);
+            branchWidth += layout(nextLeftPos + branchWidth, node, 0) + horizantalSpace;
         }
     }
 
     private int layout(int leftPos, DecisionTreeNode node, int depth) {
-        int width = getNodeWidth(node);
+        int conditionWidth = getConnWidth(node.getInput());
+        int nodeWidth = getNodeWidth(node);
+        int condiNodeWidth = Math.max(conditionWidth, nodeWidth);
 
         int branchWidth = 0;
         int nextLeftPos = leftPos;
         for (DecisionTreeNodeConnection path : node.getOutputs()) {
             branchWidth += layout(nextLeftPos + branchWidth, path.getChild(), depth + 1) + horizantalSpace;
         }
-
         branchWidth = branchWidth == 0 ? 0 : branchWidth - horizantalSpace;
         
-        branchWidth = Math.max(branchWidth, getConnWidth(node.getInput()));
-
-        int x = leftPos + (branchWidth == 0 ? 0 : (int) ((branchWidth - width) * alignment));
+        int x = leftPos + locateLowerMiddle(condiNodeWidth, nodeWidth);
         int y = margin + (depth) * (verticalSpace + nodeHeight);
-
+        
+        /**
+         *   conditionconditionconditioncondition
+         *              branchbranch
+         */
+        if(condiNodeWidth >= branchWidth) {
+            relocateBranch(node, locateLowerDelta(condiNodeWidth, branchWidth, alignment));
+        } else {
+            x += locateLowerDelta(branchWidth, condiNodeWidth, alignment);
+        }
+            
         node.setLocation(new Point(x, y));
 
-        return Math.max(width, branchWidth);
+        return Math.max(branchWidth, condiNodeWidth);
     }
 
     private int getNodeWidth(DecisionTreeNode node) {
@@ -76,5 +87,25 @@ public class LayoutAlgorithm {
         conditionCharCount += conn.getExpression() == null ? 0 : conn.getExpression().toString().length();
 
         return conditionCharCount * charWidth / 2;
+    }
+    
+    private int locateLowerMiddle(int upperWidth, int lowerWidth) {
+        return locateLowerDelta(upperWidth, lowerWidth, 0.5f);
+    }
+    
+    /**
+     *   upperWidthupperWidthupperWidth
+     *             lowerWidth
+     */
+    private int locateLowerDelta(int upperWidth, int lowerWidth, float alignment) {
+        return upperWidth >= lowerWidth ? (int)((upperWidth -lowerWidth) * alignment) : 0;
+    }
+    
+    private void relocateBranch(DecisionTreeNode node, int delta) {
+        for (DecisionTreeNodeConnection path : node.getOutputs()) {
+            DecisionTreeNode child = path.getChild();
+            child.getLocation().x += delta;
+            relocateBranch(child, delta);
+        }
     }
 }

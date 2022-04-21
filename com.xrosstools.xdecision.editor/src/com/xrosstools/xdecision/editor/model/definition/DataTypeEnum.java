@@ -67,8 +67,7 @@ public enum DataTypeEnum implements PropertyConstants {
             if(e.getName().equals(name))
                 return e;
         
-        //TODO shall we just return null?
-        return DataTypeEnum.USER_DEFINED;
+        return DataTypeEnum.STRING;
     }
     
     public static boolean isUserDefined(DataTypeEnum type) {
