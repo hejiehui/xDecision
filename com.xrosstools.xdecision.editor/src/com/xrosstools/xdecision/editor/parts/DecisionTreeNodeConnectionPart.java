@@ -18,6 +18,7 @@ import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 
 import com.xrosstools.xdecision.editor.figures.BranchConditionFigure;
+import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeConnectionEditPolicy;
@@ -52,7 +53,7 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
         conn.setForegroundColor(ColorConstants.black);
         
         condition = new BranchConditionFigure();
-        conn.add(condition, new DecisionTreeConditionLocator(conn, 0));
+        conn.add(condition, new DecisionTreeConditionLocator(conn, 0, (DecisionTreeNodeConnection)getModel()));
         return conn;
     }
 

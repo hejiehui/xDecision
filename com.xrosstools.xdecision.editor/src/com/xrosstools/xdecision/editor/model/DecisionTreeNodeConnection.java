@@ -129,4 +129,8 @@ public class DecisionTreeNodeConnection implements PropertyConstants, IPropertyS
     public void propertyChange(PropertyChangeEvent evt) {
         listeners.firePropertyChange(evt);
     }
+    
+    public void layout() {
+        listeners.firePropertyChange(PROP_CONDITION, null, operator);
+    }
 }

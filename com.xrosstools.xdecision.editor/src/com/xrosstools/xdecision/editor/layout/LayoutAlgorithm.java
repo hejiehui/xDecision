@@ -44,7 +44,7 @@ public class LayoutAlgorithm {
         }
         branchWidth = branchWidth == 0 ? 0 : branchWidth - horizantalSpace;
         
-        int x = leftPos + locateLowerMiddle(condiNodeWidth, nodeWidth);
+        int x = leftPos + locateLower(condiNodeWidth, nodeWidth);
         int y = margin + (depth) * (verticalSpace + nodeHeight);
         
         /**
@@ -52,12 +52,15 @@ public class LayoutAlgorithm {
          *              branchbranch
          */
         if(condiNodeWidth >= branchWidth) {
-            relocateBranch(node, locateLowerDelta(condiNodeWidth, branchWidth, alignment));
+            relocateBranch(node, locateLower(condiNodeWidth, branchWidth));
         } else {
-            x += locateLowerDelta(branchWidth, condiNodeWidth, alignment);
+            x += locateLower(branchWidth, condiNodeWidth);
         }
             
         node.setLocation(new Point(x, y));
+        //Make sure connection get refreshed
+        if(node.getInput() != null)
+            node.getInput().layout();
 
         return Math.max(branchWidth, condiNodeWidth);
     }
@@ -89,22 +92,20 @@ public class LayoutAlgorithm {
         return conditionCharCount * charWidth / 2;
     }
     
-    private int locateLowerMiddle(int upperWidth, int lowerWidth) {
-        return locateLowerDelta(upperWidth, lowerWidth, 0.5f);
-    }
-    
     /**
      *   upperWidthupperWidthupperWidth
      *             lowerWidth
      */
-    private int locateLowerDelta(int upperWidth, int lowerWidth, float alignment) {
+    private int locateLower(int upperWidth, int lowerWidth) {
         return upperWidth >= lowerWidth ? (int)((upperWidth -lowerWidth) * alignment) : 0;
     }
     
     private void relocateBranch(DecisionTreeNode node, int delta) {
         for (DecisionTreeNodeConnection path : node.getOutputs()) {
             DecisionTreeNode child = path.getChild();
-            child.getLocation().x += delta;
+            Point loc = child.getLocation();
+            loc.x += delta;
+            child.setLocation(loc);
             relocateBranch(child, delta);
         }
     }
