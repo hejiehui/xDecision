@@ -20,19 +20,50 @@ public class LayoutAlgorithm {
     public void layout(DecisionTreeDiagram diagram) {
         horizantalSpace = diagram.isHorizantal() ? diagram.getVerticalSpace() : diagram.getHorizantalSpace();
         verticalSpace = diagram.isHorizantal() ? diagram.getHorizantalSpace() : diagram.getVerticalSpace();
+        
+        nodeHeight = diagram.getNodeHeight();
 
-        nodeHeight = diagram.isHorizantal() ? diagram.getNodeWidth() : diagram.getNodeHeight();
-
+        //TODO check actual height
         alignment = diagram.getAlignment();
 
-        int branchWidth = 0;
-        int nextLeftPos = margin;
-        for (DecisionTreeNode node : diagram.getRoots()) {
-            branchWidth += layout(nextLeftPos + branchWidth, node, 0) + horizantalSpace;
+        if(diagram.isHorizantal()) {
+            int nextPos = margin; //+condition height
+            for (DecisionTreeNode node : diagram.getRoots()) {
+                nextPos += layoutHorizanta(margin, nextPos, node, 0) + verticalSpace;
+            }
+        } else {
+            int branchWidth = 0;
+            int nextLeftPos = margin;
+            for (DecisionTreeNode node : diagram.getRoots()) {
+                branchWidth += layoutVertical(nextLeftPos + branchWidth, node, 0) + horizantalSpace;
+            }
         }
     }
+    
+    private int layoutHorizanta(int leftPosX, int leftPosY, DecisionTreeNode node, int depth) {
+        int conditionWidth = getConnWidth(node.getInput());
+        int nodeWidth = getNodeWidth(node);
+        int condiNodeWidth = Math.max(conditionWidth, nodeWidth);
 
-    private int layout(int leftPos, DecisionTreeNode node, int depth) {
+        int childPosX = leftPosX + condiNodeWidth + horizantalSpace;
+        int branchHeight = 0;
+        for (DecisionTreeNodeConnection path : node.getOutputs()) {
+            branchHeight += layoutHorizanta(childPosX, leftPosY + branchHeight, path.getChild(), depth + 1) + verticalSpace;
+        }
+        branchHeight = branchHeight == 0 ? nodeHeight : branchHeight - verticalSpace;
+        
+        int x = leftPosX;
+        int y = leftPosY + (int)((branchHeight - nodeHeight)* alignment);
+        
+        node.setLocation(new Point(x, y));
+        //Make sure connection get refreshed
+        if(node.getInput() != null)
+            node.getInput().layout();
+
+        return branchHeight;
+    }
+
+    private int layoutVertical(int leftPos, DecisionTreeNode node, int depth) {
         int conditionWidth = getConnWidth(node.getInput());
         int nodeWidth = getNodeWidth(node);
         int condiNodeWidth = Math.max(conditionWidth, nodeWidth);
@@ -40,7 +71,7 @@ public class LayoutAlgorithm {
         int branchWidth = 0;
         int nextLeftPos = leftPos;
         for (DecisionTreeNodeConnection path : node.getOutputs()) {
-            branchWidth += layout(nextLeftPos + branchWidth, path.getChild(), depth + 1) + horizantalSpace;
+            branchWidth += layoutVertical(nextLeftPos + branchWidth, path.getChild(), depth + 1) + horizantalSpace;
         }
         branchWidth = branchWidth == 0 ? 0 : branchWidth - horizantalSpace;
         

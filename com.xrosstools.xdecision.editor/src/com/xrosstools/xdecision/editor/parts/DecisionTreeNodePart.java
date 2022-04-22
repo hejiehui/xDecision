@@ -144,7 +144,7 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
     	DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
 
 		Point loc = node.getLocation();
-		Dimension size = new Dimension(-1, -1);
+		Dimension size = new Dimension(-1, node.getDecisionTreeManager().getDiagram().getNodeHeight());
         Rectangle rectangle = new Rectangle(loc, size);
         ((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rectangle);
         

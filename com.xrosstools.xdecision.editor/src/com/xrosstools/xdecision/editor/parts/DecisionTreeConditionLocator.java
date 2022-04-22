@@ -26,6 +26,12 @@ public class DecisionTreeConditionLocator extends ConnectionLocator {
         
         DecisionTreeNode node = conn.getChild();
         int halfWidth = (int)(conn.getActualWidth() * 0.5);
+
+        return node.getDecisionTreeManager().getDiagram().isHorizantal() ?
+            getHorizantalLayoutPoint(p, node, halfWidth) :getVerticalLayoutPoint(p, node, halfWidth);
+    }
+    
+    private Point getVerticalLayoutPoint(Point p, DecisionTreeNode node, int halfWidth) {
         float alignment = node.getDecisionTreeManager().getDiagram().getAlignment();
 
         if(alignment == 0) {
@@ -36,6 +42,14 @@ public class DecisionTreeConditionLocator extends ConnectionLocator {
             p.x = node.getLocation().x + node.getActualWidth() - halfWidth;
         }
         
+        p.y -= 50;
+        
+        getConnection().translateToAbsolute(p);
+        return p;
+    }
+    
+    private Point getHorizantalLayoutPoint(Point p, DecisionTreeNode node, int halfWidth) {
+        p.x = node.getLocation().x + halfWidth;
         p.y -= 50;
         
         getConnection().translateToAbsolute(p);
