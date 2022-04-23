@@ -12,11 +12,9 @@ import org.eclipse.gef.requests.CreateRequest;
 import com.xrosstools.xdecision.editor.commands.CreateNodeCommand;
 import com.xrosstools.xdecision.editor.commands.LayoutTreeCommand;
 import com.xrosstools.xdecision.editor.commands.MoveNodeCommand;
-import com.xrosstools.xdecision.editor.commands.ResizeNodeCommand;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.requests.DecisionTreeLayoutRequest;
-import com.xrosstools.xdecision.editor.requests.DecisionTreeResizeRequest;
 
 public class DecisionTreeDiagramLayoutPolicy extends XYLayoutEditPolicy {
 
@@ -39,19 +37,14 @@ public class DecisionTreeDiagramLayoutPolicy extends XYLayoutEditPolicy {
     		DecisionTreeLayoutRequest layoutReq = (DecisionTreeLayoutRequest)request;
     		return new LayoutTreeCommand(layoutReq.getDiagram(), layoutReq.isHorizantal(), layoutReq.getAlignment());
     	}
-    	
-    	if(request.getType() == RequestConstants.REQ_RESIZE){
-    		DecisionTreeResizeRequest resizeReq = (DecisionTreeResizeRequest)request;
-    		return new ResizeNodeCommand(resizeReq.getDiagram(), resizeReq.isNodeSize(), resizeReq.isHorizantal(), resizeReq.isIncrease());
-    	}
-    	
+
     	return super.getCommand(request);
     }
     
     protected Command getCreateCommand(CreateRequest request) {
         return new CreateNodeCommand(
         		(DecisionTreeDiagram)getHost().getModel(),
-        		(DecisionTreeNode)request.getNewObject(),
-        		((Rectangle) getConstraintFor(request)).getLocation());
+                (DecisionTreeNode) request.getNewObject(),
+                ((Rectangle) getConstraintFor(request)).getLocation());
     }
 }

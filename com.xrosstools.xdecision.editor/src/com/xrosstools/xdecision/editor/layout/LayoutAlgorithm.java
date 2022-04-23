@@ -9,7 +9,6 @@ import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 public class LayoutAlgorithm {
     private int charWidth = 10;
     private int margin = 100;
-    private int minWidth = 100;
     private int horizantalSpace;
     private int verticalSpace;
     private int nodeHeight;
@@ -23,7 +22,6 @@ public class LayoutAlgorithm {
         
         nodeHeight = diagram.getNodeHeight();
 
-        //TODO check actual height
         alignment = diagram.getAlignment();
 
         if(diagram.isHorizantal()) {
@@ -97,15 +95,7 @@ public class LayoutAlgorithm {
     }
 
     private int getNodeWidth(DecisionTreeNode node) {
-        if (node.getActualWidth() > 0)
-            return node.getActualWidth();
-
-        int width = node.getNodeExpression() == null ? 0 : node.getNodeExpression().toString().length();
-
-        width *= charWidth;// average char width
-        width += 10;// gap
-
-        return Math.max(width, minWidth);
+        return node.getSize().width;
     }
 
     private int getConnWidth(DecisionTreeNodeConnection conn) {

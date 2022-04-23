@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -220,6 +221,8 @@ public class DecisionTreeDiagramFactory {
 
             String rawExpression = getAttribute(nodeNode, EXPRESSION);
             node.setNodeExpression(parser.parseExpression(rawExpression));
+            
+            node.setSize(new Dimension(diagram.getNodeWidth(), diagram.getNodeHeight()));
 
             nodes.add(node);
         }

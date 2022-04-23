@@ -150,7 +150,7 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
         
         figure.setDecision(node.getDecision() == null ? "": node.getDecision().getName());
         
-        node.setActualWidth(figure.getPreferredSize().width);
+        node.setSize(figure.getPreferredSize().getCopy());
         refreshChildren();
     }
 

@@ -26,15 +26,12 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 
 	private Point location;
 	private Dimension size;
-	private int actualWidth;
 	
 	private DecisionTreeNodeConnection input;
 	private List<DecisionTreeNodeConnection> outputs = new ArrayList<DecisionTreeNodeConnection>();
 	
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	private DecisionTreeManager manager;
-    private int virtualPos;//Horizontal children count
-    private int virtualWidth;//Horizontal children count
 	
     public void setDecisionTreeManager(DecisionTreeManager manager){
 		this.manager = manager;
@@ -142,26 +139,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 	}
 	public void setSize(Dimension size) {
 		this.size = size;
-		listeners.firePropertyChange(PROP_SIZE, null, size);
 	}
-    public int getVirtualPos() {
-        return virtualPos;
-    }
-    public void setVirtualPos(int virtualPos) {
-        this.virtualPos = virtualPos;
-    }
-    public int getBranchWidth() {
-        return virtualWidth;
-    }
-    public void setBranchWidth(int virtualWidth) {
-        this.virtualWidth = virtualWidth;
-    }	
-    public int getActualWidth() {
-        return actualWidth;
-    }
-    public void setActualWidth(int actualWidth) {
-        this.actualWidth = actualWidth;
-    }
     public PropertyChangeSupport getListeners() {
 		return listeners;
 	}
