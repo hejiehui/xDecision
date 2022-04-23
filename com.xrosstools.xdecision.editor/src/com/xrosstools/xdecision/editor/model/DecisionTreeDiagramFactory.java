@@ -26,7 +26,6 @@ import com.xrosstools.xdecision.editor.model.definition.NamedType;
 import com.xrosstools.xdecision.editor.model.definition.ParameterDefinition;
 import com.xrosstools.xdecision.editor.model.definition.TemplateType;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
-import com.xrosstools.xdecision.editor.model.expression.OperatorEnum;
 
 public class DecisionTreeDiagramFactory {
     private static final String DECISION_TREE = "decision_tree";
@@ -34,6 +33,9 @@ public class DecisionTreeDiagramFactory {
     private static final String COMMENTS = "comments";
     private static final String PARSER = "parser";
     private static final String EVALUATOR = "evaluator";
+    
+    private static final String LAYOUT = "layout";
+    private static final String ALIGNMENT = "alignment";
 
     private static final String FACTORS = "factors";
     private static final String FACTOR = "factor";
@@ -72,17 +74,21 @@ public class DecisionTreeDiagramFactory {
     private static final String PATH = "path";
     private static final String NODE_INDEX = "node_index";
     private static final String OPERATOR = "operator";
-    private static final String CONDITION = "condition";
 
     private static final String ID = "id";
     private static final String INDEX = "index";
 
     public DecisionTreeDiagram getFromXML(Document doc){
         DecisionTreeDiagram diagram = new DecisionTreeDiagram();
+        Node root = doc.getElementsByTagName(DECISION_TREE).item(0);
+
+        diagram.setHorizantal(getIntAttribute(root, LAYOUT, 0) == 0 ? false: true);
+        diagram.setAlignment(getFloatAttribute(root, ALIGNMENT, diagram.getAlignment()));
+
         diagram.setDescription(getNodeValue(doc, COMMENTS, ""));
         diagram.setParserClass(getNodeValue(doc, PARSER, ""));
         diagram.setEvaluatorClass(getNodeValue(doc, EVALUATOR, ""));
-
+        
         diagram.getDecisions().addAll(createDecisions(doc));
 
         DecisionTreePath[] paths = null;
@@ -257,6 +263,11 @@ public class DecisionTreeDiagramFactory {
         return Integer.parseInt(getAttribute(node, attributeName));
     }
 
+    public static float getFloatAttribute(Node node, String attributeName, float defaultValue) {
+        String value = getAttribute(node, attributeName);
+        return value == null ? defaultValue : Float.parseFloat(value);
+    }
+
     public static String getAttribute(Node node, String attributeName) {
         NamedNodeMap map = node.getAttributes();
         for (int i = 0; i < map.getLength(); i++) {
@@ -301,6 +312,9 @@ public class DecisionTreeDiagramFactory {
             doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
             Element root = doc.createElement(DECISION_TREE);
             doc.appendChild(root);
+            root.setAttribute(LAYOUT, String.valueOf(diagram.isHorizantal() ? 1: 0));
+            root.setAttribute(ALIGNMENT, String.valueOf(diagram.getAlignment()));
+
             root.appendChild(createNode(doc, COMMENTS, diagram.getDescription()));
             root.appendChild(createNode(doc, PARSER, diagram.getParserClass()));
             root.appendChild(createNode(doc, EVALUATOR, diagram.getEvaluatorClass()));

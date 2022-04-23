@@ -26,18 +26,6 @@ public class DecisionTreeActionBarContributor extends ActionBarContributor
         addRetargetAction(getAction(ALIGN_LEFT, ALIGN_LEFT_MSG));
         addRetargetAction(getAction(ALIGN_CENTER, ALIGN_CENTER_MSG));
         addRetargetAction(getAction(ALIGN_RIGHT, ALIGN_RIGHT_MSG));
-
-        addRetargetAction(getAction(INCREASE_NODE_HEIGHT, INCREASE_NODE_HEIGHT_MSG));
-        addRetargetAction(getAction(DECREASE_NODE_HEIGHT, DECREASE_NODE_HEIGHT_MSG));
-
-        addRetargetAction(getAction(INCREASE_NODE_WIDTH, INCREASE_NODE_WIDTH_MSG));
-        addRetargetAction(getAction(DECREASE_NODE_WIDTH, DECREASE_NODE_WIDTH_MSG));
-
-        addRetargetAction(getAction(INCREASE_HORIZANTAL_SPACE, INCREASE_HORIZANTAL_SPACE_MSG));
-        addRetargetAction(getAction(DECREASE_HORIZANTAL_SPACE, DECREASE_HORIZANTAL_SPACE_MSG));
-
-        addRetargetAction(getAction(INCREASE_VERTICAL_SPACE, INCREASE_VERTICAL_SPACE_MSG));
-        addRetargetAction(getAction(DECREASE_VERTICAL_SPACE, DECREASE_VERTICAL_SPACE_MSG));
     }
 
     private LabelRetargetAction getAction(String id, String text) {
@@ -60,18 +48,6 @@ public class DecisionTreeActionBarContributor extends ActionBarContributor
         toolBarManager.add(getAction(getId(ALIGN_TOP)));
         toolBarManager.add(getAction(getId(ALIGN_MIDDLE)));
         toolBarManager.add(getAction(getId(ALIGN_BOTTOM)));
-
-        toolBarManager.add(new Separator());
-        toolBarManager.add(getAction(getId(INCREASE_NODE_HEIGHT)));
-        toolBarManager.add(getAction(getId(DECREASE_NODE_HEIGHT)));
-        toolBarManager.add(getAction(getId(INCREASE_NODE_WIDTH)));
-        toolBarManager.add(getAction(getId(DECREASE_NODE_WIDTH)));
-
-        toolBarManager.add(new Separator());
-        toolBarManager.add(getAction(getId(INCREASE_HORIZANTAL_SPACE)));
-        toolBarManager.add(getAction(getId(DECREASE_HORIZANTAL_SPACE)));
-        toolBarManager.add(getAction(getId(INCREASE_VERTICAL_SPACE)));
-        toolBarManager.add(getAction(getId(DECREASE_VERTICAL_SPACE)));
     }
 
     private String getId(String id) {

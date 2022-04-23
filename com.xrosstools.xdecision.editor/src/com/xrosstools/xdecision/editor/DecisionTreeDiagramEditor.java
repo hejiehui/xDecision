@@ -45,7 +45,6 @@ import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateDecisionAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateFactorAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeLayoutAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
-import com.xrosstools.xdecision.editor.actions.DecisionTreeResizeAction;
 import com.xrosstools.xdecision.editor.layout.LayoutAlgorithm;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagramFactory;
@@ -89,6 +88,7 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
         new LayoutAlgorithm().layout(diagram);
         getGraphicalViewer().setContents(diagram);
         //Then with actual width
+        diagram.fireLayoutChange();
         diagram.fireLayoutChange();
     }
 
@@ -199,18 +199,6 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
         getActionRegistry().registerAction(new DecisionTreeLayoutAction(this, ALIGN_LEFT, false, 0));
         getActionRegistry().registerAction(new DecisionTreeLayoutAction(this, ALIGN_CENTER, false, 0.5f));
         getActionRegistry().registerAction(new DecisionTreeLayoutAction(this, ALIGN_RIGHT, false, 1));
-        
-        getActionRegistry().registerAction(new DecisionTreeResizeAction(this, INCREASE_NODE_HEIGHT, true, false, true));
-        getActionRegistry().registerAction(new DecisionTreeResizeAction(this, DECREASE_NODE_HEIGHT, true, false, false));
-
-        getActionRegistry().registerAction(new DecisionTreeResizeAction(this, INCREASE_NODE_WIDTH, true, true, true));
-        getActionRegistry().registerAction(new DecisionTreeResizeAction(this, DECREASE_NODE_WIDTH, true, true, false));
-        
-        getActionRegistry().registerAction(new DecisionTreeResizeAction(this, INCREASE_HORIZANTAL_SPACE, false, true, true));
-        getActionRegistry().registerAction(new DecisionTreeResizeAction(this, DECREASE_HORIZANTAL_SPACE, false, true, false));
-        
-        getActionRegistry().registerAction(new DecisionTreeResizeAction(this, INCREASE_VERTICAL_SPACE, false, false, true));
-        getActionRegistry().registerAction(new DecisionTreeResizeAction(this, DECREASE_VERTICAL_SPACE, false, false, false));
         
         getActionRegistry().registerAction(new DecisionTreeCodeGenAction(this, true));
         getActionRegistry().registerAction(new DecisionTreeCodeGenAction(this, false));

@@ -142,13 +142,12 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements P
 
     protected void refreshVisuals() {
     	DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
+        figure.setDecision(node.getDecision() == null ? "": node.getDecision().getName());
 
 		Point loc = node.getLocation();
 		Dimension size = new Dimension(-1, node.getDecisionTreeManager().getDiagram().getNodeHeight());
         Rectangle rectangle = new Rectangle(loc, size);
         ((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), rectangle);
-        
-        figure.setDecision(node.getDecision() == null ? "": node.getDecision().getName());
         
         node.setSize(figure.getPreferredSize().getCopy());
         refreshChildren();
