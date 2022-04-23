@@ -94,11 +94,8 @@ public enum ExpressionType {
             if(grammar == FIN)
                 return end();
             
-            if(true)
-                throw new RuntimeException("fix this");
             Expression exp = withLeft(exp1(segment), exp2(segment));
-            
-            return new CalculateExpression(exp1(segment), grammar == TIMES_F_U ? TIMES: DIVIDE);
+            return new CalculateExpression(exp, grammar == TIMES_F_U ? TIMES: DIVIDE);
         }
     },
     

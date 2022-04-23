@@ -124,7 +124,7 @@ public enum ExpressionType {
         @Override
         public ExpressionDefinition compile(Grammar grammar, List<Object> segment) {
             if(grammar == MINUS_H)
-                return new NegtiveExpression().setInnerExpression(exp1(segment));
+                return new NegativeExpression().setInnerExpression(exp1(segment));
 
             return exp0(segment);
         }
@@ -299,8 +299,8 @@ public enum ExpressionType {
         if(basic instanceof CalculationExpression)
             return ((CalculationExpression)basic).addFirst(leftExp);
         
-        if(basic instanceof NegtiveExpression) {
-            ExpressionDefinition realBasic = ((NegtiveExpression)basic).getInnerExpression();
+        if(basic instanceof NegativeExpression) {
+            ExpressionDefinition realBasic = ((NegativeExpression)basic).getInnerExpression();
             CalculationExpression calExp = new CalculationExpression();
             return calExp.add(leftExp).add(new OperatorExpression(OperatorEnum.MINUS)).add(realBasic);
         }

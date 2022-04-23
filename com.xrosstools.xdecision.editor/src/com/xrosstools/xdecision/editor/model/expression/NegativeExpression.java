@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.editor.model.expression;
 
-public class NegtiveExpression extends EnclosedExpression {
+public class NegativeExpression extends EnclosedExpression {
     @Override
     public String toString() {
         return "-" + getInnerExpression().toString();

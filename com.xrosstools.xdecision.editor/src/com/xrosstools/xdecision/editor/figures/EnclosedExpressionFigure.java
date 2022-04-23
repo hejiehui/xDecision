@@ -25,6 +25,13 @@ public class EnclosedExpressionFigure extends Figure {
         return element;
     }
     
+    public static EnclosedExpressionFigure createNegativeFigure() {
+        EnclosedExpressionFigure element = new EnclosedExpressionFigure();
+        element.setLeftDelimeter("-");
+        element.setRightDelimeter("");
+        return element;
+    }
+    
     public EnclosedExpressionFigure() {
         setLayoutManager(layout);
 //        this.setBorder(new MarginBorder(0, 2, 0, 2));

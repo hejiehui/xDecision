@@ -11,12 +11,16 @@ import org.eclipse.gef.GraphicalEditPart;
 import com.xrosstools.xdecision.editor.figures.EnclosedExpressionFigure;
 import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.editor.model.expression.EnclosedExpression;
+import com.xrosstools.xdecision.editor.model.expression.NegativeExpression;
 
 public class EnclosedExpressionPart extends BaseExpressionPart {
     @Override
     protected IFigure createFigure() {
         if(getModel() instanceof BracktExpression)
             return EnclosedExpressionFigure.createBracketFigure();
+        
+        if(getModel() instanceof NegativeExpression)
+            return EnclosedExpressionFigure.createNegativeFigure();
 
         return new EnclosedExpressionFigure();
     }
