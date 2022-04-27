@@ -4,43 +4,34 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.xrosstools.xdecision.editor.model.DecisionTreeDecision;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
-import com.xrosstools.xdecision.editor.model.DecisionTreeDiagramFactory;
 import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
-import com.xrosstools.xdecision.editor.model.DecisionTreeModel;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
-import com.xrosstools.xdecision.editor.model.definition.DataType;
 
 public class DecisionTreeJunit4TestCodeGen {
     private static final String METHOD_BODY = 
                                                 "\n" + 
                                                 "    @Test\n" + 
                                                 "    public void test_%d(){\n" + 
-                                                "        /*\n" + 
+                                                "        /*\n" +
+                                                "          Decision paths to %s:\n" +
                                                 "%s" + 
                                                 "        */\n" + 
                                                 "%s\n" + 
                                                 "    }\n"; 
     
-    private static final String COMMENTS =       "          %s\n";
+    private static final String COMMENTS =       "          %s,\n";
     private static final String TEST_RESET =       "        test = new MapFacts();\n";
 	private static final String TEST_ASSIGN = 		"        test.set(\"%s\", \"%s\");\n";
 	private static final String ASSERT_DISPLAY = 	"        assertEquals(\"%s\", tree.get(test));";
 	
 	
 	public String generate(DecisionTreeDiagram diagram, String packageName, String testName, String path){
-        DecisionTreeModel model = new DecisionTreeModel();
-        model.setDecisions(diagram.getDecisions().getElements().toArray(new DecisionTreeDecision[0]));
-        model.setFactors(diagram.getFactorList().toArray(new DecisionTreeFactor[0]));
-        model.setTypes(diagram.getUserDefinedTypeList().toArray(new DataType[0]));
-        model.setNodes(diagram.getNodes().toArray(new DecisionTreeNode[0]));
-
 		StringBuilder codeBuf = getTemplate();
 		replace(codeBuf, "!PACKAGE!", packageName);
 		replace(codeBuf, "!TEST_CLASS!", testName);
 		replace(codeBuf, "!MODEL_PATH!", path);
-		replace(codeBuf, "!TREE_VERIFY!", "\n" + generateVerify(model));
+		replace(codeBuf, "!TREE_VERIFY!", "\n" + generateVerify(diagram));
 		
 		return codeBuf.toString();
 	}
@@ -50,18 +41,19 @@ public class DecisionTreeJunit4TestCodeGen {
 		codeBuf.replace(start, start + replacementMark.length(), replacement);
 	}
 	
-	private String generateVerify(DecisionTreeModel model){
+	private String generateVerify(DecisionTreeDiagram diagram){
 		StringBuilder testCasesCode = new StringBuilder();
-		boolean hasEvaluator = model.getEvaluatorClass() != null && model.getEvaluatorClass().trim().length() > 0;
 		
 		int index = 0;
-		for(DecisionTreeNode node: model.getNodes()){
+		for(DecisionTreeNode node: diagram.getNodes()){
 		    if(node.getDecision() == null)
 		        continue;
 
             StringBuilder commentsBuf = new StringBuilder();
             StringBuilder codeBuf = new StringBuilder(TEST_RESET);
+            String decision = node.getDecision().getName();
 
+            //get all decision paths
             while(node.getInput() != null) {
                 DecisionTreeNode parent = node.getInput().getParent();
                 
@@ -70,13 +62,15 @@ public class DecisionTreeJunit4TestCodeGen {
                         .append(node.getInput().getExpression());
                 commentsBuf.insert(0, String.format(COMMENTS, commnets.toString()));
 
-                //get all factors
-                codeBuf.insert(0, String.format(TEST_ASSIGN, "factor.getFactorName()", ""));
-		        
 		        node = parent;
 		    }
-            codeBuf.append(String.format(ASSERT_DISPLAY, node.getDecision()));
-            testCasesCode.append(String.format(METHOD_BODY, index++, commentsBuf.toString(), codeBuf.toString()));
+
+            //get all factors
+            for(DecisionTreeFactor factor: diagram.getFactorList()) {
+                codeBuf.append(String.format(TEST_ASSIGN, factor.getFactorName(), ""));
+            }
+            codeBuf.append(String.format(ASSERT_DISPLAY, decision));
+            testCasesCode.append(String.format(METHOD_BODY, index++, decision, commentsBuf.toString(), codeBuf.toString()));
 		}		
 		return testCasesCode.toString();
 	}

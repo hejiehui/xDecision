@@ -23,10 +23,6 @@ public class DecisionTreeV1FormatReader {
         return doc.getElementsByTagName(PATHS).getLength() > 0;
     }
 
-    public static boolean isV1Format(DecisionTreeModel model) {
-        return model.getNodes() == null || model.getPathes() != null;
-    }
-
     public static DecisionTreePath[] createPaths(Document doc) {
         if(doc.getElementsByTagName(PATHS).getLength() == 0)
             return null;
