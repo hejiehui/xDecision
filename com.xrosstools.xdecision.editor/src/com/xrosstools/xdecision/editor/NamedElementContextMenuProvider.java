@@ -25,10 +25,11 @@ public class NamedElementContextMenuProvider implements DecisionTreeMessages {
     public void buildContextMenu(IMenuManager menu, NamedElementTreePart namedElementPart) {
         NamedElement element = (NamedElement)namedElementPart.getModel();
         
-        NamedElementTypeEnum type = ((NamedElementContainer<?>)namedElementPart.getParent().getModel()).getElementType();
+        NamedElementContainer container = (NamedElementContainer<?>)namedElementPart.getParent().getModel();
+        NamedElementTypeEnum type = container.getElementType();
         String typeName = type.getTypeName();
         
-        menu.add(new InputTextCommandAction(editor, String.format(CHANGE_NAME_MSG, typeName), "New Name", element.getName(), new ChangeElementNameCommand(element)));
+        menu.add(new InputTextCommandAction(editor, String.format(CHANGE_NAME_MSG, typeName), "New Name", element.getName(), new ChangeElementNameCommand(editor.getModel(), container, element)));
         
         changeTypeMenu(menu, element);
         

@@ -37,7 +37,7 @@ public class DecisionTreeCreateDecisionAction extends WorkbenchPartAction
         
         String value = dlg.getValue();
         CommandChain cc = new CommandChain();
-        CreateElementCommand createCmd = new CreateElementCommand(null, node.getDecisionTreeManager().getDecisions());
+        CreateElementCommand createCmd = new CreateElementCommand(node.getDecisionTreeManager().getDiagram(), node.getDecisionTreeManager().getDecisions());
         createCmd.setInputText(value);
         cc.add(createCmd);
         cc.add(new ChangeDecisionCommand(node));

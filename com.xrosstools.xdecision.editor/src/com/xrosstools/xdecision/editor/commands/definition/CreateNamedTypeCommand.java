@@ -11,7 +11,7 @@ public class CreateNamedTypeCommand extends CreateElementCommand{
         super(diagram, container);
         this.fieldType = fieldType;
     }
-    
+
     public void execute() {
         super.execute();
         ((NamedType)newElement).setType(diagram.findDataType(fieldType));

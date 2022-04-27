@@ -7,7 +7,7 @@ import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
 
 public class CreateElementCommand extends InputTextCommand{
     protected DecisionTreeDiagram diagram;
-    private NamedElementContainer container;
+    private NamedElementContainer<NamedElement> container;
     protected NamedElement newElement;
     
     public CreateElementCommand(DecisionTreeDiagram diagram, NamedElementContainer container){
@@ -16,7 +16,23 @@ public class CreateElementCommand extends InputTextCommand{
     }
     
     public boolean canExecute() {
-        return !container.containsName(getInputText());
+        return contains(diagram, container, getInputText());
+    }
+     
+    public static boolean contains(DecisionTreeDiagram diagram, NamedElementContainer<NamedElement> container, String newName) {
+        switch (container.getElementType()) {
+        case DECISION:
+        case DATA_TYPE:
+            return !container.containsName(newName);
+        case FACTOR:
+        case ENUM:
+        case CONSTANT:
+            return !(diagram.getFactors().containsName(newName) ||
+                    diagram.getUserDefinedConstants().containsName(newName) ||
+                    diagram.getUserDefinedEnums().containsName(newName));    
+        default:
+            return false;
+        }
     }
     
     public void execute() {

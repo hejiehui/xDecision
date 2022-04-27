@@ -67,7 +67,7 @@ public class ExpressionContextMenuProvider {
             changeToTypeMenu(menu, part, DataType.STRING_TYPE);
         }
         
-        if(!(exp instanceof NumberExpression)) {
+        if(!(exp instanceof NumberExpression || exp instanceof StringExpression)) {
             menu.add(new Separator());
             createOperatorMenu(menu, part);
         }

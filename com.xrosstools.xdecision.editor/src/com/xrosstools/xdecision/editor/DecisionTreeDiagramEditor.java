@@ -41,8 +41,6 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.xrosstools.common.XmlHelper;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeActionConstants;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeCodeGenAction;
-import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateDecisionAction;
-import com.xrosstools.xdecision.editor.actions.DecisionTreeCreateFactorAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeLayoutAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.layout.LayoutAlgorithm;
@@ -202,8 +200,6 @@ public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implem
         
         getActionRegistry().registerAction(new DecisionTreeCodeGenAction(this, true));
         getActionRegistry().registerAction(new DecisionTreeCodeGenAction(this, false));
-        getActionRegistry().registerAction(new DecisionTreeCreateDecisionAction(this));
-        getActionRegistry().registerAction(new DecisionTreeCreateFactorAction(this));
     }
 
     private class OutlinePage extends ContentOutlinePage {
