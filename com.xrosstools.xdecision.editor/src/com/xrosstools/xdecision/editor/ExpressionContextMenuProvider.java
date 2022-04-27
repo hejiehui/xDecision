@@ -15,14 +15,12 @@ import com.xrosstools.xdecision.editor.commands.expression.ChangeOperatorCommand
 import com.xrosstools.xdecision.editor.commands.expression.CreateExpressionCommand;
 import com.xrosstools.xdecision.editor.commands.expression.RemoveExpressionCommand;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
-import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.definition.ArrayType;
 import com.xrosstools.xdecision.editor.model.definition.DataType;
 import com.xrosstools.xdecision.editor.model.definition.EnumType;
 import com.xrosstools.xdecision.editor.model.definition.MethodDefinition;
 import com.xrosstools.xdecision.editor.model.definition.NamedElement;
 import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
-import com.xrosstools.xdecision.editor.model.definition.NamedType;
 import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
@@ -31,7 +29,6 @@ import com.xrosstools.xdecision.editor.model.expression.MethodExpression;
 import com.xrosstools.xdecision.editor.model.expression.NumberExpression;
 import com.xrosstools.xdecision.editor.model.expression.OperatorEnum;
 import com.xrosstools.xdecision.editor.model.expression.OperatorExpression;
-import com.xrosstools.xdecision.editor.model.expression.PlaceholderExpression;
 import com.xrosstools.xdecision.editor.model.expression.StringExpression;
 import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 import com.xrosstools.xdecision.editor.parts.expression.BaseExpressionPart;
@@ -44,35 +41,47 @@ public class ExpressionContextMenuProvider {
         this.editor = editor;
     }
     
-    public void buildContextMenu(IMenuManager menu, BaseExpressionPart expPart) {
-        ExpressionDefinition exp = (ExpressionDefinition)expPart.getModel();
-        //TODO all of the following can be optimized
-        if(exp instanceof OperatorExpression)
+    public void buildContextMenu(IMenuManager menu, BaseExpressionPart part) {
+        ExpressionDefinition exp = (ExpressionDefinition)part.getModel();
+        if(exp instanceof OperatorExpression) {
             createOperatorMenu(menu, (OperatorExpression)exp);
-        else if(exp instanceof ExtensibleExpression)
-            createExtensibleExpressionMenu(menu, expPart);
-        else if(exp instanceof PlaceholderExpression)
-            createPlaceholderExpressionMenu(menu, expPart);
-        else if(exp instanceof NumberExpression)
-            createNumberMenu(menu, expPart);
-        else if(exp instanceof StringExpression)
-            createStringMenu(menu, expPart);
+            return;
+        }
+
+        if(exp instanceof NumberExpression) {
+            createOperatorMenu(menu, part);
+            menu.add(new Separator());
+        }
         
-        addRemoveMenu(menu, expPart);
+        if(exp instanceof ExtensibleExpression)
+            createChildMenu(menu, part.getParent(), part, true);
+        else
+            changeToUserDefinedMenu(menu, part);
+
+        menu.add(new Separator());
+        
+        if(!(exp instanceof NumberExpression))
+            changeToTypeMenu(menu, part, DataType.NUMBER_TYPE);
+        
+        if(!(exp instanceof StringExpression)) {
+            changeToTypeMenu(menu, part, DataType.STRING_TYPE);
+        }
+        
+        if(!(exp instanceof NumberExpression)) {
+            menu.add(new Separator());
+            createOperatorMenu(menu, part);
+        }
+
+        menu.add(new Separator());
+
+        wrapBracketOperatorMenu(menu, part);
+        addRemoveMenu(menu, part);
     }
     
-    //Only field or method expression goes here
-    public void createExtensibleExpressionMenu(IMenuManager menu, EditPart part) {
-        createChildMenu(menu, part.getParent(), part, true);
-        menu.add(new Separator());
-        changeToNumberMenu(menu, part);
-        changeToStringMenu(menu, part);
-        changeToConstMenu(menu, part);
-        changeToEnumMenu(menu, part);
-        menu.add(new Separator());
-        createOperatorMenu(menu, part);
-        menu.add(new Separator());
-        wrapBracketOperatorMenu(menu, part); 
+    private void createOperatorMenu(IMenuManager menu, OperatorExpression opExp) {
+        for(OperatorEnum op: OperatorEnum.values()) {
+            add(menu, op.getOperator(), op == opExp.getOperator(), new ChangeOperatorCommand(opExp, op));
+        }
     }
 
     private void createChildMenu(IMenuManager menu, EditPart parentPart, EditPart part, boolean extendChildren) {
@@ -105,8 +114,6 @@ public class ExpressionContextMenuProvider {
         }
         
         menu.add(new Separator());
-        
-//        createIdMenu(menu, "[index]", method.getType(), parentPart, childModel, extendChildren, new MethodExpression(method));
     }
 
     private void buildReplacementMenu(IMenuManager menu, NamedElementContainer<?> container, EditPart parentPart, EditPart part, boolean extendChildren) {
@@ -148,51 +155,10 @@ public class ExpressionContextMenuProvider {
         return null;
     }
     
-    private DecisionTreeDiagram getDiagram() {
-        return (DecisionTreeDiagram)editor.getRootEditPart().getContents().getModel();
-    }
-
-    private void createOperatorMenu(IMenuManager menu, OperatorExpression opExp) {
-        for(OperatorEnum op: OperatorEnum.values()) {
-            add(menu, op.getOperator(), op == opExp.getOperator(), new ChangeOperatorCommand(opExp, op));
-        }
-    }
-    
-    private void createNumberMenu(IMenuManager menu, EditPart expPart) {
-        createOperatorMenu(menu, expPart);
-        menu.add(new Separator());
-        changeToFactorMenu(menu, expPart);
-
-        menu.add(new Separator());
-        changeToStringMenu(menu, expPart);
-        wrapBracketOperatorMenu(menu, expPart);
-    }
-
-    private void createStringMenu(IMenuManager menu, EditPart expPart) {
-        changeToFactorMenu(menu, expPart);
-        menu.add(new Separator());
-        changeToNumberMenu(menu, expPart);
-        wrapBracketOperatorMenu(menu, expPart);
-    }
     private void createOperatorMenu(IMenuManager menu, EditPart expPart) {
         for(OperatorEnum op: OperatorEnum.values()) {
-            // TODO revise checked
             add(menu, op.getOperator(), false, new AddOperatorCommand(expPart, op));
         }
-    }
-    
-    private void createPlaceholderExpressionMenu(IMenuManager menu, BaseExpressionPart expPart) {
-        changeToNumberMenu(menu, expPart);
-        changeToStringMenu(menu, expPart);
-
-        menu.add(new Separator());
-        
-        changeToFactorMenu(menu, expPart);
-
-        menu.add(new Separator());
-        
-        //add bracket
-        wrapBracketOperatorMenu(menu, expPart);
     }
     
     private void wrapBracketOperatorMenu(IMenuManager menu, EditPart expPart) {
@@ -201,30 +167,22 @@ public class ExpressionContextMenuProvider {
         add(menu, "(...)", false, new ChangeChildCommand(expPart.getParent().getModel(), exp, new BracktExpression().setInnerExpression(exp)));        
     }
     
-    private void changeToFactorMenu(IMenuManager menu, EditPart expPart) {
-        changeToElementMenu(menu, expPart, getDiagram().getFactors());
-    }
-    
-    private void changeToNumberMenu(IMenuManager menu, EditPart expPart) {
-        changeToTypeMenu(menu, expPart, DataType.NUMBER_TYPE);        
-    }
+    private void changeToUserDefinedMenu(IMenuManager menu, EditPart expPart) {
+        DecisionTreeDiagram diagram = (DecisionTreeDiagram)editor.getRootEditPart().getContents().getModel();
+        
+        changeToElementMenu(menu, expPart, diagram.getFactors());
+        menu.add(new Separator());
 
-    private void changeToStringMenu(IMenuManager menu, EditPart expPart) {
-        changeToTypeMenu(menu, expPart, DataType.STRING_TYPE);
+        changeToElementMenu(menu, expPart, diagram.getUserDefinedConstants());
+        menu.add(new Separator());
+
+        changeToElementMenu(menu, expPart, diagram.getUserDefinedEnums());
     }
 
     private void changeToTypeMenu(IMenuManager menu, EditPart expPart, DataType type) {
         menu.add(new InputTextCommandAction(editor, type.getName() + DIALOG, type.getName(), "", new CreateExpressionCommand(expPart, type)));
     }
 
-    private void changeToConstMenu(IMenuManager menu, EditPart expPart) {
-        changeToElementMenu(menu, expPart, getDiagram().getUserDefinedConstants());
-    }
-
-    private void changeToEnumMenu(IMenuManager menu, EditPart expPart) {
-        changeToElementMenu(menu, expPart, getDiagram().getUserDefinedEnums());
-    }
-    
     private void changeToArray(IMenuManager menu, EditPart parentPart, EditPart part) {
         VariableExpression exp = (VariableExpression)parentPart.getModel();
         boolean selected = part != null ? part.getModel() instanceof ElementExpression : false;

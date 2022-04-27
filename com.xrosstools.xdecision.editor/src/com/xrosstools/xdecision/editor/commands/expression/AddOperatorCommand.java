@@ -33,7 +33,6 @@ public class AddOperatorCommand extends Command{
             return findTopExpressionPart(parentPart);
         else
             return expPart;
-        
     }
  
     public void execute() {
