@@ -196,13 +196,6 @@ public class DecisionTreeDiagramFactory {
 
             factor.setType(diagram.findDataType(getAttribute(factorNode, TYPE)));
             factors[getIntAttribute(factorNode, INDEX)] = factor;
-
-            List<Node> valueNodes = getValidChildNodes(factorNode);
-            String[] values = new String[valueNodes.size()];
-            factor.setFactorValues(values);
-            for (int j = 0; j < values.length; j++) {
-                values[j] = valueNodes.get(j).getTextContent();
-            }
         }
 
         return Arrays.asList(factors);
@@ -438,13 +431,6 @@ public class DecisionTreeDiagramFactory {
 
             factorNode.setAttribute(INDEX, String.valueOf(i++));
             factorsNode.appendChild(factorNode);
-
-            String[] values = factor.getFactorValues();
-            for (int j = 0; j < values.length; j++) {
-                Element valueNode = doc.createElement(VALUE);
-                valueNode.appendChild(doc.createTextNode(values[j]));
-                factorNode.appendChild(valueNode);
-            }
         }
     }
 
