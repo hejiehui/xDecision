@@ -1,6 +1,6 @@
 package com.xrosstools.gef.parts;
 
-import com.xrosstools.gef.Command;
+import com.xrosstools.gef.commands.Command;
 import com.xrosstools.gef.figures.AbstractAnchor;
 import com.xrosstools.gef.figures.ChopboxAnchor;
 import com.xrosstools.gef.figures.Connection;
@@ -50,6 +50,10 @@ public abstract class EditPart implements PropertyChangeListener {
         return Collections.EMPTY_LIST;
     }
 
+    public List<EditPart> getChildren() {
+        return childEditParts;
+    }
+
     public List getModelSourceConnections() {
         return Collections.EMPTY_LIST;
     }
@@ -60,6 +64,10 @@ public abstract class EditPart implements PropertyChangeListener {
 
     public void addChildVisual(EditPart childEditPart, int index) {
         getFigure().add(childEditPart.getFigure(), index);
+    }
+
+    protected void removeChildVisual(EditPart childEditPart) {
+        getFigure().remove(childEditPart.getFigure());
     }
 
     public final void addChildModel(Object child, int index) {
@@ -124,6 +132,10 @@ public abstract class EditPart implements PropertyChangeListener {
             refreshVisuals();
         }
         return figure;
+    }
+
+    public  Figure getContentPane() {
+        return getFigure();
     }
 
     public final EditPolicy getEditPolicy() {

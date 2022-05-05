@@ -3,33 +3,40 @@ package com.xrosstools.xdecision.idea.editor.model;
 import com.xrosstools.gef.util.ComboBoxPropertyDescriptor;
 import com.xrosstools.gef.util.IPropertyDescriptor;
 import com.xrosstools.gef.util.IPropertySource;
+import com.xrosstools.gef.util.TextPropertyDescriptor;
+import com.xrosstools.xdecision.idea.editor.model.definition.PropertyConstants;
+import com.xrosstools.xdecision.idea.editor.model.expression.*;
 
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource {
-	private int factorId = -1;
-	private int decisionId = -1;
+public class DecisionTreeNode implements PropertyConstants, IPropertySource, PropertyChangeListener {
+	private ExpressionDefinition expression = PlaceholderExpression.EMPTY;
+
+	private DecisionTreeDecision decision;
 	private String description;
 
 	private Point location;
 	private Dimension size;
-	
+
 	private DecisionTreeNodeConnection input;
 	private List<DecisionTreeNodeConnection> outputs = new ArrayList<DecisionTreeNodeConnection>();
-	
+
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	private DecisionTreeManager manager;
-	private int virtualPos;//Horizontal children count
-	private int virtualWidth;//Horizontal children count
-
 
 	public void setDecisionTreeManager(DecisionTreeManager manager){
 		this.manager = manager;
 	}
-	
+
+	public ExpressionParser getParser() {
+		return manager.getParser();
+	}
+
 	public DecisionTreeManager getDecisionTreeManager(){
 		return manager;
 	}
@@ -41,28 +48,28 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] descriptors;
 		descriptors = new IPropertyDescriptor[] {
-				new ComboBoxPropertyDescriptor(PROP_FACTOR_ID, PROP_FACTOR_ID, manager.getFactorNames()),
-				new ComboBoxPropertyDescriptor(PROP_DECISION_ID, PROP_DECISION_ID, manager.getDecisions()),
-			};
+				new TextPropertyDescriptor(PROP_EXPRESSION, PROP_EXPRESSION),
+				new ComboBoxPropertyDescriptor(PROP_DECISION, PROP_DECISION, manager.getDecisions().getElementNames()),
+		};
 		return descriptors;
 	}
-	
+
 	public Object getPropertyValue(Object propName) {
-		if (PROP_FACTOR_ID.equals(propName))
-			return factorId;
-		if (PROP_DECISION_ID.equals(propName))
-			return decisionId;
+		if (PROP_EXPRESSION.equals(propName))
+			return expression.toString();
+		if (PROP_DECISION.equals(propName))
+			return getDecisionId();
 
 		return null;
 	}
 
 	public void setPropertyValue(Object propName, Object value){
-		if (PROP_FACTOR_ID.equals(propName))
-			setFactorId((Integer)value);
-		if (PROP_DECISION_ID.equals(propName))
-			setDecisionId((Integer)value);
+		if (PROP_EXPRESSION.equals(propName))
+			setNodeExpression(getParser().parseExpression((String)value));
+		if (PROP_DECISION.equals(propName))
+			setDecision(manager.getDecisions().get((Integer)value));
 	}
-	
+
 	public Object getEditableValue(){
 		return this;
 	}
@@ -73,20 +80,42 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 
 	public void resetPropertyValue(Object propName){
 	}
-	
-	public int getFactorId() {
-		return factorId;
+
+	public String getOutlineText() {
+		String expDes;
+		if(getNodeExpression() == null)
+			expDes = "Not specified";
+		else
+			expDes = getNodeExpression().toString();
+
+		return "[" + (decision == null ? "No decision": decision.getName()) + "] " + expDes;
+
 	}
-	public void setFactorId(int factorId) {
-		this.factorId = factorId;
-		listeners.firePropertyChange(PROP_FACTOR_ID, null, factorId);
+
+	public void setNodeExpression(ExpressionDefinition expression) {
+		this.expression = expression;
+		expression.getListeners().addPropertyChangeListener(this);
+		listeners.firePropertyChange(PROP_EXPRESSION, null, expression);
 	}
+
+	public ExpressionDefinition getNodeExpression() {
+		return expression;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		listeners.firePropertyChange(evt);
+	}
+
 	public int getDecisionId() {
-		return decisionId;
+		return manager.getDecisions().indexOf(decision);
 	}
-	public void setDecisionId(int decisionId) {
-		this.decisionId = decisionId;
-		listeners.firePropertyChange(PROP_DECISION_ID, null, decisionId);
+	public DecisionTreeDecision getDecision() {
+		return decision;
+	}
+	public void setDecision(DecisionTreeDecision decision) {
+		this.decision = decision;
+		listeners.firePropertyChange(PROP_DECISION, null, decision);
 	}
 	public String getDescription() {
 		return description;
@@ -106,21 +135,8 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	}
 	public void setSize(Dimension size) {
 		this.size = size;
-		listeners.firePropertyChange(PROP_SIZE, null, size);
 	}
-    public int getVirtualPos() {
-        return virtualPos;
-    }
-    public void setVirtualPos(int virtualPos) {
-        this.virtualPos = virtualPos;
-    }
-    public int getVirtualWidth() {
-        return virtualWidth;
-    }
-    public void setVirtualWidth(int virtualWidth) {
-        this.virtualWidth = virtualWidth;
-    }
-    public PropertyChangeSupport getListeners() {
+	public PropertyChangeSupport getListeners() {
 		return listeners;
 	}
 	public DecisionTreeNodeConnection getInput() {
@@ -136,9 +152,9 @@ public class DecisionTreeNode implements DecisionTreeConstants, IPropertySource 
 	public void addOutput(DecisionTreeNodeConnection output) {
 		outputs.add(output);
 		listeners.firePropertyChange(PROP_OUTPUTS, null, output);
-	}	
+	}
 	public void removeOutput(DecisionTreeNodeConnection output) {
 		outputs.remove(output);
 		listeners.firePropertyChange(PROP_OUTPUTS, null, output);
-	}	
+	}
 }

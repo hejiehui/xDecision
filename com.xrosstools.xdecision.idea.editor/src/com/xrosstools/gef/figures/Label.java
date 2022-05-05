@@ -12,13 +12,13 @@ public class Label extends Figure {
     }
 
     public Label() {
-        setLayout(new ToolbarLayout(true, ToolbarLayout.ALIGN_CENTER, 5));
+        setLayoutManager(new ToolbarLayout(true, ToolbarLayout.ALIGN_CENTER, 5));
         add(icon);
         add(text);
     }
 
-    public void setForeground(Color foreground) {
-        this.text.setForeground(foreground);
+    public void setForegroundColor(Color foreground) {
+        this.text.setForegroundColor(foreground);
     }
 
     public void setText(String text) {
@@ -27,5 +27,9 @@ public class Label extends Figure {
 
     public void setIcon(String icon) {
         this.icon.setSource(icon);
+    }
+
+    public void setLabelAlignment(int position){
+        //TODO
     }
 }

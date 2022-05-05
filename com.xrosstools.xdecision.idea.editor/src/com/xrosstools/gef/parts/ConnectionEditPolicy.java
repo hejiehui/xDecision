@@ -1,6 +1,6 @@
 package com.xrosstools.gef.parts;
 
-import com.xrosstools.gef.Command;
+import com.xrosstools.gef.commands.Command;
 
 public class ConnectionEditPolicy {
     /**

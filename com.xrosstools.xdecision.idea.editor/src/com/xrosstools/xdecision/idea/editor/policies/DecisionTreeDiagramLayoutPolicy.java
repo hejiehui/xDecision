@@ -2,7 +2,7 @@ package com.xrosstools.xdecision.idea.editor.policies;
 
 import com.xrosstools.gef.parts.EditPart;
 import com.xrosstools.gef.parts.EditPolicy;
-import com.xrosstools.gef.Command;
+import com.xrosstools.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.commands.CreateNodeCommand;
 import com.xrosstools.xdecision.idea.editor.commands.MoveNodeCommand;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;

@@ -34,15 +34,15 @@ public class Text extends Figure {
         Color oldColor = graphics.getColor();
 
         // paint background
-        if(getBackground() != null) {
-            graphics.setColor(getBackground());
+        if(getBackgroundColor() != null) {
+            graphics.setColor(getBackgroundColor());
             Figure p = getParent().getParent();
             graphics.fillRect(p.getX(), p.getY(), p.getWidth(), getParent().getHeight());
             graphics.setColor(Color.white);
             graphics.drawRect(p.getX(), p.getY(), p.getWidth(), p.getHeight());
         }
 
-        graphics.setColor(getForeground());
+        graphics.setColor(getForegroundColor());
 
         graphics.setFont(font);
 

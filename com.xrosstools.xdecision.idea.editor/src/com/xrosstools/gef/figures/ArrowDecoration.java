@@ -35,7 +35,7 @@ public class ArrowDecoration extends RotatableDecoration {
 
         poly.translate(getX(), getY());
 
-        g2d.setColor(getForeground());
+        g2d.setColor(getForegroundColor());
         g2d.rotate(getAngle(), getX(), getY());
 
         g2d.fill(poly);

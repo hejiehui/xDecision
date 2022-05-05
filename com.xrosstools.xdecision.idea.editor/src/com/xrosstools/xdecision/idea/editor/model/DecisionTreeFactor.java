@@ -1,24 +1,17 @@
 package com.xrosstools.xdecision.idea.editor.model;
 
-public class DecisionTreeFactor {
-	private String factorName;
-	private String[] factorValues;
-	
+import com.xrosstools.xdecision.idea.editor.model.definition.NamedElementTypeEnum;
+import com.xrosstools.xdecision.idea.editor.model.definition.NamedType;
+
+public class DecisionTreeFactor extends NamedType {
+	public DecisionTreeFactor(DecisionTreeDiagram diagram, String name) {
+		super(diagram, name, NamedElementTypeEnum.FACTOR, DEFAULT_TYPE);
+	}
+
 	public String getFactorName() {
-		return factorName;
+		return getName();
 	}
 	public void setFactorName(String factorName) {
-		this.factorName = factorName;
-	}
-	
-	public int getFactorValueNum() {
-		return factorValues.length;
-	}
-	
-	public String[] getFactorValues() {
-		return factorValues;
-	}
-	public void setFactorValues(String[] factorValues) {
-		this.factorValues = factorValues;
+		setName(factorName);
 	}
 }

@@ -1,101 +1,133 @@
 package com.xrosstools.xdecision.idea.editor.layout;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 
-import com.xrosstools.xdecision.idea.editor.model.*;
+import java.awt.*;
 
 public class LayoutAlgorithm {
-	public void layout(DecisionTreeDiagram diagram){
-		findRoots(diagram);
-		int nextTreePos = 0;
-		for(DecisionTreeRoot root : diagram.getRoots()){
-			root.getRows().clear();
-			root.setWidth(visit(root.getRows(), root.getRootNode(), 0, 0));
-			layout(diagram, root, nextTreePos);
-			nextTreePos += root.getWidth();
-		}
-	}
+	private int charWidth = 10;
+	private int margin = 100;
+	private int horizantalSpace;
+	private int verticalSpace;
+	private int nodeHeight;
+	private float alignment;
 
-	private void findRoots(DecisionTreeDiagram diagram){
-		List<DecisionTreeRoot> newRoots = new ArrayList<DecisionTreeRoot>();
-		Set<DecisionTreeNode> proceed = new HashSet<DecisionTreeNode>();
+	boolean useNew = true;
 
-		// First keep old root at list start
-		for(DecisionTreeRoot root : diagram.getRoots()){
-			DecisionTreeNode node = root.getRootNode();
-			if(node.getInput() == null && diagram.getNodes().contains(node)){
-				newRoots.add(root);
-				proceed.add(node);
+	public void layout(DecisionTreeDiagram diagram) {
+		horizantalSpace = diagram.isHorizantal() ? diagram.getVerticalSpace() : diagram.getHorizantalSpace();
+		verticalSpace = diagram.isHorizantal() ? diagram.getHorizantalSpace() : diagram.getVerticalSpace();
+
+		nodeHeight = diagram.getNodeHeight();
+
+		alignment = diagram.getAlignment();
+
+		if(diagram.isHorizantal()) {
+			int nextPos = margin; //+condition height
+			for (DecisionTreeNode node : diagram.getRoots()) {
+				nextPos += layoutHorizanta(margin, nextPos, node, 0) + verticalSpace;
+			}
+		} else {
+			int branchWidth = 0;
+			int nextLeftPos = margin;
+			for (DecisionTreeNode node : diagram.getRoots()) {
+				branchWidth += layoutVertical(nextLeftPos + branchWidth, node, 0) + horizantalSpace;
 			}
 		}
-
-		for(DecisionTreeNode node: diagram.getNodes()){
-			if(proceed.contains(node))
-				continue;
-			if(node.getInput() == null)
-				newRoots.add(new DecisionTreeRoot(node));
-		}
-
-		diagram.setRoots(newRoots);
 	}
 
-	private int visit(List<DecisionTreeRow> rows, DecisionTreeNode curNode, int depth, int pos){
-		curNode.setVirtualPos(pos);
+	private int layoutHorizanta(int leftPosX, int leftPosY, DecisionTreeNode node, int depth) {
+		int conditionWidth = getConnWidth(node.getInput());
+		int nodeWidth = getNodeWidth(node);
+		int condiNodeWidth = Math.max(conditionWidth, nodeWidth);
 
-		if(rows.size() == depth)
-			rows.add(new DecisionTreeRow());
-
-		DecisionTreeRow row = rows.get(depth);
-		row.getRowNodes().add(curNode);
-
-		if(row.getMaxChidrenNumber() < curNode.getOutputs().size())
-			row.setMaxChidrenNumber(curNode.getOutputs().size());
-
-		if(curNode.getOutputs().size() == 0) {
-			curNode.setVirtualWidth(1);
-			return 1;
+		int childPosX = leftPosX + condiNodeWidth + horizantalSpace;
+		int branchHeight = 0;
+		for (DecisionTreeNodeConnection path : node.getOutputs()) {
+			branchHeight += layoutHorizanta(childPosX, leftPosY + branchHeight, path.getChild(), depth + 1) + verticalSpace;
 		}
+		branchHeight = branchHeight == 0 ? nodeHeight : branchHeight - verticalSpace;
 
-		int virtualWidth = 0;
-		for(DecisionTreeNodeConnection path : curNode.getOutputs()){
-			virtualWidth += visit(rows, path.getChild(), depth + 1, pos + virtualWidth);
-		}
+		int x = leftPosX;
+		int y = leftPosY + (int)((branchHeight - nodeHeight)* alignment);
 
-		curNode.setVirtualWidth(virtualWidth);
-		return virtualWidth;
+		node.setLocation(new Point(x, y));
+		//Make sure connection get refreshed
+		if(node.getInput() != null)
+			node.getInput().layout();
+
+		return branchHeight;
 	}
 
-	private void layout(DecisionTreeDiagram diagram, DecisionTreeRoot root, int nextTreePos){
-		Dimension size = new Dimension(diagram.getNodeWidth(), diagram.getNodeHeight());
-		int horizantalSpace = diagram.isHorizantal() ? diagram.getVerticalSpace() : diagram.getHorizantalSpace();
-		int verticalSpace = diagram.isHorizantal() ? diagram.getHorizantalSpace() : diagram.getVerticalSpace();
+	private int layoutVertical(int leftPos, DecisionTreeNode node, int depth) {
+		int conditionWidth = getConnWidth(node.getInput());
+		int nodeWidth = getNodeWidth(node);
+		int condiNodeWidth = Math.max(conditionWidth, nodeWidth);
 
-		int nodeWidth = diagram.isHorizantal() ? diagram.getNodeHeight() : diagram.getNodeWidth();
-		int nodeHeight = diagram.isHorizantal() ? diagram.getNodeWidth() : diagram.getNodeHeight();
+		int branchWidth = 0;
+		int nextLeftPos = leftPos;
+		for (DecisionTreeNodeConnection path : node.getOutputs()) {
+			branchWidth += layoutVertical(nextLeftPos + branchWidth, path.getChild(), depth + 1) + horizantalSpace;
+		}
+		branchWidth = branchWidth == 0 ? 0 : branchWidth - horizantalSpace;
 
-		int margin  = 100;
-		int leftSpace = margin + (horizantalSpace + nodeWidth) * nextTreePos;
+		int x = leftPos + locateLower(condiNodeWidth, nodeWidth);
+		int y = margin + (depth) * (verticalSpace + nodeHeight);
 
-		for(int rowNum = 0; rowNum < root.getRows().size(); rowNum++){
-			DecisionTreeRow row = root.getRows().get(rowNum);
+		/**
+		 *   conditionconditionconditioncondition
+		 *              branchbranch
+		 */
+		if(condiNodeWidth >= branchWidth) {
+			relocateBranch(node, locateLower(condiNodeWidth, branchWidth));
+		} else {
+			x += locateLower(branchWidth, condiNodeWidth);
+		}
 
-			for(int colNum = 0; colNum < row.getRowNodes().size(); colNum++){
-				DecisionTreeNode node = row.getRowNodes().get(colNum);
-				node.setSize(size);
+		node.setLocation(new Point(x, y));
+		//Make sure connection get refreshed
+		if(node.getInput() != null)
+			node.getInput().layout();
 
-				//[NODE]__[NODE]
-				int curNodeWidth = node.getVirtualWidth() * (horizantalSpace + nodeWidth) - horizantalSpace;
-				int curNodePos = node.getVirtualPos() * (horizantalSpace + nodeWidth);
+		return Math.max(branchWidth, condiNodeWidth);
+	}
 
-				int x = (int)(leftSpace + curNodePos + (curNodeWidth - nodeWidth) * diagram.getAlignment());
-				int y = margin + (rowNum) * (verticalSpace + nodeHeight);
+	private int getNodeWidth(DecisionTreeNode node) {
+		return node.getSize().width;
+	}
 
-				node.setLocation(diagram.isHorizantal()? new Point(y, x): new Point(x, y));
-			}
+	private int getConnWidth(DecisionTreeNodeConnection conn) {
+		if (conn == null)
+			return 0;
+
+		if (conn.getActualWidth() > 0)
+			return conn.getActualWidth();
+
+		int conditionCharCount = 0;
+
+		conditionCharCount = conn.getOperator() == null ? 0 : conn.getOperator().toString().length();
+		conditionCharCount += conn.getExpression() == null ? 0 : conn.getExpression().toString().length();
+
+		return conditionCharCount * charWidth / 2;
+	}
+
+	/**
+	 *   upperWidthupperWidthupperWidth
+	 *             lowerWidth
+	 */
+	private int locateLower(int upperWidth, int lowerWidth) {
+		return upperWidth >= lowerWidth ? (int)((upperWidth -lowerWidth) * alignment) : 0;
+	}
+
+	private void relocateBranch(DecisionTreeNode node, int delta) {
+		for (DecisionTreeNodeConnection path : node.getOutputs()) {
+			DecisionTreeNode child = path.getChild();
+			Point loc = child.getLocation();
+			loc.x += delta;
+			child.setLocation(loc);
+			relocateBranch(child, delta);
 		}
 	}
 }

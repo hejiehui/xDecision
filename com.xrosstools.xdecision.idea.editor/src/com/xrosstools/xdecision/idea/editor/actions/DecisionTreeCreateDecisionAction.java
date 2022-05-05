@@ -1,11 +1,11 @@
 package com.xrosstools.xdecision.idea.editor.actions;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.gef.BaseDialogAction;
-import com.xrosstools.gef.CommandChain;
-import com.xrosstools.xdecision.idea.editor.commands.AddDecisionCommand;
-import com.xrosstools.gef.Command;
+import com.xrosstools.gef.actions.BaseDialogAction;
+import com.xrosstools.gef.commands.CommandChain;
+import com.xrosstools.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.commands.ChangeDecisionCommand;
+import com.xrosstools.xdecision.idea.editor.commands.definition.CreateElementCommand;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 
@@ -24,13 +24,15 @@ public class DecisionTreeCreateDecisionAction extends BaseDialogAction implement
 
 	@Override
 	protected Command createCommand(String value) {
-	    if(node == null)
-		    return new AddDecisionCommand(diagram, value);
-	    else {
-            CommandChain cc = new CommandChain();
-            cc.add(new AddDecisionCommand(diagram, value));
-            cc.add(new ChangeDecisionCommand(node, diagram.getDecisions().size()));
-            return cc;
-        }
+        CreateElementCommand createCmd = new CreateElementCommand(diagram, node.getDecisionTreeManager().getDecisions());
+
+        if(node == null)
+            return createCmd;
+
+        CommandChain cc = new CommandChain();
+        createCmd.setInputText(value);
+        cc.add(createCmd);
+        cc.add(new ChangeDecisionCommand(node));
+        return cc;
 	}
 }

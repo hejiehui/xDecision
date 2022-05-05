@@ -4,8 +4,9 @@ import com.xrosstools.gef.parts.TreeEditPart;
 import com.xrosstools.gef.parts.TreeEditPartFactory;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
-import com.xrosstools.xdecision.idea.editor.model.DecisionTreeRoot;
 import com.xrosstools.gef.parts.EditContext;
+import com.xrosstools.xdecision.idea.editor.model.definition.*;
+import com.xrosstools.xdecision.idea.editor.treeparts.definition.*;
 
 public class DecisionTreeTreePartFactory implements TreeEditPartFactory {
 	private EditContext editContext;
@@ -20,11 +21,28 @@ public class DecisionTreeTreePartFactory implements TreeEditPartFactory {
 			return part;
 
 		if(model instanceof DecisionTreeDiagram)
-			part = new DecisionTreeDiagramTreePart();
-		else if(model instanceof DecisionTreeRoot)
-			part = new DecisionTreeRootTreePart();
-		else if(model instanceof DecisionTreeNode)
-			part = new DecisionTreeNodeTreePart();
+			return new DecisionTreeDiagramTreePart(model);
+
+		if(model instanceof DecisionTreeNode)
+			return new DecisionTreeNodeTreePart(model);
+
+		if(model instanceof NamedElementContainer)
+			return new NamedElementContainerTreePart(model);
+
+		if(model instanceof MethodDefinition)
+			return new MethodDefinitionTreePart(model);
+
+		if(model instanceof NamedType)
+			return new NamedTypeTreePart(model);
+
+		if(model instanceof EnumType)
+			return new EnumTypeTreePart(model);
+
+		if(model instanceof DataType)
+			return new DataTypeTreePart(model);
+
+		if(model instanceof NamedElement)
+			return new NamedElementTreePart(model);
 
 		part.setEditPartFactory(this);
 		part.setModel(model);

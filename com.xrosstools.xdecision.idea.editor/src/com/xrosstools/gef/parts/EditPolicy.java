@@ -1,7 +1,6 @@
 package com.xrosstools.gef.parts;
 
-import com.xrosstools.gef.Command;
-import com.xrosstools.gef.figures.Connection;
+import com.xrosstools.gef.commands.Command;
 
 import java.awt.*;
 

@@ -27,7 +27,7 @@ public class DecisionTreeDiagramPart extends EditPart {
 
 	protected Figure createFigure() {
         Figure figure = new Figure();
-        figure.setLayout(new FreeformLayout());
+        figure.setLayoutManager(new FreeformLayout());
         return figure;
 	}
 

@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.commands;
 
-import com.xrosstools.gef.Command;
+import com.xrosstools.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 
 public class DeletePathCommand extends Command {

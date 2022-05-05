@@ -13,14 +13,14 @@ public class DecisionTreeNodeFigure extends RoundedRectangle {
 
     public DecisionTreeNodeFigure() {
         setMinSize(new Dimension(100, 50));
-        setLayout(new ToolbarLayout(false, ToolbarLayout.ALIGN_TOPLEFT, 10));
+        setLayoutManager(new ToolbarLayout(false, ToolbarLayout.ALIGN_TOPLEFT, 10));
         factorLabel = new Label();
 //        factorLabel .getInsets().set(BORDER_WIDTH, 0, BORDER_WIDTH, 0);
         factorLabel .getInsets().set(BORDER_WIDTH, BORDER_WIDTH, 0, BORDER_WIDTH);
         add(factorLabel);
 
         decisionLabel = new Label();
-        decisionLabel.setForeground(new Color(0, 125, 0));
+        decisionLabel.setForegroundColor(new Color(0, 125, 0));
 //        decisionLabel.getInsets().set(BORDER_WIDTH, 0, 10, 0);
         decisionLabel.getInsets().set(BORDER_WIDTH, BORDER_WIDTH, 10, BORDER_WIDTH);
         add(decisionLabel);

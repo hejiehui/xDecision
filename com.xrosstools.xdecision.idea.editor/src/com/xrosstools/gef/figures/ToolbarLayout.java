@@ -20,10 +20,28 @@ public class ToolbarLayout implements LayoutManager {
         this.gap = gap;
     }
 
+    public ToolbarLayout() {}
+
     public ToolbarLayout(boolean horizontal, int alignment, int gap) {
         this.horizontal = horizontal;
         this.alignment = alignment;
         this.gap = gap;
+    }
+
+    public void setHorizontal(boolean horizontal) {
+        this.horizontal = horizontal;
+    }
+
+    public void setSpacing(int gap) {
+        this.gap = gap;
+    }
+
+    public void setMinorAlignment(int alignment) {
+        this.alignment = alignment;
+    }
+
+    public void setStretchMinorAxis(boolean stretchMinorAxis) {
+        //TODO
     }
 
     public boolean isHorizontal() {

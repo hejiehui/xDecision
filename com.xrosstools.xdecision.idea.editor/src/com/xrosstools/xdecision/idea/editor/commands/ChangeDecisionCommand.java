@@ -1,21 +1,30 @@
 package com.xrosstools.xdecision.idea.editor.commands;
 
-import com.xrosstools.gef.Command;
+import com.xrosstools.gef.commands.Command;
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDecision;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 
 public class ChangeDecisionCommand extends Command {
+    private boolean useLastCreated;
     private DecisionTreeNode node;
-    private int oldDecisionId;
-    private int newDecisionId;
-    
-    public ChangeDecisionCommand(DecisionTreeNode node, int newDecisionId){
-        this.node = node;
-        oldDecisionId = node.getDecisionId();
-        this.newDecisionId = newDecisionId;
+    private DecisionTreeDecision oldDecision;
+    private DecisionTreeDecision newDecision;
+
+    public ChangeDecisionCommand(DecisionTreeNode node){
+        this(node, null);
+        useLastCreated = true;
     }
-    
+
+    public ChangeDecisionCommand(DecisionTreeNode node, DecisionTreeDecision decision){
+        this.node = node;
+        oldDecision = node.getDecision();
+        this.newDecision = decision;
+    }
+
     public void execute() {
-        node.setDecisionId(newDecisionId);
+        if(useLastCreated)
+            newDecision = node.getDecisionTreeManager().getDecisions().get(node.getDecisionTreeManager().getDecisions().size() -1);
+        redo();
     }
 
     public String getLabel() {
@@ -23,10 +32,10 @@ public class ChangeDecisionCommand extends Command {
     }
 
     public void redo() {
-        execute();
+        node.setDecision(newDecision);
     }
 
     public void undo() {
-        node.setDecisionId(oldDecisionId);
+        node.setDecision(oldDecision);
     }
 }

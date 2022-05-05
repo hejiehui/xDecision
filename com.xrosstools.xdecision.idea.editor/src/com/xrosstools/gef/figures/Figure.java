@@ -132,11 +132,11 @@ public class Figure implements ImageObserver {
         this.selected = selected;
     }
 
-    public LayoutManager getLayout() {
+    public LayoutManager getLayoutManager() {
         return layout;
     }
 
-    public void setLayout(LayoutManager layout) {
+    public void setLayoutManager(LayoutManager layout) {
         this.layout = layout;
     }
 
@@ -178,6 +178,17 @@ public class Figure implements ImageObserver {
         return new Rectangle(x, y, width, height);
     }
 
+    public void setBounds(Rectangle bounds) {
+        x = bounds.x;
+        y = bounds.y;
+        width = bounds.width;
+        height = bounds.height;
+    }
+
+    public final Rectangle getClientArea() {
+        return getBound();
+    }
+
     public void resizeToPreferredSize() {
         setSize(getPreferredSize());
     }
@@ -213,6 +224,10 @@ public class Figure implements ImageObserver {
 
     public List<Figure> getComponents() {
         return components;
+    }
+
+    public List<Figure> getChildren() {
+        return getComponents();
     }
 
     public List<Connection> getConnection() {
@@ -298,6 +313,14 @@ public class Figure implements ImageObserver {
         components.add(child);
         child.setRootPane(rootPane);
 //        layout();
+    }
+
+    public void setConstraint(Figure child, Object constraint) {
+        if (child.getParent() != this)
+            throw new IllegalArgumentException("Figure must be a child");
+        if (layout != null)
+            layout.setConstraint(child, constraint);
+//        revalidate();
     }
 
     public  void add(Figure child, int index) {
@@ -386,19 +409,19 @@ public class Figure implements ImageObserver {
         return insets;
     }
 
-    public void setForeground(Color foreground) {
+    public void setForegroundColor(Color foreground) {
         this.foreground = foreground;
     }
 
-    public Color getForeground() {
+    public Color getForegroundColor() {
         return foreground;
     }
 
-    public Color getBackground() {
+    public Color getBackgroundColor() {
         return background;
     }
 
-    public void setBackground(Color background) {
+    public void setBackgroundColor(Color background) {
         this.background = background;
     }
 

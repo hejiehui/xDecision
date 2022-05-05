@@ -23,7 +23,7 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
         Connection conn = new Connection();
         conn.setTargetDecoration(new ArrowDecoration());
         conn.setRouter(new BendpointConnectionRouter());
-        conn.setForeground(Color.black);
+        conn.setForegroundColor(Color.black);
         
         DecisionTreeNodeConnection nodeConn = (DecisionTreeNodeConnection)getModel();
         int valueId = nodeConn.getValueId();

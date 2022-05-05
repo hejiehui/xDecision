@@ -1,19 +1,20 @@
 package com.xrosstools.gef;
 
+import com.xrosstools.gef.actions.Action;
 import com.xrosstools.gef.parts.EditPart;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 
-public interface ContextMenuProvider {
+public class ContextMenuProvider {
 
-    JPopupMenu buildContextMenu(EditPart selecte);
+    public void addSeparator(JPopupMenu menu) {
+        menu.addSeparator();
+    }
 
-    default JMenuItem createItem(Action action) {
+    public JMenuItem createItem(Action action) {
         JMenuItem item = new JMenuItem(action.getText());
         item.addActionListener(action);
         item.setSelected(action.isChecked());
         return item;
     }
-
 }

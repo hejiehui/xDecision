@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.parts;
 
-import com.xrosstools.gef.CommandChain;
+import com.xrosstools.gef.commands.CommandChain;
 import com.xrosstools.gef.parts.EditPart;
 import com.xrosstools.gef.parts.EditPolicy;
 import com.xrosstools.xdecision.idea.editor.commands.CreateNodeCommand;
