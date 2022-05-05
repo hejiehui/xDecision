@@ -16,7 +16,7 @@ public class CreateElementCommand extends InputTextCommand{
     }
     
     public boolean canExecute() {
-        return contains(diagram, container, getInputText());
+        return !contains(diagram, container, getInputText());
     }
      
     public static boolean contains(DecisionTreeDiagram diagram, NamedElementContainer<NamedElement> container, String newName) {

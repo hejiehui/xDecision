@@ -18,6 +18,12 @@ public class TreeEditPart implements PropertyChangeListener {
     private DefaultMutableTreeNode treeNode;
     private List<TreeEditPart> childEditParts = new ArrayList<>();
 
+    public TreeEditPart(){}
+
+    public TreeEditPart(Object model){
+        this.model = model;
+    }
+
     public Object getModel() {
         return model;
     }
@@ -46,7 +52,7 @@ public class TreeEditPart implements PropertyChangeListener {
         return treeNode;
     }
 
-    public String getText() {
+    protected String getText() {
         return "";
     }
 

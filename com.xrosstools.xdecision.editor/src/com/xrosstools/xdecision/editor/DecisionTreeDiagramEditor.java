@@ -44,10 +44,12 @@ import com.xrosstools.xdecision.editor.actions.DecisionTreeCodeGenAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeLayoutAction;
 import com.xrosstools.xdecision.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.editor.layout.LayoutAlgorithm;
+import com.xrosstools.xdecision.editor.menus.DecisionTreeContextMenuProvider;
+import com.xrosstools.xdecision.editor.menus.DecisionTreeOutlineContextMenuProvider;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.editor.model.DecisionTreeDiagramFactory;
 import com.xrosstools.xdecision.editor.parts.DecisionTreePartFactory;
-import com.xrosstools.xdecision.editor.parts.DecisionTreeTreePartFactory;
+import com.xrosstools.xdecision.editor.treeparts.DecisionTreeTreePartFactory;
 
 public class DecisionTreeDiagramEditor extends GraphicalEditorWithPalette implements DecisionTreeActionConstants, DecisionTreeMessages {
 

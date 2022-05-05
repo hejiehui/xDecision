@@ -24,7 +24,6 @@ public class ChangeElementNameCommand extends InputTextCommand {
     }
     
     public void execute() {
-        
         redo();
     }
 
@@ -33,7 +32,7 @@ public class ChangeElementNameCommand extends InputTextCommand {
     }
 
     public void redo() {
-        nameType.setName(newName);
+        nameType.setName(getInputText());
     }
 
     public void undo() {

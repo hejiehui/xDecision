@@ -1,0 +1,76 @@
+package com.xrosstools.xdecision.idea.editor.commands.expression;
+
+import com.xrosstools.gef.commands.Command;
+import com.xrosstools.xdecision.idea.editor.model.*;
+import com.xrosstools.xdecision.idea.editor.model.expression.*;
+
+public class ChangeChildCommand extends Command {
+    private Object parentModel;
+    private ExpressionDefinition oldExp;
+    private ExpressionDefinition newExp;
+    
+    
+    public ChangeChildCommand(Object parentModel, ExpressionDefinition oldExp, ExpressionDefinition newExp) {
+        this.parentModel = parentModel;
+        this.newExp = newExp;
+        this.oldExp = oldExp;
+    }
+    
+    public static void setChild(Object parentModel, ExpressionDefinition oldExp, ExpressionDefinition newExp) {
+        if(parentModel instanceof CompositeExpression) {
+            CompositeExpression parent = (CompositeExpression)parentModel;
+            parent.set(parent.indexOf(oldExp), newExp);
+            return;
+        }
+        
+        if(parentModel instanceof ElementExpression) {
+            ElementExpression parent = (ElementExpression)parentModel;
+            parent.setIndexExpression(newExp);
+            return;
+        }
+        
+        if(parentModel instanceof ExtensibleExpression) {
+            ((ExtensibleExpression)parentModel).setChildExpression(newExp);
+            return;
+        }
+        
+        if(parentModel instanceof DecisionTreeNode) {
+            ((DecisionTreeNode)parentModel).setNodeExpression(newExp);
+            return;
+        }
+        
+        if(parentModel instanceof DecisionTreeNodeConnection) {
+            ((DecisionTreeNodeConnection)parentModel).setExpression(newExp);
+            return;
+        }
+
+        //TODO check negative expression
+        if(parentModel instanceof BracktExpression) {
+            ((EnclosedExpression)parentModel).setInnerExpression(newExp);
+            return;
+        }
+        
+        if(parentModel instanceof ParameterExpression) {
+            ((EnclosedExpression)parentModel).setInnerExpression(newExp);
+            return;
+        }
+
+        throw new IllegalArgumentException("type not supported: " + parentModel.getClass());
+    }
+
+    public void execute() {
+        setChild(parentModel, oldExp, newExp);
+    }
+
+    public String getLabel() {
+        return "Change child";
+    }
+
+    public void redo() {
+        execute();
+    }
+
+    public void undo() {
+        setChild(parentModel, newExp, oldExp);
+    }
+}

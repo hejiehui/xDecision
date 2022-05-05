@@ -1,38 +1,44 @@
 package com.xrosstools.xdecision.idea.editor.treeparts;
 
 import com.xrosstools.gef.parts.TreeEditPart;
-import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DecisionTreeNodeTreePart extends TreeEditPart {
-    protected List<DecisionTreeNode> getModelChildren() {
-    	DecisionTreeNode node = (DecisionTreeNode)getModel();
-    	List<DecisionTreeNode> children = new ArrayList<DecisionTreeNode>();
-    	for(DecisionTreeNodeConnection path : node.getOutputs())
-    		children.add(path.getChild());
-    	return children;
-    }
+public class DecisionTreeNodeTreePart extends TreeEditPart implements PropertyChangeListener {
+	public DecisionTreeNodeTreePart(Object model) {
+		super(model);
+	}
 
-    public String getText() {
-    	DecisionTreeNode node = (DecisionTreeNode)getModel();
-    	DecisionTreeDiagram diagram = (DecisionTreeDiagram)getRoot().getModel();
-    	
-        String factor;
-    	if(node.getFactorId() == -1)
-    		factor = "Not specified";
-    	else
-    		factor = diagram.getFactors().get(node.getFactorId()).getFactorName();
+	protected List<DecisionTreeNode> getModelChildren() {
+		DecisionTreeNode node = (DecisionTreeNode)getModel();
+		List<DecisionTreeNode> chidren = new ArrayList<DecisionTreeNode>();
+		for(DecisionTreeNodeConnection path : node.getOutputs())
+			chidren.add(path.getChild());
+		return chidren;
+	}
 
-        String decision;
-    	if(node.getDecisionId() == -1)
-    		decision = "No decision";
-    	else
-    		decision = diagram.getDecisions().get(node.getDecisionId());
+	public void activate() {
+//		super.activate();
+		((DecisionTreeNode) getModel()).getListeners().addPropertyChangeListener(this);
+	}
 
-        return "[" + decision + "] " + factor;
-    }
+	public void deactivate() {
+//		super.deactivate();
+		((DecisionTreeNode) getModel()).getListeners().removePropertyChangeListener(this);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		refresh();
+	}
+
+	protected String getText() {
+		DecisionTreeNode node = (DecisionTreeNode)getModel();
+		return node.getOutlineText();
+	}
 }

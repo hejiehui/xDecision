@@ -12,8 +12,8 @@ import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 
 public class ElementExpressionPart extends ExtensibleExpressionPart {
     private EnclosedExpressionFigure indexPanel;
-    private IFigure indexFigure;
-    public ElementExpression getModel() {
+
+    public ElementExpression getElementExpression() {
         return (ElementExpression)super.getModel();
     }
 
@@ -25,14 +25,14 @@ public class ElementExpressionPart extends ExtensibleExpressionPart {
     
     @Override
     protected void postGetModelChildren(List children) {
-        if(getModel().getIndexExpression() != null)
-            children.add(getModel().getIndexExpression());
+        if(getElementExpression().getIndexExpression() != null)
+            children.add(getElementExpression().getIndexExpression());
     }
     
     protected void postAddChildVisual(EditPart childEditPart, int index) {
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
 
-        if(getModel().getIndexExpression() == childEditPart.getModel()) 
+        if(getElementExpression().getIndexExpression() == childEditPart.getModel()) 
             indexPanel.setEnclosedFigure(childFigure);
     }
 

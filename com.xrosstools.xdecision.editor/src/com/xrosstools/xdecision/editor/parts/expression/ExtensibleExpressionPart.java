@@ -12,7 +12,7 @@ import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExtensibleExpression;
 
 public class ExtensibleExpressionPart extends BaseExpressionPart {
-    public ExtensibleExpression getModel() {
+    public ExtensibleExpression getExtensibleExpression() {
         return (ExtensibleExpression)super.getModel();
     }
 
@@ -39,7 +39,7 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
     @Override
     protected List getModelChildren() {
         List children = new ArrayList();
-        ExtensibleExpression exp = getModel();
+        ExtensibleExpression exp = getExtensibleExpression();
         
         if(exp.getChildExpression() != null)
             children.add(exp.getChildExpression());
@@ -51,7 +51,7 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
     
     @Override
     protected void addChildVisual(EditPart childEditPart, int index) {
-        ExtensibleExpression exp = getModel();
+        ExtensibleExpression exp = getExtensibleExpression();
         
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
         Object childModel = childEditPart.getModel();
@@ -65,7 +65,7 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
     }
 
     protected void refreshVisuals() {
-        ExtensibleExpression exp = getModel();
+        ExtensibleExpression exp = getExtensibleExpression();
         ExpandableExpressionFigure figure = getFigure();
         if(exp.getChildExpression() == null || exp.getChildExpression() instanceof ElementExpression)
             figure.setJointText("");

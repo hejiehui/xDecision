@@ -1,11 +1,6 @@
 package com.xrosstools.xdecision.editor.model;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.xrosstools.xdecision.editor.model.definition.NamedElementContainer;
-import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 
 public class DecisionTreeManager {

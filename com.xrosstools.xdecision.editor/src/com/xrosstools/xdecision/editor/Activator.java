@@ -51,12 +51,7 @@ public class Activator extends AbstractUIPlugin implements DecisionTreeActionCon
     	put(reg, ALIGN_BOTTOM);
     	put(reg, ALIGN_MIDDLE);
     	put(reg, ALIGN_TOP);
-    	
-    	put(reg, INCREASE_NODE_HEIGHT);
-    	put(reg, DECREASE_NODE_HEIGHT);
-    	put(reg, INCREASE_NODE_WIDTH);
-    	put(reg, DECREASE_NODE_WIDTH);
-    	
+
     	put(reg, INCREASE_VERTICAL_SPACE);
     	put(reg, DECREASE_VERTICAL_SPACE);
     	
