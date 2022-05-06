@@ -55,6 +55,11 @@ public class ToolbarLayout implements LayoutManager {
     }
 
     @Override
+    public void setConstraint(Figure figure, Object constraint) {
+
+    }
+
+    @Override
     public Dimension preferredLayoutSize(Figure parent) {
         synchronized (parent) {
             Insets ins = parent.getInsets();

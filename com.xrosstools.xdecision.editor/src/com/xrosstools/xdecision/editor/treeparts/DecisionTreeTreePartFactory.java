@@ -20,30 +20,25 @@ import com.xrosstools.xdecision.editor.treeparts.definition.NamedTypeTreePart;
 
 public class DecisionTreeTreePartFactory implements EditPartFactory {
 	public EditPart createEditPart(EditPart context, Object model) {
-		if(model instanceof DecisionTreeDiagram)
-			return new DecisionTreeDiagramTreePart(model);
+	    EditPart part = null;
 
-		if(model instanceof DecisionTreeNode)
-			return new DecisionTreeNodeTreePart(model);
-		
-		if(model instanceof NamedElementContainer)
-		    return new NamedElementContainerTreePart(model);
-		
-        if(model instanceof MethodDefinition)
-            return new MethodDefinitionTreePart(model);
+	    if(model instanceof DecisionTreeDiagram)
+            part = new DecisionTreeDiagramTreePart(model);
+        else if(model instanceof DecisionTreeNode)
+            part = new DecisionTreeNodeTreePart(model);
+        else if(model instanceof NamedElementContainer)
+            part = new NamedElementContainerTreePart(model);
+        else if(model instanceof MethodDefinition)
+            part = new MethodDefinitionTreePart(model);
+        else if(model instanceof NamedType)
+            part = new NamedTypeTreePart(model);
+        else if(model instanceof EnumType)
+            part =  new EnumTypeTreePart(model);
+        else if(model instanceof DataType)
+            part = new DataTypeTreePart(model);
+        else if(model instanceof NamedElement)
+            part = new NamedElementTreePart(model);
         
-        if(model instanceof NamedType)
-            return new NamedTypeTreePart(model);
-        
-        if(model instanceof EnumType)
-            return new EnumTypeTreePart(model);
-
-        if(model instanceof DataType)
-            return new DataTypeTreePart(model);
-        
-        if(model instanceof NamedElement)
-            return new NamedElementTreePart(model);
-        
-		return null;
+		return part;
 	}
 }

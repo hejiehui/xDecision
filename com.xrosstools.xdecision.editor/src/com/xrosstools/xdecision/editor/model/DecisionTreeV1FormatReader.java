@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.eclipse.draw2d.geometry.Dimension;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -62,6 +63,7 @@ public class DecisionTreeV1FormatReader {
              DecisionTreeNode parent = null;
              if(!roots.containsKey(rootFactor)){
                  parent = new DecisionTreeNode();
+                 parent.setSize(new Dimension(diagram.getNodeWidth(), diagram.getNodeHeight()));
                  diagram.addNode(parent);
                  roots.put(rootFactor, parent);
              }else
@@ -80,6 +82,7 @@ public class DecisionTreeV1FormatReader {
                  
                  if(child == null){
                      child = new DecisionTreeNode();
+                     child.setSize(new Dimension(diagram.getNodeWidth(), diagram.getNodeHeight()));
                      diagram.addNode(child);
                      DecisionTreeNodeConnection conn = new DecisionTreeNodeConnection(parent, child);
                      conn.setValueId(entry.getValueIndex());

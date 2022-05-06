@@ -35,7 +35,6 @@ import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeEditPolicy;
 
 public class DecisionTreeNodePart extends AbstractGraphicalEditPart implements PropertyChangeListener, NodeEditPart {
     private DecisionTreeNode node;
-    private Label placeHolder = new Label();
     
     @Override
     public void setModel(Object model) {

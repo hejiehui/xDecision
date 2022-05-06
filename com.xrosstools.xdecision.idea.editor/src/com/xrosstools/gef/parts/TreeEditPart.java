@@ -52,7 +52,7 @@ public class TreeEditPart implements PropertyChangeListener {
         return treeNode;
     }
 
-    protected String getText() {
+    public String getText() {
         return "";
     }
 

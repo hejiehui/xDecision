@@ -8,7 +8,6 @@ import java.util.List;
 import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.MidpointLocator;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.gef.EditPart;
@@ -18,7 +17,6 @@ import org.eclipse.gef.editparts.AbstractConnectionEditPart;
 import org.eclipse.gef.editpolicies.ConnectionEndpointEditPolicy;
 
 import com.xrosstools.xdecision.editor.figures.BranchConditionFigure;
-import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.policies.DecisionTreeNodeConnectionEditPolicy;

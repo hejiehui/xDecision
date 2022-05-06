@@ -148,12 +148,6 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
 //        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, true, true), INCREASE_NODE_WIDTH, INCREASE_NODE_WIDTH_MSG));
 //        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, true, false), DECREASE_NODE_WIDTH, DECREASE_NODE_WIDTH_MSG));
 
-        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, false, true, true), INCREASE_HORIZANTAL_SPACE, INCREASE_HORIZANTAL_SPACE_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, false, true, false), DECREASE_HORIZANTAL_SPACE, DECREASE_HORIZANTAL_SPACE_MSG));
-
-        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, false, false, true), INCREASE_VERTICAL_SPACE, INCREASE_VERTICAL_SPACE_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, false, false, false), DECREASE_VERTICAL_SPACE, DECREASE_VERTICAL_SPACE_MSG));
-
         return toolbar;
     }
 
@@ -244,13 +238,13 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
 
     private void build() {
         EditContext context = new EditContext(this);
-
+        LayoutAlgorithm layoutAlgorithm = new LayoutAlgorithm();
+        layoutAlgorithm.layout(diagram);
         DecisionTreePartFactory f = new DecisionTreePartFactory(context);
         root = f.createEditPart(null, diagram);
         root.build();
 
-        new LayoutAlgorithm().layout(diagram);
-
+        layoutAlgorithm.layout(diagram);
 
         DecisionTreeTreePartFactory treePartFactory = new DecisionTreeTreePartFactory(context);
         treeRoot = treePartFactory.createEditPart(null, diagram);
@@ -269,6 +263,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
             }
         });
 
+        treeNavigator.setComponentPopupMenu(new JPopupMenu("aaaaa"));
         updateVisual();
     }
 
