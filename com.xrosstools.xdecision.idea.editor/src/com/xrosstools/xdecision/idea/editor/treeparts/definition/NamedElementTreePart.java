@@ -13,7 +13,7 @@ public class NamedElementTreePart extends TreeEditPart implements PropertyChange
         this.element = (NamedElement)model;
     }
     
-    protected String getText() {
+    public String getText() {
         return element.toString();
     }
     

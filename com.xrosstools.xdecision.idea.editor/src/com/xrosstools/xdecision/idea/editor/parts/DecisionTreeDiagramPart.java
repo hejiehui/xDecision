@@ -14,14 +14,14 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.policies.DecisionTreeDiagramLayoutPolicy;
 
 public class DecisionTreeDiagramPart extends EditPart {
-	private boolean isLayoutUpdated;
+    private LayoutAlgorithm layout = new LayoutAlgorithm();
     protected List<DecisionTreeNode> getModelChildren() {
-    	DecisionTreeDiagram diagram = (DecisionTreeDiagram)getModel();
-        layout();
-    	DecisionTreeManager manager = new DecisionTreeManager(diagram);
-    	for(DecisionTreeNode node: diagram.getNodes())
-    		if(!node.isDecisionTreeManagerSet())
-    			node.setDecisionTreeManager(manager);
+        DecisionTreeDiagram diagram = (DecisionTreeDiagram)getModel();
+
+        DecisionTreeManager manager = new DecisionTreeManager(diagram);
+        for(DecisionTreeNode node: diagram.getNodes())
+            if(!node.isDecisionTreeManagerSet())
+                node.setDecisionTreeManager(manager);
         return diagram.getNodes();
     }
 
@@ -31,20 +31,11 @@ public class DecisionTreeDiagramPart extends EditPart {
         return figure;
 	}
 
-	private void layout() {
-        DecisionTreeDiagram diagram = (DecisionTreeDiagram)getModel();
-        if(!isLayoutUpdated){
-            new LayoutAlgorithm().layout(diagram);
-            isLayoutUpdated = true;
-        }
-    }
-
 	public void propertyChange(PropertyChangeEvent evt) {
 		String prop = evt.getPropertyName();
-		if (DecisionTreeDiagram.LAYOUT.equals(prop)){
-			isLayoutUpdated = false;
-		}
-        layout();
+        if (DecisionTreeDiagram.LAYOUT.equals(prop)){
+            layout.layout((DecisionTreeDiagram)getModel());
+        }
 		refresh();
 	}
 

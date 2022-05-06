@@ -37,7 +37,7 @@ public class DecisionTreeNodeTreePart extends TreeEditPart implements PropertyCh
 		refresh();
 	}
 
-	protected String getText() {
+	public String getText() {
 		DecisionTreeNode node = (DecisionTreeNode)getModel();
 		return node.getOutlineText();
 	}

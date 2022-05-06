@@ -4,6 +4,12 @@ import java.awt.*;
 
 public class FreeformLayout implements LayoutManager {
     private int margin = 200;
+
+    @Override
+    public void setConstraint(Figure figure, Object constraint) {
+
+    }
+
     @Override
     public Dimension preferredLayoutSize(Figure parent) {
         int width=0;

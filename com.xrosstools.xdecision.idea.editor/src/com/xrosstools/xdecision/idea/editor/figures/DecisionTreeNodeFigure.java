@@ -1,52 +1,47 @@
 package com.xrosstools.xdecision.idea.editor.figures;
 
+import com.xrosstools.gef.figures.*;
+import com.xrosstools.gef.figures.BorderLayout;
 import com.xrosstools.gef.figures.Label;
-import com.xrosstools.gef.figures.RoundedRectangle;
-import com.xrosstools.gef.figures.ToolbarLayout;
 
 import java.awt.*;
 
+
 public class DecisionTreeNodeFigure extends RoundedRectangle {
-    private static int BORDER_WIDTH = 5;
-    private com.xrosstools.gef.figures.Label factorLabel;
-    private com.xrosstools.gef.figures.Label decisionLabel;
+    private Label decisionLabel;
+    private Figure nodeExpression;
+    private BorderLayout layout;
 
     public DecisionTreeNodeFigure() {
         setMinSize(new Dimension(100, 50));
         setLayoutManager(new ToolbarLayout(false, ToolbarLayout.ALIGN_TOPLEFT, 10));
-        factorLabel = new Label();
-//        factorLabel .getInsets().set(BORDER_WIDTH, 0, BORDER_WIDTH, 0);
-        factorLabel .getInsets().set(BORDER_WIDTH, BORDER_WIDTH, 0, BORDER_WIDTH);
-        add(factorLabel);
+
+//        layout= new BorderLayout();
+//        setLayoutManager(layout);
+        this.getInsets().set(5, 5, 5, 5);
+
+        //To make sure the minimal width of the node figure
+        Figure  widthLine = new Figure();
+        widthLine.setPreferredSize(new Dimension(90, 1));
+        add(widthLine);
+//        layout.setConstraint(widthLine, PositionConstants.TOP);
 
         decisionLabel = new Label();
-        decisionLabel.setForegroundColor(new Color(0, 125, 0));
-//        decisionLabel.getInsets().set(BORDER_WIDTH, 0, 10, 0);
-        decisionLabel.getInsets().set(BORDER_WIDTH, BORDER_WIDTH, 10, BORDER_WIDTH);
+        decisionLabel.setLabelAlignment(PositionConstants.CENTER);
+        decisionLabel.setForegroundColor(ColorConstants.black);
         add(decisionLabel);
+//        layout.setConstraint(decisionLabel, PositionConstants.CENTER);
     }
 
-//    private Dimension preferredSize;
-//
-//    @Override
-//    public Dimension getPreferredSize() {
-//        return this.preferredSize;
-//    }
-//
-//    @Override
-//    public void setPreferredSize(Dimension preferredSize) {
-//        this.preferredSize = preferredSize;
-//    }
-//
-    public void setFactor(String name) {
-    	factorLabel.setText(name);
-    	factorLabel.setToolTipText(name);
-    	repaint();
-    }
-    
     public void setDecision(String decision) {
-    	decisionLabel.setText(decision);
-    	decisionLabel.setToolTipText(decision);
+        decisionLabel.setText(decision);
+        repaint();
+    }
+
+    public void setExpressionFigure(Figure nodeExpression) {
+        this.nodeExpression = nodeExpression;
+        add(nodeExpression);
+//        layout.setConstraint(nodeExpression, PositionConstants.BOTTOM);
         repaint();
     }
 }

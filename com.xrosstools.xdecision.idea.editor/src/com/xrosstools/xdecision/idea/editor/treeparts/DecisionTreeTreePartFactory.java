@@ -21,28 +21,21 @@ public class DecisionTreeTreePartFactory implements TreeEditPartFactory {
 			return part;
 
 		if(model instanceof DecisionTreeDiagram)
-			return new DecisionTreeDiagramTreePart(model);
-
-		if(model instanceof DecisionTreeNode)
-			return new DecisionTreeNodeTreePart(model);
-
-		if(model instanceof NamedElementContainer)
-			return new NamedElementContainerTreePart(model);
-
-		if(model instanceof MethodDefinition)
-			return new MethodDefinitionTreePart(model);
-
-		if(model instanceof NamedType)
-			return new NamedTypeTreePart(model);
-
-		if(model instanceof EnumType)
-			return new EnumTypeTreePart(model);
-
-		if(model instanceof DataType)
-			return new DataTypeTreePart(model);
-
-		if(model instanceof NamedElement)
-			return new NamedElementTreePart(model);
+			part = new DecisionTreeDiagramTreePart(model);
+		else if(model instanceof DecisionTreeNode)
+			part = new DecisionTreeNodeTreePart(model);
+		else if(model instanceof NamedElementContainer)
+			part = new NamedElementContainerTreePart(model);
+		else if(model instanceof MethodDefinition)
+			part = new MethodDefinitionTreePart(model);
+		else if(model instanceof NamedType)
+			part = new NamedTypeTreePart(model);
+		else if(model instanceof EnumType)
+			part =  new EnumTypeTreePart(model);
+		else if(model instanceof DataType)
+			part = new DataTypeTreePart(model);
+		else if(model instanceof NamedElement)
+			part = new NamedElementTreePart(model);
 
 		part.setEditPartFactory(this);
 		part.setModel(model);

@@ -20,7 +20,7 @@ public class DataTypeTreePart extends NamedElementTreePart {
         return a;
     }
     
-    protected String getText() {
+    public String getText() {
         return type.toString();
     }
 }

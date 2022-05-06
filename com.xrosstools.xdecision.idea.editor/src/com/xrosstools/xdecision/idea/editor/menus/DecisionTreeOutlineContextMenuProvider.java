@@ -19,7 +19,7 @@ public class DecisionTreeOutlineContextMenuProvider extends ContextMenuProvider 
     public DecisionTreeOutlineContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
         this.project = project;
         this.diagram = diagram;
-        namedElementContextMenuProvider = new NamedElementContextMenuProvider(project);
+        namedElementContextMenuProvider = new NamedElementContextMenuProvider(project, diagram);
         namedElementContainerProvider = new NamedElementContainerContextMenuProvider(project, diagram);
     }
 

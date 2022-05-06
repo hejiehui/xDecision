@@ -33,7 +33,8 @@ public class DecisionTreeDiagramEditor implements FileEditor, FileEditorManagerL
         try{
             panel = new DecisionTreeDiagramPanel(project, virtualFile);
         }catch(Throwable e) {
-            panel = new JLabel("Failed to load Xross Unit Model File: " + e.toString());
+            panel = new JLabel("Failed to load Xross Decision Model File: " + e.getMessage());
+            e.printStackTrace(System.err);
         }
 
         return panel;

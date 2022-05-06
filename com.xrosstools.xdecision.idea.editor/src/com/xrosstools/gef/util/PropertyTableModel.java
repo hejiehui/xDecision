@@ -44,7 +44,7 @@ public class PropertyTableModel extends AbstractTableModel {
             rows.add(row);
         }
 
-        if(rowByCategory.size() == 1) {
+        if(rowByCategory.size() == 1 && rowByCategory.containsKey(DEFAULT)) {
             internalRows.addAll(rowByCategory.get(DEFAULT));
             // Remove header
             internalRows.remove(0);

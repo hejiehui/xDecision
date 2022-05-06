@@ -18,7 +18,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DecisionTreeNodePart extends EditPart {
-	protected Figure createFigure() {
+    public DecisionTreeNode getDecisionTreeNode() {
+        return (DecisionTreeNode)getModel();
+    }
+    protected List getModelChildren() {
+        List children = new ArrayList();
+        DecisionTreeNode node = getDecisionTreeNode();
+
+        if(node.getNodeExpression() != null)
+            children.add(node.getNodeExpression());
+
+        return children;
+    }
+
+    public void addChildVisual(EditPart childEditPart, int index) {
+        DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
+        Figure childFigure = childEditPart.getFigure();
+
+        figure.setExpressionFigure(childFigure);
+    }
+
+    protected Figure createFigure() {
         return new DecisionTreeNodeFigure();
     }
 
@@ -55,26 +75,17 @@ public class DecisionTreeNodePart extends EditPart {
     }
 
     protected void refreshVisuals() {
-    	DecisionTreeNode node = (DecisionTreeNode) getModel();
+        DecisionTreeNode node = getDecisionTreeNode();
     	DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
 
-		figure.setLocation(node.getLocation());
-		figure.setPreferredSize(node.getSize());
+        figure.setDecision(node.getDecision() == null ? "": node.getDecision().getName());
 
-        String factor;
-    	if(node.getFactorId() == -1)
-    		factor = "";
-    	else
-    		factor = getDiagram().getFactors().get(node.getFactorId()).getFactorName();
-    	figure.setFactor(factor);
-    	
-        String decision;
-    	if(node.getDecisionId() == -1)
-    		decision = "";
-    	else
-    		decision = getDiagram().getDecisions().get(node.getDecisionId());
+        Point loc = node.getLocation();
+        Dimension size = new Dimension(-1, node.getDecisionTreeManager().getDiagram().getNodeHeight());
+        figure.setLocation(node.getLocation());
+        figure.setPreferredSize(size);
 
-    	figure.setDecision(decision);
+        node.setSize(new Dimension(figure.getPreferredSize()));
     }
 
     private DecisionTreeDiagram getDiagram() {

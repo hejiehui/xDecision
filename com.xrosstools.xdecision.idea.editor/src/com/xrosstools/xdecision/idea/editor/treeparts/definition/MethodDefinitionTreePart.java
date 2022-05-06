@@ -3,7 +3,7 @@ package com.xrosstools.xdecision.idea.editor.treeparts.definition;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xrosstools.xdecision.editor.model.definition.MethodDefinition;
+import com.xrosstools.xdecision.idea.editor.model.definition.MethodDefinition;
 
 public class MethodDefinitionTreePart extends NamedElementTreePart {
     private MethodDefinition method;

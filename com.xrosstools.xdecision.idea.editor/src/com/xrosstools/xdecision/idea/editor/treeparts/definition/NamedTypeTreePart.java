@@ -5,7 +5,7 @@ public class NamedTypeTreePart extends NamedElementTreePart {
         super(model);
      }
 
-    protected String getText() {
+    public String getText() {
         return getModel().toString();
     }
 }

@@ -129,7 +129,7 @@ public abstract class EditPart implements PropertyChangeListener {
             figure = createFigure();
             figure.setPart(this);
             figure.setRootPane(context.getContentPane());
-            refreshVisuals();
+//            refreshVisuals();
         }
         return figure;
     }
