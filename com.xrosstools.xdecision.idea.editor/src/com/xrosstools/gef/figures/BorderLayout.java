@@ -46,6 +46,7 @@ public class BorderLayout implements LayoutManager {
             minWHint = -1;
         if (hHint < 0)
             minHHint = -1;
+        
         Insets border = figure.getInsets();
         wHint = Math.max(minWHint, wHint - getWidth(border));
         hHint = Math.max(minHHint, hHint - getHeight(border));
