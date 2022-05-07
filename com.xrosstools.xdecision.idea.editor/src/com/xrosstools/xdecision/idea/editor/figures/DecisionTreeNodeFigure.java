@@ -3,6 +3,7 @@ package com.xrosstools.xdecision.idea.editor.figures;
 import com.xrosstools.gef.figures.*;
 import com.xrosstools.gef.figures.BorderLayout;
 import com.xrosstools.gef.figures.Label;
+import com.xrosstools.gef.figures.LayoutManager;
 
 import java.awt.*;
 
@@ -10,27 +11,27 @@ import java.awt.*;
 public class DecisionTreeNodeFigure extends RoundedRectangle {
     private Label decisionLabel;
     private Figure nodeExpression;
-    private BorderLayout layout;
+    private LayoutManager layout;
 
     public DecisionTreeNodeFigure() {
         setMinSize(new Dimension(100, 50));
-        setLayoutManager(new ToolbarLayout(false, ToolbarLayout.ALIGN_TOPLEFT, 10));
-
-//        layout= new BorderLayout();
-//        setLayoutManager(layout);
-        this.getInsets().set(5, 5, 5, 5);
+        getInsets().set(5, 5, 5, 5);
+        layout= new BorderLayout();
+        setLayoutManager(layout);
 
         //To make sure the minimal width of the node figure
         Figure  widthLine = new Figure();
-        widthLine.setPreferredSize(new Dimension(90, 1));
+        widthLine.setSize(new Dimension(90, 1));
+        widthLine.getInsets().set(5, 5, 5, 5);
         add(widthLine);
-//        layout.setConstraint(widthLine, PositionConstants.TOP);
+        layout.setConstraint(widthLine, PositionConstants.TOP);
 
         decisionLabel = new Label();
         decisionLabel.setLabelAlignment(PositionConstants.CENTER);
-        decisionLabel.setForegroundColor(ColorConstants.black);
+        decisionLabel.setForegroundColor(ColorConstants.gray);
+        decisionLabel.getInsets().set(5, 5, 5, 5);
         add(decisionLabel);
-//        layout.setConstraint(decisionLabel, PositionConstants.CENTER);
+        layout.setConstraint(decisionLabel, PositionConstants.CENTER);
     }
 
     public void setDecision(String decision) {
@@ -41,7 +42,7 @@ public class DecisionTreeNodeFigure extends RoundedRectangle {
     public void setExpressionFigure(Figure nodeExpression) {
         this.nodeExpression = nodeExpression;
         add(nodeExpression);
-//        layout.setConstraint(nodeExpression, PositionConstants.BOTTOM);
+        layout.setConstraint(nodeExpression, PositionConstants.BOTTOM);
         repaint();
     }
 }

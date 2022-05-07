@@ -37,7 +37,7 @@ public class BorderLayout implements LayoutManager {
     }
 
     @Override
-    public Dimension preferredLayoutSize(Figure figure) {
+    public synchronized Dimension preferredLayoutSize(Figure figure) {
         int wHint = -1;
         int hHint = -1;
         int minWHint = 0;
@@ -95,14 +95,17 @@ public class BorderLayout implements LayoutManager {
     }
 
     @Override
-    public void layoutContainer(Figure container) {
-        Rectangle area = container.getClientArea();
+    public synchronized void layoutContainer(Figure container) {
+        Point innerLoc = container.getInnerLocation();
+        Dimension innerSize = container.getInnerSize();
+
+        Rectangle area = new Rectangle(innerLoc, innerSize);
         Rectangle rect = new Rectangle();
         if (top != null && top.isVisible()) {
             Dimension childSize = top.getPreferredSize();
             rect.setLocation(area.x, area.y);
             rect.setSize(childSize);
-            rect.width = area.width;
+//            rect.width = area.width;
             top.setBounds(rect);
             area.y += rect.height + vGap;
             area.height -= rect.height + vGap;
@@ -110,7 +113,7 @@ public class BorderLayout implements LayoutManager {
         if (bottom != null && bottom.isVisible()) {
             Dimension childSize = bottom.getPreferredSize();
             rect.setSize(childSize);
-            rect.width = area.width;
+//            rect.width = area.width;
             rect.setLocation(area.x, (area.y + area.height) - rect.height);
             bottom.setBounds(rect);
             area.height -= rect.height + vGap;
@@ -118,16 +121,18 @@ public class BorderLayout implements LayoutManager {
         if (left != null && left.isVisible()) {
             Dimension childSize = left.getPreferredSize();
             rect.setLocation(area.x, area.y);
-            rect.width = childSize.width;
-            rect.height = Math.max(0, area.height);
+            rect.setSize(childSize);
+//            rect.width = childSize.width;
+//            rect.height = Math.max(0, area.height);
             left.setBounds(rect);
             area.x += rect.width + hGap;
             area.width -= rect.width + hGap;
         }
         if (right != null && right.isVisible()) {
             Dimension childSize = right.getPreferredSize();
-            rect.width = childSize.width;
-            rect.height = Math.max(0, area.height);
+            rect.setSize(childSize);
+//            rect.width = childSize.width;
+//            rect.height = Math.max(0, area.height);
             rect.setLocation((area.x + area.width) - rect.width, area.y);
             right.setBounds(rect);
             area.width -= rect.width + hGap;

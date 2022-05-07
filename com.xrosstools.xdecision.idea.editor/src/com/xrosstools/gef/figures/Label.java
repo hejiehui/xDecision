@@ -23,6 +23,7 @@ public class Label extends Figure {
 
     public void setText(String text) {
         this.text.setText(text);
+        repaint();
     }
 
     public void setIcon(String icon) {

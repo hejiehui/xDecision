@@ -35,11 +35,11 @@ public class VariableExpressionPart extends ExtensibleExpressionPart {
     
     private Color getColor(VariableExpression exp) {
         if(!exp.isValid())
-            return Color.red;
+            return Color.yellow;
         
         if(exp.getReferenceElement() instanceof DecisionTreeFactor)
-            return Color.blue;
+            return Color.lightGray;
 
-        return Color.black;
+        return Color.gray;
     }
 }
