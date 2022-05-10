@@ -43,9 +43,9 @@ public class NamedElementContainerContextMenuProvider extends ContextMenuProvide
         return new InputTextCommandAction(project, createMsg, typeName, "", new CreateElementCommand(diagram,container));
     }
 
-    public JPopupMenu createNamedTypeMenu(NamedElementContainer<NamedElement> container, String[] typeNames) {
+    public JMenu createNamedTypeMenu(NamedElementContainer<NamedElement> container, String[] typeNames) {
         String category = container.getElementType().getTypeName();
-        JPopupMenu createElementMenu = new JPopupMenu(String.format(CREATE_NEW_TEMPLATE_MSG, category));
+        JMenu createElementMenu = new JMenu(String.format(CREATE_NEW_TEMPLATE_MSG, category));
         
         // create element
         for(String typeName: typeNames) {

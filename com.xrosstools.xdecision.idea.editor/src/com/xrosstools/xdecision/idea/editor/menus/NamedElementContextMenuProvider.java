@@ -46,7 +46,7 @@ public class NamedElementContextMenuProvider extends ContextMenuProvider impleme
             return;
         
         String category = element.getElementType().getTypeName();
-        JPopupMenu changeTypeMenu = new JPopupMenu(String.format(CHANGE_TYPE_MSG, category));
+        JMenu changeTypeMenu = new JMenu(String.format(CHANGE_TYPE_MSG, category));
         
         NamedType nameType = (NamedType)element;
         for(String typeName: qualifiedTypes) {

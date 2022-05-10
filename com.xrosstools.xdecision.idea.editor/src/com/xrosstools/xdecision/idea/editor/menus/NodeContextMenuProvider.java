@@ -60,7 +60,7 @@ public class NodeContextMenuProvider extends ContextMenuProvider implements Deci
         String[] typeNames = container.getElementType().getQualifiedDataTypes(diagram);
 
         String category = container.getElementType().getTypeName();
-        JPopupMenu createElementMenu = new JPopupMenu(String.format(CREATE_NEW_TEMPLATE_MSG, category));
+        JMenu createElementMenu = new JMenu(String.format(CREATE_NEW_TEMPLATE_MSG, category));
         
         // create element
         for(String typeName: typeNames) {

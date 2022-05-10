@@ -19,6 +19,7 @@ import com.xrosstools.gef.parts.TreeEditPart;
 import com.xrosstools.gef.util.*;
 import com.xrosstools.xdecision.idea.editor.actions.*;
 import com.xrosstools.xdecision.idea.editor.menus.DecisionTreeContextMenuProvider;
+import com.xrosstools.xdecision.idea.editor.menus.DecisionTreeOutlineContextMenuProvider;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagramFactory;
 import com.xrosstools.xdecision.idea.editor.layout.LayoutAlgorithm;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
@@ -57,6 +58,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
     private DecisionTreeDiagram diagram;
 
     private Point lastHit;
+    private TreeEditPart lastSelectedTreePart;
     private Figure lastSelected;
     private Figure lastHover;
     private Object newModel;
@@ -263,7 +265,18 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
             }
         });
 
-        treeNavigator.setComponentPopupMenu(new JPopupMenu("aaaaa"));
+        treeNavigator.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                if (SwingUtilities.isRightMouseButton(evt)) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeNavigator.getLastSelectedPathComponent();
+                    if(node == null)
+                        return;
+
+                    DecisionTreeOutlineContextMenuProvider menuProvider = new DecisionTreeOutlineContextMenuProvider(project, diagram);
+                    menuProvider.buildContextMenu((TreeEditPart)node.getUserObject()).show(evt.getComponent(), evt.getX(), evt.getY());
+                }
+            }
+        });
         updateVisual();
     }
 
