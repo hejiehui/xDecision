@@ -16,7 +16,7 @@ public abstract class BaseExpressionPart extends EditPart implements PropertyCha
     public void propertyChange(PropertyChangeEvent evt) {
         refresh();
     }
-    
+
     public void activate() {
 //        super.activate();
         ((ExpressionDefinition) getModel()).getListeners().addPropertyChangeListener(this);

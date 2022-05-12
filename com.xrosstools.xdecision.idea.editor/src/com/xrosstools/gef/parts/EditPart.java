@@ -167,10 +167,7 @@ public abstract class EditPart implements PropertyChangeListener {
     }
 
     public boolean isSelectable() {
-        if(model == null || !(model instanceof IPropertySource))
-            return false;
-
-        return ((IPropertySource)model).getPropertyDescriptors().length != 0;
+        return getFigure() != null;
     }
 
     public final EditPart findEditPart(Object model) {

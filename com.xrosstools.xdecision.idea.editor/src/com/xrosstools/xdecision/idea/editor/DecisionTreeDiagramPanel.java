@@ -452,8 +452,9 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
 
     private void updateVisual() {
         if(lastSelected!=null) {
-            PropertyTableModel model = new PropertyTableModel((IPropertySource) lastSelected.getPart().getModel(), this);
-            setModel(model);
+            Object model = lastSelected.getPart().getModel();
+            if(model instanceof IPropertySource)
+                setModel(new PropertyTableModel((IPropertySource)model, this));
         }
 
         int height = unitPanel.getPreferredSize().height;
