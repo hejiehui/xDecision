@@ -63,10 +63,6 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
             getFigure().setLineWidth(1);
     }
 
-    public void propertyChange(PropertyChangeEvent event){
-        refresh();
-    }
-
     protected void refreshVisuals() {
         DecisionTreeNodeConnection conn = (DecisionTreeNodeConnection) getModel();
         condition.setOperator(conn.getOperator());

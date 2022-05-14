@@ -11,9 +11,7 @@ import com.xrosstools.xdecision.idea.editor.parts.DecisionTreePartFactory;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class EditPart implements PropertyChangeListener {
     public static final int SELECTED_NONE = 0;
@@ -72,9 +70,10 @@ public abstract class EditPart implements PropertyChangeListener {
 
     public final void addChildModel(Object child, int index) {
         EditPart childEditPart = factory.createEditPart(this, child);
-        childEditParts.add(childEditPart);
+        childEditParts.add(index, childEditPart);
         childEditPart.build();
         addChildVisual(childEditPart, index);
+        childEditPart.activate();
     }
 
     public final void addConnection(Object conn) {
@@ -94,7 +93,15 @@ public abstract class EditPart implements PropertyChangeListener {
         parent.removeChild(this);
     }
 
+    protected void activate(){}
+
+    protected void deactivate(){}
+
     public void removeChild(EditPart childEditPart) {
+        childEditPart.deactivate();
+        removeChildVisual(childEditPart);
+        childEditPart.setParent(null);
+        childEditParts.remove(childEditPart);
         getFigure().remove(childEditPart.getFigure());
     }
 
@@ -129,7 +136,6 @@ public abstract class EditPart implements PropertyChangeListener {
             figure = createFigure();
             figure.setPart(this);
             figure.setRootPane(context.getContentPane());
-//            refreshVisuals();
         }
         return figure;
     }
@@ -199,7 +205,6 @@ public abstract class EditPart implements PropertyChangeListener {
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        refreshVisuals();
         refresh();
     }
 
@@ -220,6 +225,57 @@ public abstract class EditPart implements PropertyChangeListener {
     }
 
     public void refresh() {
+        refreshVisuals();
+        refreshChildren();
         ((DecisionTreeDiagramPanel)context.getContentPane()).refresh();
+    }
+
+    /**
+     * The following is copy from GEF AbstractEditPart.refreshChildren
+     */
+    private void refreshChildren() {
+        List children = getChildren();
+        int size = children.size();
+        Map modelToEditPart = Collections.emptyMap();
+        int i;
+        if(size > 0) {
+            modelToEditPart = new HashMap(size);
+            for(i = 0; i < size; i++) {
+                EditPart editPart = (EditPart)children.get(i);
+                modelToEditPart.put(editPart.getModel(), editPart);
+            }
+        }
+
+        List modelObjects = getModelChildren();
+        for(i = 0; i < modelObjects.size(); i++) {
+            Object model = modelObjects.get(i);
+            if(i >= children.size() || ((EditPart)children.get(i)).getModel() != model) {
+                EditPart editPart = (EditPart)modelToEditPart.get(model);
+                if(editPart != null) {
+                    reorderChild(editPart, i);
+                } else {
+                    addChildModel(model, i);
+                }
+            }
+        }
+
+        size = children.size();
+        if(i < size) {
+            List trash = new ArrayList(size - i);
+            for(; i < size; i++)
+                trash.add(children.get(i));
+            for(i = 0; i < trash.size(); i++)            {
+                EditPart ep = (EditPart)trash.get(i);
+                removeChild(ep);
+            }
+        }
+    }
+
+    protected void reorderChild(EditPart editpart, int index) {
+        removeChildVisual(editpart);
+        List children = getChildren();
+        children.remove(editpart);
+        children.add(index, editpart);
+        addChildVisual(editpart, index);
     }
 }

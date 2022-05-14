@@ -13,10 +13,6 @@ public abstract class BaseExpressionPart extends EditPart implements PropertyCha
         return new DecisionTreeNodeEditPolicy();
     }
     
-    public void propertyChange(PropertyChangeEvent evt) {
-        refresh();
-    }
-
     public void activate() {
 //        super.activate();
         ((ExpressionDefinition) getModel()).getListeners().addPropertyChangeListener(this);

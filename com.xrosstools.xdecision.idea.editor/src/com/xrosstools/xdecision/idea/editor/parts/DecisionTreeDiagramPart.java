@@ -36,7 +36,7 @@ public class DecisionTreeDiagramPart extends EditPart {
         if (DecisionTreeDiagram.LAYOUT.equals(prop)){
             layout.layout((DecisionTreeDiagram)getModel());
         }
-		refresh();
+		super.propertyChange(evt);
 	}
 
     protected EditPolicy createEditPolicy() {
