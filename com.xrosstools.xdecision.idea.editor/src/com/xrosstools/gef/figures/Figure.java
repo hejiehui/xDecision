@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Figure implements ImageObserver {
+    private static final int SELECTION_GAP = 2;
+    private static final Color SELECTION_LINE_COLOR = Color.lightGray;
+
     private JComponent rootPane;
     private EditPart part;
     private Figure parent;
@@ -362,11 +365,11 @@ public class Figure implements ImageObserver {
     }
 
     public void paintSelection(Graphics graphics) {
-        Stroke s = setLineWidth(graphics, isSelected() ? 2 : 1);
+        Stroke s = setLineWidth(graphics, 2);
 
         Color oldColor = graphics.getColor();
-        graphics.setColor(Color.black);
-        graphics.drawRect(getX(), getY(), getWidth(), getHeight());
+        graphics.setColor(SELECTION_LINE_COLOR);
+        graphics.drawRect(getX() - SELECTION_GAP, getY() - SELECTION_GAP, getWidth() + SELECTION_GAP*3, getHeight() + SELECTION_GAP*3);
         graphics.setColor(oldColor);
 
         restore(graphics, s);

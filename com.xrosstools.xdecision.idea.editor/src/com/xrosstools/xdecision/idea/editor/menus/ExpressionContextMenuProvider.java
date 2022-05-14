@@ -13,6 +13,8 @@ import com.xrosstools.xdecision.idea.editor.model.definition.*;
 import com.xrosstools.xdecision.idea.editor.model.expression.*;
 import com.xrosstools.xdecision.idea.editor.parts.expression.BaseExpressionPart;
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExpressionContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
     private static final String DIALOG = "...";
@@ -37,7 +39,7 @@ public class ExpressionContextMenuProvider extends ContextMenuProvider implement
         }
         
         if(exp instanceof ExtensibleExpression)
-            createChildMenu(menu, part.getParent(), part, true);
+            addAll(menu, createChildMenu(part.getParent(), part, true));
         else
             changeToUserDefinedMenu(menu, part);
 
@@ -67,7 +69,8 @@ public class ExpressionContextMenuProvider extends ContextMenuProvider implement
         }
     }
 
-    private void createChildMenu(JPopupMenu menu, EditPart parentPart, EditPart part, boolean extendChildren) {
+    private List<JMenuItem> createChildMenu(EditPart parentPart, EditPart part, boolean extendChildren) {
+        List<JMenuItem> menuItems = new ArrayList<>();
         if(parentPart.getModel() instanceof VariableExpression) {
             // It is a factor and can be replaced by other factors or constants
             NamedElement refrenceElement = ((VariableExpression)parentPart.getModel()).getReferenceElement();
@@ -75,50 +78,52 @@ public class ExpressionContextMenuProvider extends ContextMenuProvider implement
             DataType parentType = DataType.getType(refrenceElement);
             
             if(parentType == null)
-                return;
+                return menuItems;
 
             if(parentType instanceof ArrayType) {
-                changeToArray(menu, parentPart, part);
+                menuItems.add(changeToArray(parentPart, part));
             }
                 
-            if(parentType instanceof EnumType)
-                buildReplacementMenu(menu, ((EnumType)parentType).getValues(), parentPart, part, extendChildren);
-            
-            buildReplacementMenu(menu, parentType.getFields(), parentPart, part, extendChildren);
-            menu.addSeparator();
-            buildReplacementMenu(menu, parentType.getMethods(), parentPart, part, extendChildren);
+            if(parentType instanceof EnumType) {
+                menuItems.addAll(buildReplacementMenu(((EnumType) parentType).getValues(), parentPart, part, extendChildren));
+                menuItems.add(separator());
+            }
+
+            menuItems.addAll(buildReplacementMenu(parentType.getFields(), parentPart, part, extendChildren));
+            menuItems.add(separator());
+            menuItems.addAll(buildReplacementMenu(parentType.getMethods(), parentPart, part, extendChildren));
         } else {
             // It is a factor and can be replaced by other factors or constants
-            buildReplacementMenu(menu, diagram.getFactors(), parentPart, part, extendChildren);
-            menu.addSeparator();
-            buildReplacementMenu(menu, diagram.getUserDefinedConstants(), parentPart, part, extendChildren);
-            menu.addSeparator();
-            buildReplacementMenu(menu, diagram.getUserDefinedEnums(), parentPart, part, extendChildren);
+            menuItems.addAll(buildReplacementMenu(diagram.getFactors(), parentPart, part, extendChildren));
+            menuItems.add(separator());
+            menuItems.addAll(buildReplacementMenu(diagram.getUserDefinedConstants(), parentPart, part, extendChildren));
+            menuItems.add(separator());
+            menuItems.addAll(buildReplacementMenu(diagram.getUserDefinedEnums(), parentPart, part, extendChildren));
         }
 
-        menu.addSeparator();
+        menuItems.add(separator());
+        return menuItems;
     }
 
-    private void buildReplacementMenu(JPopupMenu menu, NamedElementContainer<?> container, EditPart parentPart, EditPart part, boolean extendChildren) {
+    private List<JMenuItem> buildReplacementMenu(NamedElementContainer<?> container, EditPart parentPart, EditPart part, boolean extendChildren) {
+        List<JMenuItem> menuItems = new ArrayList<>();
         for(NamedElement element: container.getElements()) {
             ExpressionDefinition exp = element instanceof MethodDefinition ? new MethodExpression((MethodDefinition)element): new VariableExpression(element);
-            createIdMenu(menu, element, parentPart, part, extendChildren, exp);
+            menuItems.add(createIdMenu(element, parentPart, part, extendChildren, exp));
         }
+        return menuItems;
     }
     
-    private void createIdMenu(JPopupMenu menu, NamedElement element, EditPart parentPart, EditPart part, boolean extendChildren, ExpressionDefinition childExp) {
+    private JMenuItem createIdMenu(NamedElement element, EditPart parentPart, EditPart part, boolean extendChildren, ExpressionDefinition childExp) {
         String definitionId = element instanceof MethodDefinition ? element.getName() + "()" : element.getName();
         
         ExtensibleExpression model = part == null ? null: (ExtensibleExpression)part.getModel();
         boolean selected = model != null && !(model instanceof ElementExpression) && element == ((VariableExpression) model).getReferenceElement();
         
         if(selected && extendChildren) {
-            JPopupMenu subMenu = new JPopupMenu(definitionId);
-            
-            createChildMenu(subMenu, part, findChild(part, model.getChildExpression()), false);
-            menu.add(subMenu);
+            return createItem(definitionId, createChildMenu(part, findChild(part, model.getChildExpression()), false));
         } else
-            add(menu, definitionId, selected, new ChangeChildCommand(parentPart.getModel(), model, childExp));
+            return createItem(definitionId, selected, new ChangeChildCommand(parentPart.getModel(), model, childExp));
     }
 
     private void add(JPopupMenu menu, String text, boolean checked, Command command) {
@@ -164,11 +169,11 @@ public class ExpressionContextMenuProvider extends ContextMenuProvider implement
         menu.add(createItem(new InputTextCommandAction(project,type.getName() + DIALOG, type.getName(), "", new CreateExpressionCommand(expPart, type))));
     }
 
-    private void changeToArray(JPopupMenu menu, EditPart parentPart, EditPart part) {
+    private JMenuItem changeToArray(EditPart parentPart, EditPart part) {
         VariableExpression exp = (VariableExpression)parentPart.getModel();
         boolean selected = part != null && part.getModel() instanceof ElementExpression;
         Object model = part == null ? null : part.getModel();
-        add(menu, "[index]", selected, new ChangeChildCommand(exp, (ExpressionDefinition)model, new ElementExpression()));
+        return createItem("[index]", selected, new ChangeChildCommand(exp, (ExpressionDefinition)model, new ElementExpression()));
     }
 
     private <T extends NamedElement> void changeToElementMenu(JPopupMenu menu, EditPart expPart, NamedElementContainer<T> container) {
