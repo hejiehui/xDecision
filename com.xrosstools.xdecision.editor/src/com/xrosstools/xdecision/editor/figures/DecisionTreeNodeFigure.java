@@ -32,6 +32,15 @@ public class DecisionTreeNodeFigure extends RoundedRectangle {
         decisionLabel.setForegroundColor(ColorConstants.black);
         add(decisionLabel);
         layout.setConstraint(decisionLabel, PositionConstants.CENTER);
+        
+        Label left = new Label("left");
+        add(left);
+        layout.setConstraint(left, PositionConstants.LEFT);
+
+        Label right = new Label("right");
+        add(right);
+        layout.setConstraint(right, PositionConstants.RIGHT);
+
     }
 
     public Rectangle getTextBounds() {

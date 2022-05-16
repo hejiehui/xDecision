@@ -13,7 +13,6 @@ public class BranchConditionFigure extends Figure {
     private BorderLayout layout= new BorderLayout();
 
     public BranchConditionFigure() {
-        layout= new BorderLayout();
         setLayoutManager(layout);
         this.getInsets().set(5, 5, 5, 5);
 
@@ -21,7 +20,7 @@ public class BranchConditionFigure extends Figure {
         operatorFigure.setLabelAlignment(PositionConstants.RIGHT);
         operatorFigure.setForegroundColor(ColorConstants.black);
         add(operatorFigure);
-        setConstraint(operatorFigure, PositionConstants.LEFT);
+        setConstraint(operatorFigure, PositionConstants.RIGHT);
 
         widthLine = new Figure();
         widthLine.setPreferredSize(new Dimension(10, 10));
@@ -33,7 +32,7 @@ public class BranchConditionFigure extends Figure {
     //first add then remove will be called
     public void setExpressionFigure(Figure expressionFigure) {
         add(expressionFigure);
-        setConstraint(expressionFigure, PositionConstants.RIGHT);
+        setConstraint(expressionFigure, PositionConstants.LEFT);
     }
 
     public void setOperator(ConditionOperator operator) {

@@ -106,7 +106,7 @@ public class BorderLayout implements LayoutManager {
             Dimension childSize = top.getPreferredSize();
             rect.setLocation(area.x, area.y);
             rect.setSize(childSize);
-//            rect.width = area.width;
+            rect.width = area.width;
             top.setBounds(rect);
             area.y += rect.height + vGap;
             area.height -= rect.height + vGap;
@@ -114,7 +114,7 @@ public class BorderLayout implements LayoutManager {
         if (bottom != null && bottom.isVisible()) {
             Dimension childSize = bottom.getPreferredSize();
             rect.setSize(childSize);
-//            rect.width = area.width;
+            rect.width = area.width;
             rect.setLocation(area.x, (area.y + area.height) - rect.height);
             bottom.setBounds(rect);
             area.height -= rect.height + vGap;
@@ -122,18 +122,16 @@ public class BorderLayout implements LayoutManager {
         if (left != null && left.isVisible()) {
             Dimension childSize = left.getPreferredSize();
             rect.setLocation(area.x, area.y);
-            rect.setSize(childSize);
-//            rect.width = childSize.width;
-//            rect.height = Math.max(0, area.height);
+            rect.width = childSize.width;
+            rect.height = Math.max(0, area.height);
             left.setBounds(rect);
             area.x += rect.width + hGap;
             area.width -= rect.width + hGap;
         }
         if (right != null && right.isVisible()) {
             Dimension childSize = right.getPreferredSize();
-            rect.setSize(childSize);
-//            rect.width = childSize.width;
-//            rect.height = Math.max(0, area.height);
+            rect.width = childSize.width;
+            rect.height = Math.max(0, area.height);
             rect.setLocation((area.x + area.width) - rect.width, area.y);
             right.setBounds(rect);
             area.width -= rect.width + hGap;
