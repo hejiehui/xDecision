@@ -1,6 +1,5 @@
 package com.xrosstools.gef.actions;
 
-import com.xrosstools.gef.actions.Action;
 import com.xrosstools.gef.commands.Command;
 
 public class CommandAction extends Action {

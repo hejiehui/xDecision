@@ -13,6 +13,7 @@ import com.xrosstools.xdecision.idea.editor.model.definition.*;
 import com.xrosstools.xdecision.idea.editor.model.expression.*;
 import com.xrosstools.xdecision.idea.editor.parts.expression.BaseExpressionPart;
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,8 @@ public class ExpressionContextMenuProvider extends ContextMenuProvider implement
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public ExpressionContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public ExpressionContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+        super(listener);
         this.project = project;
         this.diagram = diagram;
     }

@@ -6,10 +6,17 @@ import com.xrosstools.gef.commands.Command;
 import com.xrosstools.gef.parts.EditPart;
 
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 public class ContextMenuProvider {
     private static final JMenuItem SEPARATOR = new JMenuItem();
+
+    private PropertyChangeListener listener;
+    public ContextMenuProvider(PropertyChangeListener listener) {
+        this.listener = listener;
+    }
+
     public void addSeparator(JPopupMenu menu) {
         menu.addSeparator();
     }
@@ -42,5 +49,15 @@ public class ContextMenuProvider {
                 menu.addSeparator();
             else
                 menu.add(item);
+    }
+
+    public void attachListener(MenuElement menuElement) {
+        if(menuElement.getSubElements() != null && menuElement.getSubElements().length > 0) {
+            for(MenuElement item: menuElement.getSubElements()){
+                attachListener(item);
+            }
+        }else {
+            ((Action) ((JMenuItem) menuElement).getActionListeners()[0]).setListener(listener);
+        }
     }
 }

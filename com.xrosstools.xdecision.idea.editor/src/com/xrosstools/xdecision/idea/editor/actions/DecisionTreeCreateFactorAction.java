@@ -11,18 +11,22 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.expression.VariableExpression;
 
+import java.beans.PropertyChangeListener;
+
 public class DecisionTreeCreateFactorAction extends BaseDialogAction implements DecisionTreeActionConstants, DecisionTreeMessages{
 	private DecisionTreeDiagram diagram;
     private DecisionTreeNode node;
 	private String typeName;
 
-    public DecisionTreeCreateFactorAction(Project project, DecisionTreeDiagram diagram){
+    public DecisionTreeCreateFactorAction(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener){
 		super(project, CREATE_NEW_FACTOR_MSG, "Factor", "new factor");
 		this.diagram = diagram;
+		setListener(listener);
 	}
 
 	public DecisionTreeCreateFactorAction(Project project, DecisionTreeDiagram diagram, DecisionTreeNode node, String typeName){
-		this(project, diagram);
+        super(project, CREATE_NEW_FACTOR_MSG, "Factor", "new factor");
+        this.diagram = diagram;
 		this.node = node;
 		this.typeName = typeName;
 		setText(typeName);

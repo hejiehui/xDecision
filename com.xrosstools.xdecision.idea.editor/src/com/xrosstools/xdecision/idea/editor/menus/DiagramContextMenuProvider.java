@@ -7,17 +7,19 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeDiagramPart;
 
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
 
 public class DiagramContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
     private NamedElementContainerContextMenuProvider elementContainerMenuProvider;
 
-    public DiagramContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public DiagramContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+        super(listener);
         this.project = project;
         this.diagram = diagram;
 
-        elementContainerMenuProvider = new NamedElementContainerContextMenuProvider(project, diagram);
+        elementContainerMenuProvider = new NamedElementContainerContextMenuProvider(project, diagram, listener);
     }
 
     public void buildContextMenu(JPopupMenu menu, DecisionTreeDiagramPart part) {

@@ -13,27 +13,22 @@ import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeNodePart;
 import com.xrosstools.xdecision.idea.editor.parts.expression.BaseExpressionPart;
 
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
 
 public class DecisionTreeContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
-    private Project project;
-    private DecisionTreeDiagram diagram;
-    private VirtualFile virtualFile;
-
     private NodeContextMenuProvider nodeMenuProvider;
 	private ConnectionContextMenuProvider connMenuProvider;
 	private ExpressionContextMenuProvider expMenuProvider;
     private DiagramContextMenuProvider diagramCMenuProvider;
 
 
-    public DecisionTreeContextMenuProvider(Project project, VirtualFile virtualFile, DecisionTreeDiagram diagram) {
-        this.project = project;
-        this.diagram = diagram;
-        this.virtualFile = virtualFile;
+    public DecisionTreeContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+        super((listener));
 
-        nodeMenuProvider = new NodeContextMenuProvider(project, diagram);
-        expMenuProvider = new ExpressionContextMenuProvider(project, diagram);
-        connMenuProvider = new ConnectionContextMenuProvider(project, diagram);
-        diagramCMenuProvider = new DiagramContextMenuProvider(project, diagram);
+        nodeMenuProvider = new NodeContextMenuProvider(project, diagram, listener);
+        expMenuProvider = new ExpressionContextMenuProvider(project, diagram, listener);
+        connMenuProvider = new ConnectionContextMenuProvider(project, diagram, listener);
+        diagramCMenuProvider = new DiagramContextMenuProvider(project, diagram, listener);
     }
 
     public JPopupMenu buildContextMenu(EditPart part) {
@@ -49,6 +44,7 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
             diagramCMenuProvider.buildContextMenu(menu, (DecisionTreeDiagramPart)part);
         }
 
+        attachListener(menu);
         return menu;
     }
 }

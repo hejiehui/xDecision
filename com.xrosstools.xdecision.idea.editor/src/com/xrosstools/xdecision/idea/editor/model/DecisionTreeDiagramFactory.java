@@ -59,7 +59,6 @@ public class DecisionTreeDiagramFactory {
 	private static final String NODES = "nodes";
 	private static final String NODE = "node";
 	private static final String DECISION_INDEX = "decision_index";
-	private static final String VALUE_INDEX = "value_index";
 	private static final String EXPRESSION = "expression";
 
 	private static final String PATH = "path";
@@ -232,7 +231,6 @@ public class DecisionTreeDiagramFactory {
 
 			DecisionTreeNode child = nodes.get(getIntAttribute(pathNode, NODE_INDEX));
 			DecisionTreeNodeConnection conn = new DecisionTreeNodeConnection(node, child);
-			conn.setValueId(getIntAttribute(pathNode, VALUE_INDEX, -1));
 			conn.setOperator(ConditionOperator.locate(getAttribute(pathNode, OPERATOR)));
 			conn.parseExpression(parser, getAttribute(pathNode, EXPRESSION));
 		}
@@ -448,7 +446,6 @@ public class DecisionTreeDiagramFactory {
 		for (DecisionTreeNodeConnection conn : node.getOutputs()) {
 			Element pathNode = doc.createElement(PATH);
 			pathNode.setAttribute(NODE_INDEX, String.valueOf(indexOf(nodes, conn.getChild())));
-			pathNode.setAttribute(VALUE_INDEX, String.valueOf(conn.getValueId()));
 
 			if(conn.getOperator() != null)
 				pathNode.setAttribute(OPERATOR, String.valueOf(conn.getOperator().getText()));

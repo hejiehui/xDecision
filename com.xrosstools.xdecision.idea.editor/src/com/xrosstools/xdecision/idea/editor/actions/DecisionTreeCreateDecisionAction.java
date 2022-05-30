@@ -9,22 +9,26 @@ import com.xrosstools.xdecision.idea.editor.commands.definition.CreateElementCom
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 
+import java.beans.PropertyChangeListener;
+
 public class DecisionTreeCreateDecisionAction extends BaseDialogAction implements DecisionTreeActionConstants, DecisionTreeMessages{
 	private DecisionTreeDiagram diagram;
     private DecisionTreeNode node;
-	public DecisionTreeCreateDecisionAction(Project project, DecisionTreeDiagram diagram){
+	public DecisionTreeCreateDecisionAction(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener){
 		super(project, CREATE_NEW_DECISION_MSG, "Decision", "new decision");
 		this.diagram = diagram;
+		setListener(listener);
 	}
 
     public DecisionTreeCreateDecisionAction(Project project, DecisionTreeDiagram diagram, DecisionTreeNode node){
-	    this(project, diagram);
+        super(project, CREATE_NEW_DECISION_MSG, "Decision", "new decision");
+        this.diagram = diagram;
 	    this.node = node;
     }
 
 	@Override
 	protected Command createCommand(String value) {
-        CreateElementCommand createCmd = new CreateElementCommand(diagram, node.getDecisionTreeManager().getDecisions());
+        CreateElementCommand createCmd = new CreateElementCommand(diagram, diagram.getDecisions());
 
         if(node == null)
             return createCmd;

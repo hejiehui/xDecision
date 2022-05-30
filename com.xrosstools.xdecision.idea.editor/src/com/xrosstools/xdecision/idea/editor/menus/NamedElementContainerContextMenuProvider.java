@@ -13,12 +13,14 @@ import com.xrosstools.xdecision.idea.editor.model.definition.NamedElementContain
 import com.xrosstools.xdecision.idea.editor.treeparts.definition.NamedElementContainerTreePart;
 
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
 
 public class NamedElementContainerContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public NamedElementContainerContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public NamedElementContainerContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+        super(listener);
         this.project = project;
         this.diagram = diagram;
     }

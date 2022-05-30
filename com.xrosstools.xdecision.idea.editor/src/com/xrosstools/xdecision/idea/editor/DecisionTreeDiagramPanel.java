@@ -56,6 +56,8 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
 
     private DecisionTreeDiagramFactory factory = new DecisionTreeDiagramFactory();
     private DecisionTreeDiagram diagram;
+    private DecisionTreeContextMenuProvider builder;
+    private DecisionTreeOutlineContextMenuProvider menuProvider;
 
     private Point lastHit;
     private TreeEditPart lastSelectedTreePart;
@@ -68,8 +70,8 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         this.project = project;
         this.virtualFile = virtualFile;
         diagram = factory.getFromXML(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(virtualFile.getInputStream()));
-//        diagram.setProject(project);
-//        diagram.setFilePath(virtualFile);
+        builder = new DecisionTreeContextMenuProvider(project, diagram, this);
+        menuProvider = new DecisionTreeOutlineContextMenuProvider(project, diagram, this);
         createVisual();
         registerListener();
         build();
@@ -123,8 +125,8 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         palette.add(createConnectionButton());
         palette.add(createNodeButton());
 
-        palette.add(createPaletteButton(new DecisionTreeCreateDecisionAction(project, diagram), CREATE_NEW_DECISION, CREATE_NEW_DECISION_MSG));
-        palette.add(createPaletteButton(new DecisionTreeCreateFactorAction(project, diagram), CREATE_NEW_FACTOR, CREATE_NEW_FACTOR_MSG));
+        palette.add(createPaletteButton(new DecisionTreeCreateDecisionAction(project, diagram, this), CREATE_NEW_DECISION, CREATE_NEW_DECISION_MSG));
+        palette.add(createPaletteButton(new DecisionTreeCreateFactorAction(project, diagram, this), CREATE_NEW_FACTOR, CREATE_NEW_FACTOR_MSG));
         palette.add(createPaletteButton(new DecisionTreeCodeGenAction(virtualFile, diagram), GEN_TEST_CODE, GEN_JUNIT_TEST_CODE_MSG));
 
         return palette;
@@ -134,21 +136,15 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         JToolBar  toolbar = new JToolBar ();
         toolbar.setFloatable(false);
 
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, true, 1), ALIGN_BOTTOM, ALIGN_BOTTOM_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, true, 0.5f), ALIGN_MIDDLE, ALIGN_MIDDLE_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, true, 0), ALIGN_TOP, ALIGN_TOP_MSG));
+        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, true, 1, this), ALIGN_BOTTOM, ALIGN_BOTTOM_MSG));
+        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, true, 0.5f, this), ALIGN_MIDDLE, ALIGN_MIDDLE_MSG));
+        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, true, 0, this), ALIGN_TOP, ALIGN_TOP_MSG));
         toolbar.addSeparator();
 
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 0), ALIGN_LEFT, ALIGN_LEFT_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 0.5f), ALIGN_CENTER, ALIGN_CENTER_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 1), ALIGN_RIGHT, ALIGN_RIGHT_MSG));
+        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 0, this), ALIGN_LEFT, ALIGN_LEFT_MSG));
+        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 0.5f, this), ALIGN_CENTER, ALIGN_CENTER_MSG));
+        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 1, this), ALIGN_RIGHT, ALIGN_RIGHT_MSG));
         toolbar.addSeparator();
-
-//        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, false, true), INCREASE_NODE_HEIGHT, INCREASE_NODE_HEIGHT_MSG));
-//        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, false, false),DECREASE_NODE_HEIGHT, DECREASE_NODE_HEIGHT_MSG));
-//
-//        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, true, true), INCREASE_NODE_WIDTH, INCREASE_NODE_WIDTH_MSG));
-//        toolbar.add(createToolbarButton(new DecisionTreeResizeAction(diagram, true, true, false), DECREASE_NODE_WIDTH, DECREASE_NODE_WIDTH_MSG));
 
         return toolbar;
     }
@@ -272,7 +268,6 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
                     if(node == null)
                         return;
 
-                    DecisionTreeOutlineContextMenuProvider menuProvider = new DecisionTreeOutlineContextMenuProvider(project, diagram);
                     menuProvider.buildContextMenu((TreeEditPart)node.getUserObject()).show(evt.getComponent(), evt.getX(), evt.getY());
                 }
             }
@@ -419,7 +414,6 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
     }
 
     private void showContexMenu(int x, int y) {
-        DecisionTreeContextMenuProvider builder = new DecisionTreeContextMenuProvider(project, virtualFile, diagram);
         builder.buildContextMenu(lastSelected.getPart()).show(unitPanel, x, y);
     }
 
@@ -445,7 +439,6 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
         if(action == null)
             return;
 
-        action.run();
         root.execute(action);
         save();
     }

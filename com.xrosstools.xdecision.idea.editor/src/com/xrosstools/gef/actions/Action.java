@@ -1,13 +1,14 @@
 package com.xrosstools.gef.actions;
 
 import com.xrosstools.gef.commands.Command;
+import com.xrosstools.gef.commands.CommandListener;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 
-public abstract class Action implements ActionListener {
+public abstract class Action implements ActionListener, CommandListener {
     private String text;
     private boolean checked;
     private PropertyChangeListener listener;
@@ -42,10 +43,24 @@ public abstract class Action implements ActionListener {
         if(c == null)
             return;
 
-        c.execute();
+        c.setListener(this);
+        c.run();
+    }
+
+    public abstract Command createCommand();
+
+    private void postProcess() {
         if(listener != null)
             listener.propertyChange(null);
     }
 
-    public abstract Command createCommand();
+    public void postExecute() {
+        postProcess();
+    }
+    public void postRedo() {
+        postProcess();
+    }
+    public void postUndo() {
+        postProcess();
+    }
 }

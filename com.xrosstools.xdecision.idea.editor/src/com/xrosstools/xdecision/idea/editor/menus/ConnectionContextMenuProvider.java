@@ -10,12 +10,14 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeNodeConnectionPart;
 
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
 
 public class ConnectionContextMenuProvider extends ContextMenuProvider {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public ConnectionContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public ConnectionContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+        super(listener);
         this.project = project;
         this.diagram = diagram;
     }

@@ -18,12 +18,14 @@ import com.xrosstools.xdecision.idea.editor.model.expression.VariableExpression;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeNodePart;
 
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
 
 public class NodeContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public NodeContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public NodeContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+        super(listener);
         this.project = project;
         this.diagram = diagram;
     }

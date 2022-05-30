@@ -15,12 +15,14 @@ import com.xrosstools.xdecision.idea.editor.model.definition.NamedType;
 import com.xrosstools.xdecision.idea.editor.treeparts.definition.NamedElementTreePart;
 
 import javax.swing.*;
+import java.beans.PropertyChangeListener;
 
 public class NamedElementContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public NamedElementContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public NamedElementContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+        super(listener);
         this.project = project;
         this.diagram = diagram;
     }

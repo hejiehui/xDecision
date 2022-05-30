@@ -35,7 +35,7 @@ public abstract class EditPart implements PropertyChangeListener {
     protected void refreshVisuals() {}
 
     public void execute(Command cmd) {
-        cmd.execute();
+        cmd.run();
         getRoot().build();
     }
 
