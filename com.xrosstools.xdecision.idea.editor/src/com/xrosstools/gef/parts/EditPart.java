@@ -1,13 +1,12 @@
 package com.xrosstools.gef.parts;
 
+import com.xrosstools.gef.EditorPanel;
 import com.xrosstools.gef.commands.Command;
 import com.xrosstools.gef.figures.AbstractAnchor;
 import com.xrosstools.gef.figures.ChopboxAnchor;
 import com.xrosstools.gef.figures.Connection;
 import com.xrosstools.gef.figures.Figure;
 import com.xrosstools.gef.util.IPropertySource;
-import com.xrosstools.xdecision.idea.editor.DecisionTreeDiagramPanel;
-import com.xrosstools.xdecision.idea.editor.parts.DecisionTreePartFactory;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -113,7 +112,7 @@ public abstract class EditPart implements PropertyChangeListener {
         getFigure().getConnection().remove(connectionEditPart.getFigure());
     }
 
-    public final void setEditPartFactory(DecisionTreePartFactory factory) {
+    public final void setEditPartFactory(EditPartFactory factory) {
         this.factory = factory;
     }
 
@@ -227,7 +226,7 @@ public abstract class EditPart implements PropertyChangeListener {
     public void refresh() {
         refreshVisuals();
         refreshChildren();
-        ((DecisionTreeDiagramPanel)context.getContentPane()).refresh();
+        ((EditorPanel<IPropertySource>)context.getContentPane()).refresh();
     }
 
     /**

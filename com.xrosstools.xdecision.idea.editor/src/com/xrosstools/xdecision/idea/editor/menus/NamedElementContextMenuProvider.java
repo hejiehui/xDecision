@@ -1,7 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.gef.ContextMenuProvider;
 import com.xrosstools.gef.actions.InputTextCommandAction;
 import com.xrosstools.gef.actions.CommandAction;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
@@ -17,12 +16,13 @@ import com.xrosstools.xdecision.idea.editor.treeparts.definition.NamedElementTre
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
-public class NamedElementContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
+import static com.xrosstools.gef.ContextMenuProvider.*;
+
+public class NamedElementContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
     public NamedElementContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
-        super(listener);
         this.project = project;
         this.diagram = diagram;
     }

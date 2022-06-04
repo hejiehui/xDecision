@@ -25,12 +25,13 @@ public class DecisionTreeOutlineContextMenuProvider extends ContextMenuProvider 
         namedElementContainerProvider = new NamedElementContainerContextMenuProvider(project, diagram, listener);
     }
 
-    public JPopupMenu buildContextMenu(TreeEditPart selected) {
+    public JPopupMenu buildContextMenu(Object selected) {
+        TreeEditPart editPart = (TreeEditPart )selected;
         JPopupMenu menu = new JPopupMenu();
-        if(selected instanceof NamedElementContainerTreePart) {
-            namedElementContainerProvider.buildContextMenu(menu, (NamedElementContainerTreePart)selected);
-        }else if(selected instanceof NamedElementTreePart) {
-            namedElementContextMenuProvider.buildContextMenu(menu, (NamedElementTreePart)selected);
+        if(editPart instanceof NamedElementContainerTreePart) {
+            namedElementContainerProvider.buildContextMenu(menu, (NamedElementContainerTreePart)editPart);
+        }else if(editPart instanceof NamedElementTreePart) {
+            namedElementContextMenuProvider.buildContextMenu(menu, (NamedElementTreePart)editPart);
         }
         return menu;
     }

@@ -31,7 +31,8 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
         diagramCMenuProvider = new DiagramContextMenuProvider(project, diagram, listener);
     }
 
-    public JPopupMenu buildContextMenu(EditPart part) {
+    public JPopupMenu buildContextMenu(Object selected) {
+        EditPart part = (EditPart)selected;
         // Add standard action groups to the menu
         JPopupMenu menu = new JPopupMenu();
         if(part instanceof DecisionTreeNodeConnectionPart) {

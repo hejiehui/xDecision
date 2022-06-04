@@ -1,7 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.gef.ContextMenuProvider;
+import static com.xrosstools.gef.ContextMenuProvider.*;
+
 import com.xrosstools.gef.actions.CommandAction;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeCreateDecisionAction;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeCreateFactorAction;
@@ -20,12 +21,11 @@ import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeNodePart;
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
-public class NodeContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
+public class NodeContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
     public NodeContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
-        super(listener);
         this.project = project;
         this.diagram = diagram;
     }

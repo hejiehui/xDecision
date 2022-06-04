@@ -1,7 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.gef.ContextMenuProvider;
 import com.xrosstools.gef.actions.CommandAction;
 import com.xrosstools.xdecision.idea.editor.commands.expression.ChangeConditionOperatorCommand;
 import com.xrosstools.xdecision.idea.editor.model.ConditionOperator;
@@ -12,12 +11,14 @@ import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeNodeConnectionPart
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
-public class ConnectionContextMenuProvider extends ContextMenuProvider {
+import static com.xrosstools.gef.ContextMenuProvider.*;
+
+
+public class ConnectionContextMenuProvider {
     private Project project;
     private DecisionTreeDiagram diagram;
 
     public ConnectionContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
-        super(listener);
         this.project = project;
         this.diagram = diagram;
     }

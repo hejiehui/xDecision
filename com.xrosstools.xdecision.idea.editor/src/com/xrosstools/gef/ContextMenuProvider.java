@@ -4,46 +4,49 @@ import com.xrosstools.gef.actions.Action;
 import com.xrosstools.gef.actions.CommandAction;
 import com.xrosstools.gef.commands.Command;
 import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.TreeEditPart;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-public class ContextMenuProvider {
+public abstract class ContextMenuProvider {
     private static final JMenuItem SEPARATOR = new JMenuItem();
 
     private PropertyChangeListener listener;
+
+    public abstract JPopupMenu buildContextMenu(Object selected);
     public ContextMenuProvider(PropertyChangeListener listener) {
         this.listener = listener;
     }
 
-    public void addSeparator(JPopupMenu menu) {
+    public static void addSeparator(JPopupMenu menu) {
         menu.addSeparator();
     }
 
-    public JMenuItem separator() {
+    public static JMenuItem separator() {
         return SEPARATOR;
     }
 
-    public JMenuItem createItem(Action action) {
+    public static JMenuItem createItem(Action action) {
         JMenuItem item = new JMenuItem(action.getText());
         item.addActionListener(action);
         item.setSelected(action.isChecked());
         return item;
     }
 
-    public JMenuItem createItem(String text, boolean checked, Command command) {
+    public static JMenuItem createItem(String text, boolean checked, Command command) {
         return createItem(new CommandAction(text, checked, command));
     }
 
-    public JMenuItem createItem(String text, List<JMenuItem> items) {
+    public static JMenuItem createItem(String text, List<JMenuItem> items) {
         JMenu menu = new JMenu(text);
         for(JMenuItem item: items)
             menu.add(item);
         return menu;
     }
 
-    public void addAll(JPopupMenu menu, List<JMenuItem> items) {
+    public static void addAll(JPopupMenu menu, List<JMenuItem> items) {
         for(JMenuItem item: items)
             if(item == SEPARATOR)
                 menu.addSeparator();
