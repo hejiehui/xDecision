@@ -60,7 +60,8 @@ public abstract class ContextMenuProvider {
                 attachListener(item);
             }
         }else {
-            ((Action) ((JMenuItem) menuElement).getActionListeners()[0]).setListener(listener);
+            if(((JMenuItem) menuElement).getActionListeners().length != 0)
+                ((Action) ((JMenuItem) menuElement).getActionListeners()[0]).setListener(listener);
         }
     }
 }

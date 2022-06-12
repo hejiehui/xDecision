@@ -13,21 +13,21 @@ public abstract class Command implements Runnable {
         if(!canExecute())
             return;
         execute();
-        listener.postExecute();
+        if(listener != null) listener.postExecute();
     }
 
     public void _undo() {
         if(!canUndo())
             return;
         undo();
-        listener.postUndo();
+        if(listener != null) listener.postUndo();
     }
 
     public void _redo() {
         if(!canRedo())
             return;
         redo();
-        listener.postRedo();
+        if(listener != null) listener.postRedo();
     }
 
     public boolean canExecute() {

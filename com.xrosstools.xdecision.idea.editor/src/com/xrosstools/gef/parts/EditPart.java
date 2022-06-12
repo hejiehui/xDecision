@@ -29,7 +29,9 @@ public abstract class EditPart implements PropertyChangeListener {
     private EditPolicy editPolicy;
 
     protected abstract Figure createFigure();
-    protected abstract EditPolicy createEditPolicy();
+    protected EditPolicy createEditPolicy() {
+        return new EditPolicy();
+    }
 
     protected void refreshVisuals() {}
 
