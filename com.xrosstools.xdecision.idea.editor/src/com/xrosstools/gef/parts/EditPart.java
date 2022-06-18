@@ -10,6 +10,7 @@ import com.xrosstools.gef.util.IPropertySource;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 public abstract class EditPart implements PropertyChangeListener {
@@ -160,7 +161,9 @@ public abstract class EditPart implements PropertyChangeListener {
     public final void setModel(Object model) {
         this.model = model;
         if(model instanceof IPropertySource) {
-            ((IPropertySource)model).getListeners().addPropertyChangeListener(this);
+            PropertyChangeSupport support = ((IPropertySource)model).getListeners();
+            support.removePropertyChangeListener(this);
+            support.addPropertyChangeListener(this);
         }
     }
 
@@ -226,8 +229,8 @@ public abstract class EditPart implements PropertyChangeListener {
     }
 
     public void refresh() {
-        refreshVisuals();
         refreshChildren();
+        refreshVisuals();
         ((EditorPanel<IPropertySource>)context.getContentPane()).refresh();
     }
 

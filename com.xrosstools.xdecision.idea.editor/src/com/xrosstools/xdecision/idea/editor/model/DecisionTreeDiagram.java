@@ -266,6 +266,6 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 	}
 
 	public void fireLayoutChange(){
-		listeners.firePropertyChange(LAYOUT, null, null);
+		listeners.firePropertyChange(LAYOUT, -1, 0);
 	}
 }

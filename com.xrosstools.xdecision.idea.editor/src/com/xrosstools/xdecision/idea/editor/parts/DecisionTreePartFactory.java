@@ -39,9 +39,6 @@ public class DecisionTreePartFactory implements EditPartFactory {
 		else if(model instanceof ElementExpression)
 			part = new ElementExpressionPart();
 
-		part.setModel(model);
-
-
         part.setEditPartFactory(this);
         part.setModel(model);
         part.setParent(parent);

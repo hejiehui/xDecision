@@ -167,19 +167,15 @@ public class BorderLayout implements LayoutManager {
             case 2 : // '\002'
                 center = child;
                 break;
-
             case 8 : // '\b'
                 top = child;
                 break;
-
             case 32 : // ' '
                 bottom = child;
                 break;
-
             case 4 : // '\004'
                 right = child;
                 break;
-
             case 1 : // '\001'
                 left = child;
                 break;

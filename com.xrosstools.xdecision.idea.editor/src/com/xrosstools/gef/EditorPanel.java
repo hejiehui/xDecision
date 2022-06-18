@@ -208,7 +208,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
     }
 
     public void rebuild() {
-        build();
+        root.refresh();
     }
 
     private void updateTooltip(Point location) {

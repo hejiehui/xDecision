@@ -4,7 +4,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.xrosstools.gef.ContextMenuProvider;
-import com.xrosstools.gef.EditorPanel;
 import com.xrosstools.gef.PanelContentProvider;
 import com.xrosstools.gef.parts.EditContext;
 import com.xrosstools.gef.parts.EditPartFactory;
