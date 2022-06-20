@@ -328,13 +328,19 @@ public class Figure implements ImageObserver {
 
     public  void add(Figure child, int index) {
         child.setParent(this);
-        components.add(index, child);
+        if(child instanceof Connection)
+            connections.add(index, (Connection)child);
+        else
+            components.add(index, child);
         child.setRootPane(rootPane);
 //        layout();
     }
 
     public  void remove(Figure child) {
-        components.remove(child);
+        if(child instanceof Connection)
+            connections.remove(child);
+        else
+            components.remove(child);
         layout();
     }
 

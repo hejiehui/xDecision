@@ -4,7 +4,6 @@ import com.xrosstools.gef.EditorPanel;
 import com.xrosstools.gef.commands.Command;
 import com.xrosstools.gef.figures.AbstractAnchor;
 import com.xrosstools.gef.figures.ChopboxAnchor;
-import com.xrosstools.gef.figures.Connection;
 import com.xrosstools.gef.figures.Figure;
 import com.xrosstools.gef.util.IPropertySource;
 
@@ -24,6 +23,8 @@ public abstract class EditPart implements PropertyChangeListener {
     private int flags;
     private EditPart parent;
     private List<EditPart> childEditParts = new ArrayList<>();
+    private List<ConnectionEditPart> sourceConnEditParts = new ArrayList<>();
+    private List<ConnectionEditPart> targteConnEditParts = new ArrayList<>();
     private int selected;
 
     private EditPartFactory factory;
@@ -38,7 +39,7 @@ public abstract class EditPart implements PropertyChangeListener {
 
     public void execute(Command cmd) {
         cmd.run();
-        getRoot().build();
+        getRoot().refresh();
     }
 
     /**
@@ -54,8 +55,16 @@ public abstract class EditPart implements PropertyChangeListener {
         return childEditParts;
     }
 
+    public List<ConnectionEditPart> getSourceConnections() {
+        return sourceConnEditParts;
+    }
+
     public List getModelSourceConnections() {
         return Collections.EMPTY_LIST;
+    }
+
+    public List<ConnectionEditPart> getTargetConnections() {
+        return targteConnEditParts;
     }
 
     public List getModelTargetConnections() {
@@ -70,20 +79,29 @@ public abstract class EditPart implements PropertyChangeListener {
         getFigure().remove(childEditPart.getFigure());
     }
 
-    public final void addChildModel(Object child, int index) {
+    public final void addChildModel(List parts, Object child, int index) {
         EditPart childEditPart = factory.createEditPart(this, child);
-        childEditParts.add(index, childEditPart);
-        childEditPart.build();
+        parts.add(index, childEditPart);
         addChildVisual(childEditPart, index);
+        childEditPart.addNotify();
         childEditPart.activate();
     }
 
-    public final void addConnection(Object conn) {
-        ConnectionEditPart connPart = (ConnectionEditPart)factory.createEditPart(this, conn);
-        Connection connFigure = (Connection)connPart.getFigure();
-        connFigure.setParent(getFigure());
-        getFigure().getConnection().add(connFigure);
+    public void addNotify() {
+        getFigure();
+        refresh();
+
     }
+//
+//    public final void addConnection(Object conn, int index) {
+//        ConnectionEditPart connPart = (ConnectionEditPart)factory.createEditPart(this, conn);
+//        sourceConnEditParts.add(connPart);
+//        addChildVisual(connPart, index);
+//        connPart.activate();
+////        Connection connFigure = (Connection)connPart.getFigure();
+////        connFigure.setParent(getFigure());
+////        getFigure().getConnection().add(connFigure);
+//    }
 
     public void remove() {
         for(Object conn : getModelSourceConnections())
@@ -123,11 +141,12 @@ public abstract class EditPart implements PropertyChangeListener {
         getFigure();
         List children = getModelChildren();
         for (int i = 0; i < children.size(); i++) {
-            addChildModel(children.get(i), i);
+            addChildModel(childEditParts, children.get(i), i);
         }
 
-        for(Object conn: getModelSourceConnections()) {
-            addConnection(conn);
+        children = getModelSourceConnections();
+        for (int i = 0; i < children.size(); i++) {
+            addChildModel(sourceConnEditParts, children.get(i), i);
         }
 
         refreshVisuals();
@@ -229,8 +248,10 @@ public abstract class EditPart implements PropertyChangeListener {
     }
 
     public void refresh() {
-        refreshChildren();
         refreshVisuals();
+        refreshChildren();
+        refreshSourceConnections();
+        refreshTargetConnections();
         ((EditorPanel<IPropertySource>)context.getContentPane()).refresh();
     }
 
@@ -238,36 +259,46 @@ public abstract class EditPart implements PropertyChangeListener {
      * The following is copy from GEF AbstractEditPart.refreshChildren
      */
     private void refreshChildren() {
-        List children = getChildren();
-        int size = children.size();
+        refreshModelPart(getChildren(), getModelChildren());
+    }
+
+    protected void refreshSourceConnections() {
+        refreshModelPart(getSourceConnections(), getModelSourceConnections());
+    }
+
+    protected void refreshTargetConnections() {
+        refreshModelPart(getTargetConnections(), getModelTargetConnections());
+    }
+
+    private void refreshModelPart(List parts, List models) {
+        int size = parts.size();
         Map modelToEditPart = Collections.emptyMap();
         int i;
         if(size > 0) {
             modelToEditPart = new HashMap(size);
             for(i = 0; i < size; i++) {
-                EditPart editPart = (EditPart)children.get(i);
+                EditPart editPart = (EditPart)parts.get(i);
                 modelToEditPart.put(editPart.getModel(), editPart);
             }
         }
 
-        List modelObjects = getModelChildren();
-        for(i = 0; i < modelObjects.size(); i++) {
-            Object model = modelObjects.get(i);
-            if(i >= children.size() || ((EditPart)children.get(i)).getModel() != model) {
+        for(i = 0; i < models.size(); i++) {
+            Object model = models.get(i);
+            if(i >= parts.size() || ((EditPart)parts.get(i)).getModel() != model) {
                 EditPart editPart = (EditPart)modelToEditPart.get(model);
                 if(editPart != null) {
-                    reorderChild(editPart, i);
+                    reorderChild(parts, editPart, i);
                 } else {
-                    addChildModel(model, i);
+                    addChildModel(parts, model, i);
                 }
             }
         }
 
-        size = children.size();
+        size = parts.size();
         if(i < size) {
             List trash = new ArrayList(size - i);
             for(; i < size; i++)
-                trash.add(children.get(i));
+                trash.add(parts.get(i));
             for(i = 0; i < trash.size(); i++)            {
                 EditPart ep = (EditPart)trash.get(i);
                 removeChild(ep);
@@ -275,11 +306,10 @@ public abstract class EditPart implements PropertyChangeListener {
         }
     }
 
-    protected void reorderChild(EditPart editpart, int index) {
+    protected void reorderChild(List parts, EditPart editpart, int index) {
         removeChildVisual(editpart);
-        List children = getChildren();
-        children.remove(editpart);
-        children.add(index, editpart);
+        parts.remove(editpart);
+        parts.add(index, editpart);
         addChildVisual(editpart, index);
     }
 }
