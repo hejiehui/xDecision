@@ -45,7 +45,9 @@ public class Connection extends Figure {
 
         for(Map.Entry<Figure, ConnectionLocator> childEntry: children.entrySet()) {
             childEntry.getKey().setLocation(childEntry.getValue().getLocation(points));
+            childEntry.getKey().setSize(childEntry.getKey().getPreferredSize());
             childEntry.getKey().layout();
+
         }
     }
 

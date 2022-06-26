@@ -87,8 +87,6 @@ public class BorderLayout implements LayoutManager {
         prefSize.width = Math.max(prefSize.width, middleRowWidth) + getWidth(border) + (columns - 1) * hGap;
 //        union(prefSize, getBorderPreferredSize(figure));
 
-        //TODO find out the right way of change parent size
-        figure.setSize(prefSize);
         return prefSize;
     }
 
