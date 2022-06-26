@@ -92,16 +92,6 @@ public abstract class EditPart implements PropertyChangeListener {
         refresh();
 
     }
-//
-//    public final void addConnection(Object conn, int index) {
-//        ConnectionEditPart connPart = (ConnectionEditPart)factory.createEditPart(this, conn);
-//        sourceConnEditParts.add(connPart);
-//        addChildVisual(connPart, index);
-//        connPart.activate();
-////        Connection connFigure = (Connection)connPart.getFigure();
-////        connFigure.setParent(getFigure());
-////        getFigure().getConnection().add(connFigure);
-//    }
 
     public void remove() {
         for(Object conn : getModelSourceConnections())

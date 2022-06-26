@@ -3,12 +3,6 @@ package com.xrosstools.gef.figures;
 import java.awt.*;
 
 public class BorderLayout implements LayoutManager {
-
-    public static final Integer CENTER = new Integer(2);
-    public static final Integer TOP = new Integer(8);
-    public static final Integer BOTTOM = new Integer(32);
-    public static final Integer LEFT = new Integer(1);
-    public static final Integer RIGHT = new Integer(4);
     private Figure center;
     private Figure left;
     private Figure top;
@@ -92,6 +86,9 @@ public class BorderLayout implements LayoutManager {
         prefSize.height += middleRowHeight + getHeight(border) + (rows - 1) * vGap;
         prefSize.width = Math.max(prefSize.width, middleRowWidth) + getWidth(border) + (columns - 1) * hGap;
 //        union(prefSize, getBorderPreferredSize(figure));
+
+        //TODO find out the right way of change parent size
+        figure.setSize(prefSize);
         return prefSize;
     }
 

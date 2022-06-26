@@ -20,10 +20,11 @@ public class BranchConditionFigure extends Figure {
         operatorFigure.setLabelAlignment(PositionConstants.RIGHT);
         operatorFigure.setForegroundColor(ColorConstants.black);
         add(operatorFigure);
-        setConstraint(operatorFigure, PositionConstants.RIGHT);
+        setConstraint(operatorFigure, PositionConstants.LEFT);
 
         widthLine = new Figure();
-        widthLine.setPreferredSize(new Dimension(10, 10));
+        //TODO check how to set PreferedSize
+        widthLine.setSize(new Dimension(10, 10));
         widthLine.setForegroundColor(ColorConstants.black);
         add(widthLine);
         layout.setConstraint(widthLine, PositionConstants.CENTER);
@@ -32,7 +33,7 @@ public class BranchConditionFigure extends Figure {
     //first add then remove will be called
     public void setExpressionFigure(Figure expressionFigure) {
         add(expressionFigure);
-        setConstraint(expressionFigure, PositionConstants.LEFT);
+        setConstraint(expressionFigure, PositionConstants.RIGHT);
     }
 
     public void setOperator(ConditionOperator operator) {

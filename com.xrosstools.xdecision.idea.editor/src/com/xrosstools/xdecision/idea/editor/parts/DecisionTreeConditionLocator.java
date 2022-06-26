@@ -34,16 +34,26 @@ public class DecisionTreeConditionLocator implements ConnectionLocator {
         float alignment = node.getDecisionTreeManager().getDiagram().getAlignment();
         Dimension size = node.getSize();
 
+//        The eclipse algotithym
+//        if(alignment == 0) {
+//            p.x += halfWidth;
+//        } else if(alignment == 0.5) {
+//            p.x += (int)(size.width * 0.5);
+//        } else {
+//            p.x += size.width - halfWidth;
+//        }
+
         if(alignment == 0) {
-            p.x += halfWidth;
+            p.x += 0;
         } else if(alignment == 0.5) {
-            p.x += (int)(size.width * 0.5);
+            p.x += (int)(size.width * 0.5) - halfWidth;
         } else {
-            p.x += size.width - halfWidth;
+            p.x += size.width - halfWidth * 2;
         }
-        
-        p.y -= NODE_LABEL_GAP;
-        
+
+        //TODO find out the right way of layout condition
+        p.y -= NODE_LABEL_GAP + 10;
+
 //        getConnection().translateToAbsolute(p);
         return p;
     }
