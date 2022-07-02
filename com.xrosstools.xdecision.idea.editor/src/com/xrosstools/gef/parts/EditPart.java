@@ -71,8 +71,20 @@ public abstract class EditPart implements PropertyChangeListener {
         return Collections.EMPTY_LIST;
     }
 
+    public void addConnectionVisual(ConnectionEditPart childEditPart, int index) {
+        getFigure().add(childEditPart.getFigure(), index);
+    }
+
     public void addChildVisual(EditPart childEditPart, int index) {
         getFigure().add(childEditPart.getFigure(), index);
+    }
+
+    private void addChildPartVisual(EditPart childEditPart, int index) {
+        if(childEditPart instanceof ConnectionEditPart) {
+            addConnectionVisual((ConnectionEditPart)childEditPart, index);
+        }else {
+            addChildVisual(childEditPart, index);
+        }
     }
 
     protected void removeChildVisual(EditPart childEditPart) {
@@ -82,7 +94,7 @@ public abstract class EditPart implements PropertyChangeListener {
     public final void addChildModel(List parts, Object child, int index) {
         EditPart childEditPart = factory.createEditPart(this, child);
         parts.add(index, childEditPart);
-        addChildVisual(childEditPart, index);
+        addChildPartVisual(childEditPart, index);
         childEditPart.addNotify();
         childEditPart.activate();
     }
@@ -112,7 +124,6 @@ public abstract class EditPart implements PropertyChangeListener {
         removeChildVisual(childEditPart);
         childEditPart.setParent(null);
         childEditParts.remove(childEditPart);
-        getFigure().remove(childEditPart.getFigure());
     }
 
     public void removeSourceConnection(ConnectionEditPart connectionEditPart) {
@@ -300,6 +311,6 @@ public abstract class EditPart implements PropertyChangeListener {
         removeChildVisual(editpart);
         parts.remove(editpart);
         parts.add(index, editpart);
-        addChildVisual(editpart, index);
+        addChildPartVisual(editpart, index);
     }
 }
