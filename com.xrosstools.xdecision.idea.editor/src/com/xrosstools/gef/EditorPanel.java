@@ -198,7 +198,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
                     if(node == null)
                         return;
 
-                    outlineContextMenuProvider.buildContextMenu((TreeEditPart)node.getUserObject()).show(evt.getComponent(), evt.getX(), evt.getY());
+                    outlineContextMenuProvider.buildDisplayMenu((TreeEditPart)node.getUserObject()).show(evt.getComponent(), evt.getX(), evt.getY());
                 }
             }
         });
@@ -341,7 +341,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
     }
 
     private void showContexMenu(int x, int y) {
-        contextMenuBuilder.buildContextMenu(lastSelected.getPart()).show(unitPanel, x, y);
+        contextMenuBuilder.buildDisplayMenu(lastSelected.getPart()).show(unitPanel, x, y);
     }
 
     public void refresh() {

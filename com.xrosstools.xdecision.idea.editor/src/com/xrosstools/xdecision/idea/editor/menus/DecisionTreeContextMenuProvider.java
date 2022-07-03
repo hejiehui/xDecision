@@ -45,7 +45,6 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
             diagramCMenuProvider.buildContextMenu(menu, (DecisionTreeDiagramPart)part);
         }
 
-        attachListener(menu);
         return menu;
     }
 }

@@ -16,6 +16,12 @@ public abstract class ContextMenuProvider {
     private PropertyChangeListener listener;
 
     public abstract JPopupMenu buildContextMenu(Object selected);
+
+    protected JPopupMenu buildDisplayMenu(Object selected) {
+        JPopupMenu menu = buildContextMenu(selected);
+        attachListener(menu);
+        return menu;
+    }
     public ContextMenuProvider(PropertyChangeListener listener) {
         this.listener = listener;
     }
