@@ -1,20 +1,20 @@
 package com.xrosstools.gef.parts;
 
+import com.xrosstools.gef.EditorPanel;
 import com.xrosstools.gef.figures.Figure;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EditContext {
-    private JComponent contentPane;
+    private EditorPanel contentPane;
     private List<Trinity> contents = new ArrayList<>();
 
-    public EditContext(JComponent contentPane) {
+    public EditContext(EditorPanel contentPane) {
         this.contentPane = contentPane;
     }
 
-    public JComponent getContentPane() {
+    public EditorPanel getContentPane() {
         return contentPane;
     }
 

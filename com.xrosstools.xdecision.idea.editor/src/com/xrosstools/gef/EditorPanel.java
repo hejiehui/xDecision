@@ -1,8 +1,6 @@
 package com.xrosstools.gef;
 
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
@@ -238,7 +236,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         TreeEditPart treePart = treeRoot.findEditPart(f.getPart().getModel());
         if(treePart != null) {
             DefaultMutableTreeNode treeNode = treePart.getTreeNode();
-            //update tree selection
+            //execute tree selection
             if (treeNode != null)
                 treeNavigator.setSelectionPath(new TreePath(treeNode.getPath()));
         }
@@ -351,11 +349,12 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         unitPanel.grabFocus();
     }
 
-    private void update(Command action) {
+    public void execute(Command action) {
         if(action == null)
             return;
 
-        root.execute(action);
+        action.run();
+        root.refresh();
         contentProvider.save();
     }
 
@@ -467,7 +466,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             if (lastSelected != null && lastHover != null && lastSelected != lastHover) {
                 Point p = e.getPoint();
                 Figure underPoint = findFigureAt(p);
-                update(updateHover(underPoint, getMoveCommand(underPoint, p), p));
+                execute(updateHover(underPoint, getMoveCommand(underPoint, p), p));
                 return;
             }
 
@@ -486,7 +485,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
                     return;
 
                 lastSelected.getPart().remove();
-                update(deleteCmd);
+                execute(deleteCmd);
             }
         }
     };
@@ -506,7 +505,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             Command createCommand = updateHover(underPoint, getCreateCommand(underPoint, p), p);
 
             if(createCommand != null) {
-                update(createCommand);
+                execute(createCommand);
             }
 
             gotoNext(ready);
@@ -552,7 +551,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             Command createConnectionCmd = getCreateConnectionCommand(f);
 
             if(createConnectionCmd != null) {
-                update(createConnectionCmd);
+                execute(createConnectionCmd);
             }
 
             gotoNext(ready);
@@ -571,7 +570,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         }
         public void mouseReleased(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
-            update(getCommand(f));
+            execute(getCommand(f));
             gotoNext(ready);
         }
         private Command getCommand(Figure f) {
@@ -588,7 +587,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         }
         public void mouseReleased(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
-            update(getCommand(f));
+            execute(getCommand(f));
             gotoNext(ready);
         }
         private Command getCommand(Figure f) {

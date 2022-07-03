@@ -235,7 +235,7 @@ public class DecisionTreeDiagramPanel extends JPanel implements DecisionTreeActi
     }
 
     private void build() {
-        EditContext context = new EditContext(this);
+        EditContext context = new EditContext(null);
         LayoutAlgorithm layoutAlgorithm = new LayoutAlgorithm();
         layoutAlgorithm.layout(diagram);
         DecisionTreePartFactory f = new DecisionTreePartFactory(context);
