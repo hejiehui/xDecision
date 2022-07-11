@@ -8,13 +8,13 @@ import java.awt.*;
  * If any operation is not applicable, just return null
  */
 public class EditPolicy {
-    private EditPart host;
+    private GraphicalEditPart host;
 
-    public EditPart getHost() {
+    public GraphicalEditPart getHost() {
         return host;
     }
 
-    public void setHost(EditPart host) {
+    public void setHost(GraphicalEditPart host) {
         this.host = host;
     }
 
@@ -31,7 +31,7 @@ public class EditPolicy {
     /**
      * Move an element from elsewhere
      */
-    public Command getMoveCommand(EditPart child, Rectangle constraint) {return null;}
+    public Command getMoveCommand(GraphicalEditPart child, Rectangle constraint) {return null;}
 
     /**
      * Change size and/or location
@@ -40,7 +40,7 @@ public class EditPolicy {
 
     public boolean isSelectableSource(Object connectionModel) {return false;}
 
-    public Command getCreateConnectionCommand(Object newConnectionModel, EditPart sourcePart) {return null;}
+    public Command getCreateConnectionCommand(Object newConnectionModel, GraphicalEditPart sourcePart) {return null;}
 
     public Command getReconnectSourceCommand(ConnectionEditPart connectionPart) {return null;}
 

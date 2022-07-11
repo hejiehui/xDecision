@@ -1,21 +1,19 @@
 package com.xrosstools.xdecision.idea.editor.treeparts;
 
-import com.xrosstools.gef.parts.TreeEditPart;
-import com.xrosstools.gef.parts.TreeEditPartFactory;
+import com.xrosstools.gef.parts.*;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
-import com.xrosstools.gef.parts.EditContext;
 import com.xrosstools.xdecision.idea.editor.model.definition.*;
 import com.xrosstools.xdecision.idea.editor.treeparts.definition.*;
 
-public class DecisionTreeTreePartFactory implements TreeEditPartFactory {
+public class DecisionTreeTreePartFactory implements EditPartFactory {
 	private EditContext editContext;
 
 	public DecisionTreeTreePartFactory(EditContext editContext) {
 		this.editContext = editContext;
 	}
 
-	public TreeEditPart createEditPart(TreeEditPart parent, Object model) {
+	public EditPart createEditPart(EditPart parent, Object model) {
 		TreeEditPart part = null;
 		if(model == null)
 			return part;

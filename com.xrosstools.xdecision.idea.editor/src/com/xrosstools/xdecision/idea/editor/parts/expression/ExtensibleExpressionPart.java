@@ -1,7 +1,9 @@
 package com.xrosstools.xdecision.idea.editor.parts.expression;
 
 import com.xrosstools.gef.figures.Figure;
+import com.xrosstools.gef.parts.AbstractEditPart;
 import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.figures.ExpandableExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExtensibleExpression;
@@ -27,7 +29,7 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
     
     protected void postGetModelChildren(List children) {}
     
-    protected void postAddChildVisual(EditPart childEditPart, int index) {}
+    protected void postAddChildVisual(GraphicalEditPart childEditPart, int index) {}
     
     protected void postRefreshVisuals() {}
     
@@ -36,7 +38,7 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
     }
     
     @Override
-    protected List getModelChildren() {
+    public List getModelChildren() {
         List children = new ArrayList();
         ExtensibleExpression exp = getExtensibleExpression();
         
@@ -52,15 +54,15 @@ public class ExtensibleExpressionPart extends BaseExpressionPart {
     public void addChildVisual(EditPart childEditPart, int index) {
         ExtensibleExpression exp = getExtensibleExpression();
         
-        Figure childFigure = childEditPart.getFigure();
-        Object childModel = childEditPart.getModel();
+        Figure childFigure = ((GraphicalEditPart)childEditPart).getFigure();
+        Object childModel = ((GraphicalEditPart)childEditPart).getModel();
         
         if(childModel == exp.getChildExpression()) {
             getExpandableExpressionFigure().setExpandedFigure(childFigure);
             return;
         }
         
-        postAddChildVisual(childEditPart, index);
+        postAddChildVisual((GraphicalEditPart) childEditPart, index);
     }
 
     protected void refreshVisuals() {

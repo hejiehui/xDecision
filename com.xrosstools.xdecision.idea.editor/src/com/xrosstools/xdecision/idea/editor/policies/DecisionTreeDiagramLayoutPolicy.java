@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.policies;
 
-import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.GraphicalEditPart;
 import com.xrosstools.gef.parts.EditPolicy;
 import com.xrosstools.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.commands.CreateNodeCommand;
@@ -18,7 +18,7 @@ public class DecisionTreeDiagramLayoutPolicy extends EditPolicy {
                 location);
     }
 
-    public Command getMoveCommand(EditPart child, Rectangle constraint) {
+    public Command getMoveCommand(GraphicalEditPart child, Rectangle constraint) {
         MoveNodeCommand cmd = new MoveNodeCommand();
         if(!(child.getModel() instanceof DecisionTreeNode))
             return null;

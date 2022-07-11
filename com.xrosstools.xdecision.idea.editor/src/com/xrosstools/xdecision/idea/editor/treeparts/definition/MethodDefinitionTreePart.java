@@ -13,7 +13,7 @@ public class MethodDefinitionTreePart extends NamedElementTreePart {
      }
 
     @Override
-    protected List getModelChildren() {
+    public List getModelChildren() {
         List a = new ArrayList();
         a.add(method.getParameters());
         return a;

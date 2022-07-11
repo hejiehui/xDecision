@@ -3,8 +3,6 @@ package com.xrosstools.gef;
 import com.xrosstools.gef.actions.Action;
 import com.xrosstools.gef.actions.CommandAction;
 import com.xrosstools.gef.commands.Command;
-import com.xrosstools.gef.parts.EditPart;
-import com.xrosstools.gef.parts.TreeEditPart;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;

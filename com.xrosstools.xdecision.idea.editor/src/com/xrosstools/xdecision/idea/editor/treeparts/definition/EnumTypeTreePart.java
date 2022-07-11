@@ -10,7 +10,7 @@ public class EnumTypeTreePart extends DataTypeTreePart {
     }
 
     @Override
-    protected List getModelChildren() {
+    public List getModelChildren() {
         List children = super.getModelChildren();
         children.add(0, ((EnumType)getModel()).getValues());
         return children;

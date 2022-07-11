@@ -2,7 +2,7 @@ package com.xrosstools.xdecision.idea.editor.commands.expression;
 
 
 import com.xrosstools.gef.commands.Command;
-import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.model.expression.*;
@@ -14,7 +14,7 @@ public class RemoveExpressionCommand extends Command {
     private int oldIndex;
     private OperatorExpression oldOpr;
     
-    public RemoveExpressionCommand(EditPart expPart) {
+    public RemoveExpressionCommand(GraphicalEditPart expPart) {
         this.parentModel = expPart.getParent().getModel();
         this.oldExp = (ExpressionDefinition)expPart.getModel();
     }

@@ -13,7 +13,7 @@ public class NamedElementContainerTreePart extends NamedElementTreePart {
      }
 
     @Override
-    protected List<NamedElement> getModelChildren() {
+    public List<NamedElement> getModelChildren() {
         return ((NamedElementContainer)getModel()).getElements();
     }
 }

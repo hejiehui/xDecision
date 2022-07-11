@@ -2,6 +2,7 @@ package com.xrosstools.xdecision.idea.editor.parts;
 
 import com.xrosstools.gef.commands.CommandChain;
 import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.GraphicalEditPart;
 import com.xrosstools.gef.parts.EditPolicy;
 import com.xrosstools.xdecision.idea.editor.commands.CreateNodeCommand;
 import com.xrosstools.xdecision.idea.editor.commands.CreatePathCommand;
@@ -17,11 +18,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DecisionTreeNodePart extends EditPart {
+public class DecisionTreeNodePart extends GraphicalEditPart {
     public DecisionTreeNode getDecisionTreeNode() {
         return (DecisionTreeNode)getModel();
     }
-    protected List getModelChildren() {
+    public List getModelChildren() {
         List children = new ArrayList();
         DecisionTreeNode node = getDecisionTreeNode();
 
@@ -33,7 +34,7 @@ public class DecisionTreeNodePart extends EditPart {
 
     public void addChildVisual(EditPart childEditPart, int index) {
         DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
-        Figure childFigure = childEditPart.getFigure();
+        Figure childFigure = ((GraphicalEditPart)childEditPart).getFigure();
 
         figure.setExpressionFigure(childFigure);
     }

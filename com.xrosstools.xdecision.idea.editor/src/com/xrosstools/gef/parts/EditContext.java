@@ -18,7 +18,7 @@ public class EditContext {
         return contentPane;
     }
 
-    public void add(EditPart part, Object model) {
+    public void add(GraphicalEditPart part, Object model) {
         Trinity trinity = findContent(model);
 
         if(trinity == null) {
@@ -42,7 +42,7 @@ public class EditContext {
         trinity.treeEditPart = part;
     }
 
-    public EditPart findEditPart(Object model) {
+    public GraphicalEditPart findEditPart(Object model) {
         return findContent(model).getEditPart();
     }
 
@@ -71,9 +71,9 @@ public class EditContext {
 
     private class Trinity {
         Object model;
-        EditPart  editPart;
+        GraphicalEditPart editPart;
         TreeEditPart treeEditPart;
-        EditPart getEditPart(){return editPart;}
+        GraphicalEditPart getEditPart(){return editPart;}
         TreeEditPart getTreeEditPart(){return treeEditPart;}
     }
 }

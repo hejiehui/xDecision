@@ -5,7 +5,6 @@ import com.intellij.openapi.util.IconLoader;
 import com.xrosstools.gef.actions.Action;
 import com.xrosstools.gef.parts.EditContext;
 import com.xrosstools.gef.parts.EditPartFactory;
-import com.xrosstools.gef.parts.TreeEditPartFactory;
 import com.xrosstools.gef.util.IPropertySource;
 import com.xrosstools.xdecision.idea.editor.Activator;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
@@ -26,7 +25,7 @@ public abstract class PanelContentProvider<T extends IPropertySource> implements
     public abstract void buildPalette(JPanel palette);
     public abstract void buildToolbar(JToolBar toolbar);
     public abstract EditPartFactory createEditPartFactory(EditContext context);
-    public abstract TreeEditPartFactory createTreePartFactory(EditContext context);
+    public abstract EditPartFactory createTreePartFactory(EditContext context);
 
     public void preBuildRoot(){}
     public void postBuildRoot(){}

@@ -1,6 +1,6 @@
 package com.xrosstools.gef.figures;
 
-import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.GraphicalEditPart;
 
 import java.awt.*;
 
@@ -13,7 +13,7 @@ public class Endpoint extends Figure {
     }
 
     @Override
-    public EditPart getPart() {
+    public GraphicalEditPart getPart() {
         return getParent().getPart();
     }
 

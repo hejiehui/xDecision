@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.idea.editor.policies;
 
 import com.xrosstools.gef.parts.ConnectionEditPart;
-import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.GraphicalEditPart;
 import com.xrosstools.gef.parts.EditPolicy;
 import com.xrosstools.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.commands.*;
@@ -34,7 +34,7 @@ public class DecisionTreeNodeEditPolicy extends EditPolicy {
 	}
 
 
-    public Command getMoveCommand(EditPart child, Rectangle constraint) {return null;}
+    public Command getMoveCommand(GraphicalEditPart child, Rectangle constraint) {return null;}
 
     /**
      * Change size and/or location
@@ -46,7 +46,7 @@ public class DecisionTreeNodeEditPolicy extends EditPolicy {
         return cmd;
     }
 
-    public Command getCreateConnectionCommand(Object connectionModel, EditPart sourcePart) {
+    public Command getCreateConnectionCommand(Object connectionModel, GraphicalEditPart sourcePart) {
         if(sourcePart == getHost())
             return null;
 

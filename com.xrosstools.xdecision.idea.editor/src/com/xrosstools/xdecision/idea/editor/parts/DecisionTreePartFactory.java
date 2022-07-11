@@ -1,8 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.parts;
 
-import com.xrosstools.gef.parts.EditContext;
-import com.xrosstools.gef.parts.EditPart;
-import com.xrosstools.gef.parts.EditPartFactory;
+import com.xrosstools.gef.parts.*;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
@@ -15,7 +13,7 @@ public class DecisionTreePartFactory implements EditPartFactory {
 		this.context = context;
 	}
 	public EditPart createEditPart(EditPart parent, Object model) {
-		EditPart part = null;
+		GraphicalEditPart part = null;
 		
 		if(model == null)
 			part = null;

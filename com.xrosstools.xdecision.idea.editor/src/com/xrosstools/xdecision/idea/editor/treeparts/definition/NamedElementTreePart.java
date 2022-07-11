@@ -26,9 +26,4 @@ public class NamedElementTreePart extends TreeEditPart implements PropertyChange
 //        super.deactivate();
         element.getListeners().removePropertyChangeListener(this);
     }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        refresh();
-    }
 }

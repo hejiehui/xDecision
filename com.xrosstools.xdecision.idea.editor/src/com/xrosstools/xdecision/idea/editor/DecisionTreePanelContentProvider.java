@@ -7,7 +7,6 @@ import com.xrosstools.gef.ContextMenuProvider;
 import com.xrosstools.gef.PanelContentProvider;
 import com.xrosstools.gef.parts.EditContext;
 import com.xrosstools.gef.parts.EditPartFactory;
-import com.xrosstools.gef.parts.TreeEditPartFactory;
 import com.xrosstools.gef.util.XmlHelper;
 import com.xrosstools.xdecision.idea.editor.actions.*;
 import com.xrosstools.xdecision.idea.editor.layout.LayoutAlgorithm;
@@ -105,7 +104,7 @@ public class DecisionTreePanelContentProvider extends PanelContentProvider<Decis
     }
 
     @Override
-    public TreeEditPartFactory createTreePartFactory(EditContext context) {
+    public EditPartFactory createTreePartFactory(EditContext context) {
         return new DecisionTreeTreePartFactory(context);
     }
 

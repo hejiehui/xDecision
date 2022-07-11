@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.idea.editor.commands.expression;
 
 import com.xrosstools.gef.commands.Command;
-import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.model.expression.*;
 
 public class AddOperatorCommand extends Command {
@@ -11,16 +11,16 @@ public class AddOperatorCommand extends Command {
     private Object parentModel;
     private ExpressionDefinition newExp;
         
-    public AddOperatorCommand(EditPart expPart, OperatorEnum operator){
-        EditPart topExp = findTopExpressionPart(expPart);
+    public AddOperatorCommand(GraphicalEditPart expPart, OperatorEnum operator){
+        GraphicalEditPart topExp = findTopExpressionPart(expPart);
         this.operant = (ExpressionDefinition)topExp.getModel();
         this.operatorExp = new OperatorExpression(operator);
         zeroExp = new NumberExpression(0);
         this.parentModel = topExp.getParent().getModel();
     }
     
-    public static EditPart findTopExpressionPart(EditPart expPart) {
-        EditPart parentPart = expPart.getParent();
+    public static GraphicalEditPart findTopExpressionPart(GraphicalEditPart expPart) {
+        GraphicalEditPart parentPart = (GraphicalEditPart)expPart.getParent();
         Object parantExp = parentPart.getModel();
         if(parantExp instanceof VariableExpression || parantExp instanceof MethodExpression)
             return findTopExpressionPart(parentPart);

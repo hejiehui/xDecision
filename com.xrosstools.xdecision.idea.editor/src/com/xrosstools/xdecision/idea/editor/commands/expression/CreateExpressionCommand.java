@@ -2,7 +2,7 @@ package com.xrosstools.xdecision.idea.editor.commands.expression;
 
 
 import com.xrosstools.gef.commands.InputTextCommand;
-import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.model.definition.DataType;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.idea.editor.model.expression.NumberExpression;
@@ -14,8 +14,8 @@ public class CreateExpressionCommand extends InputTextCommand {
     private ExpressionDefinition newExp;
     private DataType type;
     
-    public CreateExpressionCommand(EditPart expPart, DataType type) {
-        EditPart topExp = AddOperatorCommand.findTopExpressionPart(expPart);
+    public CreateExpressionCommand(GraphicalEditPart expPart, DataType type) {
+        GraphicalEditPart topExp = AddOperatorCommand.findTopExpressionPart(expPart);
         this.parentModel = topExp.getParent().getModel();
         this.oldExp = (ExpressionDefinition)topExp.getModel();
         this.type = type;

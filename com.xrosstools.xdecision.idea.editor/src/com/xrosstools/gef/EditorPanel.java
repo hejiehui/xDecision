@@ -31,7 +31,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
 
     private JScrollPane innerDiagramPane;
     private UnitPanel unitPanel;
-    private EditPart root;
+    private GraphicalEditPart root;
     private TreeEditPart treeRoot;
 
     private T diagram;
@@ -43,7 +43,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
     private Figure lastSelected;
     private Figure lastHover;
     private Object newModel;
-    private EditPart sourcePart;
+    private GraphicalEditPart sourcePart;
 
     private PanelContentProvider contentProvider;
 
@@ -167,15 +167,15 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
     private void build() {
         EditContext editContext = new EditContext(this);
         EditPartFactory editPartFactory = contentProvider.createEditPartFactory(editContext);
-        TreeEditPartFactory treeEditPartFactory = contentProvider.createTreePartFactory(editContext);
+        EditPartFactory treeEditPartFactory = contentProvider.createTreePartFactory(editContext);
 
-        root = editPartFactory.createEditPart(null, diagram);
+        root = (GraphicalEditPart) editPartFactory.createEditPart(null, diagram);
 
         contentProvider.preBuildRoot();
         root.build();
         contentProvider.postBuildRoot();
 
-        treeRoot = treeEditPartFactory.createEditPart(null, diagram);
+        treeRoot = (TreeEditPart) treeEditPartFactory.createEditPart(null, diagram);
         treeNavigator.setModel(new DefaultTreeModel(treeRoot.build(), false));
         treeNavigator.addTreeSelectionListener(e -> selectedNode());
 
@@ -355,7 +355,10 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
 
         action.run();
         root.refresh();
+        treeRoot.refresh();
+        treeNavigator.setModel(new DefaultTreeModel(treeRoot.getTreeNode(), false));
         contentProvider.save();
+        refresh();
     }
 
     private void updateVisual() {
@@ -484,7 +487,6 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
                 if(deleteCmd == null)
                     return;
 
-                lastSelected.getPart().remove();
                 execute(deleteCmd);
             }
         }

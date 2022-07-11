@@ -7,7 +7,7 @@ import com.xrosstools.xdecision.idea.editor.figures.CompositeExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.model.expression.CompositeExpression;
 
 public class CompositeExpressionPart extends BaseExpressionPart {
-    protected List getModelChildren() {
+    public List getModelChildren() {
         return ((CompositeExpression)getModel()).getAllExpression();
     }
     

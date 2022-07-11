@@ -13,7 +13,7 @@ public class DataTypeTreePart extends NamedElementTreePart {
      }
 
     @Override
-    protected List getModelChildren() {
+    public List getModelChildren() {
         List a = new ArrayList();
         a.add(type.getFields());
         a.add(type.getMethods());

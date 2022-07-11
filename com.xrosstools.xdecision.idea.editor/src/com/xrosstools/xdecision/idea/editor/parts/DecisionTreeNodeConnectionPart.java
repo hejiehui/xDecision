@@ -3,6 +3,7 @@ package com.xrosstools.xdecision.idea.editor.parts;
 import com.xrosstools.gef.figures.*;
 import com.xrosstools.gef.parts.ConnectionEditPart;
 import com.xrosstools.gef.parts.EditPart;
+import com.xrosstools.gef.parts.GraphicalEditPart;
 import com.xrosstools.gef.parts.EditPolicy;
 import com.xrosstools.gef.routers.BendpointConnectionRouter;
 import com.xrosstools.xdecision.idea.editor.figures.BranchConditionFigure;
@@ -10,7 +11,6 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.idea.editor.policies.DecisionTreeNodeConnectionEditPolicy;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implements PropertyChangeListener{
     private BranchConditionFigure condition;
 
-    protected List getModelChildren() {
+    public List getModelChildren() {
         List children = new ArrayList();
         DecisionTreeNodeConnection nodeConn = (DecisionTreeNodeConnection)getModel();
         if(nodeConn.getExpression() != null)
@@ -28,7 +28,7 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
     }
 
     public void addChildVisual(EditPart childEditPart, int index) {
-        Figure childFigure = childEditPart.getFigure();
+        Figure childFigure = ((GraphicalEditPart)childEditPart).getFigure();
         if(childEditPart.getModel() instanceof ExpressionDefinition)
             condition.setExpressionFigure(childFigure);
     }
@@ -57,7 +57,7 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
     }
 
     public void setSelected(int value) {
-        if (value == EditPart.SELECTED)
+        if (value == GraphicalEditPart.SELECTED)
             getFigure().setLineWidth(2);
         else
             getFigure().setLineWidth(1);
