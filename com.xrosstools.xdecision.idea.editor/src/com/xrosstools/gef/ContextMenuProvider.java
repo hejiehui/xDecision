@@ -64,6 +64,9 @@ public abstract class ContextMenuProvider {
                 attachListener(item);
             }
         }else {
+            if(menuElement instanceof JPopupMenu)
+                return;
+
             if(((JMenuItem) menuElement).getActionListeners().length != 0)
                 ((Action) ((JMenuItem) menuElement).getActionListeners()[0]).setListener(listener);
         }

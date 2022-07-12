@@ -119,6 +119,20 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         treeNavigator = new Tree();
         treeNavigator.setExpandsSelectedPaths(true);
 
+        treeNavigator.addTreeSelectionListener(e -> selectedNode());
+
+        treeNavigator.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                if (SwingUtilities.isRightMouseButton(evt)) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeNavigator.getLastSelectedPathComponent();
+                    if(node == null)
+                        return;
+
+                    outlineContextMenuProvider.buildDisplayMenu((TreeEditPart)node.getUserObject()).show(evt.getComponent(), evt.getX(), evt.getY());
+                }
+            }
+        });
+
         JScrollPane treePane = new JBScrollPane(treeNavigator);
         treePane.setLayout(new ScrollPaneLayout());
         treePane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -170,14 +184,13 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         EditPartFactory treeEditPartFactory = contentProvider.createTreePartFactory(editContext);
 
         root = (GraphicalEditPart) editPartFactory.createEditPart(null, diagram);
+        treeRoot = (TreeEditPart) treeEditPartFactory.createEditPart(null, diagram);
 
         contentProvider.preBuildRoot();
-        root.build();
-        contentProvider.postBuildRoot();
 
-        treeRoot = (TreeEditPart) treeEditPartFactory.createEditPart(null, diagram);
-        treeNavigator.setModel(new DefaultTreeModel(treeRoot.build(), false));
-        treeNavigator.addTreeSelectionListener(e -> selectedNode());
+        root.refresh();
+        treeRoot.refresh();
+        contentProvider.postBuildRoot();
 
         treeNavigator.setCellRenderer(new DefaultTreeCellRenderer(){
             public Component getTreeCellRendererComponent(JTree tree, Object value,
@@ -191,22 +204,12 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             }
         });
 
-        treeNavigator.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                if (SwingUtilities.isRightMouseButton(evt)) {
-                    DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeNavigator.getLastSelectedPathComponent();
-                    if(node == null)
-                        return;
-
-                    outlineContextMenuProvider.buildDisplayMenu((TreeEditPart)node.getUserObject()).show(evt.getComponent(), evt.getX(), evt.getY());
-                }
-            }
-        });
         updateVisual();
     }
 
     public void rebuild() {
         root.refresh();
+        treeRoot.refresh();
     }
 
     private void updateTooltip(Point location) {
@@ -354,14 +357,15 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             return;
 
         action.run();
-        root.refresh();
-        treeRoot.refresh();
-        treeNavigator.setModel(new DefaultTreeModel(treeRoot.getTreeNode(), false));
-        contentProvider.save();
         refresh();
+        contentProvider.save();
     }
 
     private void updateVisual() {
+        root.refresh();
+        treeRoot.refresh();
+        treeNavigator.setModel(new DefaultTreeModel(treeRoot.getTreeNode(), false));
+
         if(lastSelected!=null) {
             Object model = lastSelected.getPart().getModel();
             if(model instanceof IPropertySource)

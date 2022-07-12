@@ -19,7 +19,9 @@ public abstract class AbstractEditPart implements EditPart {
 
     abstract protected void removeChildVisual(EditPart childEditPart);
 
-    public void addNotify(){}
+    public void addNotify(){
+        refresh();
+    }
 
     public void activate(){
         if(getModel() instanceof IPropertySource)

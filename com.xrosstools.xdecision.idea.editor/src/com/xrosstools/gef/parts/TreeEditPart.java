@@ -5,13 +5,11 @@ import com.xrosstools.xdecision.idea.editor.Activator;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TreeEditPart extends AbstractEditPart {
-    private DefaultMutableTreeNode treeNode;
+    private DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(this);
     private List<TreeEditPart> childEditParts = new ArrayList<>();
 
     public TreeEditPart(Object model){
@@ -24,7 +22,7 @@ public class TreeEditPart extends AbstractEditPart {
 
     @Override
     protected void addChildPartVisual(EditPart childEditPart, int index) {
-        treeNode.add(((TreeEditPart)childEditPart).build());
+        treeNode.insert(((TreeEditPart)childEditPart).treeNode, index);
     }
 
     @Override
@@ -36,16 +34,6 @@ public class TreeEditPart extends AbstractEditPart {
         return treeNode;
     }
 
-    public final DefaultMutableTreeNode build() {
-        treeNode = new DefaultMutableTreeNode(this);
-        List children = getModelChildren();
-        for (int i = 0; i < children.size(); i++) {
-            addChildModel(childEditParts, children.get(i), i);
-        }
-
-        return treeNode;
-    }
-
     public String getText() {
         return "";
     }
@@ -54,14 +42,10 @@ public class TreeEditPart extends AbstractEditPart {
         return IconLoader.findIcon(Activator.getIconPath(getModel().getClass()));
     }
 
-    public void refreshVisuals() {
-    }
-
     private void refreshChildren() {
         refreshModelPart(getChildren(), getModelChildren());
     }
     public void refresh() {
-        refreshVisuals();
         refreshChildren();
     }
 

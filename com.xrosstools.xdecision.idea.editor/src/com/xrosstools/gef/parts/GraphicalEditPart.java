@@ -1,13 +1,9 @@
 package com.xrosstools.gef.parts;
 
-import com.xrosstools.gef.EditorPanel;
-import com.xrosstools.gef.commands.Command;
 import com.xrosstools.gef.figures.AbstractAnchor;
 import com.xrosstools.gef.figures.ChopboxAnchor;
 import com.xrosstools.gef.figures.Figure;
-import com.xrosstools.gef.util.IPropertySource;
 
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -78,42 +74,12 @@ public abstract class GraphicalEditPart extends AbstractEditPart {
         getFigure().remove(((GraphicalEditPart)childEditPart).getFigure());
     }
 
-    public void addNotify() {
-        getFigure();
-        refresh();
-    }
-
-//    public void remove() {
-//        for(Object conn : getModelSourceConnections())
-//            findEditPart(conn).remove();
-//
-//        for(Object conn : getModelTargetConnections())
-//            findEditPart(conn).remove();
-//
-//        getParent().removeChild(childEditParts, this);
-//    }
-
     public void removeSourceConnection(ConnectionEditPart connectionEditPart) {
         getFigure().getConnection().remove(connectionEditPart.getFigure());
     }
 
     public void removeTargetConnection(ConnectionEditPart connectionEditPart) {
         getFigure().getConnection().remove(connectionEditPart.getFigure());
-    }
-
-    public final void build() {
-        getFigure();
-        List children = getModelChildren();
-        for (int i = 0; i < children.size(); i++) {
-            addChildModel(childEditParts, children.get(i), i);
-        }
-
-        children = getModelSourceConnections();
-        for (int i = 0; i < children.size(); i++) {
-            addChildModel(sourceConnEditParts, children.get(i), i);
-        }
-
-        refreshVisuals();
     }
 
     public final Figure getFigure() {
@@ -170,7 +136,6 @@ public abstract class GraphicalEditPart extends AbstractEditPart {
         refreshChildren();
         refreshSourceConnections();
         refreshTargetConnections();
-//        ((EditorPanel<IPropertySource>)getContext().getContentPane()).refresh();
     }
 
     /**
