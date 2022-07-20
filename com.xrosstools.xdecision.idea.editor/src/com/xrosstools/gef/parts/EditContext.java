@@ -3,11 +3,13 @@ package com.xrosstools.gef.parts;
 import com.xrosstools.gef.EditorPanel;
 import com.xrosstools.gef.figures.Figure;
 
+import javax.swing.tree.DefaultTreeModel;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EditContext {
     private EditorPanel contentPane;
+
     private List<Trinity> contents = new ArrayList<>();
 
     public EditContext(EditorPanel contentPane) {
@@ -16,6 +18,10 @@ public class EditContext {
 
     public EditorPanel getContentPane() {
         return contentPane;
+    }
+
+    public DefaultTreeModel getTreeModel() {
+        return contentPane.getTreeModel();
     }
 
     public void add(GraphicalEditPart part, Object model) {
@@ -37,9 +43,11 @@ public class EditContext {
             trinity.model = model;
             contents.add(trinity);
         }
-        if(trinity.treeEditPart != null)
-            ;
         trinity.treeEditPart = part;
+    }
+
+    public void remove(Object model) {
+        contents.remove(findContent(model));
     }
 
     public GraphicalEditPart findEditPart(Object model) {

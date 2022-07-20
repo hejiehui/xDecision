@@ -1,6 +1,6 @@
 package com.xrosstools.gef;
 
-import com.intellij.openapi.util.IconLoader;
+     import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
@@ -16,10 +16,8 @@ import com.xrosstools.gef.util.SimpleTableCellEditor;
 import com.xrosstools.gef.util.SimpleTableRenderer;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
+     import javax.swing.event.TreeSelectionListener;
+     import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -39,7 +37,8 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
     private ContextMenuProvider outlineContextMenuProvider;
 
     private Point lastHit;
-    private TreeEditPart lastSelectedTreePart;
+    private DefaultTreeModel treeModel;
+    private PropertyTableModel tableModel;
     private Figure lastSelected;
     private Figure lastHover;
     private Object newModel;
@@ -118,20 +117,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
     private JComponent createTree() {
         treeNavigator = new Tree();
         treeNavigator.setExpandsSelectedPaths(true);
-
-        treeNavigator.addTreeSelectionListener(e -> selectedNode());
-
-        treeNavigator.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                if (SwingUtilities.isRightMouseButton(evt)) {
-                    DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeNavigator.getLastSelectedPathComponent();
-                    if(node == null)
-                        return;
-
-                    outlineContextMenuProvider.buildDisplayMenu((TreeEditPart)node.getUserObject()).show(evt.getComponent(), evt.getX(), evt.getY());
-                }
-            }
-        });
+        treeNavigator.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         JScrollPane treePane = new JBScrollPane(treeNavigator);
         treePane.setLayout(new ScrollPaneLayout());
@@ -144,8 +130,8 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
 
     private JComponent createProperty() {
         tableProperties = new JBTable();
-        PropertyTableModel model = new PropertyTableModel(diagram, contentProvider);
-        setModel(model);
+        tableModel = new PropertyTableModel(diagram, contentProvider);
+        tableProperties.setModel(tableModel);
 
         JScrollPane scrollPane = new JBScrollPane(tableProperties);
         scrollPane.setLayout(new ScrollPaneLayout());
@@ -164,7 +150,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         return btn;
     }
 
-    public void reset(){
+    private void reset(){
         gotoNext(ready);
     }
 
@@ -178,6 +164,10 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         gotoNext(modelCreated);
     }
 
+    public DefaultTreeModel getTreeModel() {
+        return treeModel;
+    }
+
     private void build() {
         EditContext editContext = new EditContext(this);
         EditPartFactory editPartFactory = contentProvider.createEditPartFactory(editContext);
@@ -186,11 +176,36 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         root = (GraphicalEditPart) editPartFactory.createEditPart(null, diagram);
         treeRoot = (TreeEditPart) treeEditPartFactory.createEditPart(null, diagram);
 
+        treeModel = new DefaultTreeModel(treeRoot.getTreeNode(), false);
+        tableModel = new PropertyTableModel((IPropertySource)treeRoot.getModel(), contentProvider);
+
+        treeNavigator.setModel(treeModel);
         contentProvider.preBuildRoot();
 
         root.refresh();
         treeRoot.refresh();
         contentProvider.postBuildRoot();
+
+        postBuild();
+        updateVisual();
+    }
+
+    private TreeSelectionListener treeSelectionListener = e -> selectTreeNode();
+
+    private void postBuild() {
+        treeNavigator.addTreeSelectionListener(treeSelectionListener);
+
+        treeNavigator.addMouseListener(new MouseAdapter() {
+            public void mouseReleased(MouseEvent evt) {
+                if (evt.isPopupTrigger()) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeNavigator.getLastSelectedPathComponent();
+                    if(node == null)
+                        return;
+
+                    outlineContextMenuProvider.buildDisplayMenu(node.getUserObject()).show(evt.getComponent(), evt.getX(), evt.getY());
+                }
+            }
+        });
 
         treeNavigator.setCellRenderer(new DefaultTreeCellRenderer(){
             public Component getTreeCellRendererComponent(JTree tree, Object value,
@@ -204,7 +219,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             }
         });
 
-        updateVisual();
+        treeNavigator.expandPath(new TreePath(treeRoot.getTreeNode()));
     }
 
     public void rebuild() {
@@ -229,19 +244,17 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
 
     private void selectFigureAt(Point location) {
         Figure f = findFigureAt(location);
-        updateSelection(f);
+        updateFigureSelection(f);
+
+        Object model = f == null ? null : f.getPart().getModel();
+        updateTreeSelection(model);
+        updatePropertySelection(model);
+        refresh();
+
 
         if(f == null) {
             gotoNext(ready);
             return;
-        }
-
-        TreeEditPart treePart = treeRoot.findEditPart(f.getPart().getModel());
-        if(treePart != null) {
-            DefaultMutableTreeNode treeNode = treePart.getTreeNode();
-            //execute tree selection
-            if (treeNode != null)
-                treeNavigator.setSelectionPath(new TreePath(treeNode.getPath()));
         }
 
         if(f instanceof Endpoint && f.getParent() instanceof Connection) {
@@ -300,13 +313,40 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         curHandle = next;
     }
 
-    private void setModel(PropertyTableModel model){
-        tableProperties.setModel(model);
-        tableProperties.setDefaultRenderer(Object.class, new SimpleTableRenderer(model));
-        tableProperties.getColumnModel().getColumn(1).setCellEditor(new SimpleTableCellEditor(model));
+    private void updatePropertySelection(Object model){
+        if(model == null)
+            return;
+
+        if(!(model instanceof IPropertySource)) {
+            tableModel = null;
+            tableProperties.setVisible(false);
+            return;
+        }
+
+        if(tableModel != null && tableModel.isSame((IPropertySource) model))
+            return;
+
+        tableModel = new PropertyTableModel((IPropertySource) model, contentProvider);
+        tableProperties.setVisible(true);
+        tableProperties.setModel(tableModel);
+        tableProperties.setDefaultRenderer(Object.class, new SimpleTableRenderer(tableModel));
+        tableProperties.getColumnModel().getColumn(1).setCellEditor(new SimpleTableCellEditor(tableModel));
     }
 
-    private void updateSelection(Figure selected) {
+    private void updateTreeSelection(Object model) {
+        triggedByFigure = true;
+        TreeEditPart treePart = treeRoot.findEditPart(model);
+        if(treePart == null) {
+            treeNavigator.clearSelection();
+            return;
+        }
+
+        TreePath selected = new TreePath(treePart.getTreeNode());
+        treeNavigator.setSelectionPath(selected);
+        treeNavigator.scrollPathToVisible(selected);
+    }
+
+    private void updateFigureSelection(Figure selected) {
         if(lastSelected == selected)
             return;
 
@@ -317,22 +357,27 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             lastSelected = selected;
             lastSelected.setSelected(true);
         }
-
-        refresh();
     }
 
-    private void selectedNode() {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeNavigator.getLastSelectedPathComponent();
-        if(node == null)
+    private boolean triggedByFigure = false;
+
+    private void selectTreeNode() {
+        if(triggedByFigure) {
+            triggedByFigure = false;
+            return;
+        }
+
+        DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)treeNavigator.getLastSelectedPathComponent();
+        if(treeNode == null)
             return;
 
-        TreeEditPart treePart = (TreeEditPart)node.getUserObject();
+        TreeEditPart treePart = (TreeEditPart)treeNode.getUserObject();
+
         Figure selected = treePart.getContext().findFigure(treePart.getModel());
+        updateFigureSelection(selected);
+        updatePropertySelection(treePart.getModel());
 
-        if(selected == null || selected == lastSelected)
-            return;
-
-        updateSelection(selected);
+        refresh();
 
         adjust(innerDiagramPane.getVerticalScrollBar(), lastSelected.getY(), lastSelected.getHeight());
         adjust(innerDiagramPane.getHorizontalScrollBar(), lastSelected.getX(), lastSelected.getWidth());
@@ -357,21 +402,15 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             return;
 
         action.run();
+
+        root.refresh();
+        treeRoot.refresh();
+
         refresh();
         contentProvider.save();
     }
 
     private void updateVisual() {
-        root.refresh();
-        treeRoot.refresh();
-        treeNavigator.setModel(new DefaultTreeModel(treeRoot.getTreeNode(), false));
-
-        if(lastSelected!=null) {
-            Object model = lastSelected.getPart().getModel();
-            if(model instanceof IPropertySource)
-                setModel(new PropertyTableModel((IPropertySource)model, contentProvider));
-        }
-
         int height = unitPanel.getPreferredSize().height;
         innerDiagramPane.getVerticalScrollBar().setMaximum(height);
 
@@ -569,6 +608,18 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
     };
 
     private InteractionHandle sourceEndpointSelected = new InteractionHandle("sourceEndpointSelected") {
+        private Endpoint endpoint;
+        public void enter() {
+            endpoint = (Endpoint)lastSelected;
+        }
+        public void mousePressed(MouseEvent e) {
+            selectFigureAt(e.getPoint());
+            if(lastSelected == endpoint)
+                return;
+
+            endpoint = null;
+            gotoNext(figureSelected);
+        }
         public void mouseDragged(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
             if(getCommand(f) != null)
@@ -586,6 +637,18 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
     };
 
     private InteractionHandle targetEndpointSelected = new InteractionHandle("targetEndpointSelected") {
+        private Endpoint endpoint;
+        public void enter() {
+            endpoint = (Endpoint)lastSelected;
+        }
+        public void mousePressed(MouseEvent e) {
+            selectFigureAt(e.getPoint());
+            if(lastSelected == endpoint)
+                return;
+
+            endpoint = null;
+            gotoNext(figureSelected);
+        }
         public void mouseDragged(MouseEvent e) {
             Figure f = findFigureAt(e.getPoint());
             if(getCommand(f) != null)

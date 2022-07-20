@@ -74,6 +74,10 @@ public class PropertyTableModel extends AbstractTableModel {
             return descriptor.getValue((int)value);
     }
 
+    public boolean isSame(IPropertySource anotherSource) {
+        return source == anotherSource;
+    }
+
     @Override
     public int getRowCount() {
         return source == null ? 0 : internalRows.size();

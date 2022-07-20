@@ -5,6 +5,7 @@ import com.xrosstools.xdecision.idea.editor.Activator;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,14 +21,18 @@ public class TreeEditPart extends AbstractEditPart {
         return childEditParts;
     }
 
+    protected DefaultTreeModel getTreeModel() {
+        return getContext().getTreeModel();
+    }
+
     @Override
     protected void addChildPartVisual(EditPart childEditPart, int index) {
-        treeNode.insert(((TreeEditPart)childEditPart).treeNode, index);
+        getTreeModel().insertNodeInto(((TreeEditPart)childEditPart).treeNode, treeNode, index);
     }
 
     @Override
     protected void removeChildVisual(EditPart childEditPart) {
-        treeNode.remove(((TreeEditPart)childEditPart).treeNode);
+        getTreeModel().removeNodeFromParent(((TreeEditPart)childEditPart).treeNode);
     }
 
     public DefaultMutableTreeNode getTreeNode() {

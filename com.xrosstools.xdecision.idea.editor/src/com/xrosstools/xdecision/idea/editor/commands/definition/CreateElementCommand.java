@@ -23,11 +23,11 @@ public class CreateElementCommand extends InputTextCommand {
         switch (container.getElementType()) {
         case DECISION:
         case DATA_TYPE:
-            return !container.containsName(newName);
+            return container.containsName(newName);
         case FACTOR:
         case ENUM:
         case CONSTANT:
-            return !(diagram.getFactors().containsName(newName) ||
+            return (diagram.getFactors().containsName(newName) ||
                     diagram.getUserDefinedConstants().containsName(newName) ||
                     diagram.getUserDefinedEnums().containsName(newName));    
         default:

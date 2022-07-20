@@ -40,6 +40,9 @@ public abstract class AbstractEditPart implements EditPart {
 
     @Override
     public final void setModel(Object model) {
+        if(this.model == model)
+            return;
+
         this.model = model;
         if(model instanceof IPropertySource) {
             PropertyChangeSupport support = ((IPropertySource)model).getListeners();
