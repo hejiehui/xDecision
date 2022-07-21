@@ -139,8 +139,17 @@ public abstract class AbstractEditPart implements EditPart {
     }
 
     public final void addChildModel(List parts, Object child, int index) {
-        EditPart childEditPart = factory.createEditPart(this, child);
+        EditPart childEditPart;
+        if(findEditPart(child) == null) {
+            childEditPart = factory.createEditPart(this, child);
+        } else {
+            childEditPart = findEditPart(child);
+            AbstractEditPart parent = (AbstractEditPart) childEditPart.getParent();
+            removeChild(parent.getChildren(), childEditPart);
+        }
+
         parts.add(index, childEditPart);
+        childEditPart.setParent(this);
         addChildPartVisual(childEditPart, index);
         childEditPart.addNotify();
         childEditPart.activate();
@@ -151,5 +160,8 @@ public abstract class AbstractEditPart implements EditPart {
         removeChildVisual(childEditPart);
         childEditPart.setParent(null);
         parts.remove(childEditPart);
+        editContext.remove(childEditPart.getModel());
     }
+
+    protected abstract EditPart findEditPart(Object model);
 }

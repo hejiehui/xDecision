@@ -27,7 +27,11 @@ public class TreeEditPart extends AbstractEditPart {
 
     @Override
     protected void addChildPartVisual(EditPart childEditPart, int index) {
-        getTreeModel().insertNodeInto(((TreeEditPart)childEditPart).treeNode, treeNode, index);
+        DefaultMutableTreeNode childNode = ((TreeEditPart)childEditPart).treeNode;
+        DefaultMutableTreeNode childParentNode = (DefaultMutableTreeNode)childNode.getParent();
+        if( childParentNode != null && childParentNode.getUserObject() != null && childParentNode.getUserObject() != this)
+            getTreeModel().removeNodeFromParent(childNode);
+        getTreeModel().insertNodeInto(childNode, treeNode, index);
     }
 
     @Override

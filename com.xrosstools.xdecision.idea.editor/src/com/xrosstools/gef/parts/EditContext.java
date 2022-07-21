@@ -47,15 +47,20 @@ public class EditContext {
     }
 
     public void remove(Object model) {
-        contents.remove(findContent(model));
+        Trinity t = findContent(model);
+
+        if(t.editPart == null && t.treeEditPart == null)
+            contents.remove(findContent(model));
     }
 
     public GraphicalEditPart findEditPart(Object model) {
-        return findContent(model).getEditPart();
+        Trinity t = findContent(model);
+        return t == null ? null : t.editPart;
     }
 
     public TreeEditPart findTreeEditPart(Object model) {
-        return findContent(model).getTreeEditPart();
+        Trinity t = findContent(model);
+        return t == null ? null : t.treeEditPart;
     }
 
     public Figure findFigure(Object model) {

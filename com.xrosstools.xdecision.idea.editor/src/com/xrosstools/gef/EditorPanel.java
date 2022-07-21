@@ -20,6 +20,7 @@ import javax.swing.*;
      import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
+     import java.util.Enumeration;
 
 public class EditorPanel<T extends IPropertySource> extends JPanel {
     private JBSplitter mainPane;
@@ -222,6 +223,31 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         treeNavigator.expandPath(new TreePath(treeRoot.getTreeNode()));
     }
 
+    public static void expandTree(JTree tree) {
+        TreeNode root = (TreeNode) tree.getModel().getRoot();
+        expandAll(tree, new TreePath(root), true);
+    }
+
+
+    private static void expandAll(JTree tree, TreePath parent, boolean expand) {
+        // Traverse children
+        TreeNode node = (TreeNode) parent.getLastPathComponent();
+        if (node.getChildCount() >= 0) {
+            for (Enumeration e = node.children(); e.hasMoreElements(); ) {
+                TreeNode n = (TreeNode) e.nextElement();
+                TreePath path = parent.pathByAddingChild(n);
+                expandAll(tree, path, expand);
+            }
+        }
+
+        // Expansion or collapse must be done bottom-up
+        if (expand) {
+            tree.expandPath(parent);
+        } else {
+            tree.collapsePath(parent);
+        }
+    }
+
     public void rebuild() {
         root.refresh();
         treeRoot.refresh();
@@ -249,8 +275,6 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         Object model = f == null ? null : f.getPart().getModel();
         updateTreeSelection(model);
         updatePropertySelection(model);
-        refresh();
-
 
         if(f == null) {
             gotoNext(ready);
@@ -344,6 +368,8 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         TreePath selected = new TreePath(treePart.getTreeNode());
         treeNavigator.setSelectionPath(selected);
         treeNavigator.scrollPathToVisible(selected);
+
+        expandTree(treeNavigator);
     }
 
     private void updateFigureSelection(Figure selected) {
@@ -357,6 +383,8 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             lastSelected = selected;
             lastSelected.setSelected(true);
         }
+
+        refresh();
     }
 
     private boolean triggedByFigure = false;

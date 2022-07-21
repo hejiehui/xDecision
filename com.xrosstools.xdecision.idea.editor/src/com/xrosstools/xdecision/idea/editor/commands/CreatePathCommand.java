@@ -36,9 +36,6 @@ public class CreatePathCommand extends Command {
 
 	public void execute() {
         path = new DecisionTreeNodeConnection(parent, child);
-//        TODO The following logic is different with eclipse version
-//        path.setParent(parent);
-//        path.setChild(child);
     }
 
 	public void redo() {
