@@ -20,7 +20,7 @@ public class ChangeElementNameCommand extends InputTextCommand {
     }
     
     public boolean canExecute() {
-        return CreateElementCommand.contains(diagram, container, getInputText());
+        return !CreateElementCommand.contains(diagram, container, getInputText());
     }
     
     public void execute() {
