@@ -111,8 +111,13 @@ public class DecisionTreePanelContentProvider extends PanelContentProvider<Decis
     public void preBuildRoot(){
         layoutAlgorithm.layout(diagram);
     }
+
     public void postBuildRoot(){
         layoutAlgorithm.layout(diagram);
+        getEditorPanel().refreshVisual();
+
+        layoutAlgorithm.layout(diagram);
+        getEditorPanel().refreshVisual();
     }
 
 }

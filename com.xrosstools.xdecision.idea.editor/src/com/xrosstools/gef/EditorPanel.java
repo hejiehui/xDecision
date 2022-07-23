@@ -248,9 +248,11 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         }
     }
 
-    public void rebuild() {
+    public void refresh() {
         root.refresh();
         treeRoot.refresh();
+        refreshVisual();
+        contentProvider.save();
     }
 
     private void updateTooltip(Point location) {
@@ -369,7 +371,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         treeNavigator.setSelectionPath(selected);
         treeNavigator.scrollPathToVisible(selected);
 
-        expandTree(treeNavigator);
+//        expandTree(treeNavigator);
     }
 
     private void updateFigureSelection(Figure selected) {
@@ -384,7 +386,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             lastSelected.setSelected(true);
         }
 
-        refresh();
+        refreshVisual();
     }
 
     private boolean triggedByFigure = false;
@@ -405,7 +407,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         updateFigureSelection(selected);
         updatePropertySelection(treePart.getModel());
 
-        refresh();
+        refreshVisual();
 
         adjust(innerDiagramPane.getVerticalScrollBar(), lastSelected.getY(), lastSelected.getHeight());
         adjust(innerDiagramPane.getHorizontalScrollBar(), lastSelected.getX(), lastSelected.getWidth());
@@ -420,7 +422,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         contextMenuBuilder.buildDisplayMenu(lastSelected.getPart()).show(unitPanel, x, y);
     }
 
-    public void refresh() {
+    public void refreshVisual() {
         updateVisual();
         unitPanel.grabFocus();
     }
@@ -431,11 +433,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
 
         action.run();
 
-        root.refresh();
-        treeRoot.refresh();
-
         refresh();
-        contentProvider.save();
     }
 
     private void updateVisual() {
@@ -489,7 +487,7 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             sourcePart = null;
             treeNavigator.clearSelection();
 
-            refresh();
+            refreshVisual();
         }
         public void mouseMoved(MouseEvent e) {
             updateTooltip(e.getPoint());

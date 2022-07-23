@@ -32,8 +32,7 @@ public abstract class PanelContentProvider<T extends IPropertySource> implements
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        editorPanel.rebuild();
-        save();
+        editorPanel.refresh();
     }
 
     public void createConnection(Object connModel){

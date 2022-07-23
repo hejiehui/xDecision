@@ -95,7 +95,7 @@ public abstract class AbstractEditPart implements EditPart {
     }
 
     public void repaint() {
-        ((EditorPanel<IPropertySource>)getContext().getContentPane()).refresh();
+        ((EditorPanel<IPropertySource>)getContext().getContentPane()).refreshVisual();
     }
 
     public void refresh() {
