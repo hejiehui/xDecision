@@ -27,8 +27,6 @@ public abstract class GraphicalEditPart extends AbstractEditPart {
         return new EditPolicy();
     }
 
-    protected void refreshVisuals() {}
-
     /**
      * Being double clicked
      */
@@ -70,16 +68,13 @@ public abstract class GraphicalEditPart extends AbstractEditPart {
         }
     }
 
+    public void addNotify(){
+        getFigure();
+        super.addNotify();
+    }
+
     protected void removeChildVisual(EditPart childEditPart) {
         getFigure().remove(((GraphicalEditPart)childEditPart).getFigure());
-    }
-
-    public void removeSourceConnection(ConnectionEditPart connectionEditPart) {
-        getFigure().getConnection().remove(connectionEditPart.getFigure());
-    }
-
-    public void removeTargetConnection(ConnectionEditPart connectionEditPart) {
-        getFigure().getConnection().remove(connectionEditPart.getFigure());
     }
 
     public final Figure getFigure() {
@@ -132,24 +127,76 @@ public abstract class GraphicalEditPart extends AbstractEditPart {
     }
 
     public void refresh() {
-        refreshVisuals();
-        refreshChildren();
+        super.refresh();
         refreshSourceConnections();
         refreshTargetConnections();
     }
 
-    /**
-     * The following is copy from GEF AbstractEditPart.refreshChildren
-     */
-    private void refreshChildren() {
-        refreshModelPart(getChildren(), getModelChildren());
-    }
-
     protected void refreshSourceConnections() {
-        refreshModelPart(getSourceConnections(), getModelSourceConnections());
+        refreshModelPart(getSourceConnections(), getModelSourceConnections(), sourceConnectionHandler);
     }
 
     protected void refreshTargetConnections() {
-        refreshModelPart(getTargetConnections(), getModelTargetConnections());
+        refreshModelPart(getTargetConnections(), getModelTargetConnections(), targetConnectionHandler);
     }
+
+    private EditPartHandler sourceConnectionHandler = new EditPartHandler() {
+        @Override
+        public void reorderChild(List parts, EditPart childPart, int index) {
+            defaultReorder(parts, childPart, index);
+        }
+
+        @Override
+        public void addChildModel(List parts, Object child, int index) {
+            ConnectionEditPart connection = (ConnectionEditPart)createOrFindPart(child);
+            parts.add(index, connection);
+
+            GraphicalEditPart source = connection.getSource();
+            if (source != null)
+                source.getSourceConnections().remove(connection);
+
+            connection.setSource(GraphicalEditPart.this);
+            addChildPartVisual(connection, index);
+
+            connection.addNotify();
+            connection.activate();
+        }
+
+        @Override
+        public void removeChild(List parts, EditPart childEditPart) {
+            ConnectionEditPart connection = (ConnectionEditPart)childEditPart;
+            if (connection.getSource() == GraphicalEditPart.this) {
+                connection.deactivate();
+                removeChildVisual(childEditPart);
+                connection.setSource(null);
+            }
+            parts.remove(childEditPart);
+        }
+    };
+
+    private EditPartHandler targetConnectionHandler = new EditPartHandler() {
+        @Override
+        public void reorderChild(List parts, EditPart editPart, int index) {
+            defaultReorder(parts, editPart, index);
+        }
+
+        @Override
+        public void addChildModel(List parts, Object child, int index) {
+            ConnectionEditPart connection = (ConnectionEditPart)createOrFindPart(child);
+            parts.add(index, connection);
+
+            GraphicalEditPart target = connection.getTarget();
+            if (target != null)
+                target.getTargetConnections().remove(connection);
+            connection.setTarget(GraphicalEditPart.this);
+        }
+
+        @Override
+        public void removeChild(List parts, EditPart childEditPart) {
+            ConnectionEditPart connection = (ConnectionEditPart)childEditPart;
+            if (connection.getTarget() == GraphicalEditPart.this)
+                connection.setTarget(null);
+            parts.remove(childEditPart);
+        }
+    };
 }

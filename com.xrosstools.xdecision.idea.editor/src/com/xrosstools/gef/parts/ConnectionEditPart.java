@@ -4,8 +4,8 @@ import com.xrosstools.gef.figures.AbstractAnchor;
 import com.xrosstools.gef.figures.Figure;
 
 public abstract class ConnectionEditPart extends GraphicalEditPart {
-    public abstract Object getSourceModel();
-    public abstract Object getTargetModel();
+    private GraphicalEditPart source;
+    private GraphicalEditPart target;
 
 //    @Override
 //    public void remove() {
@@ -14,11 +14,19 @@ public abstract class ConnectionEditPart extends GraphicalEditPart {
 //    }
 
     public GraphicalEditPart getSource() {
-        return findEditPart(getSourceModel());
+        return source;
     }
 
     public GraphicalEditPart getTarget() {
-        return findEditPart(getTargetModel());
+        return target;
+    }
+
+    public void setSource(GraphicalEditPart source) {
+        this.source = source;
+    }
+
+    public void setTarget(GraphicalEditPart target) {
+        this.target = target;
     }
 
     public Figure getSourceFigure() {

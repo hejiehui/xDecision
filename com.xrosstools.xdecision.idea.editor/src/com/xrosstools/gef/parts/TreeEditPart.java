@@ -13,7 +13,7 @@ public class TreeEditPart extends AbstractEditPart {
     private DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(this);
     private List<TreeEditPart> childEditParts = new ArrayList<>();
 
-    public TreeEditPart(Object model){
+    public TreeEditPart(Object model) {
         setModel(model);
     }
 
@@ -27,16 +27,16 @@ public class TreeEditPart extends AbstractEditPart {
 
     @Override
     protected void addChildPartVisual(EditPart childEditPart, int index) {
-        DefaultMutableTreeNode childNode = ((TreeEditPart)childEditPart).treeNode;
-        DefaultMutableTreeNode childParentNode = (DefaultMutableTreeNode)childNode.getParent();
-        if( childParentNode != null && childParentNode.getUserObject() != null && childParentNode.getUserObject() != this)
+        DefaultMutableTreeNode childNode = ((TreeEditPart) childEditPart).treeNode;
+        DefaultMutableTreeNode childParentNode = (DefaultMutableTreeNode) childNode.getParent();
+        if (childParentNode != null && childParentNode.getUserObject() != null && childParentNode.getUserObject() != this)
             getTreeModel().removeNodeFromParent(childNode);
         getTreeModel().insertNodeInto(childNode, treeNode, index);
     }
 
     @Override
     protected void removeChildVisual(EditPart childEditPart) {
-        getTreeModel().removeNodeFromParent(((TreeEditPart)childEditPart).treeNode);
+        getTreeModel().removeNodeFromParent(((TreeEditPart) childEditPart).treeNode);
     }
 
     public DefaultMutableTreeNode getTreeNode() {
@@ -49,13 +49,6 @@ public class TreeEditPart extends AbstractEditPart {
 
     public Icon getImage() {
         return IconLoader.findIcon(Activator.getIconPath(getModel().getClass()));
-    }
-
-    private void refreshChildren() {
-        refreshModelPart(getChildren(), getModelChildren());
-    }
-    public void refresh() {
-        refreshChildren();
     }
 
     public final TreeEditPart findEditPart(Object model) {

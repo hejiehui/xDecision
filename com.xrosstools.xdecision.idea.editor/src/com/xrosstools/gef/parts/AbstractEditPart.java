@@ -19,6 +19,8 @@ public abstract class AbstractEditPart implements EditPart {
 
     abstract protected void removeChildVisual(EditPart childEditPart);
 
+    abstract protected EditPart findEditPart(Object model);
+
     public void addNotify(){
         refresh();
     }
@@ -96,7 +98,19 @@ public abstract class AbstractEditPart implements EditPart {
         ((EditorPanel<IPropertySource>)getContext().getContentPane()).refresh();
     }
 
-    public final void refreshModelPart(List parts, List models) {
+    public void refresh() {
+        refreshVisuals();
+        refreshChildren();
+    }
+
+    protected void refreshVisuals() {}
+
+    protected void refreshChildren() {
+        refreshModelPart(getChildren(), getModelChildren(), nodeHandler);
+    }
+
+
+    public final void refreshModelPart(List parts, List models, EditPartHandler handler) {
         int size = parts.size();
         Map modelToEditPart = Collections.emptyMap();
         int i;
@@ -113,9 +127,9 @@ public abstract class AbstractEditPart implements EditPart {
             if(i >= parts.size() || ((EditPart)parts.get(i)).getModel() != model) {
                 EditPart editPart = (EditPart)modelToEditPart.get(model);
                 if(editPart != null) {
-                    reorderChild(parts, editPart, i);
+                    handler.reorderChild(parts, editPart, i);
                 } else {
-                    addChildModel(parts, model, i);
+                    handler.addChildModel(parts, model, i);
                 }
             }
         }
@@ -127,41 +141,43 @@ public abstract class AbstractEditPart implements EditPart {
                 trash.add(parts.get(i));
             for(i = 0; i < trash.size(); i++)            {
                 EditPart ep = (EditPart)trash.get(i);
-                removeChild(parts, ep);
+                handler.removeChild(parts, ep);
+                getContext().remove(ep.getModel());
             }
         }
     }
-    protected void reorderChild(List parts, EditPart editPart, int index) {
-        removeChildVisual(editPart);
-        parts.remove(editPart);
-        parts.add(index, editPart);
-        addChildPartVisual(editPart, index);
+
+    protected void defaultReorder(List parts, EditPart childPart, int index) {
+        parts.remove(childPart);
+        parts.add(index, childPart);
     }
 
-    public final void addChildModel(List parts, Object child, int index) {
-        EditPart childEditPart;
-        if(findEditPart(child) == null) {
-            childEditPart = factory.createEditPart(this, child);
-        } else {
-            childEditPart = findEditPart(child);
-            AbstractEditPart parent = (AbstractEditPart) childEditPart.getParent();
-            removeChild(parent.getChildren(), childEditPart);
+    protected EditPart createOrFindPart(Object model) {
+        EditPart childEditPart = findEditPart(model);
+        return childEditPart == null? getEditPartFactory().createEditPart(this, model) : childEditPart;
+    }
+
+    private EditPartHandler nodeHandler = new EditPartHandler() {
+        public void reorderChild(List parts, EditPart editPart, int index) {
+            removeChildVisual(editPart);
+            parts.remove(editPart);
+            parts.add(index, editPart);
+            addChildPartVisual(editPart, index);
         }
 
-        parts.add(index, childEditPart);
-        childEditPart.setParent(this);
-        addChildPartVisual(childEditPart, index);
-        childEditPart.addNotify();
-        childEditPart.activate();
-    }
+        public void addChildModel(List parts, Object child, int index) {
+            EditPart childEditPart = getEditPartFactory().createEditPart(AbstractEditPart.this, child);
+            parts.add(index, childEditPart);
+            addChildPartVisual(childEditPart, index);
+            childEditPart.addNotify();
+            childEditPart.activate();
+        }
 
-    public void removeChild(List parts, EditPart childEditPart) {
-        childEditPart.deactivate();
-        removeChildVisual(childEditPart);
-        childEditPart.setParent(null);
-        parts.remove(childEditPart);
-        editContext.remove(childEditPart.getModel());
-    }
-
-    protected abstract EditPart findEditPart(Object model);
+        public void removeChild(List parts, EditPart childEditPart) {
+            childEditPart.deactivate();
+            removeChildVisual(childEditPart);
+            childEditPart.setParent(null);
+            parts.remove(childEditPart);
+        }
+    };
 }

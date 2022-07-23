@@ -71,14 +71,4 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
 
         conn.setActualWidth(opaque ? condition.getPreferredSize().width : 0);
     }
-
-    @Override
-    public Object getSourceModel() {
-        return ((DecisionTreeNodeConnection)getModel()).getParent();
-    }
-
-    @Override
-    public Object getTargetModel() {
-        return ((DecisionTreeNodeConnection)getModel()).getChild();
-    }
 }
