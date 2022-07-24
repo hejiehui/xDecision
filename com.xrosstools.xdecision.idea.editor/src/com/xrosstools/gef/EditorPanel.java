@@ -223,29 +223,32 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         treeNavigator.expandPath(new TreePath(treeRoot.getTreeNode()));
     }
 
-    public static void expandTree(JTree tree) {
-        TreeNode root = (TreeNode) tree.getModel().getRoot();
-        expandAll(tree, new TreePath(root), true);
+    public void expandTree(TreeNode selectedNode) {
+        TreeNode root = (TreeNode) treeNavigator.getModel().getRoot();
+        expandAll(new TreePath(root), selectedNode);
     }
 
-
-    private static void expandAll(JTree tree, TreePath parent, boolean expand) {
+    private boolean expandAll(TreePath parent, TreeNode selectedNode) {
         // Traverse children
         TreeNode node = (TreeNode) parent.getLastPathComponent();
+
+        if(selectedNode == node) {
+            treeNavigator.setSelectionPath(parent);
+            return true;
+        }
+
         if (node.getChildCount() >= 0) {
             for (Enumeration e = node.children(); e.hasMoreElements(); ) {
                 TreeNode n = (TreeNode) e.nextElement();
                 TreePath path = parent.pathByAddingChild(n);
-                expandAll(tree, path, expand);
+                if(expandAll(path, selectedNode)) {
+                    // Expansion or collapse must be done bottom-up
+                    treeNavigator.expandPath(parent);
+                    return  true;
+                }
             }
         }
-
-        // Expansion or collapse must be done bottom-up
-        if (expand) {
-            tree.expandPath(parent);
-        } else {
-            tree.collapsePath(parent);
-        }
+        return false;
     }
 
     public void refresh() {
@@ -268,24 +271,6 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         Figure rootFigure = root.getFigure();
         Figure selected = rootFigure.selectFigureAt(location.x, location.y);
         return selected == null ? rootFigure : selected;
-    }
-
-    private void selectFigureAt(Point location) {
-        Figure f = findFigureAt(location);
-        updateFigureSelection(f);
-
-        Object model = f == null ? null : f.getPart().getModel();
-        updateTreeSelection(model);
-        updatePropertySelection(model);
-
-        if(f == null) {
-            gotoNext(ready);
-            return;
-        }
-
-        if(f instanceof Endpoint && f.getParent() instanceof Connection) {
-            gotoNext(((Endpoint)f).isConnectionSourceEndpoint() ? sourceEndpointSelected : targetEndpointSelected);
-        }
     }
 
     private Command updateHover(Figure underPoint, Command command, Point location) {
@@ -368,10 +353,9 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         }
 
         TreePath selected = new TreePath(treePart.getTreeNode());
-        treeNavigator.setSelectionPath(selected);
-        treeNavigator.scrollPathToVisible(selected);
+        expandTree(treePart.getTreeNode());
 
-//        expandTree(treeNavigator);
+        treeNavigator.scrollPathToVisible(selected);
     }
 
     private void updateFigureSelection(Figure selected) {
@@ -411,6 +395,24 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
 
         adjust(innerDiagramPane.getVerticalScrollBar(), lastSelected.getY(), lastSelected.getHeight());
         adjust(innerDiagramPane.getHorizontalScrollBar(), lastSelected.getX(), lastSelected.getWidth());
+    }
+
+    private void selectFigureAt(Point location) {
+        Figure f = findFigureAt(location);
+        updateFigureSelection(f);
+
+        Object model = f == null ? null : f.getPart().getModel();
+        updateTreeSelection(model);
+        updatePropertySelection(model);
+
+        if(f == null) {
+            gotoNext(ready);
+            return;
+        }
+
+        if(f instanceof Endpoint && f.getParent() instanceof Connection) {
+            gotoNext(((Endpoint)f).isConnectionSourceEndpoint() ? sourceEndpointSelected : targetEndpointSelected);
+        }
     }
 
     private void adjust(JScrollBar scrollBar, int start, int length ) {
