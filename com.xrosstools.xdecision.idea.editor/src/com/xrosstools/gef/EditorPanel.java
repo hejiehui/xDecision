@@ -117,8 +117,8 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
 
     private JComponent createTree() {
         treeNavigator = new Tree();
-        treeNavigator.setExpandsSelectedPaths(true);
         treeNavigator.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        treeNavigator.setExpandsSelectedPaths(true);
 
         JScrollPane treePane = new JBScrollPane(treeNavigator);
         treePane.setLayout(new ScrollPaneLayout());
@@ -223,34 +223,6 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         treeNavigator.expandPath(new TreePath(treeRoot.getTreeNode()));
     }
 
-    public void expandTree(TreeNode selectedNode) {
-        TreeNode root = (TreeNode) treeNavigator.getModel().getRoot();
-        expandAll(new TreePath(root), selectedNode);
-    }
-
-    private boolean expandAll(TreePath parent, TreeNode selectedNode) {
-        // Traverse children
-        TreeNode node = (TreeNode) parent.getLastPathComponent();
-
-        if(selectedNode == node) {
-            treeNavigator.setSelectionPath(parent);
-            return true;
-        }
-
-        if (node.getChildCount() >= 0) {
-            for (Enumeration e = node.children(); e.hasMoreElements(); ) {
-                TreeNode n = (TreeNode) e.nextElement();
-                TreePath path = parent.pathByAddingChild(n);
-                if(expandAll(path, selectedNode)) {
-                    // Expansion or collapse must be done bottom-up
-                    treeNavigator.expandPath(parent);
-                    return  true;
-                }
-            }
-        }
-        return false;
-    }
-
     public void refresh() {
         root.refresh();
         treeRoot.refresh();
@@ -352,10 +324,9 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
             return;
         }
 
-        TreePath selected = new TreePath(treePart.getTreeNode());
-        expandTree(treePart.getTreeNode());
-
-        treeNavigator.scrollPathToVisible(selected);
+        TreeNode selected = treePart.getTreeNode();
+        expandSelected(new TreePath(treeNavigator.getModel().getRoot()), selected);
+        treeNavigator.scrollPathToVisible(new TreePath(selected));
     }
 
     private void updateFigureSelection(Figure selected) {
@@ -413,6 +384,29 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         if(f instanceof Endpoint && f.getParent() instanceof Connection) {
             gotoNext(((Endpoint)f).isConnectionSourceEndpoint() ? sourceEndpointSelected : targetEndpointSelected);
         }
+    }
+
+    private boolean expandSelected(TreePath parent, TreeNode selectedNode) {
+        // Traverse children
+        TreeNode node = (TreeNode) parent.getLastPathComponent();
+
+        if(selectedNode == node) {
+            treeNavigator.setSelectionPath(parent);
+            return true;
+        }
+
+        if (node.getChildCount() >= 0) {
+            for (Enumeration e = node.children(); e.hasMoreElements(); ) {
+                TreeNode n = (TreeNode) e.nextElement();
+                TreePath path = parent.pathByAddingChild(n);
+                if(expandSelected(path, selectedNode)) {
+                    // Expansion or collapse must be done bottom-up
+                    treeNavigator.expandPath(parent);
+                    return  true;
+                }
+            }
+        }
+        return false;
     }
 
     private void adjust(JScrollBar scrollBar, int start, int length ) {
