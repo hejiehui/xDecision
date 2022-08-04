@@ -342,6 +342,8 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         }
 
         refreshVisual();
+        adjust(innerDiagramPane.getVerticalScrollBar(), lastSelected.getY(), lastSelected.getHeight());
+        adjust(innerDiagramPane.getHorizontalScrollBar(), lastSelected.getX(), lastSelected.getWidth());
     }
 
     private boolean triggedByFigure = false;
@@ -361,11 +363,6 @@ public class EditorPanel<T extends IPropertySource> extends JPanel {
         Figure selected = treePart.getContext().findFigure(treePart.getModel());
         updateFigureSelection(selected);
         updatePropertySelection(treePart.getModel());
-
-        refreshVisual();
-
-        adjust(innerDiagramPane.getVerticalScrollBar(), lastSelected.getY(), lastSelected.getHeight());
-        adjust(innerDiagramPane.getHorizontalScrollBar(), lastSelected.getX(), lastSelected.getWidth());
     }
 
     private void selectFigureAt(Point location) {

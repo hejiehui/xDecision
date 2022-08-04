@@ -75,6 +75,24 @@ public class DecisionTreeNodePart extends GraphicalEditPart {
         execute(cc);
     }
 
+    public void activate() {
+        super.activate();
+        DecisionTreeNode node = (DecisionTreeNode) getModel();
+        node.getListeners().addPropertyChangeListener(this);
+        node.getDecisionTreeManager().getDecisions().getListeners().addPropertyChangeListener(this);
+        if(node.getDecision() != null)
+            node.getDecision().getListeners().addPropertyChangeListener(this);
+    }
+
+    public void deactivate() {
+        super.deactivate();
+        DecisionTreeNode node = (DecisionTreeNode) getModel();
+        node.getListeners().removePropertyChangeListener(this);
+        node.getDecisionTreeManager().getDecisions().getListeners().removePropertyChangeListener(this);
+        if(node.getDecision() != null)
+            node.getDecision().getListeners().removePropertyChangeListener(this);
+    }
+
     protected void refreshVisuals() {
         DecisionTreeNode node = getDecisionTreeNode();
     	DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
