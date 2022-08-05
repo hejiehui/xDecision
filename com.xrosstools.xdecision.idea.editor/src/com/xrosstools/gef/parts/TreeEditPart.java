@@ -25,6 +25,10 @@ public class TreeEditPart extends AbstractEditPart {
         return getContext().getTreeModel();
     }
 
+    protected void refreshVisuals() {
+        getTreeModel().nodeChanged(treeNode);
+    }
+
     @Override
     protected void addChildPartVisual(EditPart childEditPart, int index) {
         DefaultMutableTreeNode childNode = ((TreeEditPart) childEditPart).treeNode;
