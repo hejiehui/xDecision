@@ -1,6 +1,9 @@
 package com.xrosstools.xdecision.idea.editor.parts;
 
-import com.xrosstools.idea.gef.figures.*;
+import com.xrosstools.idea.gef.figures.ArrowDecoration;
+import com.xrosstools.idea.gef.figures.ColorConstants;
+import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.figures.Connection;
 import com.xrosstools.idea.gef.parts.ConnectionEditPart;
 import com.xrosstools.idea.gef.parts.EditPart;
 import com.xrosstools.idea.gef.parts.GraphicalEditPart;

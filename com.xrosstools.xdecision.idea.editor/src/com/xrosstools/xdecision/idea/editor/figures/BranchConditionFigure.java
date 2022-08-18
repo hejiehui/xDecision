@@ -1,6 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.figures;
 
-import com.xrosstools.idea.gef.figures.*;
+import com.xrosstools.idea.gef.figures.ColorConstants;
+import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.figures.PositionConstants;
 import com.xrosstools.idea.gef.figures.BorderLayout;
 import com.xrosstools.idea.gef.figures.Label;
 import com.xrosstools.xdecision.idea.editor.model.ConditionOperator;
