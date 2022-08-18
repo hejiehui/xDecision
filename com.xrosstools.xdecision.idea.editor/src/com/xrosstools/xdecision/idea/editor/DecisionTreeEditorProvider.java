@@ -6,8 +6,8 @@ import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.xrosstools.gef.DiagramEditorProvider;
-import com.xrosstools.gef.PanelContentProvider;
+import com.xrosstools.idea.gef.DiagramEditorProvider;
+import com.xrosstools.idea.gef.PanelContentProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class DecisionTreeEditorProvider extends DiagramEditorProvider {

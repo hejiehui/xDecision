@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.idea.editor.figures;
 
-import com.xrosstools.gef.figures.Figure;
-import com.xrosstools.gef.figures.ToolbarLayout;
+import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.figures.ToolbarLayout;
 
 public class CompositeExpressionFigure extends Figure {
 

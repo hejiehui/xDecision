@@ -3,7 +3,7 @@ package com.xrosstools.xdecision.idea.editor.model.definition;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xrosstools.gef.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
 
 public class NamedElementContainer<T extends NamedElement> extends NamedElement {
     private List<T> elements = new ArrayList<T>();

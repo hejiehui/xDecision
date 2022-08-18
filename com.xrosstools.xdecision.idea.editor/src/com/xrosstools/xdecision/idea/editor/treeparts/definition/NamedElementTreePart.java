@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.treeparts.definition;
 
-import com.xrosstools.gef.parts.TreeEditPart;
+import com.xrosstools.idea.gef.parts.TreeEditPart;
 import com.xrosstools.xdecision.idea.editor.model.definition.NamedElement;
 
 import java.beans.PropertyChangeListener;

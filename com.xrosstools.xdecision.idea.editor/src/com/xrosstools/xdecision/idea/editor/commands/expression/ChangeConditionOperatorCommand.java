@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.commands.expression;
 
-import com.xrosstools.gef.commands.Command;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.model.ConditionOperator;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionDefinition;

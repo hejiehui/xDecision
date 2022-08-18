@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.idea.editor.policies;
 
-import com.xrosstools.gef.commands.Command;
-import com.xrosstools.gef.parts.EditPolicy;
+import com.xrosstools.idea.gef.commands.Command;
+import com.xrosstools.idea.gef.parts.EditPolicy;
 import com.xrosstools.xdecision.idea.editor.commands.DeletePathCommand;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 

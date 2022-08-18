@@ -3,10 +3,10 @@ package com.xrosstools.xdecision.idea.editor.parts;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
-import com.xrosstools.gef.figures.Figure;
-import com.xrosstools.gef.figures.FreeformLayout;
-import com.xrosstools.gef.parts.GraphicalEditPart;
-import com.xrosstools.gef.parts.EditPolicy;
+import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.figures.FreeformLayout;
+import com.xrosstools.idea.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.EditPolicy;
 import com.xrosstools.xdecision.idea.editor.layout.LayoutAlgorithm;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeManager;

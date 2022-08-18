@@ -1,8 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.gef.ContextMenuProvider;
-import com.xrosstools.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.ContextMenuProvider;
+import com.xrosstools.idea.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeDiagramPart;

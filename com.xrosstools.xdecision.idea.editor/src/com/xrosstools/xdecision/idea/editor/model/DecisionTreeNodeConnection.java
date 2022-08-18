@@ -1,10 +1,10 @@
 package com.xrosstools.xdecision.idea.editor.model;
 
 
-import com.xrosstools.gef.util.ComboBoxPropertyDescriptor;
-import com.xrosstools.gef.util.IPropertyDescriptor;
-import com.xrosstools.gef.util.IPropertySource;
-import com.xrosstools.gef.util.TextPropertyDescriptor;
+import com.xrosstools.idea.gef.util.ComboBoxPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertySource;
+import com.xrosstools.idea.gef.util.TextPropertyDescriptor;
 import com.xrosstools.xdecision.idea.editor.model.definition.PropertyConstants;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionParser;

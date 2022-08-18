@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.idea.editor.parts.expression;
 
 
-import com.xrosstools.gef.figures.Figure;
+import com.xrosstools.idea.gef.figures.Figure;
 import com.xrosstools.xdecision.idea.editor.figures.BasicExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.model.expression.BasicExpression;
 import com.xrosstools.xdecision.idea.editor.model.expression.PlaceholderExpression;

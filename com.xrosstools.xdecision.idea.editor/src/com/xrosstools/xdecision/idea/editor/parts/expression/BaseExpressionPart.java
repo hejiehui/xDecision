@@ -2,7 +2,7 @@ package com.xrosstools.xdecision.idea.editor.parts.expression;
 
 import java.beans.PropertyChangeListener;
 
-import com.xrosstools.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionDefinition;
 
 public abstract class BaseExpressionPart extends GraphicalEditPart implements PropertyChangeListener {

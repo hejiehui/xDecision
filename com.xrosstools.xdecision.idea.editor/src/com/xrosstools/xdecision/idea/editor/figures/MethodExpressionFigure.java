@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.figures;
 
-import com.xrosstools.gef.figures.*;
+import com.xrosstools.idea.gef.figures.*;
 
 public class MethodExpressionFigure extends Figure {
     private Label nameLabel;

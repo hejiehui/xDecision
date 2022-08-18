@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import static com.xrosstools.gef.util.XmlHelper.getValidChildNodes;
+import static com.xrosstools.idea.gef.util.XmlHelper.getValidChildNodes;
 
 
 public class DecisionTreeV1FormatReader {

@@ -1,14 +1,14 @@
 package com.xrosstools.xdecision.idea.editor.parts;
 
-import com.xrosstools.gef.commands.CommandChain;
-import com.xrosstools.gef.parts.EditPart;
-import com.xrosstools.gef.parts.GraphicalEditPart;
-import com.xrosstools.gef.parts.EditPolicy;
+import com.xrosstools.idea.gef.commands.CommandChain;
+import com.xrosstools.idea.gef.parts.EditPart;
+import com.xrosstools.idea.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.EditPolicy;
 import com.xrosstools.xdecision.idea.editor.commands.CreateNodeCommand;
 import com.xrosstools.xdecision.idea.editor.commands.CreatePathCommand;
 import com.xrosstools.xdecision.idea.editor.commands.LayoutTreeCommand;
 import com.xrosstools.xdecision.idea.editor.figures.DecisionTreeNodeFigure;
-import com.xrosstools.gef.figures.Figure;
+import com.xrosstools.idea.gef.figures.Figure;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;

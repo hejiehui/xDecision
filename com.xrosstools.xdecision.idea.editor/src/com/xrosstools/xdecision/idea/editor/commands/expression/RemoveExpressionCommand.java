@@ -1,8 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.commands.expression;
 
 
-import com.xrosstools.gef.commands.Command;
-import com.xrosstools.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.commands.Command;
+import com.xrosstools.idea.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.model.expression.*;

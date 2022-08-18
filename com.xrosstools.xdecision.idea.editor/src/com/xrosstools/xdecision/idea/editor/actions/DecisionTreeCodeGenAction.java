@@ -2,8 +2,8 @@ package com.xrosstools.xdecision.idea.editor.actions;
 
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.xrosstools.gef.commands.Command;
-import com.xrosstools.gef.actions.Action;
+import com.xrosstools.idea.gef.commands.Command;
+import com.xrosstools.idea.gef.actions.Action;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 
 import java.awt.event.ActionEvent;

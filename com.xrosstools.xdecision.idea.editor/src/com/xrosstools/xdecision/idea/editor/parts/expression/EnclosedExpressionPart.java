@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.xrosstools.gef.figures.Figure;
-import com.xrosstools.gef.parts.EditPart;
-import com.xrosstools.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.parts.EditPart;
+import com.xrosstools.idea.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.figures.EnclosedExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.idea.editor.model.expression.EnclosedExpression;

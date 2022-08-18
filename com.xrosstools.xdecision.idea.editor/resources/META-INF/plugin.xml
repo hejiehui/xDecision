@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xdecision.editor</id>
   <name>Xross Decision Tree Edtitor</name>
-  <version>2.0.2</version>
+  <version>3.0.0</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -10,8 +10,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      Initial IDEA version.<br>
-      <em>Getting started</em>
+      IDEA version that supports customer type and expression<br>
+      <em></em>
     ]]>
   </change-notes>
 
@@ -23,6 +23,7 @@
   <!-- uncomment to enable plugin in all products
   <depends>com.intellij.modules.lang</depends>
   -->
+
 
   <extensions defaultExtensionNs="com.intellij">
     <fileEditorProvider implementation="com.xrosstools.xdecision.idea.editor.DecisionTreeEditorProvider"/>

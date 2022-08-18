@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.idea.editor.model.definition;
 
 
-import com.xrosstools.gef.commands.Command;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.idea.editor.commands.definition.DeleteDecisionCommand;
 import com.xrosstools.xdecision.idea.editor.commands.definition.DeleteElementCommand;

@@ -1,10 +1,10 @@
 package com.xrosstools.xdecision.idea.editor.actions;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.gef.actions.BaseDialogAction;
-import com.xrosstools.gef.commands.CommandChain;
+import com.xrosstools.idea.gef.actions.BaseDialogAction;
+import com.xrosstools.idea.gef.commands.CommandChain;
 import com.xrosstools.xdecision.idea.editor.commands.AddFactorCommand2;
-import com.xrosstools.gef.commands.Command;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.commands.expression.ChangeChildCommand;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeFactor;

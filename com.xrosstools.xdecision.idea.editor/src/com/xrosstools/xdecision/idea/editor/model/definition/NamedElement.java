@@ -1,10 +1,10 @@
 package com.xrosstools.xdecision.idea.editor.model.definition;
 
 
-import com.xrosstools.gef.util.IPropertyDescriptor;
-import com.xrosstools.gef.util.IPropertySource;
-import com.xrosstools.gef.util.PropertyDescriptor;
-import com.xrosstools.gef.util.TextPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertySource;
+import com.xrosstools.idea.gef.util.PropertyDescriptor;
+import com.xrosstools.idea.gef.util.TextPropertyDescriptor;
 
 import java.beans.PropertyChangeSupport;
 

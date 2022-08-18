@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.commands.definition;
 
-import com.xrosstools.gef.commands.Command;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDecision;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;

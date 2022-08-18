@@ -1,10 +1,10 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.gef.actions.InputTextCommandAction;
-import com.xrosstools.gef.commands.Command;
-import com.xrosstools.gef.actions.CommandAction;
-import com.xrosstools.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.actions.InputTextCommandAction;
+import com.xrosstools.idea.gef.commands.Command;
+import com.xrosstools.idea.gef.actions.CommandAction;
+import com.xrosstools.idea.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.idea.editor.commands.expression.*;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
@@ -16,7 +16,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.xrosstools.gef.ContextMenuProvider.*;
+import static com.xrosstools.idea.gef.ContextMenuProvider.*;
 
 public class ExpressionContextMenuProvider implements DecisionTreeMessages {
     private static final String DIALOG = "...";

@@ -1,9 +1,9 @@
 package com.xrosstools.xdecision.idea.editor.figures;
 
-import com.xrosstools.gef.figures.BorderLayout;
-import com.xrosstools.gef.figures.Figure;
-import com.xrosstools.gef.figures.Label;
-import com.xrosstools.gef.figures.PositionConstants;
+import com.xrosstools.idea.gef.figures.BorderLayout;
+import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.figures.Label;
+import com.xrosstools.idea.gef.figures.PositionConstants;
 
 
 public class ExpandableExpressionFigure extends Figure {

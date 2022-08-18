@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.idea.editor.model.definition;
 
-import com.xrosstools.gef.util.ComboBoxPropertyDescriptor;
-import com.xrosstools.gef.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.ComboBoxPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 
 import static java.util.Arrays.asList;

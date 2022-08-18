@@ -3,11 +3,11 @@ package com.xrosstools.xdecision.idea.editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.xrosstools.gef.ContextMenuProvider;
-import com.xrosstools.gef.PanelContentProvider;
-import com.xrosstools.gef.parts.EditContext;
-import com.xrosstools.gef.parts.EditPartFactory;
-import com.xrosstools.gef.util.XmlHelper;
+import com.xrosstools.idea.gef.AbstractPanelContentProvider;
+import com.xrosstools.idea.gef.ContextMenuProvider;
+import com.xrosstools.idea.gef.parts.EditContext;
+import com.xrosstools.idea.gef.parts.EditPartFactory;
+import com.xrosstools.idea.gef.util.XmlHelper;
 import com.xrosstools.xdecision.idea.editor.actions.*;
 import com.xrosstools.xdecision.idea.editor.layout.LayoutAlgorithm;
 import com.xrosstools.xdecision.idea.editor.menus.DecisionTreeContextMenuProvider;
@@ -23,7 +23,7 @@ import javax.swing.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 
-public class DecisionTreePanelContentProvider extends PanelContentProvider<DecisionTreeDiagram> implements DecisionTreeActionConstants, DecisionTreeMessages {
+public class DecisionTreePanelContentProvider extends AbstractPanelContentProvider<DecisionTreeDiagram> implements DecisionTreeActionConstants, DecisionTreeMessages {
     private Project project;
     private VirtualFile virtualFile;
     private DecisionTreeDiagram diagram;

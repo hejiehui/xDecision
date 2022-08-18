@@ -1,8 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.model;
 
-import com.xrosstools.gef.util.ComboBoxPropertyDescriptor;
-import com.xrosstools.gef.util.IPropertyDescriptor;
-import com.xrosstools.gef.util.TextPropertyDescriptor;
+import com.xrosstools.idea.gef.util.ComboBoxPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.TextPropertyDescriptor;
 import com.xrosstools.xdecision.idea.editor.model.definition.DataType;
 import com.xrosstools.xdecision.idea.editor.model.definition.DataTypeEnum;
 import com.xrosstools.xdecision.idea.editor.model.definition.NamedElementTypeEnum;

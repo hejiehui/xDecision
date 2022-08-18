@@ -16,7 +16,7 @@ import org.w3c.dom.Node;
 import com.xrosstools.xdecision.idea.editor.model.definition.*;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionParser;
 
-import static com.xrosstools.gef.util.XmlHelper.getValidChildNodes;
+import static com.xrosstools.idea.gef.util.XmlHelper.getValidChildNodes;
 
 public class DecisionTreeDiagramFactory {
 	private static final String DECISION_TREE = "decision_tree";

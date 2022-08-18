@@ -1,7 +1,7 @@
 package com.xrosstools.xdecision.idea.editor.actions;
 
-import com.xrosstools.gef.commands.Command;
-import com.xrosstools.gef.actions.Action;
+import com.xrosstools.idea.gef.commands.Command;
+import com.xrosstools.idea.gef.actions.Action;
 import com.xrosstools.xdecision.idea.editor.commands.LayoutTreeCommand;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 

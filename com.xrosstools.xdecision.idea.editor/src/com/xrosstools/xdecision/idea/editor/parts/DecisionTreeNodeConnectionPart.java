@@ -1,11 +1,11 @@
 package com.xrosstools.xdecision.idea.editor.parts;
 
-import com.xrosstools.gef.figures.*;
-import com.xrosstools.gef.parts.ConnectionEditPart;
-import com.xrosstools.gef.parts.EditPart;
-import com.xrosstools.gef.parts.GraphicalEditPart;
-import com.xrosstools.gef.parts.EditPolicy;
-import com.xrosstools.gef.routers.BendpointConnectionRouter;
+import com.xrosstools.idea.gef.figures.*;
+import com.xrosstools.idea.gef.parts.ConnectionEditPart;
+import com.xrosstools.idea.gef.parts.EditPart;
+import com.xrosstools.idea.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.EditPolicy;
+import com.xrosstools.idea.gef.routers.BendpointConnectionRouter;
 import com.xrosstools.xdecision.idea.editor.figures.BranchConditionFigure;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionDefinition;

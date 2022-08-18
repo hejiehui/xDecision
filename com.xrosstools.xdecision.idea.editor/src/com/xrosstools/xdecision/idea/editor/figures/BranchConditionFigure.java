@@ -1,8 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.figures;
 
-import com.xrosstools.gef.figures.*;
-import com.xrosstools.gef.figures.BorderLayout;
-import com.xrosstools.gef.figures.Label;
+import com.xrosstools.idea.gef.figures.*;
+import com.xrosstools.idea.gef.figures.BorderLayout;
+import com.xrosstools.idea.gef.figures.Label;
 import com.xrosstools.xdecision.idea.editor.model.ConditionOperator;
 
 import java.awt.*;

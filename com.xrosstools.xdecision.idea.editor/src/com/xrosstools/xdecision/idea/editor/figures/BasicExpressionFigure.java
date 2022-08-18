@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.figures;
 
-import com.xrosstools.gef.figures.Label;
+import com.xrosstools.idea.gef.figures.Label;
 
 import java.awt.*;
 

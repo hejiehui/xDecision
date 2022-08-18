@@ -1,8 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.parts;
 
-import com.xrosstools.gef.figures.Connection;
-import com.xrosstools.gef.routers.ConnectionLocator;
-import com.xrosstools.gef.routers.PointList;
+import com.xrosstools.idea.gef.figures.Connection;
+import com.xrosstools.idea.gef.routers.ConnectionLocator;
+import com.xrosstools.idea.gef.routers.PointList;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import java.awt.*;

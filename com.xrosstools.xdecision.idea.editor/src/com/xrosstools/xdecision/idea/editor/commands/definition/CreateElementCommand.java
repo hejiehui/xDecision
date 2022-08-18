@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.commands.definition;
 
-import com.xrosstools.gef.commands.InputTextCommand;
+import com.xrosstools.idea.gef.commands.InputTextCommand;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.definition.NamedElement;
 import com.xrosstools.xdecision.idea.editor.model.definition.NamedElementContainer;

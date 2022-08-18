@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.treeparts;
 
-import com.xrosstools.gef.parts.TreeEditPart;
+import com.xrosstools.idea.gef.parts.TreeEditPart;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 
 import java.beans.PropertyChangeListener;

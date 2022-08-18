@@ -1,8 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.commands.expression;
 
 
-import com.xrosstools.gef.commands.InputTextCommand;
-import com.xrosstools.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.commands.InputTextCommand;
+import com.xrosstools.idea.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.model.definition.DataType;
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.idea.editor.model.expression.NumberExpression;

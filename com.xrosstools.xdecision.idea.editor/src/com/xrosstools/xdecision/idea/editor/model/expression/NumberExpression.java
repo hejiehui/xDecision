@@ -1,9 +1,9 @@
 package com.xrosstools.xdecision.idea.editor.model.expression;
 
 
-import com.xrosstools.gef.util.IPropertyDescriptor;
-import com.xrosstools.gef.util.IPropertySource;
-import com.xrosstools.gef.util.TextPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertySource;
+import com.xrosstools.idea.gef.util.TextPropertyDescriptor;
 
 public class NumberExpression extends BasicExpression implements IPropertySource {
     public static final String VALUE = "Value";
