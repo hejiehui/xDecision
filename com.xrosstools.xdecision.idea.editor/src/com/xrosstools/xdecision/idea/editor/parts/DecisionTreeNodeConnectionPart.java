@@ -4,9 +4,9 @@ import com.xrosstools.idea.gef.figures.ArrowDecoration;
 import com.xrosstools.idea.gef.figures.ColorConstants;
 import com.xrosstools.idea.gef.figures.Figure;
 import com.xrosstools.idea.gef.figures.Connection;
-import com.xrosstools.idea.gef.parts.ConnectionEditPart;
+import com.xrosstools.idea.gef.parts.AbstractConnectionEditPart;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
 import com.xrosstools.idea.gef.parts.EditPart;
-import com.xrosstools.idea.gef.parts.GraphicalEditPart;
 import com.xrosstools.idea.gef.parts.EditPolicy;
 import com.xrosstools.idea.gef.routers.BendpointConnectionRouter;
 import com.xrosstools.xdecision.idea.editor.figures.BranchConditionFigure;
@@ -18,7 +18,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implements PropertyChangeListener{
+public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart implements PropertyChangeListener{
     private BranchConditionFigure condition;
 
     public List getModelChildren() {
@@ -31,7 +31,7 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
     }
 
     public void addChildVisual(EditPart childEditPart, int index) {
-        Figure childFigure = ((GraphicalEditPart)childEditPart).getFigure();
+        Figure childFigure = ((AbstractGraphicalEditPart)childEditPart).getFigure();
         if(childEditPart.getModel() instanceof ExpressionDefinition)
             condition.setExpressionFigure(childFigure);
     }
@@ -60,7 +60,7 @@ public class DecisionTreeNodeConnectionPart extends ConnectionEditPart implement
     }
 
     public void setSelected(int value) {
-        if (value == GraphicalEditPart.SELECTED)
+        if (value == AbstractGraphicalEditPart.SELECTED)
             getFigure().setLineWidth(2);
         else
             getFigure().setLineWidth(1);

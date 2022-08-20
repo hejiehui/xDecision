@@ -3,7 +3,7 @@ package com.xrosstools.xdecision.idea.editor.treeparts;
 import com.xrosstools.idea.gef.parts.EditPartFactory;
 import com.xrosstools.idea.gef.parts.EditContext;
 import com.xrosstools.idea.gef.parts.EditPart;
-import com.xrosstools.idea.gef.parts.TreeEditPart;
+import com.xrosstools.idea.gef.parts.AbstractTreeEditPart;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.definition.*;
@@ -17,7 +17,7 @@ public class DecisionTreeTreePartFactory implements EditPartFactory {
 	}
 
 	public EditPart createEditPart(EditPart parent, Object model) {
-		TreeEditPart part = null;
+		AbstractTreeEditPart part = null;
 		if(model == null)
 			return part;
 

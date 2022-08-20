@@ -1,7 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.parts.expression;
 
 import com.xrosstools.idea.gef.figures.Figure;
-import com.xrosstools.idea.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
+import com.xrosstools.idea.gef.parts.EditPart;
 import com.xrosstools.xdecision.idea.editor.figures.ExpandableExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.figures.MethodExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.model.expression.MethodExpression;
@@ -23,10 +24,10 @@ public class MethodExpressionPart extends ExtensibleExpressionPart {
     }
     
     @Override
-    protected void postAddChildVisual(GraphicalEditPart childEditPart, int index) {
+    protected void postAddChildVisual(EditPart childEditPart, int index) {
         MethodExpression exp = (MethodExpression)getModel();
         
-        Figure childFigure = childEditPart.getFigure();
+        Figure childFigure = ((AbstractGraphicalEditPart)childEditPart).getFigure();
         
         if(childEditPart.getModel() == exp.getParameters())
             methodFigure.setParameterFigure(childFigure);

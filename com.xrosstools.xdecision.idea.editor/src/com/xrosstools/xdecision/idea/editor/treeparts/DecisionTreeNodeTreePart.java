@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.treeparts;
 
-import com.xrosstools.idea.gef.parts.TreeEditPart;
+import com.xrosstools.idea.gef.parts.AbstractTreeEditPart;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 
@@ -8,7 +8,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DecisionTreeNodeTreePart extends TreeEditPart implements PropertyChangeListener {
+public class DecisionTreeNodeTreePart extends AbstractTreeEditPart implements PropertyChangeListener {
 	public DecisionTreeNodeTreePart(Object model) {
 		super(model);
 	}

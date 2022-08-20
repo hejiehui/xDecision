@@ -3,8 +3,8 @@ package com.xrosstools.xdecision.idea.editor.parts.expression;
 
 import com.xrosstools.idea.gef.figures.Figure;
 import com.xrosstools.idea.gef.figures.Label;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
 import com.xrosstools.idea.gef.parts.EditPart;
-import com.xrosstools.idea.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.figures.ExpandableExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.idea.editor.model.expression.VariableExpression;
@@ -21,7 +21,7 @@ public class VariableExpressionPart extends ExtensibleExpressionPart {
     }
 
     protected void removeChildVisual(EditPart childEditPart) {
-        Figure child = ((GraphicalEditPart)childEditPart).getFigure();
+        Figure child = ((AbstractGraphicalEditPart)childEditPart).getFigure();
         if(getContentPane().getChildren().contains(child))
             getContentPane().remove(child);
     }

@@ -4,7 +4,8 @@ import com.intellij.openapi.project.Project;
 import com.xrosstools.idea.gef.actions.InputTextCommandAction;
 import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.idea.gef.actions.CommandAction;
-import com.xrosstools.idea.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
+import com.xrosstools.idea.gef.parts.EditPart;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.idea.editor.commands.expression.*;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
@@ -41,7 +42,7 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
         }
         
         if(exp instanceof ExtensibleExpression)
-            addAll(menu, createChildMenu((GraphicalEditPart) part.getParent(), part, true));
+            addAll(menu, createChildMenu((AbstractGraphicalEditPart) part.getParent(), part, true));
         else
             changeToUserDefinedMenu(menu, part);
 
@@ -71,7 +72,7 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
         }
     }
 
-    private List<JMenuItem> createChildMenu(GraphicalEditPart parentPart, GraphicalEditPart part, boolean extendChildren) {
+    private List<JMenuItem> createChildMenu(EditPart parentPart, EditPart part, boolean extendChildren) {
         List<JMenuItem> menuItems = new ArrayList<>();
         if(parentPart.getModel() instanceof VariableExpression) {
             // It is a factor and can be replaced by other factors or constants
@@ -107,7 +108,7 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
         return menuItems;
     }
 
-    private List<JMenuItem> buildReplacementMenu(NamedElementContainer<?> container, GraphicalEditPart parentPart, GraphicalEditPart part, boolean extendChildren) {
+    private List<JMenuItem> buildReplacementMenu(NamedElementContainer<?> container, EditPart parentPart, EditPart part, boolean extendChildren) {
         List<JMenuItem> menuItems = new ArrayList<>();
         for(NamedElement element: container.getElements()) {
             ExpressionDefinition exp = element instanceof MethodDefinition ? new MethodExpression((MethodDefinition)element): new VariableExpression(element);
@@ -116,7 +117,7 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
         return menuItems;
     }
     
-    private JMenuItem createIdMenu(NamedElement element, GraphicalEditPart parentPart, GraphicalEditPart part, boolean extendChildren, ExpressionDefinition childExp) {
+    private JMenuItem createIdMenu(NamedElement element, EditPart parentPart, EditPart part, boolean extendChildren, ExpressionDefinition childExp) {
         String definitionId = element instanceof MethodDefinition ? element.getName() + "()" : element.getName();
         
         ExtensibleExpression model = part == null ? null: (ExtensibleExpression)part.getModel();
@@ -132,12 +133,12 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
         menu.add(createItem(new CommandAction(text, checked, command)));
     }
 
-    private GraphicalEditPart findChild(GraphicalEditPart parentPart, Object childModel) {
+    private EditPart findChild(EditPart parentPart, Object childModel) {
         if(childModel == null)
             return null;
 
         for(Object childPartObj: parentPart.getChildren()) {
-            GraphicalEditPart childPart = (GraphicalEditPart)childPartObj;
+            EditPart childPart = (EditPart)childPartObj;
             if(childPart.getModel() == childModel)
                 return childPart;
         }
@@ -145,19 +146,19 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
         return null;
     }
     
-    private void createOperatorMenu(JPopupMenu menu, GraphicalEditPart expPart) {
+    private void createOperatorMenu(JPopupMenu menu, EditPart expPart) {
         for(OperatorEnum op: OperatorEnum.values()) {
             add(menu, op.getOperator(), false, new AddOperatorCommand(expPart, op));
         }
     }
     
-    private void wrapBracketOperatorMenu(JPopupMenu menu, GraphicalEditPart expPart) {
+    private void wrapBracketOperatorMenu(JPopupMenu menu, EditPart expPart) {
         expPart = AddOperatorCommand.findTopExpressionPart(expPart);
         ExpressionDefinition exp = (ExpressionDefinition)expPart.getModel();
         add(menu, "(...)", false, new ChangeChildCommand(expPart.getParent().getModel(), exp, new BracktExpression().setInnerExpression(exp)));        
     }
     
-    private void changeToUserDefinedMenu(JPopupMenu menu, GraphicalEditPart expPart) {
+    private void changeToUserDefinedMenu(JPopupMenu menu, EditPart expPart) {
         changeToElementMenu(menu, expPart, diagram.getFactors());
         addSeparator(menu);
 
@@ -167,25 +168,25 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
         changeToElementMenu(menu, expPart, diagram.getUserDefinedEnums());
     }
 
-    private void changeToTypeMenu(JPopupMenu menu, GraphicalEditPart expPart, DataType type) {
+    private void changeToTypeMenu(JPopupMenu menu, EditPart expPart, DataType type) {
         menu.add(createItem(new InputTextCommandAction(project,type.getName() + DIALOG, type.getName(), "", new CreateExpressionCommand(expPart, type))));
     }
 
-    private JMenuItem changeToArray(GraphicalEditPart parentPart, GraphicalEditPart part) {
+    private JMenuItem changeToArray(EditPart parentPart, EditPart part) {
         VariableExpression exp = (VariableExpression)parentPart.getModel();
         boolean selected = part != null && part.getModel() instanceof ElementExpression;
         Object model = part == null ? null : part.getModel();
         return createItem("[index]", selected, new ChangeChildCommand(exp, (ExpressionDefinition)model, new ElementExpression()));
     }
 
-    private <T extends NamedElement> void changeToElementMenu(JPopupMenu menu, GraphicalEditPart expPart, NamedElementContainer<T> container) {
+    private <T extends NamedElement> void changeToElementMenu(JPopupMenu menu, EditPart expPart, NamedElementContainer<T> container) {
         Object parentModel = expPart.getParent().getModel();
         ExpressionDefinition toBeReplaced = (ExpressionDefinition)expPart.getModel();
         for(NamedElement field: container.getElements())
             menu.add(createItem(new CommandAction(field.getName(), false, new ChangeChildCommand(parentModel, toBeReplaced, new VariableExpression(field)))));
     }
 
-    private void addRemoveMenu(JPopupMenu menu, GraphicalEditPart expPart) {
+    private void addRemoveMenu(JPopupMenu menu, EditPart expPart) {
         menu.add(createItem(new CommandAction(String.format(REMOVE_MSG, expPart.getModel().toString()), false, new RemoveExpressionCommand(expPart))));
     }
 }

@@ -2,7 +2,7 @@ package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
 import com.xrosstools.idea.gef.ContextMenuProvider;
-import com.xrosstools.idea.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.EditPart;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeDiagramPart;
@@ -30,7 +30,7 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
     }
 
     public JPopupMenu buildContextMenu(Object selected) {
-        GraphicalEditPart part = (GraphicalEditPart)selected;
+        EditPart part = (EditPart)selected;
         // Add standard action groups to the menu
         JPopupMenu menu = new JPopupMenu();
         if(part instanceof DecisionTreeNodeConnectionPart) {

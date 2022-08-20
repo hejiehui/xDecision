@@ -1,8 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.parts.expression;
 
 import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
 import com.xrosstools.idea.gef.parts.EditPart;
-import com.xrosstools.idea.gef.parts.GraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.figures.EnclosedExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.figures.ExpandableExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.model.expression.ElementExpression;
@@ -28,8 +28,8 @@ public class ElementExpressionPart extends ExtensibleExpressionPart {
             children.add(getElementExpression().getIndexExpression());
     }
     
-    protected void postAddChildVisual(GraphicalEditPart childEditPart, int index) {
-        Figure childFigure = childEditPart.getFigure();
+    protected void postAddChildVisual(EditPart childEditPart, int index) {
+        Figure childFigure = ((AbstractGraphicalEditPart)childEditPart).getFigure();
 
         if(getElementExpression().getIndexExpression() == childEditPart.getModel())
             indexPanel.setEnclosedFigure(childFigure);
@@ -37,7 +37,7 @@ public class ElementExpressionPart extends ExtensibleExpressionPart {
 
     @Override
     protected void removeChildVisual(EditPart childEditPart) {
-        Figure childFigure = ((GraphicalEditPart)childEditPart).getFigure();
+        Figure childFigure = ((AbstractGraphicalEditPart)childEditPart).getFigure();
         if(indexPanel.getChildren().contains(childFigure)) {
             indexPanel.remove(childFigure);
         }else

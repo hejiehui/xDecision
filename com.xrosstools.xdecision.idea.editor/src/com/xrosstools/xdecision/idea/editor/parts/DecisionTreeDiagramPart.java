@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.xrosstools.idea.gef.figures.Figure;
 import com.xrosstools.idea.gef.figures.FreeformLayout;
-import com.xrosstools.idea.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
 import com.xrosstools.idea.gef.parts.EditPolicy;
 import com.xrosstools.xdecision.idea.editor.layout.LayoutAlgorithm;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
@@ -13,7 +13,7 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeManager;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.policies.DecisionTreeDiagramLayoutPolicy;
 
-public class DecisionTreeDiagramPart extends GraphicalEditPart {
+public class DecisionTreeDiagramPart extends AbstractGraphicalEditPart {
     private LayoutAlgorithm layout = new LayoutAlgorithm();
     public List<DecisionTreeNode> getModelChildren() {
         DecisionTreeDiagram diagram = (DecisionTreeDiagram)getModel();

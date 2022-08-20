@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.xrosstools.idea.gef.figures.Figure;
 import com.xrosstools.idea.gef.parts.EditPart;
-import com.xrosstools.idea.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.figures.EnclosedExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.idea.editor.model.expression.EnclosedExpression;
@@ -38,7 +38,7 @@ public class EnclosedExpressionPart extends BaseExpressionPart {
         EnclosedExpression exp = (EnclosedExpression)getModel();
         EnclosedExpressionFigure figure = (EnclosedExpressionFigure)getFigure();
         
-        Figure childFigure = ((GraphicalEditPart)childEditPart).getFigure();
+        Figure childFigure = ((AbstractGraphicalEditPart)childEditPart).getFigure();
         figure.setEnclosedFigure(childFigure);
     }
 }
