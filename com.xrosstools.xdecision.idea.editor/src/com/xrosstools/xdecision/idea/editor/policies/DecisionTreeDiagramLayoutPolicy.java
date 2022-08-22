@@ -1,6 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.policies;
 
-import com.xrosstools.idea.gef.parts.GraphicalEditPart;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
 import com.xrosstools.idea.gef.parts.EditPolicy;
 import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xdecision.idea.editor.commands.CreateNodeCommand;
@@ -18,7 +18,7 @@ public class DecisionTreeDiagramLayoutPolicy extends EditPolicy {
                 location);
     }
 
-    public Command getMoveCommand(GraphicalEditPart child, Rectangle constraint) {
+    public Command getMoveCommand(AbstractGraphicalEditPart child, Rectangle constraint) {
         MoveNodeCommand cmd = new MoveNodeCommand();
         if(!(child.getModel() instanceof DecisionTreeNode))
             return null;
@@ -27,18 +27,4 @@ public class DecisionTreeDiagramLayoutPolicy extends EditPolicy {
         cmd.setConstraint(constraint);
         return cmd;
     }
-
-//    public Command getCommand(Request request) {
-//    	if(request.getType() == RequestConstants.REQ_ALIGN){
-//    		DecisionTreeLayoutRequest layoutReq = (DecisionTreeLayoutRequest)request;
-//    		return new LayoutTreeCommand(layoutReq.getDiagram(), layoutReq.isHorizantal(), layoutReq.getAlignment());
-//    	}
-//
-//    	if(request.getType() == RequestConstants.REQ_RESIZE){
-//    		DecisionTreeResizeRequest resizeReq = (DecisionTreeResizeRequest)request;
-//    		return new ResizeNodeCommand(resizeReq.getDiagram(), resizeReq.isNodeSize(), resizeReq.isHorizantal(), resizeReq.isIncrease());
-//    	}
-//
-//    	return super.getCommand(request);
-//    }
 }

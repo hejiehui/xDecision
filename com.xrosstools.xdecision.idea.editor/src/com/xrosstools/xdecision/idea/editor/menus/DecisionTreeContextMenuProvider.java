@@ -17,7 +17,7 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
     private NodeContextMenuProvider nodeMenuProvider;
 	private ConnectionContextMenuProvider connMenuProvider;
 	private ExpressionContextMenuProvider expMenuProvider;
-    private DiagramContextMenuProvider diagramCMenuProvider;
+    private DiagramContextMenuProvider diagramMenuProvider;
 
 
     public DecisionTreeContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
@@ -26,7 +26,7 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
         nodeMenuProvider = new NodeContextMenuProvider(project, diagram, listener);
         expMenuProvider = new ExpressionContextMenuProvider(project, diagram, listener);
         connMenuProvider = new ConnectionContextMenuProvider(project, diagram, listener);
-        diagramCMenuProvider = new DiagramContextMenuProvider(project, diagram, listener);
+        diagramMenuProvider = new DiagramContextMenuProvider(project, diagram, listener);
     }
 
     public JPopupMenu buildContextMenu(Object selected) {
@@ -40,7 +40,7 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
         }else if(part instanceof BaseExpressionPart) {
             expMenuProvider.buildContextMenu(menu, (BaseExpressionPart)part);
         }else if(part instanceof DecisionTreeDiagramPart) {
-            diagramCMenuProvider.buildContextMenu(menu, (DecisionTreeDiagramPart)part);
+            diagramMenuProvider.buildContextMenu(menu, (DecisionTreeDiagramPart)part);
         }
 
         return menu;
