@@ -5,6 +5,8 @@
 
 !/libs/dom4j-1.6.1.jar
 
+!/libs/com.xrosstools.idea.gef.jar
+
 
 /.idea/sonarlint
 
