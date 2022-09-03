@@ -21,7 +21,7 @@ public class DecisionTreeNodeFigure extends RoundedRectangle {
 
         //To make sure the minimal width of the node figure
         Figure  widthLine = new Figure();
-        widthLine.setSize(new Dimension(90, 1));
+        widthLine.setPreferredSize(new Dimension(90, 1));
         widthLine.getInsets().set(5, 5, 5, 5);
         add(widthLine);
         layout.setConstraint(widthLine, PositionConstants.TOP);

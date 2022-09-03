@@ -102,6 +102,8 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart {
         Point loc = node.getLocation();
         Dimension size = new Dimension(-1, node.getDecisionTreeManager().getDiagram().getNodeHeight());
         figure.setLocation(node.getLocation());
+        Rectangle rectangle = new Rectangle(loc, size);
+        ((AbstractGraphicalEditPart)getParent()).setLayoutConstraint(this, getFigure(), rectangle);
         figure.setPreferredSize(size);
 
         node.setSize(new Dimension(figure.getPreferredSize()));

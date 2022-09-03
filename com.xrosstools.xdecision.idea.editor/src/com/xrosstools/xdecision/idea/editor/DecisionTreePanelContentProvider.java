@@ -32,6 +32,7 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
     private DecisionTreeDiagramFactory factory = new DecisionTreeDiagramFactory();
 
     public DecisionTreePanelContentProvider(Project project, VirtualFile virtualFile) {
+        super(virtualFile);
         this.project = project;
         this.virtualFile = virtualFile;
     }
