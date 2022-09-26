@@ -10,14 +10,15 @@ public class DecisionTreeJunit4TestCodeGen {
 	private static final String METHOD_BODY =
 			"\n" +
 					"    @Test\n" +
-					"    public void test_%d(){\n" +
+					"    public void test_%d(){\n" +   //Num of test
 					"        /*\n" +
-					"%s" +
+					"            %s\n\n" +//decision
+                    "%s" +              //evaluation path
 					"        */\n" +
-					"%s\n" +
+					"%s\n" +           // factor assignment and assertion
 					"    }\n";
 
-	private static final String COMMENTS =       "          %s\n";
+	private static final String COMMENTS =       "            %s\n";
 	private static final String TEST_ASSIGN = 		"        test.set(\"%s\", \"%s\");\n";
 	private static final String ASSERT_DISPLAY = 	"        assertEquals(\"%s\", tree.get(test));";
 	private static final String TEST_RESET = 		"        test = new MapFacts();\n";
@@ -52,9 +53,12 @@ public class DecisionTreeJunit4TestCodeGen {
 			while(node.getInput() != null) {
 				DecisionTreeNode parent = node.getInput().getParent();
 
-				StringBuilder commnets = new StringBuilder(parent.getNodeExpression().toString())
-						.append(node.getInput().getOperator().getText())
-						.append(node.getInput().getExpression());
+				StringBuilder commnets = new StringBuilder(parent.getNodeExpression().toString()).append(" ")
+						.append(node.getInput().getOperator().getText()).append(" ");
+
+				if(node.getInput().getExpression() != null)
+                    commnets.append(node.getInput().getExpression());
+
 				commentsBuf.insert(0, String.format(COMMENTS, commnets.toString()));
 
 				node = parent;
