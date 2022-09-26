@@ -25,7 +25,9 @@ public class DecisionTreeCodeGenAction extends Action implements DecisionTreeAct
 		testName = file.getName().substring(0, file.getName().indexOf(".xdecision")) + "Test";
 
 		String out = junit4CodeGen.generate(diagram, packageName, testName, file.getPath());
-        Messages.showInfoMessage(out, "Generated Unit Test Source");
+//        Messages.showInfoMessage(out, "Generated Unit Test Source");
+        System.out.println("Generated Unit Test Source:");
+        System.out.println(out);
 	}
 
     @Override

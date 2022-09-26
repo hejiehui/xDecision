@@ -9,45 +9,43 @@ import com.xrosstools.xdecision.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 
 public class DecisionTreeJunit4TestCodeGen {
-    private static final String METHOD_BODY = 
-                                                "\n" + 
-                                                "    @Test\n" + 
-                                                "    public void test_%d(){\n" + 
-                                                "        /*\n" +
-                                                "          Decision paths to %s:\n" +
-                                                "%s" + 
-                                                "        */\n" + 
-                                                "%s\n" + 
-                                                "    }\n"; 
+    private static final String METHOD_BODY =
+            "\n" +
+                    "    @Test\n" +
+                    "    public void test_%d(){\n" +   //Num of test
+                    "        /*\n" +
+                    "            %s\n\n" +//decision
+                    "%s" +              //evaluation path
+                    "        */\n" +
+                    "%s\n" +           // factor assignment and assertion
+                    "    }\n";
+
+    private static final String COMMENTS =       "            %s\n";
+    private static final String TEST_ASSIGN =       "        test.set(\"%s\", \"%s\");\n";
+    private static final String ASSERT_DISPLAY =    "        assertEquals(\"%s\", tree.get(test));";
+    private static final String TEST_RESET =        "        test = new MapFacts();\n";
+    public String generate(DecisionTreeDiagram diagram, String packageName, String testName, String path){
+        StringBuffer codeBuf = getTemplate();
+        replace(codeBuf, "!PACKAGE!", packageName);
+        replace(codeBuf, "!TEST_CLASS!", testName);
+        replace(codeBuf, "!MODEL_PATH!", path);
+        replace(codeBuf, "!TREE_VERIFY!", "\n" + generateVerify(diagram));
+        
+        return codeBuf.toString();
+    }
     
-    private static final String COMMENTS =       "          %s,\n";
-    private static final String TEST_RESET =       "        test = new MapFacts();\n";
-	private static final String TEST_ASSIGN = 		"        test.set(\"%s\", \"%s\");\n";
-	private static final String ASSERT_DISPLAY = 	"        assertEquals(\"%s\", tree.get(test));";
-	
-	
-	public String generate(DecisionTreeDiagram diagram, String packageName, String testName, String path){
-		StringBuilder codeBuf = getTemplate();
-		replace(codeBuf, "!PACKAGE!", packageName);
-		replace(codeBuf, "!TEST_CLASS!", testName);
-		replace(codeBuf, "!MODEL_PATH!", path);
-		replace(codeBuf, "!TREE_VERIFY!", "\n" + generateVerify(diagram));
-		
-		return codeBuf.toString();
-	}
-	
-	private void replace(StringBuilder codeBuf, String replacementMark, String replacement){
-		int start = codeBuf.indexOf(replacementMark);
-		codeBuf.replace(start, start + replacementMark.length(), replacement);
-	}
-	
-	private String generateVerify(DecisionTreeDiagram diagram){
-		StringBuilder testCasesCode = new StringBuilder();
-		
-		int index = 0;
-		for(DecisionTreeNode node: diagram.getNodes()){
-		    if(node.getDecision() == null)
-		        continue;
+    private void replace(StringBuffer codeBuf, String replacementMark, String replacement){
+        int start = codeBuf.indexOf(replacementMark);
+        codeBuf.replace(start, start + replacementMark.length(), replacement);
+    }
+
+    private String generateVerify(DecisionTreeDiagram diagram){
+        StringBuilder testCasesCode = new StringBuilder();
+        int index = 0;
+
+        for(DecisionTreeNode node: diagram.getNodes()){
+            if(node.getDecision() == null)
+                continue;
 
             StringBuilder commentsBuf = new StringBuilder();
             StringBuilder codeBuf = new StringBuilder(TEST_RESET);
@@ -56,14 +54,17 @@ public class DecisionTreeJunit4TestCodeGen {
             //get all decision paths
             while(node.getInput() != null) {
                 DecisionTreeNode parent = node.getInput().getParent();
-                
-                StringBuilder commnets = new StringBuilder(parent.getNodeExpression().toString())
-                        .append(node.getInput().getOperator().getText())
-                        .append(node.getInput().getExpression());
+
+                StringBuilder commnets = new StringBuilder(parent.getNodeExpression().toString()).append(" ")
+                        .append(node.getInput().getOperator().getText()).append(" ");
+
+                if(node.getInput().getExpression() != null)
+                    commnets.append(node.getInput().getExpression());
+
                 commentsBuf.insert(0, String.format(COMMENTS, commnets.toString()));
 
-		        node = parent;
-		    }
+                node = parent;
+            }
 
             //get all factors
             for(DecisionTreeFactor factor: diagram.getFactorList()) {
@@ -71,27 +72,27 @@ public class DecisionTreeJunit4TestCodeGen {
             }
             codeBuf.append(String.format(ASSERT_DISPLAY, decision));
             testCasesCode.append(String.format(METHOD_BODY, index++, decision, commentsBuf.toString(), codeBuf.toString()));
-		}		
-		return testCasesCode.toString();
-	}
-	
-	private StringBuilder getTemplate(){
-		StringBuilder codeBuf = new StringBuilder();
-		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(DecisionTreeJunit4TestCodeGen.class.getResourceAsStream("/templates/Junit4TestTemplate.txt")));
-		String line;
-		try {
-			while((line = reader.readLine()) != null)
-				codeBuf.append(line).append('\n');
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			try {
-				reader.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-		return codeBuf;
-	}
+        }
+        return testCasesCode.toString();
+    }
+    
+    private StringBuffer getTemplate(){
+        StringBuffer codeBuf = new StringBuffer();
+        
+        BufferedReader reader = new BufferedReader(new InputStreamReader(DecisionTreeJunit4TestCodeGen.class.getResourceAsStream("/templates/Junit4TestTemplate.txt")));
+        String line;
+        try {
+            while((line = reader.readLine()) != null)
+                codeBuf.append(line).append('\n');
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            try {
+                reader.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return codeBuf;
+    }
 }
