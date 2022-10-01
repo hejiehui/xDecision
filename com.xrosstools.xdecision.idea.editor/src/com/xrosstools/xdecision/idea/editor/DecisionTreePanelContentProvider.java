@@ -4,8 +4,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.xrosstools.idea.gef.AbstractPanelContentProvider;
+import com.xrosstools.idea.gef.Activator;
 import com.xrosstools.idea.gef.ContextMenuProvider;
-import com.xrosstools.idea.gef.parts.EditContext;
 import com.xrosstools.idea.gef.parts.EditPartFactory;
 import com.xrosstools.idea.gef.util.XmlHelper;
 import com.xrosstools.xdecision.idea.editor.actions.*;
@@ -66,12 +66,12 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
 
         palette.add(createPaletteButton(new DecisionTreeCreateDecisionAction(project, diagram, this), CREATE_NEW_DECISION, CREATE_NEW_DECISION_MSG));
         palette.add(createPaletteButton(new DecisionTreeCreateFactorAction(project, diagram, this), CREATE_NEW_FACTOR, CREATE_NEW_FACTOR_MSG));
-        palette.add(createPaletteButton(new DecisionTreeCodeGenAction(virtualFile, diagram), GEN_TEST_CODE, GEN_JUNIT_TEST_CODE_MSG));
-
+        palette.add(createPaletteButton(new DecisionTreeCodeGenAction(virtualFile, diagram, true), GEN_TEST_CODE_CONSOLE, GEN_TEST_CODE_IN_CONSOLE_MSG));
+        palette.add(createPaletteButton(new DecisionTreeCodeGenAction(virtualFile, diagram, false), GEN_TEST_CODE_DIALOG, GEN_TEST_CODE_MSG));
     }
 
     private JButton createConnectionButton() {
-        JButton btn = new JButton("Link Node", IconLoader.findIcon(Activator.getIconPath(Activator.CONNECTION)));
+        JButton btn = new JButton("Link Node", IconLoader.findIcon(Activator.getIconPath(DecisionTreeEditorProvider.CONNECTION)));
         btn.setPreferredSize(new Dimension(100, 50));
         btn.setContentAreaFilled(false);
         btn.addActionListener(e -> createConnection(new DecisionTreeNodeConnection()));
@@ -79,7 +79,7 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
     }
 
     private JButton createNodeButton() {
-        JButton btn = new JButton("Create node", IconLoader.findIcon(Activator.getIconPath(Activator.NODE)));
+        JButton btn = new JButton("Create node", IconLoader.findIcon(Activator.getIconPath(DecisionTreeEditorProvider.NODE)));
         btn.setPreferredSize(new Dimension(100, 50));
         btn.setContentAreaFilled(false);
         btn.addActionListener(e -> createModel(new DecisionTreeNode()));
@@ -100,13 +100,13 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
     }
 
     @Override
-    public EditPartFactory createEditPartFactory(EditContext context) {
-        return new DecisionTreePartFactory(context);
+    public EditPartFactory createEditPartFactory() {
+        return new DecisionTreePartFactory();
     }
 
     @Override
-    public EditPartFactory createTreePartFactory(EditContext context) {
-        return new DecisionTreeTreePartFactory(context);
+    public EditPartFactory createTreePartFactory() {
+        return new DecisionTreeTreePartFactory();
     }
 
     public void preBuildRoot(){

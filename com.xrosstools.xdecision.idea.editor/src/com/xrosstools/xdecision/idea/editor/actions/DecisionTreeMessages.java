@@ -24,8 +24,8 @@ public interface DecisionTreeMessages {
 	String SHOW_LABEL_INSIDE_MSG = "Show lable inside node";
 	String SHOW_LABEL_OUTSIDE_MSG = "Show lable beside node";
 
-	String GEN_TEST_CODE_MSG = "Generate stand alone test code";
-	String GEN_JUNIT_TEST_CODE_MSG = "Generate junit test code";
+	String GEN_TEST_CODE_MSG = "<html>Generate test code<br>in dialog</html>";
+	String GEN_TEST_CODE_IN_CONSOLE_MSG = "<html>Generate test code<br>in console</html>";
 
 	String CREATE_NEW_TEMPLATE_MSG = "Create new %s";
 

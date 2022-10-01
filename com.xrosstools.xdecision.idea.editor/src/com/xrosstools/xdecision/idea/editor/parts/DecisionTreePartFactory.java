@@ -11,10 +11,6 @@ import com.xrosstools.xdecision.idea.editor.model.expression.*;
 import com.xrosstools.xdecision.idea.editor.parts.expression.*;
 
 public class DecisionTreePartFactory implements EditPartFactory {
-	private EditContext context;
-	public DecisionTreePartFactory(EditContext context) {
-		this.context = context;
-	}
 	public EditPart createEditPart(EditPart parent, Object model) {
 		AbstractGraphicalEditPart part = null;
 		
@@ -40,12 +36,7 @@ public class DecisionTreePartFactory implements EditPartFactory {
 		else if(model instanceof ElementExpression)
 			part = new ElementExpressionPart();
 
-        part.setEditPartFactory(this);
         part.setModel(model);
-        part.setParent(parent);
-        part.setContext(context);
-        context.add(part, model);
-
         return part;
 	}
 }

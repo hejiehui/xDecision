@@ -3,6 +3,7 @@ package com.xrosstools.xdecision.idea.editor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.xrosstools.idea.gef.Activator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -34,9 +34,8 @@ public class NodeContextMenuProvider implements DecisionTreeMessages {
         DecisionTreeNode node = (DecisionTreeNode)nodePart.getModel();
 
         createAndSetDecisionMenu(menu, node, diagram);
-        menu.addSeparator();
+        addSeparator(menu);
         
-        menu.addSeparator();
         createAndSetFactorMenu(menu, node, diagram);
     }
 
@@ -44,8 +43,8 @@ public class NodeContextMenuProvider implements DecisionTreeMessages {
         for(DecisionTreeDecision decision: diagram.getDecisions().getElements()) {
             menu.add(createItem(new CommandAction(decision.getName(), node.getDecision() == decision, new ChangeDecisionCommand(node, decision))));
         }
-        
-        menu.addSeparator();
+
+        addSeparator(menu);
         menu.add(createItem(new DecisionTreeCreateDecisionAction(project, diagram, node)));
     }
     

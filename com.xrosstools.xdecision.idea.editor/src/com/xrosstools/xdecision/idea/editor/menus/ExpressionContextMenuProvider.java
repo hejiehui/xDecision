@@ -1,6 +1,7 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
+import com.xrosstools.idea.gef.ContextMenuProvider;
 import com.xrosstools.idea.gef.actions.InputTextCommandAction;
 import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.idea.gef.actions.CommandAction;
@@ -38,7 +39,7 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
 
         if(exp instanceof NumberExpression) {
             createOperatorMenu(menu, part);
-            menu.addSeparator();
+            addSeparator(menu);
         }
         
         if(exp instanceof ExtensibleExpression)
@@ -56,11 +57,11 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
         }
         
         if(!(exp instanceof NumberExpression || exp instanceof StringExpression)) {
-            menu.addSeparator();
+            addSeparator(menu);
             createOperatorMenu(menu, part);
         }
 
-        menu.addSeparator();
+        addSeparator(menu);
 
         wrapBracketOperatorMenu(menu, part);
         addRemoveMenu(menu, part);

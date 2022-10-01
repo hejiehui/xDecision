@@ -10,12 +10,6 @@ import com.xrosstools.xdecision.idea.editor.model.definition.*;
 import com.xrosstools.xdecision.idea.editor.treeparts.definition.*;
 
 public class DecisionTreeTreePartFactory implements EditPartFactory {
-	private EditContext editContext;
-
-	public DecisionTreeTreePartFactory(EditContext editContext) {
-		this.editContext = editContext;
-	}
-
 	public EditPart createEditPart(EditPart parent, Object model) {
 		AbstractTreeEditPart part = null;
 		if(model == null)
@@ -38,11 +32,7 @@ public class DecisionTreeTreePartFactory implements EditPartFactory {
 		else if(model instanceof NamedElement)
 			part = new NamedElementTreePart(model);
 
-		part.setEditPartFactory(this);
 		part.setModel(model);
-		part.setParent(parent);
-		part.setContext(editContext);
-		editContext.add(part, model);
 		return part;
 	}
 }

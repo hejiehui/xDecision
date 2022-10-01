@@ -9,6 +9,8 @@ import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeDiagramPart;
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
+import static com.xrosstools.idea.gef.ContextMenuProvider.addSeparator;
+
 public class DiagramContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
@@ -25,7 +27,7 @@ public class DiagramContextMenuProvider implements DecisionTreeMessages {
         elementContainerMenuProvider.buildContextMenu(menu, diagram.getDecisions());
         elementContainerMenuProvider.buildContextMenu(menu, diagram.getFactors());
         elementContainerMenuProvider.buildContextMenu(menu, diagram.getUserDefinedConstants());
-        menu.addSeparator();
+        addSeparator(menu);
 
         elementContainerMenuProvider.buildContextMenu(menu, diagram.getUserDefinedTypes());
 

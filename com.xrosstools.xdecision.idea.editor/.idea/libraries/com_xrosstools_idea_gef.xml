@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/libs/com.xrosstools.idea.gef.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../xcommon/com.xrosstools.idea.gef/src" />
+    </SOURCES>
   </library>
 </component>

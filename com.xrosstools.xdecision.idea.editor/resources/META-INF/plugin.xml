@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xdecision.editor</id>
   <name>Xross Decision Tree Edtitor</name>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -11,7 +11,7 @@
 
   <change-notes><![CDATA[
       IDEA version that supports customer type and expression<br>
-      <em></em>
+      <em>3.0.0</em>
     ]]>
   </change-notes>
 

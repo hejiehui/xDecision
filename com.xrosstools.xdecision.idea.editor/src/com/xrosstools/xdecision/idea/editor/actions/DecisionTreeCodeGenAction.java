@@ -12,22 +12,26 @@ public class DecisionTreeCodeGenAction extends Action implements DecisionTreeAct
     private VirtualFile file;
 	private DecisionTreeDiagram diagram;
 	private DecisionTreeJunit4TestCodeGen junit4CodeGen = new DecisionTreeJunit4TestCodeGen();
-	public DecisionTreeCodeGenAction(VirtualFile file, DecisionTreeDiagram diagram){
-		setText(GEN_JUNIT_TEST_CODE_MSG);
+	private boolean inConsole;
+	public DecisionTreeCodeGenAction(VirtualFile file, DecisionTreeDiagram diagram, boolean inConsole){
+		setText(GEN_TEST_CODE_MSG);
 		this.diagram = diagram;
 		this.file = file;
+		this.inConsole = inConsole;
 	}
 
 	@Override
     public void actionPerformed(ActionEvent e) {
-		String packageName, testName, path;
-		packageName = "test.xrosstools.decision";
-		testName = file.getName().substring(0, file.getName().indexOf(".xdecision")) + "Test";
+        String packageName, testName, path;
+        packageName = "test.xrosstools.decision";
+        testName = file.getName().substring(0, file.getName().indexOf(".xdecision")) + "Test";
 
-		String out = junit4CodeGen.generate(diagram, packageName, testName, file.getPath());
-//        Messages.showInfoMessage(out, "Generated Unit Test Source");
-        System.out.println("Generated Unit Test Source:");
-        System.out.println(out);
+        String out = junit4CodeGen.generate(diagram, packageName, testName, file.getPath());
+        if (inConsole) {
+            System.out.println("Generated Unit Test Source:");
+            System.out.println(out);
+        } else
+            Messages.showInfoMessage(out, "Generated Unit Test Source");
 	}
 
     @Override
