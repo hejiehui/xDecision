@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xdecision.editor</id>
   <name>Xross Decision Tree Edtitor</name>
-  <version>3.0.0</version>
+  <version>3.0.1</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -10,8 +10,11 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      IDEA version that supports customer type and expression<br>
+      <em>3.0.1</em>
+      Remove printing unit test code to console
+      <p>
       <em>3.0.0</em>
+      IDEA version that supports customer type and expression<br>
     ]]>
   </change-notes>
 
