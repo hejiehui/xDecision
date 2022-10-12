@@ -28,7 +28,7 @@ public class DecisionTreeNodeFigure extends RoundedRectangle {
 
         decisionLabel = new Label();
         decisionLabel.setLabelAlignment(PositionConstants.CENTER);
-        decisionLabel.setForegroundColor(ColorConstants.gray);
+        decisionLabel.setForegroundColor(ElementColors.TEXT_NORMAL);
         decisionLabel.getInsets().set(5, 5, 5, 5);
         add(decisionLabel);
         layout.setConstraint(decisionLabel, PositionConstants.CENTER);

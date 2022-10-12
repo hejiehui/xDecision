@@ -27,7 +27,7 @@ public class MethodExpressionFigure extends Figure {
     }
 
     public void setMethodValidation(boolean valid) {
-        nameLabel.setForegroundColor(valid ? ColorConstants.black: ColorConstants.red);
+        nameLabel.setForegroundColor(valid ? ElementColors.TEXT_NORMAL: ElementColors.TEXT_ERROR);
     }
 
     public void setExpandedFigure(Figure expandedFigure) {

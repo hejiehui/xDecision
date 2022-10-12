@@ -5,6 +5,7 @@ import com.xrosstools.idea.gef.figures.Figure;
 import com.xrosstools.idea.gef.figures.Label;
 import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
 import com.xrosstools.idea.gef.parts.EditPart;
+import com.xrosstools.xdecision.idea.editor.figures.ElementColors;
 import com.xrosstools.xdecision.idea.editor.figures.ExpandableExpressionFigure;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeFactor;
 import com.xrosstools.xdecision.idea.editor.model.expression.VariableExpression;
@@ -36,11 +37,11 @@ public class VariableExpressionPart extends ExtensibleExpressionPart {
     
     private Color getColor(VariableExpression exp) {
         if(!exp.isValid())
-            return Color.yellow;
+            return ElementColors.TEXT_ERROR;
         
         if(exp.getReferenceElement() instanceof DecisionTreeFactor)
-            return Color.lightGray;
+            return ElementColors.TEXT_HIGHLIGHT;
 
-        return Color.gray;
+        return ElementColors.TEXT_NORMAL;
     }
 }

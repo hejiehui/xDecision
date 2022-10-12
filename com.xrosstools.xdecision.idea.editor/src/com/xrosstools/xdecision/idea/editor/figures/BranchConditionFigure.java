@@ -20,7 +20,7 @@ public class BranchConditionFigure extends Figure {
 
         operatorFigure = new Label();
         operatorFigure.setLabelAlignment(PositionConstants.RIGHT);
-        operatorFigure.setForegroundColor(ColorConstants.black);
+        operatorFigure.setForegroundColor(ElementColors.TEXT_NORMAL);
         add(operatorFigure);
         setConstraint(operatorFigure, PositionConstants.LEFT);
 
