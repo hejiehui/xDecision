@@ -15,4 +15,8 @@ public class EnumType extends DataType {
     public NamedElementContainer<EnumValue> getValues() {
         return values;
     }
+    
+    public EnumValue findByName(String name) {
+        return values.findByName(name);
+    }
 }

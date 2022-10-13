@@ -2,10 +2,7 @@ package com.xrosstools.xdecision.idea.editor.model.expression;
 
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeManager;
-import com.xrosstools.xdecision.idea.editor.model.definition.ArrayType;
-import com.xrosstools.xdecision.idea.editor.model.definition.DataType;
-import com.xrosstools.xdecision.idea.editor.model.definition.NamedElement;
-import com.xrosstools.xdecision.idea.editor.model.definition.NamedType;
+import com.xrosstools.xdecision.idea.editor.model.definition.*;
 
 public class ExpressionParser {
     private DecisionTreeManager manager;
@@ -89,18 +86,22 @@ public class ExpressionParser {
 
             return;
         }
-        
+
         VariableExpression varExp = (VariableExpression)exp;
-        NamedType member = exp instanceof MethodExpression ?
-                parentType.findMethod(varExp.getName()) :
+
+        if(parentType instanceof EnumType) {
+            NamedElement member = ((EnumType)parentType).findByName(varExp.getName());
+            varExp.setReferenceElement(member);
+            resolve(parentType, varExp.getChildExpression());
+        } else {
+            NamedType member = exp instanceof MethodExpression ?
+                    parentType.findMethod(varExp.getName()) :
                     parentType.findField(varExp.getName());
+            varExp.setReferenceElement(member);
+            if(varExp instanceof MethodExpression)
+                matchVariables(((MethodExpression)varExp).getParameters());
 
-
-        varExp.setReferenceElement(member);
-        
-        if(varExp instanceof MethodExpression)
-            matchVariables(((MethodExpression)varExp).getParameters());
-        
-        resolve(DataType.getType(member), varExp.getChildExpression());
+            resolve(DataType.getType(member), varExp.getChildExpression());
+        }
     }
 }

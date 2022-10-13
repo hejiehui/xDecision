@@ -10,9 +10,10 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>3.0.2</em>
+      Revise color and expression validation.<br>
       <em>3.0.1</em>
-      Remove printing unit test code to console
-      <p>
+      Remove printing unit test code to console<br>
       <em>3.0.0</em>
       IDEA version that supports customer type and expression<br>
     ]]>
