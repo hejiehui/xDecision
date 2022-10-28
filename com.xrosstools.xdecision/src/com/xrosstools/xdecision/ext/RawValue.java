@@ -3,6 +3,8 @@ package com.xrosstools.xdecision.ext;
 import com.xrosstools.xdecision.Facts;
 
 public class RawValue implements Expression {
+    public static final RawValue NULL_OBJ = new RawValue(null);
+    
     private Object value;
     
     public static RawValue numberOf(CharSequence value) {

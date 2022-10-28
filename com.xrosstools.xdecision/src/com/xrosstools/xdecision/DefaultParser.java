@@ -6,8 +6,9 @@ package com.xrosstools.xdecision;
  */
 public class DefaultParser implements XDecisionTreeParser {
     @Override
-    public Object parseFact(String name, String value) {
-        return value;
+    public Object parseDecisionPath(String name, String operator, String value) {
+        //The V1.0 format, the default "==" is not specified
+        return operator == null ? value : operator + " " + value;
     }
 
     @Override

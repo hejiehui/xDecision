@@ -21,7 +21,6 @@ public class AviatorPathEvaluator implements PathEvaluator {
                 return path;
         }
         
-        
         return null;
     }
     
@@ -32,5 +31,4 @@ public class AviatorPathEvaluator implements PathEvaluator {
         
         return env;
     }
-
 }

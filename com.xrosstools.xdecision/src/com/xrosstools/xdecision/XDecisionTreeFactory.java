@@ -16,51 +16,56 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.xrosstools.xdecision.XDecisionPath.XDecisionPathEntry;
+import com.xrosstools.xdecision.ext.XrossEvaluatorConstants;
 
-public class XDecisionTreeFactory {
-	public static final String DECISION_TREE = "decision_tree";
+public class XDecisionTreeFactory implements XrossEvaluatorConstants {
+	private static final String DECISION_TREE = "decision_tree";
 	
-	public static final String COMMENTS = "comments";
-	public static final String PARSER = "parser";
-	public static final String EVALUATOR = "evaluator";
+	private static final String COMMENTS = "comments";
+	private static final String PARSER = "parser";
+	private static final String EVALUATOR = "evaluator";
 	
-	public static final String FACTORS = "factors";
-	public static final String FACTOR = "factor";
-	public static final String VALUE = "value";
+	private static final String FACTORS = "factors";
+	private static final String FACTOR = "factor";
+	private static final String VALUE = "value";
 		
-	public static final String DECISIONS = "decisions";
-	public static final String DECISION = "decision";
+	private static final String DECISIONS = "decisions";
+	private static final String DECISION = "decision";
 
-	public static final String PATHS = "paths";
-	public static final String PATH = "path";
+	private static final String PATHS = "paths";
+	private static final String PATH = "path";
 	
-	public static final String ID = "id";
-	public static final String INDEX = "index";
+	private static final String ID = "id";
+	private static final String INDEX = "index";
 
 	
-    public static final String USER_DEFINED_TYPES = "user_defined_types";
-    public static final String USER_DEFINED_TYPE = "user_defined_type";
+    private static final String USER_DEFINED_TYPES = "user_defined_types";
+    private static final String USER_DEFINED_TYPE = "user_defined_type";
     
-    public static final String NAME = "name";
-    public static final String LABEL = "label";
-    public static final String TYPE = "type";
-    public static final String TYPE_NAME = "type_name";
+    private static final String NAME = "name";
+    private static final String LABEL = "label";
+    private static final String TYPE = "type";
+    private static final String TYPE_NAME = "type_name";
     
-    public static final String FIELDS = "fields";
-    public static final String FIELD = "field";
-    public static final String FIELD_SEPARATOR = ".";
+    private static final String FIELDS = "fields";
+    private static final String FIELD = "field";
+    private static final String FIELD_SEPARATOR = ".";
 
-    public static final String NODES = "nodes";
-    public static final String NODE = "node";
-    public static final String FACTOR_INDEX = "factor_index";
-    public static final String DECISION_INDEX = "decision_index";
-    public static final String FACTOR_FIELD = "factor_field";
-    public static final String FUNCTION_NAME = "function_name";
-    public static final String VALUE_INDEX = "value_index";
-    public static final String NODE_INDEX = "node_index";
+    private static final String NODES = "nodes";
+    private static final String NODE = "node";
+    private static final String FACTOR_INDEX = "factor_index";
+    private static final String DECISION_INDEX = "decision_index";
+    private static final String EXPRESSION = "expression";
+    private static final String OPERATOR = "operator";
+
+    private static final String FACTOR_FIELD = "factor_field";
+    private static final String FUNCTION_NAME = "function_name";
+
+    private static final String VALUE_INDEX = "value_index";
+    private static final String NODE_INDEX = "node_index";
     
-	public static final String DELIMITER = "|";
-	public static final char FACTOR_VALUE_DELIMITER = ':';
+	private static final String DELIMITER = "|";
+	private static final char FACTOR_VALUE_DELIMITER = ':';
 	
 	private static final XDecisionTreeFactory factory = new XDecisionTreeFactory();
 
@@ -119,7 +124,7 @@ public class XDecisionTreeFactory {
 
 		return doc.getElementsByTagName(PATHS).getLength() > 0 ?
 		        (XDecisionTree<T>)createV1Tree(doc, evaluator, decisions, factors) :
-		            (XDecisionTree<T>)createV2Tree(doc, evaluator, decisions, factors);
+		            (XDecisionTree<T>)createV2Tree(doc, evaluator, decisions, factors, parser);
 	}
 
     private <T> XDecisionTree<T> createV1Tree(Document doc, PathEvaluator evaluator, List<T> decisions, FactorDefinition[] factors) {
@@ -150,7 +155,7 @@ public class XDecisionTreeFactory {
         return tree;
     }
 	
-    public <T> XDecisionTree<T> createV2Tree(Document doc, PathEvaluator evaluator, List<T> decisions, FactorDefinition[] factors) {
+    public <T> XDecisionTree<T> createV2Tree(Document doc, PathEvaluator evaluator, List<T> decisions, FactorDefinition[] factors, XDecisionTreeParser<T> parser) {
         XDecisionTree<T> tree = new XDecisionTree<T>(evaluator);
         
         List<DecisionTreeNode> nodes = new ArrayList<>();
@@ -158,7 +163,7 @@ public class XDecisionTreeFactory {
         List<Node> nodeNodes = getValidChildNodes(doc.getElementsByTagName(NODES).item(0));
         
         for(int i = 0; i < nodeNodes.size(); i++)
-            nodes.add(create(nodeNodes.get(i), factors));
+            nodes.add(create(nodeNodes.get(i), factors, parser));
         
         //build tree
         for(DecisionTreeNode node: nodes) {
@@ -177,7 +182,7 @@ public class XDecisionTreeFactory {
             List<XDecisionPathEntry> entries = new ArrayList<XDecisionPathEntry>();
             
             while(node.parent != null) {
-                entries.add(0, new XDecisionPathEntry(node.parent.factorExpression, node.factorValue));
+                entries.add(0, new XDecisionPathEntry(node.parent.nodeExpression, node.factorValue));
                 node = node.parent;
             }
             
@@ -220,16 +225,42 @@ public class XDecisionTreeFactory {
 			factor.factorName = getAttribute(factorNode, ID);
 			factors[getIntAttribute(factorNode, INDEX)] = factor;
 			
-			List<Node> valueNodes = getValidChildNodes(factorNode);
-			Object[] values = new Object[valueNodes.size()];
-			factor.values = values;
-			for(int j = 0; j < values.length; j++){
-				values[j] = parser.parseFact(factor.factorName, valueNodes.get(j).getTextContent());
-			}
+			addFactorValues(parser, factorNode, factor);
 		}
 		
 		return factors;
 	}
+
+    /**
+     * The following is only for 1.0 or 2.0 model file format
+          <factor id="riskLevel" index="1">
+               <value>IN 'low', 'middle'</value>
+               <value>== 'high'</value>
+               <value>=='low'</value>
+               <value>IN 'middle', 'high'</value>
+          </factor>
+     */
+    private void addFactorValues(XDecisionTreeParser parser, Node factorNode, FactorDefinition factor) {
+        List<Node> valueNodes = getValidChildNodes(factorNode);
+        Object[] values = new Object[valueNodes.size()];
+        factor.values = values;
+        for(int j = 0; j < values.length; j++){
+            String pathValue = valueNodes.get(j).getTextContent();
+            String operator = identifyOperator(pathValue);
+
+            String expStr = operator == null? pathValue : pathValue.replaceFirst(operator, "").trim();
+        	values[j] = parser.parseDecisionPath(factor.factorName, operator, expStr);
+        }
+    }
+	
+    private String identifyOperator(String pathValue) {
+        for (String[] operators: ALL_OPERATORS) {
+            for(String operand: operators)
+                if(pathValue.startsWith(operand))
+                    return operand;
+        }
+        return null;
+    }
 	
 	private <T> List<T> createDecisions(Document doc, XDecisionTreeParser<T> parser) {
 		List<Node> decisionNodes = getValidChildNodes(doc.getElementsByTagName(DECISIONS).item(0));
@@ -243,42 +274,10 @@ public class XDecisionTreeFactory {
 		return decisions;
 	}
 	
-    private int getIntAttribute(Node node, String attributeName, int defaultValue){
-        String valueStr = getAttribute(node, attributeName);
-        return valueStr == null ? defaultValue : Integer.parseInt(valueStr);
-    }
-        
-	private int getIntAttribute(Node node, String attributeName){
-		return Integer.parseInt(getAttribute(node, attributeName));
-	}
-	
-	private String getAttribute(Node node, String attributeName){
-		NamedNodeMap map = node.getAttributes();
-		for(int i = 0; i < map.getLength(); i++){
-			if(attributeName.equals(map.item(i).getNodeName()))
-				return map.item(i).getNodeValue();
-		}
-		
-		return null;
-	}
-	
-	private boolean isValidNode(Node node) {
-		return !node.getNodeName().equals("#text");
-	}
-	
-	private List<Node> getValidChildNodes(Node node) {
-		List<Node> nl = new ArrayList<>();
-		NodeList nodeList = node.getChildNodes();
-		for(int i = 0; i < nodeList.getLength(); i++){
-			if(isValidNode(nodeList.item(i)))
-				nl.add(nodeList.item(i));
-		}
-		return nl;
-	}
-	
     private class DecisionTreePath {
         Object factorValue;
         int nodeIndex;
+        
         
         DecisionTreePath(Object factorValue, int nodeIndex) {
             this.factorValue = factorValue;
@@ -289,7 +288,7 @@ public class XDecisionTreeFactory {
 	private class DecisionTreeNode {
 	    int factorId;
 	    int decisionId;
-        String factorExpression;
+        String nodeExpression;
 
         DecisionTreeNode parent;
         Object factorValue;
@@ -297,28 +296,41 @@ public class XDecisionTreeFactory {
 	    List<DecisionTreePath> pathes = new ArrayList<>();
 	}
 	    
-    private DecisionTreeNode create(Node nodeNode, FactorDefinition[] factors) {
+	/**
+        <node factor_index="2" index="8">
+        <node decision_index="6" index="9"/>
+	 */
+    private <T> DecisionTreeNode create(Node nodeNode, FactorDefinition[] factors, XDecisionTreeParser<T> parser) {
         DecisionTreeNode node = new DecisionTreeNode();
 
         node.decisionId = getIntAttribute(nodeNode, DECISION_INDEX, -1);
-        node.factorId = getIntAttribute(nodeNode, FACTOR_INDEX, -1);
         
-        String factorField = getAttribute(nodeNode, FACTOR_FIELD);
-        String functionName = getAttribute(nodeNode, FUNCTION_NAME);
-
-        StringBuffer displayText = new StringBuffer();
+        if(getAttribute(nodeNode, EXPRESSION) != null) {
+            createV2_3(nodeNode, node, factors, parser);
+        } else {
+            createV2_0(nodeNode, node, factors);
+        }
         
-        if(node.factorId != -1)
-            displayText.append(factors[node.factorId].factorName);
-
-        if(factorField != null)
-            displayText.append(FIELD_SEPARATOR).append(factorField);
+        return node;
+	}
+    
+    /**
+     * For the initial version of expression support, requires FACTOR_INDEX, FACTOR_FIELD or FUNCTION_NAME
+     * 
+        <node factor_index="2" index="8">
+           <path node_index="9" value_index="0"/>
+           <path node_index="10" value_index="1"/>
+           <path node_index="11" value_index="2"/>
+        </node>
+        <node decision_index="6" index="9"/>
+     */
+    private void createV2_0(Node nodeNode, DecisionTreeNode node, FactorDefinition[] factors) {
+        int factorId = getIntAttribute(nodeNode, FACTOR_INDEX, -1);
+        if(factorId < 0)
+            return;
         
-        if(functionName != null)
-            displayText = new StringBuffer(String.format("%s(%s)", functionName, displayText.toString()));
-        
-        node.factorExpression = displayText.toString();
-
+        node.factorId = factorId;
+        node.nodeExpression = createNodeExpression(nodeNode, factors[factorId]);
         
         List<Node> pathNodes = getValidChildNodes(nodeNode);
         for(int i = 0; i < pathNodes.size(); i++){
@@ -330,7 +342,72 @@ public class XDecisionTreeFactory {
             
             node.pathes.add(new DecisionTreePath(factors[node.factorId].values[factorValueIndex], getIntAttribute(pathNode, NODE_INDEX)));
         }
-       
-        return node;
-	}
+    }
+
+    private String createNodeExpression(Node nodeNode, FactorDefinition factor) {
+        StringBuffer displayText = new StringBuffer();
+
+        //The following two are rarely used
+        String factorField = getAttribute(nodeNode, FACTOR_FIELD);
+        String functionName = getAttribute(nodeNode, FUNCTION_NAME);
+        
+        displayText.append(factor.factorName);
+
+        if(factorField != null)
+            displayText.append(FIELD_SEPARATOR).append(factorField);
+    
+        if(functionName != null)
+            displayText = new StringBuffer(String.format("%s(%s)", functionName, displayText.toString()));
+
+        return displayText.toString();
+    }
+    
+    /**
+     * For the complete version of expression support, requires only EXPRESSION.
+     */
+    private <T> void createV2_3(Node nodeNode, DecisionTreeNode node, FactorDefinition[] factors, XDecisionTreeParser<T> parser) {
+        node.nodeExpression = getAttribute(nodeNode, EXPRESSION);
+        
+        List<Node> pathNodes = getValidChildNodes(nodeNode);
+        for(int i = 0; i < pathNodes.size(); i++){
+            Node pathNode = pathNodes.get(i);
+            String operator = getAttribute(pathNode, OPERATOR);
+            String pathExpression =  getAttribute(pathNode, EXPRESSION);
+            
+            node.pathes.add(new DecisionTreePath(parser.parseDecisionPath(node.nodeExpression, operator, pathExpression), getIntAttribute(pathNode, NODE_INDEX)));
+        }
+    }
+
+    private int getIntAttribute(Node node, String attributeName, int defaultValue){
+        String valueStr = getAttribute(node, attributeName);
+        return valueStr == null ? defaultValue : Integer.parseInt(valueStr);
+    }
+        
+    private int getIntAttribute(Node node, String attributeName){
+        return Integer.parseInt(getAttribute(node, attributeName));
+    }
+    
+    private String getAttribute(Node node, String attributeName){
+        NamedNodeMap map = node.getAttributes();
+        for(int i = 0; i < map.getLength(); i++){
+            if(attributeName.equals(map.item(i).getNodeName()))
+                return map.item(i).getNodeValue();
+        }
+        
+        return null;
+    }
+    
+    private boolean isValidNode(Node node) {
+        return !node.getNodeName().equals("#text");
+    }
+    
+    private List<Node> getValidChildNodes(Node node) {
+        List<Node> nl = new ArrayList<>();
+        NodeList nodeList = node.getChildNodes();
+        for(int i = 0; i < nodeList.getLength(); i++){
+            if(isValidNode(nodeList.item(i)))
+                nl.add(nodeList.item(i));
+        }
+        return nl;
+    }
 }

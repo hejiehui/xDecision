@@ -16,7 +16,7 @@ public class XrossEvaluatorUnitTest implements XrossEvaluatorConstants {
         MapFacts facts = new MapFacts();
 
         Object[] paths = new Object[1];
-        paths[0] = test.parseFact(abc1, op);
+        paths[0] = test.parseDecisionPath(abc1, op, null);
 
         facts.set(abc1, value);
         assertNotNull(test.evaluate(facts, abc1, paths));
@@ -26,7 +26,7 @@ public class XrossEvaluatorUnitTest implements XrossEvaluatorConstants {
         MapFacts facts = new MapFacts();
 
         Object[] paths = new Object[1];
-        paths[0] = test.parseFact(abc1, op);
+        paths[0] = test.parseDecisionPath(abc1, op, null);
 
         facts.set(abc1, value);
         assertNull(test.evaluate(facts, abc1, paths));
@@ -78,7 +78,7 @@ public class XrossEvaluatorUnitTest implements XrossEvaluatorConstants {
         MapFacts facts = new MapFacts();
 
         Object[] paths = new Object[1];
-        paths[0] = test.parseFact(abc1, String.format("%s %s", op, valueStr));
+        paths[0] = test.parseDecisionPath(abc1, op, valueStr == null ? null:valueStr.toString());
 
         facts.set(abc1, value);
         facts.set(def1, null);
@@ -89,7 +89,7 @@ public class XrossEvaluatorUnitTest implements XrossEvaluatorConstants {
         MapFacts facts = new MapFacts();
 
         Object[] paths = new Object[1];
-        paths[0] = test.parseFact(abc1, String.format("%s %s", op, valueStr));
+        paths[0] = test.parseDecisionPath(abc1, op, valueStr == null ? null:valueStr.toString());
 
         facts.set(abc1, value);
         facts.set(def1, null);

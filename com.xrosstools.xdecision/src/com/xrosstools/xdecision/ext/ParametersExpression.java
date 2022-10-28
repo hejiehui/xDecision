@@ -1,6 +1,7 @@
 package com.xrosstools.xdecision.ext;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import com.xrosstools.xdecision.Facts;
 
@@ -13,6 +14,10 @@ public class ParametersExpression extends LeftExpression {
     
     public void addParameter(Expression leftParametere) {
         params.addFirst(leftParametere);
+    }
+    
+    public List<Expression> getParams() {
+        return params;
     }
     
     @Override

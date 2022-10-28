@@ -8,6 +8,10 @@ public class ExpressionCompiler {
         return (Expression)compile(A, new LinkedList<>(tokens));
     }
     
+    public Expression compile(ExpressionType type, List<Token> tokens) {
+        return (Expression)compile(type, new LinkedList<>(tokens));
+    }
+    
     // Assume there is no common prefix
     public Object compile(ExpressionType type, LinkedList<Token> words) {
         List<Token> bakWords = new ArrayList<Token>(words);

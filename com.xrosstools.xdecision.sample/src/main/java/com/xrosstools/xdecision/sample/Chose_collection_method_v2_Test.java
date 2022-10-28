@@ -19,6 +19,7 @@ public class Chose_collection_method_v2_Test {
         try {
             // Please revise the path to correct value 
             tree = XDecisionTreeFactory.create("chose_collection_method_V2.xdecision");
+            tree.setDebug(true);
         } catch (Exception e) {
             e.printStackTrace();
             fail();

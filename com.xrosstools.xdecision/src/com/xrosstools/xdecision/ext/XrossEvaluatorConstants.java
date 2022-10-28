@@ -52,4 +52,11 @@ public interface XrossEvaluatorConstants {
     String[] IN_OPERATOR = new String[] {
             IN, NOT_IN
     };
+    
+    String[][] ALL_OPERATORS = new String[][] {
+        SINGLE_OPERAND_OPERATOR,
+        DOUBLE_OPERAND_OPERATOR,
+        BETWEEN_OPERATOR,
+        IN_OPERATOR,
+    };
 }
