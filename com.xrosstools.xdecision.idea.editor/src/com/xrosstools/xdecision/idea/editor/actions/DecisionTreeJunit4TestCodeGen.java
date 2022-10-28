@@ -21,7 +21,7 @@ public class DecisionTreeJunit4TestCodeGen {
 	private static final String COMMENTS =       "            %s\n";
 	private static final String TEST_ASSIGN = 		"        test.set(\"%s\", \"%s\");\n";
 	private static final String ASSERT_DISPLAY = 	"        assertEquals(\"%s\", tree.get(test));";
-	private static final String TEST_RESET = 		"        test = new MapFacts();\n";
+	private static final String TEST_RESET = 		"        MapFacts test = new MapFacts();\n";
 	public String generate(DecisionTreeDiagram diagram, String packageName, String testName, String path){
 		StringBuffer codeBuf = getTemplate();
 		replace(codeBuf, "!PACKAGE!", packageName);

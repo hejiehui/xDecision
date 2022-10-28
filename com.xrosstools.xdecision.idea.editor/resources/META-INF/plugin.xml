@@ -10,6 +10,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>3.0.3</em>
+      Fix unit test and optimize model reading.<br>
       <em>3.0.2</em>
       Revise color and expression validation.<br>
       <em>3.0.1</em>
