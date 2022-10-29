@@ -3,12 +3,14 @@ package com.xrosstools.xdecision.ext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.awt.HeadlessException;
 import java.util.Arrays;
 
 import org.junit.Test;
 
 import com.xrosstools.xdecision.MapFacts;
 import com.xrosstools.xdecision.sample.Health;
+import com.xrosstools.xdecision.sample.LevelEnum;
 
 public class ExpressionCompilerTest {
     private TokenParser p = new TokenParser();
@@ -98,6 +100,7 @@ public class ExpressionCompilerTest {
       
         Health A = new Health("abc", true, "active");
         A.setChild(new Health("def", false, "deactive"));
+        A.setLevel(LevelEnum.level1);
 
         f.set("A", A);
       
@@ -115,6 +118,9 @@ public class ExpressionCompilerTest {
         e = test.compile(p.parseToken("A.date"));
         assertNotNull(e.evaluate(f));
         
+        e = test.compile(p.parseToken("A.level"));
+        assertEquals(LevelEnum.level1, e.evaluate(f));
+        
         e = test.compile(p.parseToken("A.child.name"));
         assertEquals("def",  e.evaluate(f));
         
@@ -123,7 +129,6 @@ public class ExpressionCompilerTest {
         
         e = test.compile(p.parseToken("A.child.vip"));
         assertEquals(false,  e.evaluate(f));
-
     }
     
     @Test

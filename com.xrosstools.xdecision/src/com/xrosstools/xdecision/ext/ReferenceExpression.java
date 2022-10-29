@@ -19,6 +19,9 @@ public class ReferenceExpression extends LeftExpression {
             return facts.get(name);
 
         Object parent = leftExp.evaluate(facts);
+        if(parent instanceof EnumType)
+            return ((EnumType)parent).valueOf(name);
+        
         try {
             Field f = parent.getClass().getDeclaredField(name);
             f.setAccessible(true);

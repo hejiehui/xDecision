@@ -16,7 +16,9 @@ public class Health {
     private final boolean vip;
     private final Date date = new Date();
     
+    private LevelEnum level;
     private Health child;
+    
 
     /**
      * Creates a customer with the given name and status.
@@ -29,5 +31,9 @@ public class Health {
     
     public void setChild(Health child) {
         this.child = child;
+    }
+
+    public void setLevel(LevelEnum level) {
+        this.level = level;
     }
 }

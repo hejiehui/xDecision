@@ -23,6 +23,8 @@ public abstract class OperandExpression implements Expression, XrossEvaluatorCon
         throw new IllegalArgumentException(String.valueOf(v1) + " can not be compared to " + v2);
     }
     
+    
+    
     @Override
     public String toString() {
         return String.format("%s %s", operator, getPath());

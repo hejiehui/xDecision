@@ -19,9 +19,9 @@ public class DoubleOperandExpression extends SingleOperandExpression {
         
         switch (operator) {
         case EQUAL:
-            return isAllNull(v1, v2) ? true : isNoneNull(v1, v2) ? compare(v1, v2) == 0 : false; 
+            return isAllNull(v1, v2) ? true : isNoneNull(v1, v2) ? equals(v1, v2) : false; 
         case NOT_EQUAL:
-            return isAllNull(v1, v2) ? false : isNoneNull(v1, v2) ? compare(v1, v2) != 0 : true;
+            return isAllNull(v1, v2) ? false : isNoneNull(v1, v2) ? !equals(v1, v2) : true;
         case GREATER_THAN:
             return isAnyNull(v1, v2) ? false : compare(v1, v2) > 0;
         case GREATER_THAN_EQUAL:
@@ -49,6 +49,16 @@ public class DoubleOperandExpression extends SingleOperandExpression {
         default:
             throw new IllegalArgumentException("Operator: " + operator + " is not supported!");
         }
+    }
+    
+    private boolean equals(Object v1, Object v2){
+        if(v1 instanceof EnumValue)
+            return ((EnumValue)v1).equals(v2);
+        
+        if(v2 instanceof EnumValue)
+            return ((EnumValue)v2).equals(v1);
+            
+        return v1.equals(v2);
     }
 
     @Override
