@@ -12,9 +12,11 @@ public abstract class LeftExpression implements Expression {
             return this;
         }
         
-        if(this.leftExp instanceof LeftExpression)
-            return ((LeftExpression)this.leftExp).setLeftExp(leftExp);
-        else
-            throw new IllegalArgumentException(leftExp.toString() + " is not allowed");
+        if(this.leftExp instanceof LeftExpression) {
+            ((LeftExpression)this.leftExp).setLeftExp(leftExp);
+            return this;
+        }
+
+        throw new IllegalArgumentException(leftExp.toString() + " is not allowed");
     }
 }

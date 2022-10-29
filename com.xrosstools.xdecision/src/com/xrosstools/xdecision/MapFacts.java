@@ -29,4 +29,9 @@ public class MapFacts implements Facts {
         return values.keySet().toArray(new String[values.size()]);
         
     }
+
+    @Override
+    public boolean contains(String name) {
+        return values.containsKey(name);
+    }
 }

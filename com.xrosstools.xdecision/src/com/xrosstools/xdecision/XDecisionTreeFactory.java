@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -16,6 +17,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.xrosstools.xdecision.XDecisionPath.XDecisionPathEntry;
+import com.xrosstools.xdecision.ext.EnumType;
+import com.xrosstools.xdecision.ext.RawValue;
 import com.xrosstools.xdecision.ext.XrossEvaluatorConstants;
 
 public class XDecisionTreeFactory implements XrossEvaluatorConstants {
@@ -41,6 +44,12 @@ public class XDecisionTreeFactory implements XrossEvaluatorConstants {
 	
     private static final String USER_DEFINED_TYPES = "user_defined_types";
     private static final String USER_DEFINED_TYPE = "user_defined_type";
+    
+    private static final String USER_DEFINED_ENUMS = "user_defined_enums";
+    private static final String USER_DEFINED_ENUM = "user_defined_enum";
+
+    private static final String CONSTANTS = "constants";
+    private static final String CONSTANT = "constant";
     
     private static final String NAME = "name";
     private static final String LABEL = "label";
@@ -156,7 +165,8 @@ public class XDecisionTreeFactory implements XrossEvaluatorConstants {
     }
 	
     public <T> XDecisionTree<T> createV2Tree(Document doc, PathEvaluator evaluator, List<T> decisions, FactorDefinition[] factors, XDecisionTreeParser<T> parser) {
-        XDecisionTree<T> tree = new XDecisionTree<T>(evaluator);
+        UserDefinedContext context = createContext(doc);
+        XDecisionTree<T> tree = new XDecisionTree<T>(evaluator, context);
         
         List<DecisionTreeNode> nodes = new ArrayList<>();
         
@@ -210,7 +220,69 @@ public class XDecisionTreeFactory implements XrossEvaluatorConstants {
             return defaultImplementation;
         
         return (T)Class.forName(pluginClassName).newInstance();
-    }    
+    }
+
+    private UserDefinedContext createContext(Document doc) {
+        Facts constants = createConstants(doc);
+        Facts enums = createEnums(doc);
+        
+        return new UserDefinedContext(constants, enums);
+    }
+
+    private MapFacts createEnums(Document doc) {
+        MapFacts enums = new MapFacts();
+        if(doc.getElementsByTagName(USER_DEFINED_ENUMS).getLength() == 0)
+            return enums;
+
+        List<Node> enumNodes = getValidChildNodes(doc.getElementsByTagName(USER_DEFINED_ENUMS).item(0));
+        for (Node enumNode: enumNodes) {
+            String name = getAttribute(enumNode, NAME);
+            List<Node> valueNodes = getValidChildNodes(enumNode);
+            List<String> values = new ArrayList<>();
+            int i = 0;
+            for (Node node: valueNodes) {
+                if (node.getNodeName().equals(VALUE))
+                    values.add(getAttribute(node, ID));
+            }
+            enums.set(name, new EnumType(name, values));
+        }
+        return enums;
+    }
+
+    private Facts createConstants(Document doc) {
+        MapFacts constants = new MapFacts();
+        if(doc.getElementsByTagName(CONSTANTS).getLength() == 0)
+                return constants;
+
+        List<Node> constantsNodes = getValidChildNodes(doc.getElementsByTagName(CONSTANTS).item(0));
+        for(Node constNode: constantsNodes) {
+            String name = getAttribute(constNode, ID);
+            String type = getAttribute(constNode, TYPE);
+            String value = getAttribute(constNode, VALUE);
+
+            Object constantValue = null;
+            switch (type) {
+            case "String":
+                constantValue = value; 
+                break;
+            case "Number":
+                constantValue = RawValue.parseNumber(value);
+                break;
+            case "Boolean":
+                constantValue = Boolean.parseBoolean(value);
+                break;
+            case "Date":
+                constantValue = new Date(value);
+                break;
+            default:
+                throw new IllegalArgumentException("Type: " + type + " is not supported");
+            }
+
+            constants.set(name, constantValue);
+        }
+
+        return constants;
+    }
     
 	private FactorDefinition[] createFactors(Document doc, XDecisionTreeParser parser) {
 		List<Node> factorNodes = getValidChildNodes(doc.getElementsByTagName(FACTORS).item(0));

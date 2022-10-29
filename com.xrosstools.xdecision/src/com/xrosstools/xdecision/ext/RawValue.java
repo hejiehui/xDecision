@@ -8,6 +8,10 @@ public class RawValue implements Expression {
     private Object value;
     
     public static RawValue numberOf(CharSequence value) {
+        return new RawValue(parseNumber(value));
+    }
+
+    public static Number parseNumber(CharSequence value) {
         boolean isDouble = false;
         for(int i = 0; i < value.length(); i++) {
             if(value.charAt(i) == '.')
@@ -15,9 +19,9 @@ public class RawValue implements Expression {
         }
         
         if(isDouble)
-            return new RawValue(new Double(value.toString()));
+            return new Double(value.toString());
         else
-            return new RawValue(new Integer(value.toString()));
+            return new Integer(value.toString());
     }
 
     public static RawValue stringOf(CharSequence value) {

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import com.xrosstools.xdecision.MapFacts;
+import com.xrosstools.xdecision.sample.Health;
 
 public class ExpressionCompilerTest {
     private TokenParser p = new TokenParser();
@@ -92,6 +93,40 @@ public class ExpressionCompilerTest {
     }
   
     @Test
+    public void testMemberOf() {
+        MapFacts f = new MapFacts();
+      
+        Health A = new Health("abc", true, "active");
+        A.setChild(new Health("def", false, "deactive"));
+
+        f.set("A", A);
+      
+        Expression e = test.compile(p.parseToken("A.name"));
+
+        assertNotNull(e);
+        assertEquals("abc",  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A.status"));
+        assertEquals("active",  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A.vip"));
+        assertEquals(true,  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A.date"));
+        assertNotNull(e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A.child.name"));
+        assertEquals("def",  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A.child.status"));
+        assertEquals("deactive",  e.evaluate(f));
+        
+        e = test.compile(p.parseToken("A.child.vip"));
+        assertEquals(false,  e.evaluate(f));
+
+    }
+    
+    @Test
     public void testMethodOf() {
         MapFacts f = new MapFacts();
       
@@ -109,7 +144,7 @@ public class ExpressionCompilerTest {
         assertEquals("b",  e.evaluate(f));
         
         e = test.compile(p.parseToken("A.substring(1,2).charAt(0)"));
-        assertEquals("b",  e.evaluate(f));
+        assertEquals('b',  e.evaluate(f));
         
         f.set("C", "abc");
        

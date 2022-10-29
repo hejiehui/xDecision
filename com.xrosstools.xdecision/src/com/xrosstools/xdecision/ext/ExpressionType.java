@@ -131,7 +131,7 @@ public enum ExpressionType {
             return asList(ID_G_I);
         }
         public Object compile(Grammar grammar, List<Object> segment) {
-            Expression expID = new FactorValue(((Token)segment.get(0)).getValueStr());
+            Expression expID = new ReferenceExpression(((Token)segment.get(0)).getValueStr());
             segment.set(0, expID);
             return super.compile(grammar, segment);
         }

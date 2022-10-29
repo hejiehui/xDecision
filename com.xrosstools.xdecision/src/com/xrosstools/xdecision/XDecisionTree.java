@@ -3,11 +3,14 @@ package com.xrosstools.xdecision;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.xrosstools.xdecision.ext.InternalFact;
+
 /**
  * A more user readable decision tree implementation
  * @author Jerry He
  */
 public class XDecisionTree<T> {
+    private UserDefinedContext context;
     private String nodeExpression;
     private T decision;
     private Map<Object, XDecisionTree<T>> nodes;
@@ -15,12 +18,12 @@ public class XDecisionTree<T> {
     private boolean debug;
 
     public XDecisionTree(PathEvaluator evaluator) {
-        this(null, evaluator );
-    }
-    
-    public XDecisionTree(T decision, PathEvaluator evaluator) {
-        this.decision = decision;
         this.evaluator = evaluator;
+    }
+            
+    public XDecisionTree(PathEvaluator evaluator, UserDefinedContext context) {
+        this(evaluator);
+        this.context = context;
     }
     
     public void setDebug(boolean debug) {
@@ -55,6 +58,11 @@ public class XDecisionTree<T> {
     }
     
     public T get(Facts facts) {
+        //This is the root
+        if(context != null) {
+            facts = new InternalFact(facts, context);
+        }
+        
         if (nodes == null) {
             return debugDecision("Leaf decision: ", decision);
         }
