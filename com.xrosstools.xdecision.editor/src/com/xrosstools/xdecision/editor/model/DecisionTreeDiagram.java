@@ -169,6 +169,9 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
     }
 
     public DataType findDataType(String name) {
+        if(name == null)
+            return DataType.STRING_TYPE;
+
         DataType type = getUserDefinedTypes().findByName(name);
         
         if(type != null)

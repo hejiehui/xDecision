@@ -11,6 +11,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
 import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 
 public class DecisionTreeV1FormatReader {
@@ -19,11 +20,20 @@ public class DecisionTreeV1FormatReader {
     public static final String DELIMITER = "|";
     public static final char FACTOR_VALUE_DELIMITER = ':';
     public static final String PATHS = "paths";
+    
+    public static final String VALUE = "value";
 
     public static boolean isV1Format(Document doc) {
         return doc.getElementsByTagName(PATHS).getLength() > 0;
     }
 
+    /**
+      <paths>
+          <path index="0">0:0|1:0</path>
+           <path index="10">0:3|1:1|5:1|6:1</path>
+     </paths>
+     */
+    
     public static DecisionTreePath[] createPaths(Document doc) {
         if(doc.getElementsByTagName(PATHS).getLength() == 0)
             return null;
@@ -56,7 +66,25 @@ public class DecisionTreeV1FormatReader {
         return new DecisionTreePath(entries, decisionId);
     }
     
-    public static void buildTree(DecisionTreePath[] paths, DecisionTreeDiagram diagram){
+    /**
+     * The following is only for 1.0 or 2.0 model file format
+          <factor id="riskLevel" index="1">
+               <value>IN 'low', 'middle'</value>
+               <value>== 'high'</value>
+               <value>=='low'</value>
+               <value>IN 'middle', 'high'</value>
+          </factor>
+     */
+    public static void addFactorValues(Node factorNode, Map<Integer, String[]> factorValuesMap) {
+        List<Node> valueNodes = getValidChildNodes(factorNode);
+        String[] values = new String[valueNodes.size()];
+        for(int j = 0; j < values.length; j++){
+            values[j] = valueNodes.get(j).getTextContent();
+        }
+        factorValuesMap.put(DecisionTreeDiagramFactory.getIntAttribute(factorNode, INDEX), values);
+    }    
+    
+    public static void buildTree(ExpressionParser parser, DecisionTreePath[] paths, DecisionTreeDiagram diagram, Map<Integer, String[]> factorValuesMap){
         Map<Integer, DecisionTreeNode> roots = new HashMap<Integer, DecisionTreeNode>();
          for(DecisionTreePath path: paths){
              Integer rootFactor = new Integer(path.getPathEntries()[0].getNodeIndex());
@@ -70,6 +98,7 @@ public class DecisionTreeV1FormatReader {
                  parent = roots.get(rootFactor);
              
              for(DecisionTreePathEntry entry: path.getPathEntries()){
+                 String pathValue = factorValuesMap.get(entry.getNodeIndex())[entry.getValueIndex()];
                  parent.setNodeExpression(new VariableExpression(diagram.getFactorById(entry.getNodeIndex()).getFactorName()));
                  DecisionTreeNode child = null;
                  for(DecisionTreeNodeConnection conn: parent.getOutputs()){
@@ -86,6 +115,7 @@ public class DecisionTreeV1FormatReader {
                      diagram.addNode(child);
                      DecisionTreeNodeConnection conn = new DecisionTreeNodeConnection(parent, child);
                      conn.setValueId(entry.getValueIndex());
+                     populateOperatorAndExpression(parser, conn, pathValue);
                  }
                  
                  parent = child;
@@ -94,4 +124,36 @@ public class DecisionTreeV1FormatReader {
              parent.setDecision(diagram.getDecisions().get(path.getDecisionIndex()));
          }
     } 
+    
+
+    public static void populateOperatorAndExpression(ExpressionParser parser, DecisionTreeNodeConnection conn, String pathValue){
+        if(pathValue == null) {
+            conn.setOperator(ConditionOperator.EQUAL);
+            conn.setExpression(parser.parseExpression(""));
+            return ;
+        }
+
+        ConditionOperator foundOperator = null;
+        if(pathValue.startsWith(ConditionOperator.GREATER_THAN_EQUAL.getText()) || pathValue.startsWith(ConditionOperator.LESS_THAN_EQUAL.getText())) {
+            foundOperator = pathValue.startsWith(ConditionOperator.GREATER_THAN_EQUAL.getText()) ? ConditionOperator.GREATER_THAN_EQUAL : ConditionOperator.LESS_THAN_EQUAL;
+        } else {
+            for (ConditionOperator operator: ConditionOperator.values()) {
+                if(pathValue.startsWith(operator.getText())) {
+                    foundOperator = operator;
+                    break;
+                }
+            }
+        }
+
+        String expStr = null;
+        if(foundOperator == null) {
+            foundOperator = ConditionOperator.EQUAL;
+            expStr = String.format("'%s'", pathValue);
+        }else {
+            expStr = foundOperator == null? pathValue : pathValue.replaceFirst(foundOperator.getText(), "").trim();
+        }
+
+        conn.setOperator(foundOperator);
+        conn.setExpression(parser.parseExpression(expStr));
+    }
 }
