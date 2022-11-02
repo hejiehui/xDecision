@@ -18,7 +18,8 @@ public class TokenParser {
                 pos++;
                 continue;
             }
-            
+
+            boolean matches = false;
             StringBuilder buf = new StringBuilder(String.valueOf(next));
             for(TokenType type: TokenType.values()) {
                 if(!type.matchStart(next))
@@ -35,9 +36,12 @@ public class TokenParser {
                 }
                 
                 tokens.add(type.parse(buf));
+                matches = true;
                 break;
             }
-            
+
+            if(!matches)
+                throw new IllegalArgumentException("Can not identify expression: " + expressionStr.substring(pos));
         }
 
         return tokens;
