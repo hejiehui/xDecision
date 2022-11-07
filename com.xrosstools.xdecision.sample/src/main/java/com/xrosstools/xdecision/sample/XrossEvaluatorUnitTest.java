@@ -322,4 +322,62 @@ public class XrossEvaluatorUnitTest implements XrossEvaluatorConstants {
         testDoubleOprFail(null, op, "'A*'");
         testDoubleOprFail(null, op, null);
     }
+
+    @Test
+    public void testBetween() {
+        String op = BETWEEN;
+        testDoubleOprPass(123, op, "12,123");
+        testDoubleOprPass(123, op, "123,456");
+
+        testDoubleOprFail(123, op, "124,456");
+        testDoubleOprFail(123, op, "12,122");
+    }
+
+    @Test
+    public void testNotBetween() {
+        String op = NOT_BETWEEN;
+        testDoubleOprFail(123, op, "12,123");
+        testDoubleOprFail(123, op, "123,  456");
+
+        testDoubleOprPass(123, op, "124,456");
+        testDoubleOprPass(123, op, "12,    122");
+    }
+
+    @Test
+    public void testIn() {
+        String op = IN;
+        testDoubleOprPass(123, op, "123");
+        testDoubleOprPass(123, op, "12,  123");
+        testDoubleOprPass(123, op, "123,  456");
+
+        testDoubleOprPass("123", op, "'123'");
+        testDoubleOprPass("123", op, "'12','123'");
+        testDoubleOprPass("123", op, "'123','456'");
+
+        testDoubleOprFail(123, op, "124");
+        testDoubleOprFail(123, op, "124,456");
+        testDoubleOprFail(123, op, "12,122");
+
+        testDoubleOprFail("123", op, "'13'");
+        testDoubleOprFail("123", op, "'12','13'");
+    }
+
+    @Test
+    public void testNotIn() {
+        String op = NOT_IN;
+        testDoubleOprFail(123, op, "123");
+        testDoubleOprFail(123, op, "12,  123");
+        testDoubleOprFail(123, op, "123,  456");
+
+        testDoubleOprFail("123", op, "'123'");
+        testDoubleOprFail("123", op, "'12','123'");
+        testDoubleOprFail("123", op, "'123','456'");
+
+        testDoubleOprPass(123, op, "124");
+        testDoubleOprPass(123, op, "124,456");
+        testDoubleOprPass(123, op, "12,122");
+
+        testDoubleOprPass("123", op, "'13'");
+        testDoubleOprPass("123", op, "'12','13'");
+    }
 }
