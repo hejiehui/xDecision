@@ -12,6 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.xrosstools.xdecision.editor.model.expression.ExpressionParser;
+import com.xrosstools.xdecision.editor.model.expression.ExpressionType;
 import com.xrosstools.xdecision.editor.model.expression.VariableExpression;
 
 public class DecisionTreeV1FormatReader {
@@ -154,6 +155,6 @@ public class DecisionTreeV1FormatReader {
         }
 
         conn.setOperator(foundOperator);
-        conn.setExpression(parser.parseExpression(expStr));
+        conn.parseExpression(parser, expStr);
     }
 }

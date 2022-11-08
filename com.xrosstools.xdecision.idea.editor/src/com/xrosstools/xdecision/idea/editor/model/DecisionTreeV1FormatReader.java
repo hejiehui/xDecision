@@ -100,7 +100,7 @@ public class DecisionTreeV1FormatReader {
 
             for(DecisionTreePathEntry entry: path.getPathEntries()){
                 String pathValue = factorValuesMap.get(entry.getNodeIndex())[entry.getValueIndex()];
-                parent.setNodeExpression(new VariableExpression(diagram.getFactorById(entry.getNodeIndex()).getFactorName()));
+                parent.setNodeExpression(parser.parseExpression(diagram.getFactorById(entry.getNodeIndex()).getFactorName()));
                 DecisionTreeNode child = null;
                 for(DecisionTreeNodeConnection conn: parent.getOutputs()){
                     if(conn.getValueId() != entry.getValueIndex())
@@ -155,6 +155,6 @@ public class DecisionTreeV1FormatReader {
         }
 
         conn.setOperator(foundOperator);
-        conn.setExpression(parser.parseExpression(expStr));
+        conn.parseExpression(parser, expStr);
     }
 }

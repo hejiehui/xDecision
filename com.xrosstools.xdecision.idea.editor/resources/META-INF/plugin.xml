@@ -10,6 +10,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>3.0.5</em>
+      Fix paring parameters in BETWEEN and IN.<br>
       <em>3.0.4</em>
       Support old version modle file.<br>
       <em>3.0.3</em>
