@@ -10,6 +10,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>3.0.7</em>
+      Update to IDEA GEF 1.0.5 to fix refresh children parts<br>
       <em>3.0.6</em>
       Fix connection expression display bug. Support remove parameter from parameter list<br>
       <em>3.0.5</em>

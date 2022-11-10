@@ -19,7 +19,7 @@ public class ParameterListExpression extends CompositeExpression {
     }
 
     public ParameterListExpression addFirst(ExpressionDefinition parameter) {
-        super.addFirst(new ParameterExpression().setInnerExpression(parameter));//TokenExpression.TOKEN_COMMA);
+        super.addFirst(new ParameterExpression().setInnerExpression(parameter));
         return this;
     }
 

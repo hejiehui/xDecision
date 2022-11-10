@@ -8,17 +8,13 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.model.expression.*;
 
 public class RemoveExpressionCommand extends Command {
-    private EditPart expPart;
     private Object parentModel;
     private ExpressionDefinition oldExp;
     
     private int oldExpIndex;
     private OperatorExpression oldOpr;
-    private int oldOprIndex;
-    
-    public RemoveExpressionCommand(EditPart expPart) {
-        this.expPart = expPart;
 
+    public RemoveExpressionCommand(EditPart expPart) {
         if(expPart.getParent().getModel() instanceof ParameterExpression) {
             this.parentModel = (ParameterListExpression)expPart.getParent().getParent().getModel();
             this.oldExp = (ExpressionDefinition)expPart.getParent().getModel();
