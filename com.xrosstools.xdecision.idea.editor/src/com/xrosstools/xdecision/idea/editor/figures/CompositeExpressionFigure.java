@@ -8,7 +8,7 @@ public class CompositeExpressionFigure extends Figure {
     public CompositeExpressionFigure() {
         ToolbarLayout elementsLayout = new ToolbarLayout();
         elementsLayout.setHorizontal(true);
-        elementsLayout.setSpacing(2);
+        elementsLayout.setSpacing(5);
         elementsLayout.setStretchMinorAxis(false);
         elementsLayout.setMinorAlignment(ToolbarLayout.ALIGN_CENTER);
         setLayoutManager(elementsLayout);

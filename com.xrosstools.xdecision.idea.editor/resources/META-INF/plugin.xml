@@ -10,6 +10,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>3.0.6</em>
+      Fix connection expression display bug. Support remove parameter from parameter list<br>
       <em>3.0.5</em>
       Fix paring parameters in BETWEEN and IN.<br>
       <em>3.0.4</em>

@@ -8,9 +8,7 @@ import com.xrosstools.idea.gef.figures.Figure;
 import com.xrosstools.idea.gef.parts.EditPart;
 import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
 import com.xrosstools.xdecision.idea.editor.figures.EnclosedExpressionFigure;
-import com.xrosstools.xdecision.idea.editor.model.expression.BracktExpression;
-import com.xrosstools.xdecision.idea.editor.model.expression.EnclosedExpression;
-import com.xrosstools.xdecision.idea.editor.model.expression.NegativeExpression;
+import com.xrosstools.xdecision.idea.editor.model.expression.*;
 
 
 public class EnclosedExpressionPart extends BaseExpressionPart {
@@ -40,5 +38,20 @@ public class EnclosedExpressionPart extends BaseExpressionPart {
         
         Figure childFigure = ((AbstractGraphicalEditPart)childEditPart).getFigure();
         figure.setEnclosedFigure(childFigure);
+    }
+
+    @Override
+    public void refreshVisuals() {
+        ExpressionDefinition exp = (ExpressionDefinition)getModel();
+        if(!(exp instanceof ParameterExpression))
+            return;
+
+        ParameterListExpression pl = (ParameterListExpression)getParent().getModel();
+        EnclosedExpressionFigure figure = (EnclosedExpressionFigure) getFigure();
+
+        if(pl.indexOf(exp) == pl.size() -1)
+            figure.setRightDelimeter("");
+        else
+            figure.setRightDelimeter(", ");
     }
 }

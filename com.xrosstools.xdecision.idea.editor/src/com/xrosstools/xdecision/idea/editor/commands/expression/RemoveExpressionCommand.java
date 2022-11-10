@@ -8,26 +8,49 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.model.expression.*;
 
 public class RemoveExpressionCommand extends Command {
+    private EditPart expPart;
     private Object parentModel;
     private ExpressionDefinition oldExp;
     
-    private int oldIndex;
+    private int oldExpIndex;
     private OperatorExpression oldOpr;
+    private int oldOprIndex;
     
     public RemoveExpressionCommand(EditPart expPart) {
-        this.parentModel = expPart.getParent().getModel();
-        this.oldExp = (ExpressionDefinition)expPart.getModel();
+        this.expPart = expPart;
+
+        if(expPart.getParent().getModel() instanceof ParameterExpression) {
+            this.parentModel = (ParameterListExpression)expPart.getParent().getParent().getModel();
+            this.oldExp = (ExpressionDefinition)expPart.getParent().getModel();
+        } else {
+            this.parentModel = expPart.getParent().getModel();
+            this.oldExp = (ExpressionDefinition)expPart.getModel();
+        }
     }
     
     public void removeChild() {
-        if(parentModel instanceof CompositeExpression) {
-            CompositeExpression parent = (CompositeExpression)parentModel;
-            oldIndex = parent.indexOf(oldExp);
+        if(parentModel instanceof ParameterListExpression) {
+            ParameterListExpression parent = (ParameterListExpression)parentModel;
+            oldExpIndex = parent.indexOf(oldExp);
             parent.remove(oldExp);
-            if(oldIndex != 0 && parent.getExpression(oldIndex - 1) instanceof OperatorExpression) {
-                oldOpr = (OperatorExpression)parent.getExpression(oldIndex - 1);
-                parent.remove(oldOpr);
+            return;
+        }
+
+        if(parentModel instanceof CalculationExpression) {
+            CalculationExpression parent = (CalculationExpression)parentModel;
+            oldExpIndex = parent.indexOf(oldExp);
+
+            parent.remove(oldExp);
+            //First, we need to check following operator
+            if(oldExpIndex == 0 && parent.size() > 0 && parent.getExpression(oldExpIndex) instanceof OperatorExpression) {
+                oldOpr = (OperatorExpression) parent.getExpression(oldExpIndex);
+            } //Last, we need to check previours operator
+            else if(oldExpIndex > 0 && parent.size() > 0 && parent.getExpression(oldExpIndex - 1) instanceof OperatorExpression) {
+                oldOpr = (OperatorExpression)parent.getExpression(oldExpIndex - 1);
             }
+
+            if(oldOpr != null)
+                parent.remove(oldOpr);
             return;
         }
         
@@ -63,9 +86,14 @@ public class RemoveExpressionCommand extends Command {
     public void setChild() {
         if(parentModel instanceof CompositeExpression) {
             CompositeExpression parent = (CompositeExpression)parentModel;
-            if(oldOpr != null)
-                parent.add(oldIndex - 1, oldOpr);
-            parent.add(oldIndex, oldExp);
+            if(oldExpIndex == 0 && oldOpr != null) {
+                parent.add(oldExpIndex, oldExp);
+                parent.add(1, oldOpr);
+            }
+            else if(oldExpIndex > 0 && oldOpr != null) {
+                parent.add(oldExpIndex - 1, oldOpr);
+                parent.add(oldExpIndex, oldExp);
+            }
             return;
         }
         
