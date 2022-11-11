@@ -11,7 +11,10 @@ import org.eclipse.gef.GraphicalEditPart;
 import com.xrosstools.xdecision.editor.figures.EnclosedExpressionFigure;
 import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
 import com.xrosstools.xdecision.editor.model.expression.EnclosedExpression;
+import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.NegativeExpression;
+import com.xrosstools.xdecision.editor.model.expression.ParameterExpression;
+import com.xrosstools.xdecision.editor.model.expression.ParameterListExpression;
 
 public class EnclosedExpressionPart extends BaseExpressionPart {
     @Override
@@ -40,5 +43,20 @@ public class EnclosedExpressionPart extends BaseExpressionPart {
         
         IFigure childFigure = ((GraphicalEditPart) childEditPart).getFigure();
         figure.setEnclosedFigure(childFigure);
+    }
+
+    @Override
+    public void refreshVisuals() {
+        ExpressionDefinition exp = (ExpressionDefinition)getModel();
+        if(!(exp instanceof ParameterExpression))
+            return;
+
+        ParameterListExpression pl = (ParameterListExpression)getParent().getModel();
+        EnclosedExpressionFigure figure = (EnclosedExpressionFigure) getFigure();
+
+        if(pl.indexOf(exp) == pl.size() -1)
+            figure.setRightDelimeter("");
+        else
+            figure.setRightDelimeter(", ");
     }
 }

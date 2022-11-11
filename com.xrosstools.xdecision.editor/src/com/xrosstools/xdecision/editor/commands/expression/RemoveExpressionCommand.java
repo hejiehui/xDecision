@@ -6,33 +6,55 @@ import org.eclipse.gef.commands.Command;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.editor.model.expression.BracktExpression;
+import com.xrosstools.xdecision.editor.model.expression.CalculationExpression;
 import com.xrosstools.xdecision.editor.model.expression.CompositeExpression;
 import com.xrosstools.xdecision.editor.model.expression.ElementExpression;
 import com.xrosstools.xdecision.editor.model.expression.ExpressionDefinition;
 import com.xrosstools.xdecision.editor.model.expression.ExtensibleExpression;
 import com.xrosstools.xdecision.editor.model.expression.OperatorExpression;
+import com.xrosstools.xdecision.editor.model.expression.ParameterExpression;
+import com.xrosstools.xdecision.editor.model.expression.ParameterListExpression;
 
 public class RemoveExpressionCommand extends Command{
     private Object parentModel;
     private ExpressionDefinition oldExp;
     
-    private int oldIndex;
+    private int oldExpIndex;
     private OperatorExpression oldOpr;
-    
+
     public RemoveExpressionCommand(EditPart expPart) {
-        this.parentModel = expPart.getParent().getModel();
-        this.oldExp = (ExpressionDefinition)expPart.getModel();
+        if(expPart.getParent().getModel() instanceof ParameterExpression) {
+            this.parentModel = (ParameterListExpression)expPart.getParent().getParent().getModel();
+            this.oldExp = (ExpressionDefinition)expPart.getParent().getModel();
+        } else {
+            this.parentModel = expPart.getParent().getModel();
+            this.oldExp = (ExpressionDefinition)expPart.getModel();
+        }
     }
     
     public void removeChild() {
-        if(parentModel instanceof CompositeExpression) {
-            CompositeExpression parent = (CompositeExpression)parentModel;
-            oldIndex = parent.indexOf(oldExp);
+        if(parentModel instanceof ParameterListExpression) {
+            ParameterListExpression parent = (ParameterListExpression)parentModel;
+            oldExpIndex = parent.indexOf(oldExp);
             parent.remove(oldExp);
-            if(oldIndex != 0 && parent.getExpression(oldIndex - 1) instanceof OperatorExpression) {
-                oldOpr = (OperatorExpression)parent.getExpression(oldIndex - 1);
-                parent.remove(oldOpr);
+            return;
+        }
+
+        if(parentModel instanceof CalculationExpression) {
+            CalculationExpression parent = (CalculationExpression)parentModel;
+            oldExpIndex = parent.indexOf(oldExp);
+
+            parent.remove(oldExp);
+            //First, we need to check following operator
+            if(oldExpIndex == 0 && parent.size() > 0 && parent.getExpression(oldExpIndex) instanceof OperatorExpression) {
+                oldOpr = (OperatorExpression) parent.getExpression(oldExpIndex);
+            } //Last, we need to check previours operator
+            else if(oldExpIndex > 0 && parent.size() > 0 && parent.getExpression(oldExpIndex - 1) instanceof OperatorExpression) {
+                oldOpr = (OperatorExpression)parent.getExpression(oldExpIndex - 1);
             }
+
+            if(oldOpr != null)
+                parent.remove(oldOpr);
             return;
         }
         
@@ -68,13 +90,16 @@ public class RemoveExpressionCommand extends Command{
     public void setChild() {
         if(parentModel instanceof CompositeExpression) {
             CompositeExpression parent = (CompositeExpression)parentModel;
-            if(oldOpr != null)
-                parent.add(oldIndex - 1, oldOpr);
-            parent.add(oldIndex, oldExp);
+            if(oldExpIndex == 0 && oldOpr != null) {
+                parent.add(oldExpIndex, oldExp);
+                parent.add(1, oldOpr);
+            }
+            else if(oldExpIndex > 0 && oldOpr != null) {
+                parent.add(oldExpIndex - 1, oldOpr);
+                parent.add(oldExpIndex, oldExp);
+            }
             return;
         }
-        
-        ChangeChildCommand.setChild(parentModel, null, oldExp);
     }
 
     public void execute() {

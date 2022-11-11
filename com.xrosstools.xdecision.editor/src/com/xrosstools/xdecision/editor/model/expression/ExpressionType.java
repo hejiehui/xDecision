@@ -319,7 +319,7 @@ public enum ExpressionType {
             segment.remove(0);
             
         ParameterListExpression params = (ParameterListExpression)exp1(segment);
-        params.addFirst(new ParameterExpression().setInnerExpression((exp0(segment))));
+        params.addFirst(exp0(segment));
         
         
         return params;
