@@ -35,10 +35,12 @@ public class EnclosedExpressionFigure extends Figure {
         setLayoutManager(layout);
 //        this.setBorder(new MarginBorder(0, 2, 0, 2));
         leftDelimeter = new Label();
+        leftDelimeter.getInsets().set(0,1,0,2);
         add(leftDelimeter);
         layout.setConstraint(leftDelimeter, PositionConstants.LEFT);
 
         rightDelimeter = new Label();
+        rightDelimeter.getInsets().set(0,2,0,1);
         add(rightDelimeter);
         layout.setConstraint(rightDelimeter, PositionConstants.RIGHT);
     }
