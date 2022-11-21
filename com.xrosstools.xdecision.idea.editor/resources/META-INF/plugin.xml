@@ -10,6 +10,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>3.0.9</em>
+      Fix create decision NPE bug<br>
       <em>3.0.8</em>
       Fix bracket overlapping issue<br>
       <em>3.0.7</em>

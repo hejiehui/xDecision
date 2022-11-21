@@ -29,12 +29,12 @@ public class DecisionTreeCreateDecisionAction extends BaseDialogAction implement
 	@Override
 	protected Command createCommand(String value) {
         CreateElementCommand createCmd = new CreateElementCommand(diagram, diagram.getDecisions());
+        createCmd.setInputText(value);
 
         if(node == null)
             return createCmd;
 
         CommandChain cc = new CommandChain();
-        createCmd.setInputText(value);
         cc.add(createCmd);
         cc.add(new ChangeDecisionCommand(node));
         return cc;
