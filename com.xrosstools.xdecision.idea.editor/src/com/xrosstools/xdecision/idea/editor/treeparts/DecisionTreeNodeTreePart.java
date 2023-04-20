@@ -1,9 +1,11 @@
 package com.xrosstools.xdecision.idea.editor.treeparts;
 
 import com.xrosstools.idea.gef.parts.AbstractTreeEditPart;
+import com.xrosstools.xdecision.idea.editor.XdecisionsIcons;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 
+import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,5 +26,10 @@ public class DecisionTreeNodeTreePart extends AbstractTreeEditPart implements Pr
 	public String getText() {
 		DecisionTreeNode node = (DecisionTreeNode)getModel();
 		return node.getOutlineText();
+	}
+
+	@Override
+	public Icon getImage() {
+		return XdecisionsIcons.NODE;
 	}
 }

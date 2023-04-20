@@ -1,8 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.treeparts.definition;
 
-import com.intellij.openapi.util.IconLoader;
-import com.xrosstools.idea.gef.Activator;
-import com.xrosstools.xdecision.idea.editor.DecisionTreeEditorProvider;
+import com.xrosstools.xdecision.idea.editor.XdecisionsIcons;
 
 import javax.swing.*;
 
@@ -16,6 +14,6 @@ public class NamedTypeTreePart extends NamedElementTreePart {
     }
 
     public Icon getImage() {
-        return IconLoader.findIcon(Activator.getIconPath(DecisionTreeEditorProvider.NODE));
+        return XdecisionsIcons.NODE;
     }
 }

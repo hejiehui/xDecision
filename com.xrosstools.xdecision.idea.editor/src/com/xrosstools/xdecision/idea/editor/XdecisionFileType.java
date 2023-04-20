@@ -1,9 +1,7 @@
 package com.xrosstools.xdecision.idea.editor;
 
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.xrosstools.idea.gef.Activator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +11,6 @@ public class XdecisionFileType implements FileType {
     public static final String NAME = "Xross Decision Model File";
     public static final String DESCRIPTION = "Xross Decision Model File";
     public static final String EXTENSION = "xdecision";
-    public static final String ICON = "tree";
 
     public static final XdecisionFileType INSTANCE = new XdecisionFileType();
 
@@ -38,7 +35,7 @@ public class XdecisionFileType implements FileType {
     @Nullable
     @Override
     public Icon getIcon() {
-        return IconLoader.findIcon(Activator.getIconPath(ICON));
+        return XdecisionsIcons.TREE;
     }
 
     @Override

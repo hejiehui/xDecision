@@ -1,35 +1,33 @@
 <idea-plugin>
   <id>com.xrosstools.xdecision.editor</id>
   <name>Xross Decision Tree Edtitor</name>
-  <version>3.0.1</version>
+  <version>3.1.0</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
-      Xross Tools.<br>
-      <em>Xross Decision Tree Edtitor</em>
+      Xross Decision Tree Editor. A no-code tool for building decision tree.<br>
+      To create a decision tree, follow these steps:<br>
+      1. create decision tree mnodel file from file -> new -> Xross Decision Tree<br>
+      2. Create factor and decsions according to your needs<br>
+      3. Place decision tree node and assign factor or decision to it<br>
+      4. Link nodes with connection<br>
+      5. Specify operation and expression on connection<br>
+      You can download and play with the <a href"https://github.com/hejiehui/xDecision/tree/master/com.xrosstools.xdecision.sample">example</a> to quick start with it.
     ]]></description>
 
   <change-notes><![CDATA[
-      <em>3.0.9</em>
-      Fix create decision NPE bug<br>
-      <em>3.0.8</em>
-      Fix bracket overlapping issue<br>
-      <em>3.0.7</em>
-      Update to IDEA GEF 1.0.5 to fix refresh children parts<br>
-      <em>3.0.6</em>
-      Fix connection expression display bug. Support remove parameter from parameter list<br>
-      <em>3.0.5</em>
-      Fix paring parameters in BETWEEN and IN.<br>
-      <em>3.0.4</em>
-      Support old version modle file.<br>
-      <em>3.0.3</em>
-      Fix unit test and optimize model reading.<br>
-      <em>3.0.2</em>
-      Revise color and expression validation.<br>
-      <em>3.0.1</em>
-      Remove printing unit test code to console<br>
-      <em>3.0.0</em>
-      IDEA version that supports customer type and expression<br>
+      <em>3.1.0</em> Make the product qualify for market standard.<br>
+      <em>3.0.10</em> Fix IconLoader usage<br>
+      <em>3.0.9</em> Fix create decision NPE bug<br>
+      <em>3.0.8</em> Fix bracket overlapping issue<br>
+      <em>3.0.7</em> Update to IDEA GEF 1.0.5 to fix refresh children parts<br>
+      <em>3.0.6</em> Fix connection expression display bug. Support remove parameter from parameter list<br>
+      <em>3.0.5</em> Fix paring parameters in BETWEEN and IN.<br>
+      <em>3.0.4</em> Support old version modle file.<br>
+      <em>3.0.3</em> Fix unit test and optimize model reading.<br>
+      <em>3.0.2</em> Revise color and expression validation.<br>
+      <em>3.0.1</em> Remove printing unit test code to console<br>
+      <em>3.0.0</em> IDEA version that supports customer type and expression<br>
     ]]>
   </change-notes>
 
@@ -39,7 +37,9 @@
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products
   <depends>com.xrosstools.idea.gef</depends> -->
-
+  <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.java</depends>
+  <depends>com.xrosstools.idea.gef</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <fileEditorProvider implementation="com.xrosstools.xdecision.idea.editor.DecisionTreeEditorProvider"/>

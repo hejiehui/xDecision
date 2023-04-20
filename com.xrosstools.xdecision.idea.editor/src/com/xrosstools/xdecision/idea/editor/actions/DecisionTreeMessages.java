@@ -90,7 +90,6 @@ public interface DecisionTreeMessages {
 	String DECISION_COMMENTS = "Decision comments";
 	String DECISION = "Decision ";
 	String LAYOUT = "layout";
-	String NODE = "node";
 	String PARSER = "Parser";
 	String EVALUATOR = "Evaluator";
 }

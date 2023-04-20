@@ -1,10 +1,8 @@
 package com.xrosstools.xdecision.idea.editor;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.xrosstools.idea.gef.AbstractPanelContentProvider;
-import com.xrosstools.idea.gef.Activator;
 import com.xrosstools.idea.gef.ContextMenuProvider;
 import com.xrosstools.idea.gef.parts.EditPartFactory;
 import com.xrosstools.idea.gef.util.XmlHelper;
@@ -23,7 +21,7 @@ import javax.swing.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 
-public class DecisionTreePanelContentProvider extends AbstractPanelContentProvider<DecisionTreeDiagram> implements DecisionTreeActionConstants, DecisionTreeMessages {
+public class DecisionTreePanelContentProvider extends AbstractPanelContentProvider<DecisionTreeDiagram> implements XdecisionsIcons, DecisionTreeMessages {
     private Project project;
     private VirtualFile virtualFile;
     private DecisionTreeDiagram diagram;
@@ -72,7 +70,7 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
     }
 
     private JButton createConnectionButton() {
-        JButton btn = new JButton("Link Node", IconLoader.findIcon(Activator.getIconPath(DecisionTreeEditorProvider.CONNECTION)));
+        JButton btn = new JButton("Link Node", CONNECTION);
         btn.setPreferredSize(new Dimension(100, 50));
         btn.setContentAreaFilled(false);
         btn.addActionListener(e -> createConnection(new DecisionTreeNodeConnection()));
@@ -80,7 +78,7 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
     }
 
     private JButton createNodeButton() {
-        JButton btn = new JButton("Create node", IconLoader.findIcon(Activator.getIconPath(DecisionTreeEditorProvider.NODE)));
+        JButton btn = new JButton("Create node", NODE);
         btn.setPreferredSize(new Dimension(100, 50));
         btn.setContentAreaFilled(false);
         btn.addActionListener(e -> createModel(new DecisionTreeNode()));
