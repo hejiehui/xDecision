@@ -5,7 +5,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.xrosstools.idea.gef.AbstractPanelContentProvider;
 import com.xrosstools.idea.gef.ContextMenuProvider;
 import com.xrosstools.idea.gef.parts.EditPartFactory;
-import com.xrosstools.idea.gef.util.XmlHelper;
+import com.xrosstools.xdecision.idea.editor.model.XmlHelper;
 import com.xrosstools.xdecision.idea.editor.actions.*;
 import com.xrosstools.xdecision.idea.editor.layout.LayoutAlgorithm;
 import com.xrosstools.xdecision.idea.editor.menus.DecisionTreeContextMenuProvider;

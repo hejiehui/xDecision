@@ -1,6 +1,5 @@
 package com.xrosstools.xdecision.idea.editor.model;
 
-
 import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionParser;
 import com.xrosstools.xdecision.idea.editor.model.expression.VariableExpression;
 import org.w3c.dom.Document;
@@ -12,8 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import static com.xrosstools.idea.gef.util.XmlHelper.getValidChildNodes;
-
+import static com.xrosstools.xdecision.idea.editor.model.XmlHelper.*;
 
 public class DecisionTreeV1FormatReader {
     private static final String INDEX = "index";
@@ -95,8 +93,9 @@ public class DecisionTreeV1FormatReader {
                 parent.setSize(new Dimension(diagram.getNodeWidth(), diagram.getNodeHeight()));
                 diagram.addNode(parent);
                 roots.put(rootFactor, parent);
-            }else
+            }else {
                 parent = roots.get(rootFactor);
+            }
 
             for(DecisionTreePathEntry entry: path.getPathEntries()){
                 String pathValue = factorValuesMap.get(entry.getNodeIndex())[entry.getValueIndex()];
