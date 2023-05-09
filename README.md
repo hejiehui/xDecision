@@ -37,6 +37,7 @@ Depenency
 		<version>${latest}</version>
 	</dependency>
 
+从2.3.1起，所有新增版本将发布到[Maven中央仓库](https://s01.oss.sonatype.org/#nexus-search;quick~xdecision)
 
 # Demo project
 [Demo](https://github.com/hejiehui/xDecision/tree/master/com.xrosstools.xdecision.sample)
