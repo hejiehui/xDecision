@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xdecision.editor</id>
   <name>Xross Decision Tree Edtitor</name>
-  <version>3.1.0</version>
+  <version>3.1.1</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -16,6 +16,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>3.1.1</em> Fix misplace of connection condition when value changes.<br>
       <em>3.1.0</em> Make the product qualify for market standard.<br>
       <em>3.0.10</em> Fix IconLoader usage<br>
       <em>3.0.9</em> Fix create decision NPE bug<br>

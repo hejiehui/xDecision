@@ -3,6 +3,7 @@ package com.xrosstools.xdecision.idea.editor.parts;
 import com.xrosstools.idea.gef.figures.Connection;
 import com.xrosstools.idea.gef.routers.ConnectionLocator;
 import com.xrosstools.idea.gef.routers.PointList;
+import com.xrosstools.xdecision.idea.editor.figures.BranchConditionFigure;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import java.awt.*;
@@ -10,10 +11,12 @@ import java.awt.*;
 public class DecisionTreeConditionLocator implements ConnectionLocator {
     private int index;
     private DecisionTreeNodeConnection conn;
+    private BranchConditionFigure condition;
     private static final int NODE_LABEL_GAP = 20;
 
-    public DecisionTreeConditionLocator(DecisionTreeNodeConnection conn) {
+    public DecisionTreeConditionLocator(DecisionTreeNodeConnection conn, BranchConditionFigure condition) {
         this.conn = conn;
+        this.condition = condition;
     }
 
     protected int getIndex() {
@@ -24,6 +27,8 @@ public class DecisionTreeConditionLocator implements ConnectionLocator {
         DecisionTreeNode node = conn.getChild();
 
         int halfWidth = (int)(conn.getActualWidth() * 0.5);
+
+        halfWidth = condition.getPreferredSize().width/2;
 
         return node.getDecisionTreeManager().getDiagram().isHorizantal() ?
             getHorizantalLayoutPoint(node, halfWidth) :getVerticalLayoutPoint(node, halfWidth);

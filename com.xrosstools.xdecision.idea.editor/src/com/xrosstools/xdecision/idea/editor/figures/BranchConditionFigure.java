@@ -26,8 +26,7 @@ public class BranchConditionFigure extends Figure {
 
         widthLine = new Figure();
         //TODO check how to set PreferedSize
-        widthLine.setSize(new Dimension(10, 10));
-        widthLine.setForegroundColor(ColorConstants.black);
+        widthLine.setPreferredSize(new Dimension(10, 10));
         add(widthLine);
         layout.setConstraint(widthLine, PositionConstants.CENTER);
     }
@@ -36,6 +35,7 @@ public class BranchConditionFigure extends Figure {
     public void setExpressionFigure(Figure expressionFigure) {
         add(expressionFigure);
         setConstraint(expressionFigure, PositionConstants.RIGHT);
+        repaint();
     }
 
     public void setOperator(ConditionOperator operator) {

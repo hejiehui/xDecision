@@ -36,7 +36,6 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
             condition.setExpressionFigure(childFigure);
     }
 
-
     protected Figure createFigure() {
         Connection conn = new Connection();
         conn.setTargetDecoration(new ArrowDecoration());
@@ -46,7 +45,7 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
         DecisionTreeNodeConnection nodeConn = (DecisionTreeNodeConnection)getModel();
 
         condition = new BranchConditionFigure();
-        conn.add(condition, new DecisionTreeConditionLocator(nodeConn));
+        conn.add(condition, new DecisionTreeConditionLocator(nodeConn, condition));
 
         return conn;
     }
