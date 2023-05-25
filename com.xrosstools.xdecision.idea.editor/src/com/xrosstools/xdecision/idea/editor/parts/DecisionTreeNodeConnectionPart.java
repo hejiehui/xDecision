@@ -70,7 +70,5 @@ public class DecisionTreeNodeConnectionPart extends AbstractConnectionEditPart i
         condition.setOperator(conn.getOperator());
         boolean opaque = conn.getOperator() != null || !(conn.getExpression() == null || conn.getExpression().toString().equals(""));
         condition.setOpaque(opaque);
-
-        conn.setActualWidth(opaque ? condition.getPreferredSize().width : 0);
     }
 }
