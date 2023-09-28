@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decision_tree alignment="0.5" layout="0">
+ <comments/>
+ <parser>com.xrosstools.xdecision.ext.XrossEvaluator</parser>
+ <evaluator>com.xrosstools.xdecision.ext.XrossEvaluator</evaluator>
+ <user_defined_types/>
+ <user_defined_enums/>
+ <factors>
+  <factor id="A" index="0" type="Number"/>
+ </factors>
+ <nodes>
+  <node expression="A" index="0">
+   <path expression="0" node_index="3" operator="&lt;&gt;"/>
+   <path expression="0" node_index="4" operator="=="/>
+  </node>
+  <node decision_index="1" expression="A" index="1">
+   <path expression="1" node_index="6" operator="&gt;="/>
+  </node>
+  <node decision_index="2" expression="A" index="2">
+   <path expression="-1" node_index="5" operator="&lt;="/>
+  </node>
+  <node expression="A" index="3">
+   <path expression="0" node_index="2" operator="&lt;"/>
+   <path expression="0" node_index="1" operator="&gt;"/>
+  </node>
+  <node decision_index="0" expression="" index="4"/>
+  <node decision_index="3" expression="" index="5"/>
+  <node decision_index="4" expression="" index="6"/>
+ </nodes>
+ <decisions>
+  <decision id="Equals 0" index="0"/>
+  <decision id="Greater than 0" index="1"/>
+  <decision id="Less than 0" index="2"/>
+  <decision id="Less than or equals to -1" index="3"/>
+  <decision id="Greater than or equals to 1" index="4"/>
+  <decision id="decision5" index="5"/>
+  <decision id="decision6" index="6"/>
+ </decisions>
+ <constants/>
+</decision_tree>

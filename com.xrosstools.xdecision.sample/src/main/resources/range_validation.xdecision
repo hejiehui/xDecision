@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decision_tree alignment="0.5" layout="0">
+ <comments/>
+ <parser>com.xrosstools.xdecision.ext.XrossEvaluator</parser>
+ <evaluator>com.xrosstools.xdecision.ext.XrossEvaluator</evaluator>
+ <user_defined_types/>
+ <user_defined_enums/>
+ <factors>
+  <factor id="A" index="0" type="String"/>
+  <factor id="B" index="1" type="String"/>
+  <factor id="C" index="2" type="String"/>
+  <factor id="E" index="3" type="Number"/>
+  <factor id="F" index="4" type="Number"/>
+  <factor id="G" index="5" type="Number"/>
+ </factors>
+ <nodes>
+  <node expression="A" index="0">
+   <path expression="1,10" node_index="1" operator="BETWEEN"/>
+   <path expression="B,C" node_index="2" operator="NOT BETWEEN"/>
+  </node>
+  <node decision_index="1" expression="B" index="1">
+   <path expression="1,2,3,4" node_index="3" operator="IN"/>
+  </node>
+  <node decision_index="2" expression="C" index="2">
+   <path expression="E,F,G" node_index="4" operator="NOT IN"/>
+  </node>
+  <node decision_index="3" expression="" index="3"/>
+  <node decision_index="4" expression="" index="4"/>
+ </nodes>
+ <decisions>
+  <decision id="decision0" index="0"/>
+  <decision id="BETWEEN" index="1"/>
+  <decision id="NOT BETWEEN" index="2"/>
+  <decision id="IN" index="3"/>
+  <decision id="NOT IN" index="4"/>
+ </decisions>
+ <constants/>
+</decision_tree>
