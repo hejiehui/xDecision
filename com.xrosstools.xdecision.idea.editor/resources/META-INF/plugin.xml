@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xdecision.editor</id>
   <name>Xross Decision Tree Edtitor</name>
-  <version>3.1.1</version>
+  <version>3.1.2</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
