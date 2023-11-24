@@ -16,6 +16,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>3.1.2</em> Fix create model file bug.<br>
       <em>3.1.1</em> Fix misplace of connection condition when value changes.<br>
       <em>3.1.0</em> Make the product qualify for market standard.<br>
       <em>3.0.10</em> Fix IconLoader usage<br>
