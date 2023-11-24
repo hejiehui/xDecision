@@ -7,17 +7,17 @@ A decision tree editor and runtime engine.
 ### Commonly used decision-making tools in the field of business intelligence
 
 ### Express complex decision-making processes using tree models
-![overview](https://oscimg.oschina.net/oscnet/up-2d4e231956aa24c47de8d32be0c8f9891a0.png)
+![overview](./doc//up-2d4e231956aa24c47de8d32be0c8f9891a0.png)
 
 # The Decision Tree editor allows developers to
 ## Generate decision trees in a WYSIWYG manner
-![edit](https://oscimg.oschina.net/oscnet/up-b8bf88e63ebf86110aa599c1ad2c8ddab72.png)
+![edit](./doc//up-b8bf88e63ebf86110aa599c1ad2c8ddab72.png)
 
 ## Generate verification code for unit tests based on the model
-![generate test](https://oscimg.oschina.net/oscnet/up-fa974c5611b93a5c9d5d9f433292541fdce.png)
+![generate test](./doc//up-fa974c5611b93a5c9d5d9f433292541fdce.png)
 
 ## Full coverage of all decision paths
-![validation](https://oscimg.oschina.net/oscnet/up-3aa52f77feb022afafbe99e1a2a25d5b897.png)
+![validation](./doc//up-3aa52f77feb022afafbe99e1a2a25d5b897.png)
 
 # Advantage
 
