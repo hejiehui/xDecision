@@ -1,19 +1,17 @@
 package com.xrosstools.xdecision.idea.editor;
 
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.xrosstools.idea.gef.AbstractPanelContentProvider;
 import com.xrosstools.idea.gef.ContextMenuProvider;
 import com.xrosstools.idea.gef.parts.EditPartFactory;
-import com.xrosstools.xdecision.idea.editor.model.XmlHelper;
 import com.xrosstools.xdecision.idea.editor.actions.*;
 import com.xrosstools.xdecision.idea.editor.layout.LayoutAlgorithm;
 import com.xrosstools.xdecision.idea.editor.menus.DecisionTreeContextMenuProvider;
 import com.xrosstools.xdecision.idea.editor.menus.DecisionTreeOutlineContextMenuProvider;
-import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
-import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagramFactory;
-import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
-import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
+import com.xrosstools.xdecision.idea.editor.model.*;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreePartFactory;
 import com.xrosstools.xdecision.idea.editor.treeparts.DecisionTreeTreePartFactory;
 
@@ -86,16 +84,18 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
     }
 
     @Override
-    public void buildToolbar(JToolBar toolbar) {
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, true, 1, this), ALIGN_BOTTOM, ALIGN_BOTTOM_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, true, 0.5f, this), ALIGN_MIDDLE, ALIGN_MIDDLE_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, true, 0, this), ALIGN_TOP, ALIGN_TOP_MSG));
-        toolbar.addSeparator();
+    public ActionGroup createToolbar() {
+        DefaultActionGroup actionGroup = new DefaultActionGroup();
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 1, this), ALIGN_BOTTOM, ALIGN_BOTTOM_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 0.5f, this), ALIGN_MIDDLE, ALIGN_MIDDLE_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 0, this), ALIGN_TOP, ALIGN_TOP_MSG));
+        actionGroup.addSeparator();
 
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 0, this), ALIGN_LEFT, ALIGN_LEFT_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 0.5f, this), ALIGN_CENTER, ALIGN_CENTER_MSG));
-        toolbar.add(createToolbarButton(new DecisionTreeLayoutAction(diagram, false, 1, this), ALIGN_RIGHT, ALIGN_RIGHT_MSG));
-        toolbar.addSeparator();
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 0, this), ALIGN_LEFT, ALIGN_LEFT_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 0.5f, this), ALIGN_CENTER, ALIGN_CENTER_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 1, this), ALIGN_RIGHT, ALIGN_RIGHT_MSG));
+
+        return actionGroup;
     }
 
     @Override
