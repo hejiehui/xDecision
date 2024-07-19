@@ -1,8 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-import static com.xrosstools.idea.gef.ContextMenuProvider.*;
-
 import com.xrosstools.idea.gef.actions.CommandAction;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeCreateDecisionAction;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeCreateFactorAction;
@@ -19,13 +17,15 @@ import com.xrosstools.xdecision.idea.editor.model.expression.VariableExpression;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeNodePart;
 
 import javax.swing.*;
-import java.beans.PropertyChangeListener;
+
+import static com.xrosstools.idea.gef.ContextMenuProvider.addSeparator;
+import static com.xrosstools.idea.gef.ContextMenuProvider.createItem;
 
 public class NodeContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public NodeContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+    public NodeContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
         this.project = project;
         this.diagram = diagram;
     }
@@ -40,8 +40,14 @@ public class NodeContextMenuProvider implements DecisionTreeMessages {
     }
 
     private void createAndSetDecisionMenu(JPopupMenu menu, DecisionTreeNode node, DecisionTreeDiagram diagram) {
+        DecisionTreeDecision curDecision = node.getDecision();
+        if(curDecision != null) {
+            menu.add(createItem(new CommandAction(String.format(UNSELECT_MSG, curDecision.getName()), false, new ChangeDecisionCommand(node, null))));
+        }
+
         for(DecisionTreeDecision decision: diagram.getDecisions().getElements()) {
-            menu.add(createItem(new CommandAction(decision.getName(), node.getDecision() == decision, new ChangeDecisionCommand(node, decision))));
+            if(curDecision != decision)
+                menu.add(createItem(new CommandAction(decision.getName(), node.getDecision() == decision, new ChangeDecisionCommand(node, decision))));
         }
 
         addSeparator(menu);

@@ -1,26 +1,27 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-
+import com.xrosstools.idea.gef.actions.Action;
 import com.xrosstools.idea.gef.actions.InputTextCommandAction;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
+import com.xrosstools.xdecision.idea.editor.actions.ImportDataTypeAction;
 import com.xrosstools.xdecision.idea.editor.commands.definition.CreateElementCommand;
 import com.xrosstools.xdecision.idea.editor.commands.definition.CreateNamedTypeCommand;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.definition.NamedElement;
 import com.xrosstools.xdecision.idea.editor.model.definition.NamedElementContainer;
+import com.xrosstools.xdecision.idea.editor.model.definition.NamedElementTypeEnum;
 import com.xrosstools.xdecision.idea.editor.treeparts.definition.NamedElementContainerTreePart;
 
 import javax.swing.*;
-import java.beans.PropertyChangeListener;
 
-import static com.xrosstools.idea.gef.ContextMenuProvider.*;
+import static com.xrosstools.idea.gef.ContextMenuProvider.createItem;
 
 public class NamedElementContainerContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public NamedElementContainerContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+    public NamedElementContainerContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
         this.project = project;
         this.diagram = diagram;
     }
@@ -37,6 +38,12 @@ public class NamedElementContainerContextMenuProvider implements DecisionTreeMes
             menu.add(createItem(createElementMenu(createMsg, container)));
         else
             menu.add(createNamedTypeMenu(container, qualifiedTypes));
+
+        menu.add(createItem(createImportTypeAction()));
+    }
+
+    private Action createImportTypeAction() {
+        return new ImportDataTypeAction(project, diagram, NamedElementTypeEnum.DATA_TYPE);
     }
 
     public InputTextCommandAction createElementMenu(String createMsg, NamedElementContainer<NamedElement> container) {

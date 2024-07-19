@@ -57,6 +57,7 @@ public class DecisionTreeDiagramFactory {
 	private static final String NODES = "nodes";
 	private static final String NODE = "node";
 	private static final String DECISION_INDEX = "decision_index";
+	private static final String DESCRIPTION = "description";
 	private static final String FACTOR_INDEX = "factor_index";
 	private static final String VALUE_INDEX = "value_index";
 	private static final String EXPRESSION = "expression";
@@ -231,6 +232,8 @@ public class DecisionTreeDiagramFactory {
 				}
 			}
 			node.setNodeExpression(parser.parseExpression(rawExpression));
+
+			node.setDescription(getAttribute(nodeNode, DESCRIPTION));
 
 			node.setSize(new Dimension(diagram.getNodeWidth(), diagram.getNodeHeight()));
 
@@ -497,6 +500,9 @@ public class DecisionTreeDiagramFactory {
 
 			if (node.getNodeExpression() != null)
 				treeNode.setAttribute(EXPRESSION, node.getNodeExpression().toString());
+
+			if (node.getDescription() != null)
+				treeNode.setAttribute(DESCRIPTION, node.getDescription());
 
 			writePathes(doc, treeNode, nodes, node);
 

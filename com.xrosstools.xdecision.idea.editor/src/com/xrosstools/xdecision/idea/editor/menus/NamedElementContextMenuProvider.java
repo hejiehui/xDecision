@@ -1,8 +1,8 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.idea.gef.actions.InputTextCommandAction;
 import com.xrosstools.idea.gef.actions.CommandAction;
+import com.xrosstools.idea.gef.actions.InputTextCommandAction;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.idea.editor.commands.definition.ChangeElementNameCommand;
 import com.xrosstools.xdecision.idea.editor.commands.definition.ChangeElementTypeCommand;
@@ -14,15 +14,15 @@ import com.xrosstools.xdecision.idea.editor.model.definition.NamedType;
 import com.xrosstools.xdecision.idea.editor.treeparts.definition.NamedElementTreePart;
 
 import javax.swing.*;
-import java.beans.PropertyChangeListener;
 
-import static com.xrosstools.idea.gef.ContextMenuProvider.*;
+import static com.xrosstools.idea.gef.ContextMenuProvider.addSeparator;
+import static com.xrosstools.idea.gef.ContextMenuProvider.createItem;
 
 public class NamedElementContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public NamedElementContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+    public NamedElementContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
         this.project = project;
         this.diagram = diagram;
     }

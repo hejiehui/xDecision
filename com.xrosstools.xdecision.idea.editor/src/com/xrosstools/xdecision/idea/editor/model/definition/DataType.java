@@ -30,8 +30,8 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
 
     private DataTypeEnum metaType;
     private String label;
-    private NamedElementContainer<FieldDefinition> fields = new NamedElementContainer<FieldDefinition>(FIELDS_MSG, NamedElementTypeEnum.FIELD);
-    private NamedElementContainer<MethodDefinition> methods = new NamedElementContainer<MethodDefinition>(METHODS_MSG, NamedElementTypeEnum.METHOD);
+    private NamedElementContainer<FieldDefinition> fields = new NamedElementContainer<>(FIELDS_MSG, NamedElementTypeEnum.FIELD);
+    private NamedElementContainer<MethodDefinition> methods = new NamedElementContainer<>(METHODS_MSG, NamedElementTypeEnum.METHOD);
 
     public static final DataType NOT_MATCHED = new DataType("Not Matched!"); 
     
@@ -44,7 +44,7 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
         super(name, NamedElementTypeEnum.DATA_TYPE);
         this.metaType = DataTypeEnum.USER_DEFINED;
     }
-    
+
     public boolean isConcernedProperty(Object propName) {
         return false;
     }
@@ -58,12 +58,12 @@ public class DataType extends NamedElement implements DecisionTreeMessages {
         // Do not allow name change for non predefined type
         return DataTypeEnum.isUserDefined(metaType) ? super.getPropertyDescriptors() : NONE;
     }
-    
-    protected void add(MethodDefinition method) {
+
+    public void add(MethodDefinition method) {
         methods.add(method);
     }
-    
-    protected void add(FieldDefinition field) {
+
+    public void add(FieldDefinition field) {
         fields.add(field);
     }
 

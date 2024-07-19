@@ -50,6 +50,7 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 		descriptors = new IPropertyDescriptor[] {
 				new TextPropertyDescriptor(PROP_EXPRESSION, PROP_EXPRESSION),
 				new ComboBoxPropertyDescriptor(PROP_DECISION, PROP_DECISION, manager.getDecisions().getElementNames()),
+				new TextPropertyDescriptor(PROP_DESCRIPTION, PROP_DESCRIPTION),
 		};
 		return descriptors;
 	}
@@ -59,6 +60,8 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 			return expression.toString();
 		if (PROP_DECISION.equals(propName))
 			return getDecisionId();
+		if (PROP_DESCRIPTION.equals(propName))
+			return getDescription();
 
 		return null;
 	}
@@ -66,8 +69,12 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 	public void setPropertyValue(Object propName, Object value){
 		if (PROP_EXPRESSION.equals(propName))
 			setNodeExpression(getParser().parseExpression((String)value));
-		if (PROP_DECISION.equals(propName))
-			setDecision(manager.getDecisions().get((Integer)value));
+		if (PROP_DECISION.equals(propName)) {
+			int index = (Integer)value;
+			setDecision(index < 0 ? null : manager.getDecisions().get(index));
+		}
+		if (PROP_DESCRIPTION.equals(propName))
+			setDescription((String) value);
 	}
 
 	public Object getEditableValue(){
@@ -121,7 +128,11 @@ public class DecisionTreeNode implements PropertyConstants, IPropertySource, Pro
 		return description;
 	}
 	public void setDescription(String description) {
-		this.description = description;
+		this.description = description == null ? null : description.trim();
+		listeners.firePropertyChange(PROP_DESCRIPTION, null, description);
+	}
+	public String getDisplayText(){
+		return description == null || description.length() == 0 ? (decision == null ? "" : decision.getName()) : description;
 	}
 	public Point getLocation() {
 		return location;

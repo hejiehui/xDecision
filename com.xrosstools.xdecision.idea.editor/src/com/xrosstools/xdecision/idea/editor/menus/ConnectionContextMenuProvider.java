@@ -9,16 +9,15 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNodeConnection;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeNodeConnectionPart;
 
 import javax.swing.*;
-import java.beans.PropertyChangeListener;
 
-import static com.xrosstools.idea.gef.ContextMenuProvider.*;
+import static com.xrosstools.idea.gef.ContextMenuProvider.createItem;
 
 
 public class ConnectionContextMenuProvider {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public ConnectionContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+    public ConnectionContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
         this.project = project;
         this.diagram = diagram;
     }

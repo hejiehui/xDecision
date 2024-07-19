@@ -14,7 +14,7 @@ public interface PropertyConstants {
 	String PROP_FIELD_NAME = "Field name";
 	String PROP_FUNCTION_NAME = "Function name";
 	String PROP_DECISION = "Decision";
-	String PROP_DESCRIPTION = "description";
+	String PROP_DESCRIPTION = "Description";
 	String PROP_IDENTIFIER = "identifier";
 	
 	String PROP_NAME_TPL = "%s name";

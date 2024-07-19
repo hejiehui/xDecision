@@ -9,7 +9,6 @@ import com.xrosstools.xdecision.idea.editor.treeparts.definition.NamedElementCon
 import com.xrosstools.xdecision.idea.editor.treeparts.definition.NamedElementTreePart;
 
 import javax.swing.*;
-import java.beans.PropertyChangeListener;
 
 public class DecisionTreeOutlineContextMenuProvider extends ContextMenuProvider implements DecisionTreeMessages {
     private Project project;
@@ -17,12 +16,11 @@ public class DecisionTreeOutlineContextMenuProvider extends ContextMenuProvider 
     private NamedElementContainerContextMenuProvider namedElementContainerProvider;
     private NamedElementContextMenuProvider namedElementContextMenuProvider;
 
-    public DecisionTreeOutlineContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
-        super(listener);
+    public DecisionTreeOutlineContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
         this.project = project;
         this.diagram = diagram;
-        namedElementContextMenuProvider = new NamedElementContextMenuProvider(project, diagram, listener);
-        namedElementContainerProvider = new NamedElementContainerContextMenuProvider(project, diagram, listener);
+        namedElementContextMenuProvider = new NamedElementContextMenuProvider(project, diagram);
+        namedElementContainerProvider = new NamedElementContainerContextMenuProvider(project, diagram);
     }
 
     public JPopupMenu buildContextMenu(Object selected) {

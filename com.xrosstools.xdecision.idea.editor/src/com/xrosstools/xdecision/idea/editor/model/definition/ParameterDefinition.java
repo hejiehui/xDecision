@@ -8,6 +8,6 @@ public class ParameterDefinition extends NamedType {
     }
     
     public ParameterDefinition(DecisionTreeDiagram diagram, String name, DataType type) {
-        super(diagram, name, NamedElementTypeEnum.PARTAMETER, type);
+        super(diagram, name, NamedElementTypeEnum.PARAMETER, type);
     }
 }

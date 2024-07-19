@@ -47,17 +47,9 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		List<IPropertyDescriptor> props = new ArrayList<IPropertyDescriptor>();
 		//new TextPropertyDescriptor(NAME, NAME),
-		PropertyDescriptor desc = new TextPropertyDescriptor(COMMENTS, COMMENTS);
-		desc.setCategory(CONFIGURE);
-		props.add(desc);
-
-		desc = new TextPropertyDescriptor(PARSER, PARSER);
-		desc.setCategory(CONFIGURE);
-		props.add(desc);
-
-		desc = new TextPropertyDescriptor(EVALUATOR, EVALUATOR);
-		desc.setCategory(CONFIGURE);
-		props.add(desc);
+		props.add(new TextPropertyDescriptor(COMMENTS, COMMENTS));
+		props.add(new TextPropertyDescriptor(PARSER, PARSER));
+		props.add(new TextPropertyDescriptor(EVALUATOR, EVALUATOR));
 
 		return props.toArray(new IPropertyDescriptor[0]);
 	}
@@ -86,7 +78,7 @@ public class DecisionTreeDiagram implements IPropertySource, DecisionTreeMessage
 		String value = (String)valueObj;
 
 		if (COMMENTS.equals(id))
-			setDescription((String)value);
+			setDescription(value);
 
 		if (PARSER.equals(prop))
 			setParserClass(value);

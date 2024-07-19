@@ -1,10 +1,9 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.idea.gef.ContextMenuProvider;
+import com.xrosstools.idea.gef.actions.CommandAction;
 import com.xrosstools.idea.gef.actions.InputTextCommandAction;
 import com.xrosstools.idea.gef.commands.Command;
-import com.xrosstools.idea.gef.actions.CommandAction;
 import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
 import com.xrosstools.idea.gef.parts.EditPart;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
@@ -13,8 +12,8 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.definition.*;
 import com.xrosstools.xdecision.idea.editor.model.expression.*;
 import com.xrosstools.xdecision.idea.editor.parts.expression.BaseExpressionPart;
+
 import javax.swing.*;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public ExpressionContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+    public ExpressionContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
         this.project = project;
         this.diagram = diagram;
     }

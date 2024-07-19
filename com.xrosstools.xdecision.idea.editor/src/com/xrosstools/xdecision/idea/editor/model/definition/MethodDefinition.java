@@ -6,7 +6,7 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import java.util.List;
 
 public class MethodDefinition extends NamedType implements DecisionTreeMessages {
-    private NamedElementContainer<ParameterDefinition> parameters = new NamedElementContainer<ParameterDefinition>(PARAMETERS_MSG, NamedElementTypeEnum.PARTAMETER);
+    private NamedElementContainer<ParameterDefinition> parameters = new NamedElementContainer<ParameterDefinition>(PARAMETERS_MSG, NamedElementTypeEnum.PARAMETER);
     
     public MethodDefinition(DecisionTreeDiagram diagram, String name) {
         super(diagram, name, NamedElementTypeEnum.METHOD, DEFAULT_TYPE);

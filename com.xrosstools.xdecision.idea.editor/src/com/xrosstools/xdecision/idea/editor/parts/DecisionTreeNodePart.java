@@ -97,7 +97,7 @@ public class DecisionTreeNodePart extends AbstractGraphicalEditPart {
         DecisionTreeNode node = getDecisionTreeNode();
     	DecisionTreeNodeFigure figure = (DecisionTreeNodeFigure)getFigure();
 
-        figure.setDecision(node.getDecision() == null ? "": node.getDecision().getName());
+        figure.setDecision(node.getDisplayText());
 
         Point loc = node.getLocation();
         Dimension size = new Dimension(-1, node.getDecisionTreeManager().getDiagram().getNodeHeight());

@@ -2,22 +2,19 @@ package com.xrosstools.xdecision.idea.editor.actions;
 
 import com.intellij.openapi.project.Project;
 import com.xrosstools.idea.gef.actions.BaseDialogAction;
-import com.xrosstools.idea.gef.commands.CommandChain;
 import com.xrosstools.idea.gef.commands.Command;
+import com.xrosstools.idea.gef.commands.CommandChain;
 import com.xrosstools.xdecision.idea.editor.commands.ChangeDecisionCommand;
 import com.xrosstools.xdecision.idea.editor.commands.definition.CreateElementCommand;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 
-import java.beans.PropertyChangeListener;
-
 public class DecisionTreeCreateDecisionAction extends BaseDialogAction implements DecisionTreeActionConstants, DecisionTreeMessages{
 	private DecisionTreeDiagram diagram;
     private DecisionTreeNode node;
-	public DecisionTreeCreateDecisionAction(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener){
+	public DecisionTreeCreateDecisionAction(Project project, DecisionTreeDiagram diagram){
 		super(project, CREATE_NEW_DECISION_MSG, "Decision", "new decision");
 		this.diagram = diagram;
-		setListener(listener);
 	}
 
     public DecisionTreeCreateDecisionAction(Project project, DecisionTreeDiagram diagram, DecisionTreeNode node){

@@ -28,6 +28,7 @@ public interface DecisionTreeMessages {
 	String GEN_TEST_CODE_IN_CONSOLE_MSG = "<html>Generate test code<br>in console</html>";
 
 	String CREATE_NEW_TEMPLATE_MSG = "Create new %s";
+	String IMPORT_NEW_TEMPLATE_MSG = "Import new %s";
 
 	String CREATE_NEW_DECISION_MSG = "Create decision";
 	String CREATE_NEW_FACTOR_MSG = "Create factor";
@@ -71,6 +72,7 @@ public interface DecisionTreeMessages {
 	String CHANGE_TYPE_MSG = "Change %s type";
 	String CHANGE_NAME_MSG = "Change %s name";
 	String REMOVE_MSG = "Remove %s";
+	String UNSELECT_MSG = "Unselect %s";
 
 	String FACTOR_NAME_MSG = "Factor name";
 	String FIELD_NAME_MSG = "Field name";

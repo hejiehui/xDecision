@@ -1,13 +1,11 @@
 package com.xrosstools.xdecision.idea.editor.menus;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.idea.gef.ContextMenuProvider;
 import com.xrosstools.xdecision.idea.editor.actions.DecisionTreeMessages;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreeDiagramPart;
 
 import javax.swing.*;
-import java.beans.PropertyChangeListener;
 
 import static com.xrosstools.idea.gef.ContextMenuProvider.addSeparator;
 
@@ -16,11 +14,11 @@ public class DiagramContextMenuProvider implements DecisionTreeMessages {
     private DecisionTreeDiagram diagram;
     private NamedElementContainerContextMenuProvider elementContainerMenuProvider;
 
-    public DiagramContextMenuProvider(Project project, DecisionTreeDiagram diagram, PropertyChangeListener listener) {
+    public DiagramContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
         this.project = project;
         this.diagram = diagram;
 
-        elementContainerMenuProvider = new NamedElementContainerContextMenuProvider(project, diagram, listener);
+        elementContainerMenuProvider = new NamedElementContainerContextMenuProvider(project, diagram);
     }
 
     public void buildContextMenu(JPopupMenu menu, DecisionTreeDiagramPart part) {

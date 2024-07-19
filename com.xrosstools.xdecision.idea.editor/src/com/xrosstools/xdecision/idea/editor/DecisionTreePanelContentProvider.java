@@ -47,12 +47,12 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
 
     @Override
     public ContextMenuProvider getContextMenuProvider() {
-        return new DecisionTreeContextMenuProvider(project, diagram, this);
+        return new DecisionTreeContextMenuProvider(project, diagram);
     }
 
     @Override
     public ContextMenuProvider getOutlineContextMenuProvider() {
-        return new DecisionTreeOutlineContextMenuProvider(project, diagram, this);
+        return new DecisionTreeOutlineContextMenuProvider(project, diagram);
     }
 
     @Override
@@ -60,8 +60,8 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
         palette.add(createConnectionButton());
         palette.add(createNodeButton());
 
-        palette.add(createPaletteButton(new DecisionTreeCreateDecisionAction(project, diagram, this), CREATE_NEW_DECISION, CREATE_NEW_DECISION_MSG));
-        palette.add(createPaletteButton(new DecisionTreeCreateFactorAction(project, diagram, this), CREATE_NEW_FACTOR, CREATE_NEW_FACTOR_MSG));
+        palette.add(createPaletteButton(new DecisionTreeCreateDecisionAction(project, diagram), CREATE_NEW_DECISION, CREATE_NEW_DECISION_MSG));
+        palette.add(createPaletteButton(new DecisionTreeCreateFactorAction(project, diagram), CREATE_NEW_FACTOR, CREATE_NEW_FACTOR_MSG));
         //Disable printing to console for now
         //palette.add(createPaletteButton(new DecisionTreeCodeGenAction(virtualFile, diagram, true), GEN_TEST_CODE_CONSOLE, GEN_TEST_CODE_IN_CONSOLE_MSG));
         palette.add(createPaletteButton(new DecisionTreeCodeGenAction(virtualFile, diagram, false), GEN_TEST_CODE_DIALOG, GEN_TEST_CODE_MSG));
@@ -86,14 +86,14 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
     @Override
     public ActionGroup createToolbar() {
         DefaultActionGroup actionGroup = new DefaultActionGroup();
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 1, this), ALIGN_BOTTOM, ALIGN_BOTTOM_MSG));
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 0.5f, this), ALIGN_MIDDLE, ALIGN_MIDDLE_MSG));
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 0, this), ALIGN_TOP, ALIGN_TOP_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 1), ALIGN_BOTTOM, ALIGN_BOTTOM_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 0.5f), ALIGN_MIDDLE, ALIGN_MIDDLE_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 0), ALIGN_TOP, ALIGN_TOP_MSG));
         actionGroup.addSeparator();
 
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 0, this), ALIGN_LEFT, ALIGN_LEFT_MSG));
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 0.5f, this), ALIGN_CENTER, ALIGN_CENTER_MSG));
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 1, this), ALIGN_RIGHT, ALIGN_RIGHT_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 0), ALIGN_LEFT, ALIGN_LEFT_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 0.5f), ALIGN_CENTER, ALIGN_CENTER_MSG));
+        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 1), ALIGN_RIGHT, ALIGN_RIGHT_MSG));
 
         return actionGroup;
     }

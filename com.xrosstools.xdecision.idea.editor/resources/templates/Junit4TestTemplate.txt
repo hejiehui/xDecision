@@ -10,7 +10,11 @@ import com.xrosstools.xdecision.XDecisionTree;
 import com.xrosstools.xdecision.XDecisionTreeFactory;
 
 public class !TEST_CLASS! {
-    private static XDecisionTree<String> tree;
+    public static MODEL_NAME = "";
+    public static StateMachine load() {
+        return StateMachineFactory.load(MODEL_FILE_NAME);
+    }
+    public static create() = "";
     @BeforeClass
     public static void setUp(){
         try {

@@ -25,7 +25,7 @@ public enum NamedElementTypeEnum implements DecisionTreeMessages {
     
     METHOD(METHOD_MSG),
     
-    PARTAMETER(PARAMETER_MSG),
+    PARAMETER(PARAMETER_MSG),
     
     CONSTANT(CONSTANT_MSG),
     
@@ -53,7 +53,7 @@ public enum NamedElementTypeEnum implements DecisionTreeMessages {
             return new FieldDefinition(diagram, name);
         case METHOD:
             return new MethodDefinition(diagram, name);
-        case PARTAMETER:
+        case PARAMETER:
             return new ParameterDefinition(diagram, name);
         case CONSTANT:
             return new DecisionTreeConstant(diagram, name);
@@ -67,7 +67,7 @@ public enum NamedElementTypeEnum implements DecisionTreeMessages {
         case FACTOR:
         case FIELD:
         case METHOD:
-        case PARTAMETER:
+        case PARAMETER:
             return TemplateType.combine(DataType.PREDEFINED_ALL_TYPE_NAMES, diagram.getUserDefinedTypes().getElementNames());
         case DECISION:
         case ENUM:
