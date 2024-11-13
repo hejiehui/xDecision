@@ -43,7 +43,7 @@ public class RangeValidationTest {
             A NOT BETWEEN B,C
         */
         test = new MapFacts();
-        test.set("A", 3);
+        test.set("A", 13);
         test.set("B", 4);
         test.set("C", 10);
         test.set("E", 10);
@@ -79,7 +79,7 @@ public class RangeValidationTest {
             C NOT IN E,F,G
         */
         test = new MapFacts();
-        test.set("A", 3);
+        test.set("A", 13);
         test.set("B", 4);
         test.set("C", 10);
         test.set("E", 11);
