@@ -17,6 +17,7 @@ public interface XdecisionsIcons  {
     Icon GEN_TEST_CODE_CONSOLE = IconLoader.getIcon("/icons/console.png", XdecisionsIcons.class);
     Icon CREATE_NEW_DECISION = IconLoader.getIcon("/icons/create_new_decision.png", XdecisionsIcons.class);
     Icon CREATE_NEW_FACTOR = IconLoader.getIcon("/icons/create_new_factor.png", XdecisionsIcons.class);
+    Icon IMPORT_TYPE = IconLoader.getIcon("/icons/import.png", XdecisionsIcons.class);
 
     Icon TREE = IconLoader.getIcon("/icons/tree.png", XdecisionsIcons.class);
     Icon NODE = IconLoader.getIcon("/icons/node.png", XdecisionsIcons.class);

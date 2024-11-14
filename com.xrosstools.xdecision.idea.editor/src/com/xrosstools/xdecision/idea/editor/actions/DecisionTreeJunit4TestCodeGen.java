@@ -1,10 +1,12 @@
 package com.xrosstools.xdecision.idea.editor.actions;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeFactor;
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 
-import com.xrosstools.xdecision.idea.editor.model.*;
+import static com.xrosstools.idea.gef.actions.CodeGenHelper.*;
 
 public class DecisionTreeJunit4TestCodeGen {
 	private static final String METHOD_BODY =
@@ -19,22 +21,17 @@ public class DecisionTreeJunit4TestCodeGen {
 					"    }\n";
 
 	private static final String COMMENTS =       "            %s\n";
-	private static final String TEST_ASSIGN = 		"        test.set(\"%s\", \"%s\");\n";
+	private static final String TEST_ASSIGN = 		"        test.set(\"%s\", null);\n";
 	private static final String ASSERT_DISPLAY = 	"        assertEquals(\"%s\", tree.get(test));";
 	private static final String TEST_RESET = 		"        MapFacts test = new MapFacts();\n";
-	public String generate(DecisionTreeDiagram diagram, String packageName, String testName, String path){
-		StringBuffer codeBuf = getTemplate();
+	public String generate(Project project, VirtualFile file, DecisionTreeDiagram diagram, String packageName, String testName){
+		StringBuffer codeBuf = getTemplate("/templates/Junit4TestTemplate.txt", this.getClass());
 		replace(codeBuf, "!PACKAGE!", packageName);
 		replace(codeBuf, "!TEST_CLASS!", testName);
-		replace(codeBuf, "!MODEL_PATH!", path);
+		replace(codeBuf, "!MODEL_PATH!", findResourcesPath(project, file));
 		replace(codeBuf, "!TREE_VERIFY!", "\n" + generateVerify(diagram));
 		
 		return codeBuf.toString();
-	}
-	
-	private void replace(StringBuffer codeBuf, String replacementMark, String replacement){
-		int start = codeBuf.indexOf(replacementMark);
-		codeBuf.replace(start, start + replacementMark.length(), replacement);
 	}
 
 	private String generateVerify(DecisionTreeDiagram diagram){
@@ -66,31 +63,11 @@ public class DecisionTreeJunit4TestCodeGen {
 
 			//get all factors
 			for(DecisionTreeFactor factor: diagram.getFactorList()) {
-				codeBuf.append(String.format(TEST_ASSIGN, factor.getFactorName(), ""));
+				codeBuf.append(String.format(TEST_ASSIGN, factor.getFactorName()));
 			}
 			codeBuf.append(String.format(ASSERT_DISPLAY, decision));
 			testCasesCode.append(String.format(METHOD_BODY, index++, decision, commentsBuf.toString(), codeBuf.toString()));
 		}
 		return testCasesCode.toString();
-	}
-	
-	private StringBuffer getTemplate(){
-		StringBuffer codeBuf = new StringBuffer();
-		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(DecisionTreeJunit4TestCodeGen.class.getResourceAsStream("/templates/Junit4TestTemplate.txt")));
-		String line;
-		try {
-			while((line = reader.readLine()) != null)
-				codeBuf.append(line).append('\n');
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			try {
-				reader.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-		return codeBuf;
 	}
 }

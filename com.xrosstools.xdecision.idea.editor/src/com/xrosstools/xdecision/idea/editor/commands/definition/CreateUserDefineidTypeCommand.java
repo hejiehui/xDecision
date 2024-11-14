@@ -4,10 +4,7 @@ import com.intellij.psi.*;
 import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.idea.gef.commands.InputTextCommand;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
-import com.xrosstools.xdecision.idea.editor.model.definition.DataType;
-import com.xrosstools.xdecision.idea.editor.model.definition.FieldDefinition;
-import com.xrosstools.xdecision.idea.editor.model.definition.MethodDefinition;
-import com.xrosstools.xdecision.idea.editor.model.definition.ParameterDefinition;
+import com.xrosstools.xdecision.idea.editor.model.definition.*;
 
 public class CreateUserDefineidTypeCommand extends Command {
     private DecisionTreeDiagram diagram;
@@ -24,10 +21,16 @@ public class CreateUserDefineidTypeCommand extends Command {
     }
     
     public void execute() {
-        newType = new DataType(selectedClass.getName());
+        if(selectedClass.isEnum())
+            newType = new EnumType(selectedClass.getName());
+        else
+            newType = new DataType(selectedClass.getName());
 
         for(PsiField f:selectedClass.getFields()) {
-            newType.add(new FieldDefinition(diagram, f.getName(), diagram.findDataType(f.getType().getCanonicalText(false))));
+            if(f instanceof PsiEnumConstant)
+                ((EnumType)newType).getValues().add(new EnumValue(f.getName()));
+            else
+                newType.add(new FieldDefinition(diagram, f.getName(), diagram.findDataType(f.getType().getCanonicalText(false))));
         }
 
         for(PsiMethod m:selectedClass.getMethods()) {
@@ -51,7 +54,10 @@ public class CreateUserDefineidTypeCommand extends Command {
     }
 
     public void redo() {
-        diagram.getUserDefinedTypes().add(newType);
+        if(selectedClass.isEnum())
+            diagram.getUserDefinedEnums().add((EnumType)newType);
+        else
+            diagram.getUserDefinedTypes().add(newType);
     }
 
     public void undo() {

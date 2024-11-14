@@ -25,10 +25,10 @@ public interface DecisionTreeMessages {
 	String SHOW_LABEL_OUTSIDE_MSG = "Show lable beside node";
 
 	String GEN_TEST_CODE_MSG = "Generate test";
-	String GEN_TEST_CODE_IN_CONSOLE_MSG = "<html>Generate test code<br>in console</html>";
+	String IMPORT_TYPE_MSG = "Import type";
 
 	String CREATE_NEW_TEMPLATE_MSG = "Create new %s";
-	String IMPORT_NEW_TEMPLATE_MSG = "Import new %s";
+	String IMPORT_NEW_TEMPLATE_MSG = "Import type";
 
 	String CREATE_NEW_DECISION_MSG = "Create decision";
 	String CREATE_NEW_FACTOR_MSG = "Create factor";

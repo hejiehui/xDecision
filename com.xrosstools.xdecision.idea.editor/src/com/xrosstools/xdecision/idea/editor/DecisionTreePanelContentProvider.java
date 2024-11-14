@@ -12,6 +12,7 @@ import com.xrosstools.xdecision.idea.editor.layout.LayoutAlgorithm;
 import com.xrosstools.xdecision.idea.editor.menus.DecisionTreeContextMenuProvider;
 import com.xrosstools.xdecision.idea.editor.menus.DecisionTreeOutlineContextMenuProvider;
 import com.xrosstools.xdecision.idea.editor.model.*;
+import com.xrosstools.xdecision.idea.editor.model.definition.NamedElementTypeEnum;
 import com.xrosstools.xdecision.idea.editor.parts.DecisionTreePartFactory;
 import com.xrosstools.xdecision.idea.editor.treeparts.DecisionTreeTreePartFactory;
 
@@ -62,9 +63,9 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
 
         palette.add(createPaletteButton(new DecisionTreeCreateDecisionAction(project, diagram), CREATE_NEW_DECISION, CREATE_NEW_DECISION_MSG));
         palette.add(createPaletteButton(new DecisionTreeCreateFactorAction(project, diagram), CREATE_NEW_FACTOR, CREATE_NEW_FACTOR_MSG));
-        //Disable printing to console for now
-        //palette.add(createPaletteButton(new DecisionTreeCodeGenAction(virtualFile, diagram, true), GEN_TEST_CODE_CONSOLE, GEN_TEST_CODE_IN_CONSOLE_MSG));
-        palette.add(createPaletteButton(new DecisionTreeCodeGenAction(virtualFile, diagram, false), GEN_TEST_CODE_DIALOG, GEN_TEST_CODE_MSG));
+
+        palette.add(createPaletteButton(new ImportDataTypeAction(project, diagram), IMPORT_TYPE, IMPORT_TYPE_MSG));
+        palette.add(createPaletteButton(new DecisionTreeCodeGenAction(project, virtualFile, diagram, false), GEN_TEST_CODE_DIALOG, GEN_TEST_CODE_MSG));
     }
 
     private JButton createConnectionButton() {
