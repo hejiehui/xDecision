@@ -3,6 +3,8 @@ xDecision
 
 A decision tree editor and runtime engine.
 
+[This file in English](./README.en.md)
+
 # 什么是decision tree
 ### 商业智能领域常用的决策工具
 
@@ -29,7 +31,7 @@ A decision tree editor and runtime engine.
 # 集成说明
 [参考样例POM](https://github.com/hejiehui/xDecision/blob/master/com.xrosstools.xdecision.sample/pom.xml)
 
-Depenency
+Dependency
 
 	<dependency>
 		<groupId>com.xrosstools</groupId>
