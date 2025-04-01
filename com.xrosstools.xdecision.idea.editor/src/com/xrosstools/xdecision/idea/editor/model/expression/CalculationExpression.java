@@ -4,13 +4,13 @@ package com.xrosstools.xdecision.idea.editor.model.expression;
  * A + B - C
  */
 public class CalculationExpression extends CompositeExpression {
-    public static CalculationExpression compile(OperatorEnum operator, ExpressionDefinition operant) {
+    public static CalculationExpression compile(OperatorEnum operator, ExpressionDefinition operand) {
         CalculationExpression calExp;
-        if(operant instanceof CalculationExpression) {
-            calExp = ((CalculationExpression)operant);
+        if(operand instanceof CalculationExpression) {
+            calExp = ((CalculationExpression)operand);
         }else{
             calExp = new CalculationExpression();
-            calExp.addFirst(operant);
+            calExp.addFirst(operand);
         }
         calExp.addFirst(new OperatorExpression(operator));
         return calExp;

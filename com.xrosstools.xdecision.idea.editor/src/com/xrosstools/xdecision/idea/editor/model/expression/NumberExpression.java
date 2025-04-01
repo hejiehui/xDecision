@@ -41,7 +41,7 @@ public class NumberExpression extends BasicExpression implements IPropertySource
     public IPropertyDescriptor[] getPropertyDescriptors() {
         IPropertyDescriptor[] descriptors;
         descriptors = new IPropertyDescriptor[] {
-                new TextPropertyDescriptor(VALUE, VALUE)
+                new TextPropertyDescriptor(VALUE)
             };
         return descriptors;
     }

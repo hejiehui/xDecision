@@ -7,9 +7,9 @@ public class EnclosedExpression extends ExpressionDefinition {
         return innerExpression;
     }
     public EnclosedExpression setInnerExpression(ExpressionDefinition innerExpression) {
+        unlisten(this.innerExpression);
         this.innerExpression = innerExpression;
-        if(innerExpression != null)
-            innerExpression.getListeners().addPropertyChangeListener(this);
+        listen(innerExpression);
         propertyChanged();
         return this;
     }

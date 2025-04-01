@@ -23,6 +23,16 @@ public abstract class ExpressionDefinition implements PropertyChangeListener {
         propertyChanged();
     }
 
+    public void listen(ExpressionDefinition expressionDefinition) {
+        if(expressionDefinition != null)
+            expressionDefinition.getListeners().addPropertyChangeListener(this);
+    }
+
+    public void unlisten(ExpressionDefinition expressionDefinition) {
+        if(expressionDefinition != null)
+            expressionDefinition.getListeners().removePropertyChangeListener(this);
+    }
+
     @Override
     public String toString() {
         throw new IllegalStateException("Sub class needs to implement this");

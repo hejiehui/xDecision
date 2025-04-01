@@ -15,8 +15,9 @@ public class ElementExpression extends ExtensibleExpression {
     }
 
     public void setIndexExpression(ExpressionDefinition indexExpression) {
+        unlisten(this.indexExpression);
         this.indexExpression = indexExpression;
-        indexExpression.getListeners().addPropertyChangeListener(this);
+        listen(indexExpression);
         propertyChanged();
     }
 

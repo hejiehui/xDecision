@@ -1,5 +1,6 @@
 package com.xrosstools.xdecision.idea.editor.model.expression;
 
+import com.xrosstools.xdecision.idea.editor.model.DecisionTreeConstant;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeDiagram;
 import com.xrosstools.xdecision.idea.editor.model.DecisionTreeManager;
 import com.xrosstools.xdecision.idea.editor.model.definition.*;
@@ -68,6 +69,12 @@ public class ExpressionParser {
         if(member == null)
             member = diagram.getUserDefinedEnums().findByName(name);
         
+        if(DecisionTreeConstant.TRUE.getName().equals(name))
+            member = DecisionTreeConstant.TRUE;
+
+        if(DecisionTreeConstant.FALSE.getName().equals(name))
+            member = DecisionTreeConstant.FALSE;
+
         varExp.setReferenceElement(member);
 
         resolve(DataType.getType(member), varExp.getChildExpression());

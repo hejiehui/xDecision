@@ -32,7 +32,7 @@ public class StringExpression extends BasicExpression implements IPropertySource
     public IPropertyDescriptor[] getPropertyDescriptors() {
         IPropertyDescriptor[] descriptors;
         descriptors = new IPropertyDescriptor[] {
-                new TextPropertyDescriptor(TEXT, TEXT)
+                new TextPropertyDescriptor(TEXT)
             };
         return descriptors;
     }

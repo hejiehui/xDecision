@@ -12,6 +12,18 @@ import java.util.Date;
 
 public class DecisionTreeConstant extends NamedType {
     private static final String[] BOOLEAN_VALUES = new String[] {"false", "true"};
+
+    public static final DecisionTreeConstant TRUE = new DecisionTreeConstant(null, "true");
+    public static final DecisionTreeConstant FALSE = new DecisionTreeConstant(null, "false");
+
+    static {
+        TRUE.setType(DataType.BOOLEAN_TYPE);
+        TRUE.setValue("true");
+
+        FALSE.setType(DataType.BOOLEAN_TYPE);
+        FALSE.setValue("false");
+    }
+
     public DecisionTreeConstant(DecisionTreeDiagram diagram, String name) {
         super(diagram, name, NamedElementTypeEnum.CONSTANT, DEFAULT_TYPE);
     }
@@ -54,8 +66,8 @@ public class DecisionTreeConstant extends NamedType {
     @Override
     public IPropertyDescriptor[] getPropertyDescriptors() {
         IPropertyDescriptor valueDesc = getType().getMetaType() == DataTypeEnum.BOOLEAN ?
-                new ComboBoxPropertyDescriptor(PROP_VALUE, PROP_VALUE, BOOLEAN_VALUES) :
-                    new TextPropertyDescriptor(PROP_VALUE, PROP_VALUE);
+                new ComboBoxPropertyDescriptor(PROP_VALUE, BOOLEAN_VALUES) :
+                    new TextPropertyDescriptor(PROP_VALUE);
 
         return combine(super.getPropertyDescriptors(),
                 new IPropertyDescriptor[] {valueDesc});

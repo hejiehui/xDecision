@@ -51,8 +51,13 @@ public class DecisionTreeNodeConnection implements PropertyConstants, IPropertyS
 	}
 
 	public void setExpression(ExpressionDefinition expression) {
+		if(this.expression != null)
+			this.expression.getListeners().removePropertyChangeListener(this);
+
 		this.expression = expression;
-		expression.getListeners().addPropertyChangeListener(this);
+
+		if(expression != null)
+			expression.getListeners().addPropertyChangeListener(this);
 		listeners.firePropertyChange(PROP_EXPRESSION, null, expression);
 	}
 

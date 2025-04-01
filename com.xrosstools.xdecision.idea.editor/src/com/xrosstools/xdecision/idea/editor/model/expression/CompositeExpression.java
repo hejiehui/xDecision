@@ -23,12 +23,13 @@ public class CompositeExpression extends ExpressionDefinition {
     
     public void remove(ExpressionDefinition exp) {
         elements.remove(exp);
+        unlisten(exp);
         propertyChanged();
     }
     
     public CompositeExpression add(int index, ExpressionDefinition exp) {
         elements.add(index, exp);
-        exp.getListeners().addPropertyChangeListener(this);
+        listen(exp);
         propertyChanged();
         return this;
     }
@@ -51,7 +52,7 @@ public class CompositeExpression extends ExpressionDefinition {
 
     public void set(int index, ExpressionDefinition exp) {
         elements.set(index, exp);
-        exp.getListeners().addPropertyChangeListener(this);
+        listen(exp);
         propertyChanged();
     }
     
