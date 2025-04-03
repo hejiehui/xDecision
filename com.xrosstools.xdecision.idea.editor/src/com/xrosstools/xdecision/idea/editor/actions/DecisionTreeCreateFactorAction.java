@@ -16,14 +16,17 @@ public class DecisionTreeCreateFactorAction extends BaseDialogAction implements 
     private DecisionTreeNode node;
 	private String typeName;
 
-    public DecisionTreeCreateFactorAction(Project project, DecisionTreeDiagram diagram){
+    public DecisionTreeCreateFactorAction(Project project){
 		super(project, CREATE_NEW_FACTOR_MSG, "Factor", "new factor");
+	}
+
+	public void setDiagram(DecisionTreeDiagram diagram) {
 		this.diagram = diagram;
 	}
 
 	public DecisionTreeCreateFactorAction(Project project, DecisionTreeDiagram diagram, DecisionTreeNode node, String typeName){
         super(project, CREATE_NEW_FACTOR_MSG, "Factor", "new factor");
-        this.diagram = diagram;
+        setDiagram(diagram);
 		this.node = node;
 		this.typeName = typeName;
 		setText(typeName);
@@ -41,7 +44,7 @@ public class DecisionTreeCreateFactorAction extends BaseDialogAction implements 
 
 		CommandChain cc = new CommandChain();
 		cc.add(new AddFactorCommand2(diagram, factor));
-		cc.add(new ChangeChildCommand(node, node.getNodeExpression(), new VariableExpression(factor.getFactorName())));
+		cc.add(new ChangeChildCommand(node, node.getNodeExpression(), new VariableExpression(factor)));
 		return cc;
 	}
 }

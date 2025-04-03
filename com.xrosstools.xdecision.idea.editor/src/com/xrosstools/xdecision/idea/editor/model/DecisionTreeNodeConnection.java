@@ -6,10 +6,7 @@ import com.xrosstools.idea.gef.util.IPropertyDescriptor;
 import com.xrosstools.idea.gef.util.IPropertySource;
 import com.xrosstools.idea.gef.util.TextPropertyDescriptor;
 import com.xrosstools.xdecision.idea.editor.model.definition.PropertyConstants;
-import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionDefinition;
-import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionParser;
-import com.xrosstools.xdecision.idea.editor.model.expression.ExpressionType;
-import com.xrosstools.xdecision.idea.editor.model.expression.PlaceholderExpression;
+import com.xrosstools.xdecision.idea.editor.model.expression.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -18,7 +15,7 @@ import java.beans.PropertyChangeSupport;
 public class DecisionTreeNodeConnection implements PropertyConstants, IPropertySource, PropertyChangeListener {
 	private int valueId = -1;
 	private ConditionOperator operator = ConditionOperator.EQUAL;
-	private ExpressionDefinition expression = new PlaceholderExpression("value");
+	private ExpressionDefinition expression = new NumberExpression(0);
 	private DecisionTreeNode parent;
 	private DecisionTreeNode child;
 

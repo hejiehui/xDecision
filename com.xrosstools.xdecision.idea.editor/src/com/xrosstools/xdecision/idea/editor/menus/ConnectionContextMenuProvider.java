@@ -17,8 +17,11 @@ public class ConnectionContextMenuProvider {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public ConnectionContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public ConnectionContextMenuProvider(Project project) {
         this.project = project;
+    }
+
+    public void setDiagram(DecisionTreeDiagram diagram) {
         this.diagram = diagram;
     }
 

@@ -25,8 +25,11 @@ public class NodeContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public NodeContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public NodeContextMenuProvider(Project project) {
         this.project = project;
+    }
+
+    public void setDiagram(DecisionTreeDiagram diagram) {
         this.diagram = diagram;
     }
 

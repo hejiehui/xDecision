@@ -24,11 +24,14 @@ public class ExpressionContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public ExpressionContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public ExpressionContextMenuProvider(Project project) {
         this.project = project;
+    }
+
+    public void setDiagram(DecisionTreeDiagram diagram) {
         this.diagram = diagram;
     }
-    
+
     public void buildContextMenu(JPopupMenu menu, BaseExpressionPart part) {
         ExpressionDefinition exp = (ExpressionDefinition)part.getModel();
         if(exp instanceof OperatorExpression) {

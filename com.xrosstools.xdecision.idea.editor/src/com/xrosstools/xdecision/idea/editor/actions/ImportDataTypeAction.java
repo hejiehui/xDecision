@@ -13,9 +13,12 @@ public class ImportDataTypeAction extends Action implements DecisionTreeActionCo
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public ImportDataTypeAction(Project project, DecisionTreeDiagram diagram) {
+    public ImportDataTypeAction(Project project) {
         setText(IMPORT_NEW_TEMPLATE_MSG);
         this.project = project;
+    }
+
+    public void setDiagram(DecisionTreeDiagram diagram) {
         this.diagram = diagram;
     }
 

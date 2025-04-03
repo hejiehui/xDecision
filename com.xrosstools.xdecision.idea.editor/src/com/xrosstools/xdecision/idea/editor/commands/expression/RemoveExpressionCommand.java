@@ -51,11 +51,10 @@ public class RemoveExpressionCommand extends Command {
         }
         
         if(parentModel instanceof ElementExpression) {
-            ElementExpression parent = (ElementExpression)parentModel;
-            parent.setIndexExpression(null);
+            //Remove from ElementExpression is invalid
             return;
         }
-        
+
         if(parentModel instanceof ExtensibleExpression) {
             ((ExtensibleExpression)parentModel).setChildExpression(null);
             return;
@@ -80,13 +79,22 @@ public class RemoveExpressionCommand extends Command {
     }
 
     public void setChild() {
-        if(parentModel instanceof CompositeExpression) {
-            CompositeExpression parent = (CompositeExpression)parentModel;
-            if(oldExpIndex == 0 && oldOpr != null) {
+        if(parentModel instanceof ParameterListExpression) {
+            ParameterListExpression parent = (ParameterListExpression)parentModel;
+            parent.add(oldExpIndex, oldExp);
+            return;
+        }
+
+        if(parentModel instanceof CalculationExpression) {
+            CalculationExpression parent = (CalculationExpression)parentModel;
+            if(oldOpr == null) {
+                parent.add(oldExpIndex, oldExp);
+                return;
+            }
+            if(oldExpIndex == 0) {
                 parent.add(oldExpIndex, oldExp);
                 parent.add(1, oldOpr);
-            }
-            else if(oldExpIndex > 0 && oldOpr != null) {
+            } else {
                 parent.add(oldExpIndex - 1, oldOpr);
                 parent.add(oldExpIndex, oldExp);
             }

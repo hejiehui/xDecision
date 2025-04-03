@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.sun.org.glassfish.external.amx.AMX;
 import com.xrosstools.idea.gef.AbstractPanelContentProvider;
 import com.xrosstools.idea.gef.ContextMenuProvider;
 import com.xrosstools.idea.gef.parts.EditPartFactory;
@@ -27,17 +28,67 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
     private LayoutAlgorithm layoutAlgorithm = new LayoutAlgorithm();
 
     private DecisionTreeDiagramFactory factory = new DecisionTreeDiagramFactory();
+    private DecisionTreeContextMenuProvider contextMenuProvider;
+    private DecisionTreeOutlineContextMenuProvider outlineContextMenuProvider;
+
+    private DecisionTreeCreateDecisionAction createDecisionAction;
+    private DecisionTreeCreateFactorAction createFactorAction;
+    private ImportDataTypeAction importDataTypeAction;
+    private DecisionTreeCodeGenAction codeGenAction;
+
+    private DecisionTreeLayoutAction alignBottom;
+    private DecisionTreeLayoutAction alignMiddle;
+    private DecisionTreeLayoutAction alignTop;
+
+    private DecisionTreeLayoutAction alignLeft;
+    private DecisionTreeLayoutAction alignCenter;
+    private DecisionTreeLayoutAction alignRight;
 
     public DecisionTreePanelContentProvider(Project project, VirtualFile virtualFile) {
         super(virtualFile);
         this.project = project;
         this.virtualFile = virtualFile;
+
+        contextMenuProvider = new DecisionTreeContextMenuProvider(project);
+        outlineContextMenuProvider = new DecisionTreeOutlineContextMenuProvider(project);
+
+        createDecisionAction = new DecisionTreeCreateDecisionAction(project);
+        createFactorAction = new DecisionTreeCreateFactorAction(project);
+        importDataTypeAction = new ImportDataTypeAction(project);
+        codeGenAction = new DecisionTreeCodeGenAction(project, virtualFile);
+
+        alignBottom = new DecisionTreeLayoutAction(true, 1);
+        alignMiddle = new DecisionTreeLayoutAction(true, 0.5f);
+        alignTop = new DecisionTreeLayoutAction(true, 0);
+
+        alignLeft = new DecisionTreeLayoutAction(false, 0);
+        alignCenter = new DecisionTreeLayoutAction(false, 0.5f);
+        alignRight = new DecisionTreeLayoutAction(false, 1);
     }
 
     @Override
     public DecisionTreeDiagram getContent() throws Exception {
         diagram = factory.getFromXML(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(virtualFile.getInputStream()));
+        diagramChanged(diagram);
         return diagram;
+    }
+
+    private void diagramChanged(DecisionTreeDiagram diagram) {
+        contextMenuProvider.setDiagram(diagram);
+        outlineContextMenuProvider.setDiagram(diagram);
+
+        createDecisionAction.setDiagram(diagram);
+        createFactorAction.setDiagram(diagram);
+        importDataTypeAction.setDiagram(diagram);
+        codeGenAction.setDiagram(diagram);
+
+        alignBottom.setDiagram(diagram);
+        alignMiddle.setDiagram(diagram);
+        alignTop.setDiagram(diagram);
+
+        alignLeft.setDiagram(diagram);
+        alignCenter.setDiagram(diagram);
+        alignRight.setDiagram(diagram);
     }
 
     @Override
@@ -48,12 +99,12 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
 
     @Override
     public ContextMenuProvider getContextMenuProvider() {
-        return new DecisionTreeContextMenuProvider(project, diagram);
+        return contextMenuProvider;
     }
 
     @Override
     public ContextMenuProvider getOutlineContextMenuProvider() {
-        return new DecisionTreeOutlineContextMenuProvider(project, diagram);
+        return outlineContextMenuProvider;
     }
 
     @Override
@@ -61,11 +112,11 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
         palette.add(createConnectionButton());
         palette.add(createNodeButton());
 
-        palette.add(createPaletteButton(new DecisionTreeCreateDecisionAction(project, diagram), CREATE_NEW_DECISION, CREATE_NEW_DECISION_MSG));
-        palette.add(createPaletteButton(new DecisionTreeCreateFactorAction(project, diagram), CREATE_NEW_FACTOR, CREATE_NEW_FACTOR_MSG));
+        palette.add(createPaletteButton(createDecisionAction, CREATE_NEW_DECISION, CREATE_NEW_DECISION_MSG));
+        palette.add(createPaletteButton(createFactorAction, CREATE_NEW_FACTOR, CREATE_NEW_FACTOR_MSG));
 
-        palette.add(createPaletteButton(new ImportDataTypeAction(project, diagram), IMPORT_TYPE, IMPORT_TYPE_MSG));
-        palette.add(createPaletteButton(new DecisionTreeCodeGenAction(project, virtualFile, diagram, false), GEN_TEST_CODE_DIALOG, GEN_TEST_CODE_MSG));
+        palette.add(createPaletteButton(importDataTypeAction, IMPORT_TYPE, IMPORT_TYPE_MSG));
+        palette.add(createPaletteButton(codeGenAction, GEN_TEST_CODE_DIALOG, GEN_TEST_CODE_MSG));
     }
 
     private JButton createConnectionButton() {
@@ -87,14 +138,14 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
     @Override
     public ActionGroup createToolbar() {
         DefaultActionGroup actionGroup = new DefaultActionGroup();
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 1), ALIGN_BOTTOM, ALIGN_BOTTOM_MSG));
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 0.5f), ALIGN_MIDDLE, ALIGN_MIDDLE_MSG));
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, true, 0), ALIGN_TOP, ALIGN_TOP_MSG));
+        actionGroup.add(createToolbarAction(alignBottom, ALIGN_BOTTOM, ALIGN_BOTTOM_MSG));
+        actionGroup.add(createToolbarAction(alignMiddle, ALIGN_MIDDLE, ALIGN_MIDDLE_MSG));
+        actionGroup.add(createToolbarAction(alignTop, ALIGN_TOP, ALIGN_TOP_MSG));
         actionGroup.addSeparator();
 
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 0), ALIGN_LEFT, ALIGN_LEFT_MSG));
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 0.5f), ALIGN_CENTER, ALIGN_CENTER_MSG));
-        actionGroup.add(createToolbarAction(new DecisionTreeLayoutAction(diagram, false, 1), ALIGN_RIGHT, ALIGN_RIGHT_MSG));
+        actionGroup.add(createToolbarAction(alignLeft, ALIGN_LEFT, ALIGN_LEFT_MSG));
+        actionGroup.add(createToolbarAction(alignCenter, ALIGN_CENTER, ALIGN_CENTER_MSG));
+        actionGroup.add(createToolbarAction(alignRight, ALIGN_RIGHT, ALIGN_RIGHT_MSG));
 
         return actionGroup;
     }
@@ -120,5 +171,4 @@ public class DecisionTreePanelContentProvider extends AbstractPanelContentProvid
         layoutAlgorithm.layout(diagram);
         getEditorPanel().refreshVisual();
     }
-
 }

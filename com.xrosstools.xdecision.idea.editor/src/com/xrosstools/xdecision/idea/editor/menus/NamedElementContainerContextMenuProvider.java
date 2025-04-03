@@ -18,8 +18,11 @@ public class NamedElementContainerContextMenuProvider implements DecisionTreeMes
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public NamedElementContainerContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public NamedElementContainerContextMenuProvider(Project project) {
         this.project = project;
+    }
+
+    public void setDiagram(DecisionTreeDiagram diagram) {
         this.diagram = diagram;
     }
 

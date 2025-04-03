@@ -16,11 +16,16 @@ public class DecisionTreeOutlineContextMenuProvider extends ContextMenuProvider 
     private NamedElementContainerContextMenuProvider namedElementContainerProvider;
     private NamedElementContextMenuProvider namedElementContextMenuProvider;
 
-    public DecisionTreeOutlineContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public DecisionTreeOutlineContextMenuProvider(Project project) {
         this.project = project;
+        namedElementContextMenuProvider = new NamedElementContextMenuProvider(project);
+        namedElementContainerProvider = new NamedElementContainerContextMenuProvider(project);
+    }
+
+    public void setDiagram(DecisionTreeDiagram diagram) {
         this.diagram = diagram;
-        namedElementContextMenuProvider = new NamedElementContextMenuProvider(project, diagram);
-        namedElementContainerProvider = new NamedElementContainerContextMenuProvider(project, diagram);
+        namedElementContextMenuProvider.setDiagram(diagram);
+        namedElementContainerProvider.setDiagram(diagram);
     }
 
     public JPopupMenu buildContextMenu(Object selected) {

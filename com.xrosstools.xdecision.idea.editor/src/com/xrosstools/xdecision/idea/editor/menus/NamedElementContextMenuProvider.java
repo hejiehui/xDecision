@@ -22,11 +22,14 @@ public class NamedElementContextMenuProvider implements DecisionTreeMessages {
     private Project project;
     private DecisionTreeDiagram diagram;
 
-    public NamedElementContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public NamedElementContextMenuProvider(Project project) {
         this.project = project;
+    }
+
+    public void setDiagram(DecisionTreeDiagram diagram) {
         this.diagram = diagram;
     }
-    
+
     public void buildContextMenu(JPopupMenu menu, NamedElementTreePart namedElementPart) {
         NamedElement element = (NamedElement)namedElementPart.getModel();
         

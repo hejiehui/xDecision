@@ -12,15 +12,18 @@ import com.xrosstools.xdecision.idea.editor.model.DecisionTreeNode;
 public class DecisionTreeCreateDecisionAction extends BaseDialogAction implements DecisionTreeActionConstants, DecisionTreeMessages{
 	private DecisionTreeDiagram diagram;
     private DecisionTreeNode node;
-	public DecisionTreeCreateDecisionAction(Project project, DecisionTreeDiagram diagram){
+	public DecisionTreeCreateDecisionAction(Project project){
 		super(project, CREATE_NEW_DECISION_MSG, "Decision", "new decision");
-		this.diagram = diagram;
 	}
 
     public DecisionTreeCreateDecisionAction(Project project, DecisionTreeDiagram diagram, DecisionTreeNode node){
         super(project, CREATE_NEW_DECISION_MSG, "Decision", "new decision");
-        this.diagram = diagram;
+        setDiagram(diagram);
 	    this.node = node;
+    }
+
+    public void setDiagram(DecisionTreeDiagram diagram) {
+        this.diagram = diagram;
     }
 
 	@Override

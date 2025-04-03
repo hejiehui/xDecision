@@ -14,11 +14,14 @@ public class DiagramContextMenuProvider implements DecisionTreeMessages {
     private DecisionTreeDiagram diagram;
     private NamedElementContainerContextMenuProvider elementContainerMenuProvider;
 
-    public DiagramContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
+    public DiagramContextMenuProvider(Project project) {
         this.project = project;
-        this.diagram = diagram;
+        elementContainerMenuProvider = new NamedElementContainerContextMenuProvider(project);
+    }
 
-        elementContainerMenuProvider = new NamedElementContainerContextMenuProvider(project, diagram);
+    public void setDiagram(DecisionTreeDiagram diagram) {
+        this.diagram = diagram;
+        elementContainerMenuProvider.setDiagram(diagram);
     }
 
     public void buildContextMenu(JPopupMenu menu, DecisionTreeDiagramPart part) {
@@ -28,6 +31,5 @@ public class DiagramContextMenuProvider implements DecisionTreeMessages {
         addSeparator(menu);
 
         elementContainerMenuProvider.buildContextMenu(menu, diagram.getUserDefinedTypes());
-
     }
 }

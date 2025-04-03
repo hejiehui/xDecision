@@ -18,13 +18,18 @@ public class DecisionTreeContextMenuProvider extends ContextMenuProvider impleme
 	private ExpressionContextMenuProvider expMenuProvider;
     private DiagramContextMenuProvider diagramMenuProvider;
 
+    public DecisionTreeContextMenuProvider(Project project) {
+        nodeMenuProvider = new NodeContextMenuProvider(project);
+        expMenuProvider = new ExpressionContextMenuProvider(project);
+        connMenuProvider = new ConnectionContextMenuProvider(project);
+        diagramMenuProvider = new DiagramContextMenuProvider(project);
+    }
 
-    public DecisionTreeContextMenuProvider(Project project, DecisionTreeDiagram diagram) {
-
-        nodeMenuProvider = new NodeContextMenuProvider(project, diagram);
-        expMenuProvider = new ExpressionContextMenuProvider(project, diagram);
-        connMenuProvider = new ConnectionContextMenuProvider(project, diagram);
-        diagramMenuProvider = new DiagramContextMenuProvider(project, diagram);
+    public void setDiagram(DecisionTreeDiagram diagram) {
+        nodeMenuProvider.setDiagram(diagram);
+        expMenuProvider.setDiagram(diagram);
+        connMenuProvider.setDiagram(diagram);
+        diagramMenuProvider.setDiagram(diagram);
     }
 
     public JPopupMenu buildContextMenu(Object selected) {

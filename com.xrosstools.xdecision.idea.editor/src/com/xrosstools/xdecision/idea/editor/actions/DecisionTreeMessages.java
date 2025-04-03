@@ -24,7 +24,7 @@ public interface DecisionTreeMessages {
 	String SHOW_LABEL_INSIDE_MSG = "Show lable inside node";
 	String SHOW_LABEL_OUTSIDE_MSG = "Show lable beside node";
 
-	String GEN_TEST_CODE_MSG = "Generate test";
+	String GEN_TEST_CODE_MSG = "Generate test cases";
 	String IMPORT_TYPE_MSG = "Import type";
 
 	String CREATE_NEW_TEMPLATE_MSG = "Create new %s";

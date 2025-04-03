@@ -10,9 +10,12 @@ public class DecisionTreeLayoutAction extends Action implements DecisionTreeActi
 	private float alignment;
 	private DecisionTreeDiagram diagram;
 
-	public DecisionTreeLayoutAction(DecisionTreeDiagram diagram, boolean horizantal, float alignment){
+	public DecisionTreeLayoutAction(boolean horizantal, float alignment){
 		this.alignment = alignment;
 		this.horizantal = horizantal;
+	}
+
+	public void setDiagram(DecisionTreeDiagram diagram) {
 		this.diagram = diagram;
 	}
 
