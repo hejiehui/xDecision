@@ -58,7 +58,7 @@ public class DecisionTreeV1FormatReader {
             int index = pair.indexOf(FACTOR_VALUE_DELIMITER);
             String factorIndexStr = pair.substring(0, index);
             String valueIndexStr = pair.substring(index+1, pair.length());
-            DecisionTreePathEntry entry = new DecisionTreePathEntry(new Integer(factorIndexStr), Integer.parseInt(valueIndexStr));
+            DecisionTreePathEntry entry = new DecisionTreePathEntry(Integer.parseInt(factorIndexStr), Integer.parseInt(valueIndexStr));
             entries[i] = entry;
         }
 
@@ -86,7 +86,7 @@ public class DecisionTreeV1FormatReader {
     public static void buildTree(ExpressionParser parser, DecisionTreePath[] paths, DecisionTreeDiagram diagram, Map<Integer, String[]> factorValuesMap){
         Map<Integer, DecisionTreeNode> roots = new HashMap<Integer, DecisionTreeNode>();
         for(DecisionTreePath path: paths){
-            Integer rootFactor = new Integer(path.getPathEntries()[0].getNodeIndex());
+            Integer rootFactor = path.getPathEntries()[0].getNodeIndex();
             DecisionTreeNode parent = null;
             if(!roots.containsKey(rootFactor)){
                 parent = new DecisionTreeNode();

@@ -33,6 +33,7 @@ dependencies {
 
 intellijPlatform {
     instrumentCode = true
+    buildSearchableOptions = false
 
     pluginConfiguration {
         //<idea-version since-build="193.6911.18"/>
@@ -41,7 +42,7 @@ intellijPlatform {
         }
 
         changeNotes = """
-            <em>3.3.2</em> Migrate from devkit to gradle to fix verification issue.<br>
+            <em>3.3.2</em> Minor code optimize for data parsing.<br>
             <em>3.3.1</em> FIX NPE when remove expression from node and identify true/false.<br>
             <em>3.3.0</em> Improve user defined data type import, default parser and evaluator, test case generation.<br>
             <em>3.2.0</em> Support decision node description property.<br>
