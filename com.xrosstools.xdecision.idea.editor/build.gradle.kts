@@ -36,9 +36,8 @@ intellijPlatform {
     buildSearchableOptions = false
 
     pluginConfiguration {
-        //<idea-version since-build="193.6911.18"/>
         ideaVersion {
-            sinceBuild = "183.6156.11"
+            sinceBuild = "193.6911.18"
         }
 
         changeNotes = """

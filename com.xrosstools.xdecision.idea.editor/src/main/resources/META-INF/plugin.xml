@@ -23,7 +23,11 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <fileEditorProvider implementation="com.xrosstools.xdecision.idea.editor.DecisionTreeEditorProvider"/>
-    <fileTypeFactory implementation="com.xrosstools.xdecision.idea.editor.XdecisionFileTypeFactory"/>
+    <fileType name="Xross Decision Model File"
+              implementationClass="com.xrosstools.xdecision.idea.editor.XdecisionFileType"
+              fieldName="INSTANCE"
+              extensions="xdecision"
+              description="Xross Decision Model File"/>
   </extensions>
 
   <actions>
